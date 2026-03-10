@@ -1,0 +1,828 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="text-center mb-4">
+        <h2 class="fw-bold"><i class="bi bi-clipboard-data me-2"></i>Pre-Match Insights</h2>
+        <p class="text-muted">Venue analysis, conditions, par scores & match expectations before the game starts</p>
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ 'danger' if category == 'error' else category }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    {% if not analysis %}
+
+    <div class="card shadow-sm mb-4 border-0">
+        <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
+            <h5 class="mb-0"><i class="bi bi-calendar-event me-2"></i>Load from Upcoming Match</h5>
+            <button type="button" class="btn btn-sm btn-outline-light" onclick="refreshPrematchMatches()">
+                <i class="bi bi-arrow-clockwise me-1"></i>Refresh
+            </button>
+        </div>
+        <div class="card-body">
+            <p class="text-muted small mb-2">Select a match to auto-fill venue, teams, and format</p>
+            <div class="row g-3">
+                <div class="col-12 col-md-4">
+                    <label class="form-label fw-semibold">Format</label>
+                    <select class="form-select" id="prematchLiveFormat" onchange="fetchPrematchMatches()">
+                        <option value="mens_t20">Men's T20</option>
+                        <option value="womens_t20">Women's T20</option>
+                        <option value="mens_odi">Men's ODI</option>
+                        <option value="womens_odi">Women's ODI</option>
+                    </select>
+                </div>
+                <div class="col-12 col-md-8">
+                    <label class="form-label fw-semibold">Match</label>
+                    <select class="form-select" id="prematchLiveMatch" onchange="loadPrematchMatch()">
+                        <option value="">Select a match...</option>
+                    </select>
+                </div>
+            </div>
+            <div id="prematchLiveStatus" class="mt-2"></div>
+            <div id="prematchLoadingSpinner" class="text-center py-2" style="display: none;">
+                <div class="spinner-border spinner-border-sm text-primary" role="status"></div>
+                <small class="text-muted ms-2">Fetching match data...</small>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-dark text-white">
+            <h5 class="mb-0"><i class="bi bi-gear me-2"></i>Match Details</h5>
+        </div>
+        <div class="card-body">
+            <form method="POST" action="/prematch" id="prematchForm">
+                <div class="row g-3">
+                    <div class="col-12 col-md-6">
+                        <label class="form-label fw-semibold">Match Format</label>
+                        <select class="form-select" name="match_format" id="prematchFormat">
+                            <option value="mens_t20">Men's T20</option>
+                            <option value="womens_t20">Women's T20</option>
+                            <option value="mens_odi">Men's ODI</option>
+                            <option value="womens_odi">Women's ODI</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <label class="form-label fw-semibold">Venue</label>
+                        <select class="form-select" name="venue" id="prematchVenue" required>
+                            <option value="">Select Venue</option>
+                            {% for country, venue_list in venues_by_country.items() %}
+                            <optgroup label="{{ country }}">
+                                {% for v in venue_list %}
+                                <option value="{{ v }}">{{ v }}</option>
+                                {% endfor %}
+                            </optgroup>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                <hr class="my-3">
+                <h6 class="fw-bold text-muted text-uppercase mb-3"><i class="bi bi-people me-1"></i>Teams (Optional)</h6>
+                <div class="row g-3">
+                    <div class="col-12 col-md-6">
+                        <label class="form-label">Team 1</label>
+                        <input type="text" class="form-control" name="team1" id="prematchTeam1" placeholder="e.g. India">
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <label class="form-label">Team 2</label>
+                        <input type="text" class="form-control" name="team2" id="prematchTeam2" placeholder="e.g. Australia">
+                    </div>
+                </div>
+
+                <hr class="my-3">
+                <h6 class="fw-bold text-muted text-uppercase mb-3"><i class="bi bi-clock me-1"></i>Match Start Time (Optional)</h6>
+                <div class="row g-3">
+                    <div class="col-12 col-md-6">
+                        <label class="form-label">Start Time (Ground Local Time)</label>
+                        <input type="datetime-local" class="form-control" name="match_time" id="matchTimeInput">
+                        <small class="text-muted" id="matchTimeHint">Select a venue to auto-fill with ground local time</small>
+                    </div>
+                </div>
+
+                <div class="mt-4 d-grid d-md-block text-center">
+                    <button type="submit" class="btn btn-lg px-md-5" style="background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); color: white; border: none;">
+                        <i class="bi bi-clipboard-data me-2"></i>Get Pre-Match Analysis
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    {% else %}
+
+    <div class="mb-3">
+        <a href="/prematch" class="btn btn-outline-secondary"><i class="bi bi-arrow-left me-1"></i>New Analysis</a>
+        <a href="/" class="btn btn-outline-primary ms-2"><i class="bi bi-calculator me-1"></i>Score Predictor</a>
+        <a href="/insights" class="btn btn-outline-info ms-2"><i class="bi bi-lightbulb me-1"></i>Match Insights</a>
+    </div>
+
+    {% if analysis.match_time_utc %}
+    <div class="card shadow-sm mb-4 border-0" style="background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);">
+        <div class="card-body text-white text-center py-4">
+            <div class="d-flex justify-content-center align-items-center gap-3 mb-2">
+                {% if analysis.team1 and analysis.team2 %}
+                <h4 class="fw-bold mb-0">{{ analysis.team1 }} vs {{ analysis.team2 }}</h4>
+                {% endif %}
+                <span class="badge bg-info">{{ analysis.format_label }}</span>
+            </div>
+            <p class="text-white-50 mb-3"><i class="bi bi-geo-alt me-1"></i>{{ analysis.venue }}</p>
+            {% if analysis.venue_timezone %}
+            <p class="text-white-50 mb-3" style="font-size: 0.8rem;"><i class="bi bi-clock me-1"></i>Time entered as {{ analysis.venue_timezone }} (venue local time)</p>
+            {% endif %}
+            <div id="countdown-section">
+                <p class="text-white-50 mb-2 small text-uppercase">Match starts in</p>
+                <div class="d-flex justify-content-center gap-3" id="countdown-display">
+                    <div class="text-center">
+                        <div class="display-5 fw-bold" id="cd-days" style="font-family: 'Roboto Mono', monospace;">--</div>
+                        <small class="text-white-50">Days</small>
+                    </div>
+                    <div class="display-5 fw-bold text-white-50">:</div>
+                    <div class="text-center">
+                        <div class="display-5 fw-bold" id="cd-hours" style="font-family: 'Roboto Mono', monospace;">--</div>
+                        <small class="text-white-50">Hours</small>
+                    </div>
+                    <div class="display-5 fw-bold text-white-50">:</div>
+                    <div class="text-center">
+                        <div class="display-5 fw-bold" id="cd-mins" style="font-family: 'Roboto Mono', monospace;">--</div>
+                        <small class="text-white-50">Mins</small>
+                    </div>
+                    <div class="display-5 fw-bold text-white-50">:</div>
+                    <div class="text-center">
+                        <div class="display-5 fw-bold" id="cd-secs" style="font-family: 'Roboto Mono', monospace;">--</div>
+                        <small class="text-white-50">Secs</small>
+                    </div>
+                </div>
+                <div id="countdown-live" class="d-none mt-3">
+                    <span class="badge bg-success px-4 py-2 fs-6"><i class="bi bi-broadcast me-1"></i>Match is LIVE</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="card shadow-sm mb-4 border-0" style="background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);">
+        <div class="card-body text-white text-center py-4">
+            <div class="d-flex justify-content-center align-items-center gap-3 mb-2">
+                {% if analysis.team1 and analysis.team2 %}
+                <h4 class="fw-bold mb-0">{{ analysis.team1 }} vs {{ analysis.team2 }}</h4>
+                {% else %}
+                <h4 class="fw-bold mb-0">Pre-Match Analysis</h4>
+                {% endif %}
+                <span class="badge bg-info">{{ analysis.format_label }}</span>
+            </div>
+            <p class="text-white-50 mb-0"><i class="bi bi-geo-alt me-1"></i>{{ analysis.venue }}</p>
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="row g-4">
+
+        <div class="col-lg-6">
+            <div class="card shadow-sm h-100 border-0">
+                <div class="card-header bg-white border-bottom">
+                    <h5 class="mb-0 fw-bold"><i class="bi bi-cloud-sun me-2" style="color: #3498db;"></i>Weather & Conditions</h5>
+                </div>
+                <div class="card-body">
+                    <p class="mb-3">{{ analysis.weather.description }}</p>
+                    <div class="d-flex flex-wrap gap-2 mb-3">
+                        {% if analysis.weather.typical_conditions == 'overcast_cool' %}
+                        <span class="badge bg-secondary px-3 py-2"><i class="bi bi-cloud me-1"></i>Overcast & Cool</span>
+                        {% elif analysis.weather.typical_conditions == 'hot_humid' %}
+                        <span class="badge bg-warning text-dark px-3 py-2"><i class="bi bi-thermometer-sun me-1"></i>Hot & Humid</span>
+                        {% elif analysis.weather.typical_conditions == 'hot_dry' %}
+                        <span class="badge bg-danger px-3 py-2"><i class="bi bi-sun me-1"></i>Hot & Dry</span>
+                        {% elif analysis.weather.typical_conditions == 'dry_warm' %}
+                        <span class="badge bg-info px-3 py-2"><i class="bi bi-sun me-1"></i>Dry & Warm</span>
+                        {% elif analysis.weather.typical_conditions == 'temperate' %}
+                        <span class="badge bg-success px-3 py-2"><i class="bi bi-cloud-sun me-1"></i>Temperate</span>
+                        {% elif analysis.weather.typical_conditions == 'tropical' %}
+                        <span class="badge bg-warning text-dark px-3 py-2"><i class="bi bi-tree me-1"></i>Tropical</span>
+                        {% else %}
+                        <span class="badge bg-secondary px-3 py-2"><i class="bi bi-cloud-sun me-1"></i>{{ analysis.weather.typical_conditions|replace('_', ' ')|title }}</span>
+                        {% endif %}
+
+                        {% if analysis.weather.dew_factor >= 0.6 %}
+                        <span class="badge bg-info px-3 py-2"><i class="bi bi-droplet me-1"></i>Heavy Dew Expected</span>
+                        {% elif analysis.weather.dew_factor >= 0.4 %}
+                        <span class="badge bg-info px-3 py-2"><i class="bi bi-droplet-half me-1"></i>Moderate Dew</span>
+                        {% endif %}
+
+                        {% if analysis.weather.humidity == 'high' %}
+                        <span class="badge bg-secondary px-3 py-2"><i class="bi bi-moisture me-1"></i>High Humidity</span>
+                        {% endif %}
+                    </div>
+                    <div class="row text-center g-2">
+                        <div class="col-6">
+                            <div class="border rounded p-2">
+                                <small class="text-muted d-block">Swing Window</small>
+                                <span class="fw-bold">
+                                    {% if analysis.weather.swing_window == 'all_innings' %}Entire Innings
+                                    {% elif analysis.weather.swing_window == 'first_10' %}First 10 Overs
+                                    {% elif analysis.weather.swing_window == 'first_6' %}Powerplay Only
+                                    {% elif analysis.weather.swing_window == 'first_4' %}First 4 Overs
+                                    {% endif %}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="border rounded p-2">
+                                <small class="text-muted d-block">Dew Factor</small>
+                                <div class="progress mt-1" style="height: 8px;">
+                                    <div class="progress-bar bg-info" style="width: {{ (analysis.weather.dew_factor * 100)|int }}%"></div>
+                                </div>
+                                <small class="fw-bold">{{ (analysis.weather.dew_factor * 10)|int }}/10</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="card shadow-sm h-100 border-0">
+                <div class="card-header bg-white border-bottom">
+                    <h5 class="mb-0 fw-bold"><i class="bi bi-bar-chart me-2" style="color: #e74c3c;"></i>Bat First vs Chase Record</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="flex-grow-1">
+                            <div class="progress animate-bar" style="height: 30px; border-radius: 15px;">
+                                <div class="progress-bar" role="progressbar" style="width: 0%; background: linear-gradient(90deg, #e74c3c, #c0392b);" data-target-width="{{ analysis.bat_chase.bat_first_wins }}" aria-valuenow="{{ analysis.bat_chase.bat_first_wins }}">
+                                    <span class="fw-bold">Bat 1st {{ analysis.bat_chase.bat_first_wins }}%</span>
+                                </div>
+                                <div class="progress-bar" role="progressbar" style="width: 0%; background: linear-gradient(90deg, #2ecc71, #27ae60);" data-target-width="{{ analysis.bat_chase.chase_wins }}" aria-valuenow="{{ analysis.bat_chase.chase_wins }}">
+                                    <span class="fw-bold">Chase {{ analysis.bat_chase.chase_wins }}%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="mb-2">{{ analysis.bat_chase.verdict }}</p>
+                    <div class="alert alert-light border mb-0 py-2">
+                        <i class="bi bi-lightbulb me-1 text-warning"></i>
+                        <strong>Toss Strategy:</strong> {{ analysis.toss_advice }}
+                    </div>
+                    <div class="decision-support mt-3">
+                        <div class="ds-item">
+                            <span class="ds-label"><i class="bi bi-info-circle-fill text-primary me-1"></i>What this means:</span>
+                            {% if analysis.bat_chase.chase_wins >= 58 %}
+                            Historically, teams chasing at this venue win far more often. Dew, pressure on defending totals, and flatter pitches in the second innings all favour the chasing side.
+                            {% elif analysis.bat_chase.bat_first_wins >= 58 %}
+                            Batting first is a proven winning strategy here. The pitch deteriorates, dew is minimal, and defending teams have a psychological advantage.
+                            {% else %}
+                            This is a neutral venue — toss matters less. Both strategies have been equally effective historically.
+                            {% endif %}
+                        </div>
+                        <div class="ds-item">
+                            <span class="ds-label"><i class="bi bi-compass-fill text-success me-1"></i>Tactical implication:</span>
+                            {% if analysis.bat_chase.chase_wins >= 54 %}
+                            If batting first, aim for 15-20 runs above par. The chasing team will be confident, so you need an above-average total to defend.
+                            {% elif analysis.bat_chase.bat_first_wins >= 54 %}
+                            If chasing, be aggressive in the powerplay. Don't let the required rate climb — this pitch gets harder to bat on.
+                            {% else %}
+                            No extreme strategy needed. Play according to conditions on the day and adapt to the match situation.
+                            {% endif %}
+                        </div>
+                        <div class="ds-item">
+                            <span class="ds-label"><i class="bi bi-star-fill text-warning me-1"></i>Fantasy impact:</span>
+                            {% if analysis.bat_chase.chase_wins >= 54 %}
+                            Prioritise batsmen from the chasing team as captain/vice-captain. They bat with clarity of target and score faster.
+                            {% elif analysis.bat_chase.bat_first_wins >= 54 %}
+                            First-innings batsmen set the tone — pick top-order batsmen batting first for run accumulation points.
+                            {% else %}
+                            Balance fantasy picks across both teams. All-rounders give the best value in evenly matched venue conditions.
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-white border-bottom">
+                    <h5 class="mb-0 fw-bold"><i class="bi bi-layers me-2" style="color: #9b59b6;"></i>Surface & Pitch Report</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="d-flex align-items-start gap-3 mb-3">
+                                <span class="badge px-3 py-2 fs-6
+                                    {% if analysis.surface.pitch_tempo == 'high_bounce' %}bg-danger
+                                    {% elif analysis.surface.pitch_tempo == 'low_slow' %}bg-success
+                                    {% elif analysis.surface.pitch_tempo == 'true_pace' %}bg-primary
+                                    {% elif analysis.surface.pitch_tempo == 'batting_road' %}bg-warning text-dark
+                                    {% else %}bg-secondary{% endif %}">
+                                    {% if analysis.surface.pitch_tempo == 'high_bounce' %}High Bounce
+                                    {% elif analysis.surface.pitch_tempo == 'low_slow' %}Low & Slow
+                                    {% elif analysis.surface.pitch_tempo == 'true_pace' %}True Pace
+                                    {% elif analysis.surface.pitch_tempo == 'batting_road' %}Batting Road
+                                    {% else %}Standard{% endif %}
+                                </span>
+                            </div>
+                            <p class="mb-3">{{ analysis.surface.surface }}</p>
+                            <p class="mb-0 text-muted"><i class="bi bi-info-circle me-1"></i>{{ analysis.surface.bowler_analysis }}</p>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="text-center">
+                                <h6 class="fw-bold text-muted mb-3">Wicket Share</h6>
+                                <div class="d-flex justify-content-center gap-4">
+                                    <div>
+                                        <div class="display-6 fw-bold pulse-metric" style="color: #e74c3c; font-family: 'Roboto Mono', monospace;">{{ analysis.surface.pace_wicket_pct }}%</div>
+                                        <small class="text-muted">Pace</small>
+                                    </div>
+                                    <div>
+                                        <div class="display-6 fw-bold pulse-metric" style="color: #2ecc71; font-family: 'Roboto Mono', monospace;">{{ analysis.surface.spin_wicket_pct }}%</div>
+                                        <small class="text-muted">Spin</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="decision-support mt-3">
+                        <div class="ds-item">
+                            <span class="ds-label"><i class="bi bi-info-circle-fill text-primary me-1"></i>What this means:</span>
+                            {% if analysis.surface.pace_wicket_pct >= 55 %}
+                            Pace bowlers dominate at this venue. Seam, swing, and bounce are key weapons — expect fast bowlers to be the primary wicket-takers.
+                            {% elif analysis.surface.spin_wicket_pct >= 50 %}
+                            This is a spin-friendly surface. Spinners will find turn and variable bounce, especially in the middle and death overs.
+                            {% else %}
+                            A balanced surface that assists both pace and spin equally. Bowlers of all types can be effective here.
+                            {% endif %}
+                        </div>
+                        <div class="ds-item">
+                            <span class="ds-label"><i class="bi bi-compass-fill text-success me-1"></i>Tactical implication:</span>
+                            {% if analysis.surface.pace_wicket_pct >= 55 %}
+                            Load up on quality pace bowlers. Use them in the powerplay and death overs. Spinners should focus on economy and containment.
+                            {% elif analysis.surface.spin_wicket_pct >= 50 %}
+                            Deploy spinners through the middle overs aggressively. Consider an extra spinner in the lineup and use pace only in powerplay/death.
+                            {% else %}
+                            Flexibility is key. Rotate pace and spin based on match situations — the pitch doesn't heavily favour either.
+                            {% endif %}
+                        </div>
+                        <div class="ds-item">
+                            <span class="ds-label"><i class="bi bi-star-fill text-warning me-1"></i>Fantasy impact:</span>
+                            {% if analysis.surface.pace_wicket_pct >= 55 %}
+                            Fast bowlers are premium fantasy picks. Look for pace bowlers with good economy who can also take wickets in the powerplay.
+                            {% elif analysis.surface.spin_wicket_pct >= 50 %}
+                            Spinners become high-value fantasy assets. Multi-wicket hauls by spinners are common here — prioritise them.
+                            {% else %}
+                            All-rounder bowlers (who bat in top 7) give the best fantasy returns on balanced pitches.
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-white border-bottom">
+                    <h5 class="mb-0 fw-bold"><i class="bi bi-bullseye me-2" style="color: #f39c12;"></i>Par Score & Match Expectations</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-md-4 text-center mb-3 mb-md-0">
+                            <small class="text-muted text-uppercase d-block mb-1">Par Score</small>
+                            <div class="display-3 fw-bold pulse-metric" style="font-family: 'Roboto Mono', monospace; color: #2c3e50;">{{ analysis.par_score.par_score }}</div>
+                            <span class="badge bg-dark px-3 py-1">Competitive: {{ analysis.par_score.competitive_range }}</span>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="mb-3">
+                                <span class="badge px-3 py-2 fs-6
+                                    {% if analysis.par_score.scoring_vibe == 'high-scoring' %}bg-warning text-dark
+                                    {% elif analysis.par_score.scoring_vibe == 'low-scoring spin battle' %}bg-success
+                                    {% elif analysis.par_score.scoring_vibe == 'pace-dominated' %}bg-danger
+                                    {% else %}bg-primary{% endif %}">
+                                    Expect a {{ analysis.par_score.scoring_vibe }} game
+                                </span>
+                            </div>
+                            <p class="mb-3">{{ analysis.par_score.scoring_detail }}</p>
+                            <div class="row g-2">
+                                <div class="col-6 col-md-3">
+                                    <div class="border rounded p-2 text-center">
+                                        <small class="text-muted d-block">Avg 1st Innings</small>
+                                        <span class="fw-bold fs-5" style="font-family: 'Roboto Mono', monospace;">{{ analysis.par_score.avg_1st }}</span>
+                                    </div>
+                                </div>
+                                <div class="col-6 col-md-3">
+                                    <div class="border rounded p-2 text-center">
+                                        <small class="text-muted d-block">Avg 2nd Innings</small>
+                                        <span class="fw-bold fs-5" style="font-family: 'Roboto Mono', monospace;">{{ analysis.par_score.avg_2nd }}</span>
+                                    </div>
+                                </div>
+                                <div class="col-6 col-md-3">
+                                    <div class="border rounded p-2 text-center">
+                                        <small class="text-muted d-block">Highest</small>
+                                        <span class="fw-bold fs-5 text-success" style="font-family: 'Roboto Mono', monospace;">{{ analysis.par_score.highest_recorded }}</span>
+                                    </div>
+                                </div>
+                                <div class="col-6 col-md-3">
+                                    <div class="border rounded p-2 text-center">
+                                        <small class="text-muted d-block">Lowest</small>
+                                        <span class="fw-bold fs-5 text-danger" style="font-family: 'Roboto Mono', monospace;">{{ analysis.par_score.lowest_recorded }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="decision-support mt-3">
+                                <div class="ds-item">
+                                    <span class="ds-label"><i class="bi bi-info-circle-fill text-primary me-1"></i>What this means:</span>
+                                    {% if analysis.par_score.scoring_vibe == 'high-scoring' %}
+                                    This is a run-feast venue. Totals routinely exceed par, and both teams should expect a high-scoring affair.
+                                    {% elif analysis.par_score.scoring_vibe == 'low-scoring spin battle' %}
+                                    Runs are hard to come by here. Low totals are common and every boundary is valuable — expect a grind.
+                                    {% elif analysis.par_score.scoring_vibe == 'pace-dominated' %}
+                                    Pace bowlers set the tone at this ground. Scoring comes in bursts between tight, movement-heavy spells.
+                                    {% else %}
+                                    A balanced scoring venue. Neither extreme is likely — expect a par-range game decided by key moments.
+                                    {% endif %}
+                                </div>
+                                <div class="ds-item">
+                                    <span class="ds-label"><i class="bi bi-compass-fill text-success me-1"></i>Tactical implication:</span>
+                                    {% if analysis.par_score.scoring_vibe == 'high-scoring' %}
+                                    Batting first? Set a big target (par + 15-20). Chasing? Don't panic early — runs will come. Save wickets for the death overs push.
+                                    {% elif analysis.par_score.scoring_vibe == 'low-scoring spin battle' %}
+                                    Play cautiously in the powerplay. Rotate strike, minimise dot balls, and build pressure with fielding. Every run matters.
+                                    {% else %}
+                                    Adapt to the match flow. Don't force scoring if the pitch is playing slow — let the ball come to the bat.
+                                    {% endif %}
+                                </div>
+                                <div class="ds-item">
+                                    <span class="ds-label"><i class="bi bi-star-fill text-warning me-1"></i>Fantasy impact:</span>
+                                    {% if analysis.par_score.scoring_vibe == 'high-scoring' %}
+                                    Stack your fantasy team with batsmen and all-rounders. Run bonuses, strike rate bonuses, and boundary points will be plentiful.
+                                    {% elif analysis.par_score.scoring_vibe == 'low-scoring spin battle' %}
+                                    Bowlers are king. Multi-wicket hauls and economy bonuses make bowlers the premium fantasy picks at this venue.
+                                    {% else %}
+                                    Balanced picks work best. Choose players who contribute in multiple facets — batting, bowling, and fielding.
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-white border-bottom">
+                    <h5 class="mb-0 fw-bold"><i class="bi bi-clock-history me-2" style="color: #1abc9c;"></i>Phase-by-Phase Expectations</h5>
+                </div>
+                <div class="card-body p-0">
+                    <ul class="nav nav-tabs px-3 pt-3" id="inningsPhaseTab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active fw-semibold" id="innings1-phase-tab" data-bs-toggle="tab" data-bs-target="#innings1-phase" type="button" role="tab">
+                                <i class="bi bi-1-circle me-1"></i>1st Innings
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link fw-semibold" id="innings2-phase-tab" data-bs-toggle="tab" data-bs-target="#innings2-phase" type="button" role="tab">
+                                <i class="bi bi-2-circle me-1"></i>2nd Innings
+                            </button>
+                        </li>
+                    </ul>
+                    <div class="tab-content" id="inningsPhaseTabContent">
+                        <div class="tab-pane fade show active" id="innings1-phase" role="tabpanel">
+                            {% for phase in analysis.phases.innings_1 %}
+                            <div class="p-4 {% if not loop.last %}border-bottom{% endif %}">
+                                <div class="d-flex align-items-center mb-2">
+                                    <i class="bi {{ phase.icon }} me-2 fs-5" style="color: {{ phase.color }};"></i>
+                                    <h6 class="fw-bold mb-0">{{ phase.name }}</h6>
+                                </div>
+                                <p class="mb-2">{{ phase.expectation }}</p>
+                                <div class="d-flex align-items-center">
+                                    <i class="bi bi-crosshair me-2 text-muted"></i>
+                                    <small class="text-muted"><strong>Likely wickets:</strong> {{ phase.wicket_type }}</small>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        <div class="tab-pane fade" id="innings2-phase" role="tabpanel">
+                            {% for phase in analysis.phases.innings_2 %}
+                            <div class="p-4 {% if not loop.last %}border-bottom{% endif %}">
+                                <div class="d-flex align-items-center mb-2">
+                                    <i class="bi {{ phase.icon }} me-2 fs-5" style="color: {{ phase.color }};"></i>
+                                    <h6 class="fw-bold mb-0">{{ phase.name }}</h6>
+                                </div>
+                                <p class="mb-2">{{ phase.expectation }}</p>
+                                <div class="d-flex align-items-center">
+                                    <i class="bi bi-crosshair me-2 text-muted"></i>
+                                    <small class="text-muted"><strong>Likely wickets:</strong> {{ phase.wicket_type }}</small>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+$(document).ready(function() {
+    $('#prematchVenue').select2({
+        theme: 'bootstrap-5',
+        placeholder: 'Search venues...',
+        allowClear: true
+    });
+
+    $('#prematchVenue').on('change', function() {
+        var venue = $(this).val();
+        if (!venue) return;
+        fetch('/api/venue-timezone?venue=' + encodeURIComponent(venue))
+            .then(function(r) { return r.json(); })
+            .then(function(data) {
+                if (data.timezone) {
+                    try {
+                        var now = new Date();
+                        var tzShort = new Intl.DateTimeFormat('en-US', { timeZone: data.timezone, timeZoneName: 'short' }).formatToParts(now).find(function(p) { return p.type === 'timeZoneName'; });
+                        var tzLabel = tzShort ? tzShort.value : data.timezone;
+                        document.getElementById('matchTimeHint').innerHTML = '<i class="bi bi-geo-alt me-1"></i>Ground time zone: <strong>' + tzLabel + '</strong> (' + data.timezone + ')';
+                    } catch(e) {}
+                }
+            });
+    });
+
+    if (document.getElementById('prematchLiveFormat')) {
+        fetchAllPrematchMatches();
+    }
+});
+
+function fetchAllPrematchMatches() {
+    var fmtEl = document.getElementById('prematchLiveFormat');
+    if (!fmtEl) return;
+    var select = document.getElementById('prematchLiveMatch');
+    var statusDiv = document.getElementById('prematchLiveStatus');
+    select.style.display = 'none';
+    var shimmer = select.nextElementSibling;
+    if (!shimmer || !shimmer.classList.contains('skeleton-shimmer-block')) {
+        shimmer = document.createElement('div');
+        shimmer.className = 'skeleton-shimmer-block';
+        select.parentNode.insertBefore(shimmer, select.nextSibling);
+    }
+    shimmer.style.display = 'block';
+    statusDiv.innerHTML = '<small class="text-muted"><i class="bi bi-hourglass-split me-1"></i>Searching for matches across all formats...</small>';
+
+    var formats = ['mens_t20', 'womens_t20', 'mens_odi', 'womens_odi'];
+    var allMatches = [];
+    var done = 0;
+
+    formats.forEach(function(fmt) {
+        fetch('/api/live-matches?format=' + fmt)
+            .then(function(r) { return r.json(); })
+            .then(function(data) {
+                if (data.success && data.matches) {
+                    data.matches.forEach(function(m) {
+                        if (m.status === 'Upcoming') {
+                            m._format = fmt;
+                            allMatches.push(m);
+                        }
+                    });
+                }
+            })
+            .catch(function() {})
+            .finally(function() {
+                done++;
+                if (done === formats.length) {
+                    renderPrematchMatches(allMatches, select, statusDiv, fmtEl);
+                }
+            });
+    });
+}
+
+function fetchPrematchMatches() {
+    var fmtEl = document.getElementById('prematchLiveFormat');
+    if (!fmtEl) return;
+    var fmt = fmtEl.value;
+    var select = document.getElementById('prematchLiveMatch');
+    var statusDiv = document.getElementById('prematchLiveStatus');
+    select.style.display = 'none';
+    var shimmer2 = select.nextElementSibling;
+    if (!shimmer2 || !shimmer2.classList.contains('skeleton-shimmer-block')) {
+        shimmer2 = document.createElement('div');
+        shimmer2.className = 'skeleton-shimmer-block';
+        select.parentNode.insertBefore(shimmer2, select.nextSibling);
+    }
+    shimmer2.style.display = 'block';
+    statusDiv.innerHTML = '<small class="text-muted"><i class="bi bi-hourglass-split me-1"></i>Searching for upcoming matches...</small>';
+
+    fetch('/api/live-matches?format=' + fmt)
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+            var matches = [];
+            if (data.success && data.matches) {
+                data.matches.forEach(function(m) {
+                    if (m.status === 'Upcoming') {
+                        m._format = fmt;
+                        matches.push(m);
+                    }
+                });
+            }
+            renderPrematchMatches(matches, select, statusDiv, fmtEl);
+        })
+        .catch(function() {
+            var shimmerErr = select.nextElementSibling;
+            if (shimmerErr && shimmerErr.classList.contains('skeleton-shimmer-block')) shimmerErr.style.display = 'none';
+            select.style.display = 'block';
+            select.innerHTML = '<option value="">Error loading matches</option>';
+            statusDiv.innerHTML = '<small class="text-danger"><i class="bi bi-exclamation-circle me-1"></i>Could not fetch matches.</small>';
+        });
+}
+
+function renderPrematchMatches(allMatches, select, statusDiv, fmtEl) {
+    var shimmerEl = select.nextElementSibling;
+    if (shimmerEl && shimmerEl.classList.contains('skeleton-shimmer-block')) shimmerEl.style.display = 'none';
+    select.style.display = 'block';
+    select.innerHTML = '<option value="">Select a match...</option>';
+    var count = 0;
+    var formatLabels = { mens_t20: "Men's T20", womens_t20: "Women's T20", mens_odi: "Men's ODI", womens_odi: "Women's ODI" };
+
+    allMatches.forEach(function(match) {
+        var opt = document.createElement('option');
+        opt.value = match.id;
+        var label = match.display_text.replace(/ \((Live|Upcoming|Completed)\)$/, '');
+        opt.textContent = '[' + (formatLabels[match._format] || match._format) + '] ' + label;
+        opt.dataset.status = match.status;
+        opt.dataset.teams = JSON.stringify(match.teams || []);
+        opt.dataset.fmt = match._format;
+        count++;
+        select.appendChild(opt);
+    });
+
+    if (count > 0) {
+        statusDiv.innerHTML = '<small class="text-success"><i class="bi bi-check-circle me-1"></i>Found ' + count + ' upcoming match(es) — auto-loading first match...</small>';
+        if (select.options.length > 1) {
+            select.selectedIndex = 1;
+            var firstFmt = select.options[1].dataset.fmt;
+            if (firstFmt) fmtEl.value = firstFmt;
+            loadPrematchMatch();
+        }
+    } else {
+        select.innerHTML = '<option value="">No upcoming matches found</option>';
+        statusDiv.innerHTML = '<small class="text-warning"><i class="bi bi-info-circle me-1"></i>No upcoming matches found. Enter details manually below.</small>';
+    }
+}
+
+function refreshPrematchMatches() {
+    var statusDiv = document.getElementById('prematchLiveStatus');
+    if (!statusDiv) return;
+    statusDiv.innerHTML = '<small class="text-muted"><i class="bi bi-arrow-clockwise me-1"></i>Refreshing...</small>';
+    fetch('/api/live-matches/refresh', { method: 'POST' })
+        .then(function() { fetchPrematchMatches(); })
+        .catch(function() { fetchPrematchMatches(); });
+}
+
+function loadPrematchMatch() {
+    var select = document.getElementById('prematchLiveMatch');
+    if (!select) return;
+    var matchId = select.value;
+    var spinner = document.getElementById('prematchLoadingSpinner');
+    var statusDiv = document.getElementById('prematchLiveStatus');
+    if (!matchId) return;
+
+    var selectedOption = select.options[select.selectedIndex];
+    var teams = [];
+    try { teams = JSON.parse(selectedOption.dataset.teams || '[]'); } catch(e) {}
+
+    var fmt = (selectedOption && selectedOption.dataset.fmt) || document.getElementById('prematchLiveFormat').value;
+    document.getElementById('prematchLiveFormat').value = fmt;
+    document.getElementById('prematchFormat').value = fmt;
+
+    if (teams.length >= 2) {
+        document.getElementById('prematchTeam1').value = teams[0];
+        document.getElementById('prematchTeam2').value = teams[1];
+    }
+
+    spinner.style.display = 'block';
+    statusDiv.innerHTML = '<small class="text-info"><i class="bi bi-download me-1"></i>Loading venue data...</small>';
+
+    var currentVenue = document.getElementById('prematchVenue').value || '';
+    fetch('/api/live-match/' + matchId + '?format=' + fmt + '&venue=' + encodeURIComponent(currentVenue))
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+            spinner.style.display = 'none';
+            if (data.success && data.match && data.match.venue) {
+                var venueSelect = document.getElementById('prematchVenue');
+                var venueFound = false;
+                var matchVenue = data.match.venue.toLowerCase().trim();
+                var matchVenueWords = matchVenue.replace(/[,]/g, '').split(/\s+/);
+
+                for (var i = 0; i < venueSelect.options.length; i++) {
+                    if (!venueSelect.options[i].value) continue;
+                    var optVal = venueSelect.options[i].value.toLowerCase();
+                    if (optVal === matchVenue || optVal.indexOf(matchVenue) !== -1 || matchVenue.indexOf(optVal) !== -1) {
+                        venueSelect.value = venueSelect.options[i].value;
+                        if ($.fn.select2) $(venueSelect).trigger('change');
+                        venueFound = true;
+                        break;
+                    }
+                }
+                if (!venueFound) {
+                    var bestScore = 0;
+                    var bestIdx = -1;
+                    for (var i = 0; i < venueSelect.options.length; i++) {
+                        if (!venueSelect.options[i].value) continue;
+                        var optVal = venueSelect.options[i].value.toLowerCase();
+                        var optCity = optVal.split(',').pop().trim();
+                        var matchCity = matchVenue.split(',').pop().trim();
+                        var score = 0;
+                        for (var w = 0; w < matchVenueWords.length; w++) {
+                            if (matchVenueWords[w].length > 2 && optVal.indexOf(matchVenueWords[w]) !== -1) score++;
+                        }
+                        if (optCity === matchCity) score += 2;
+                        if (score > bestScore) {
+                            bestScore = score;
+                            bestIdx = i;
+                        }
+                    }
+                    if (bestScore >= 2 && bestIdx >= 0) {
+                        venueSelect.value = venueSelect.options[bestIdx].value;
+                        if ($.fn.select2) $(venueSelect).trigger('change');
+                        venueFound = true;
+                    }
+                }
+                statusDiv.innerHTML = '<small class="text-success"><i class="bi bi-check-circle me-1"></i>Match data loaded! ' + (venueFound ? 'Venue matched.' : 'Venue not matched — please select manually.') + '</small>';
+
+                var timeInput = document.getElementById('matchTimeInput');
+                if (data.match.start_time_gmt && timeInput && venueFound) {
+                    var resolvedVenue = document.getElementById('prematchVenue').value;
+                    fetch('/api/live-match/' + matchId + '?format=' + fmt + '&venue=' + encodeURIComponent(resolvedVenue))
+                        .then(function(r2) { return r2.json(); })
+                        .then(function(data2) {
+                            if (data2.success && data2.match && data2.match.start_time_local) {
+                                timeInput.value = data2.match.start_time_local;
+                            }
+                        });
+                } else if (data.match.start_time_local && timeInput) {
+                    timeInput.value = data.match.start_time_local;
+                }
+            } else {
+                statusDiv.innerHTML = '<small class="text-success"><i class="bi bi-check-circle me-1"></i>Teams loaded. Please select venue manually.</small>';
+            }
+
+            if (data.success && data.match && data.match.teams && data.match.teams.length >= 2 && !teams.length) {
+                document.getElementById('prematchTeam1').value = data.match.teams[0];
+                document.getElementById('prematchTeam2').value = data.match.teams[1];
+            }
+        })
+        .catch(function() {
+            spinner.style.display = 'none';
+            statusDiv.innerHTML = '<small class="text-success"><i class="bi bi-check-circle me-1"></i>Teams loaded. Select venue manually.</small>';
+        });
+}
+
+{% if analysis and analysis.match_time_utc %}
+(function() {
+    var matchTimeStr = "{{ analysis.match_time_utc }}";
+    var matchDate = new Date(matchTimeStr);
+
+    function updateCountdown() {
+        var now = new Date();
+        var diff = matchDate - now;
+
+        if (diff <= 0) {
+            document.getElementById('countdown-display').classList.add('d-none');
+            document.getElementById('countdown-live').classList.remove('d-none');
+            document.querySelector('#countdown-section p').textContent = '';
+            return;
+        }
+
+        var days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        var hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        var mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        var secs = Math.floor((diff % (1000 * 60)) / 1000);
+
+        document.getElementById('cd-days').textContent = String(days).padStart(2, '0');
+        document.getElementById('cd-hours').textContent = String(hours).padStart(2, '0');
+        document.getElementById('cd-mins').textContent = String(mins).padStart(2, '0');
+        document.getElementById('cd-secs').textContent = String(secs).padStart(2, '0');
+    }
+
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+})();
+{% endif %}
+
+document.addEventListener('DOMContentLoaded', function() {
+    setTimeout(function() {
+        document.querySelectorAll('.animate-bar .progress-bar[data-target-width]').forEach(function(bar) {
+            bar.style.width = bar.getAttribute('data-target-width') + '%';
+        });
+    }, 300);
+});
+</script>
+{% endblock %}

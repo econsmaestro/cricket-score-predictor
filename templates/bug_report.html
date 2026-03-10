@@ -1,0 +1,251 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="feedback-page">
+    <div class="feedback-header mb-4">
+        <div class="d-flex align-items-center gap-2 mb-2">
+            <i class="bi bi-chat-square-text-fill" style="font-size: 1.5rem; color: var(--success-color);"></i>
+            <h2 class="mb-0" style="color: var(--success-color); font-weight: 700;">Feedback</h2>
+        </div>
+        <p class="text-muted mb-0">Report bugs, request features, or share ideas.</p>
+    </div>
+
+    <div id="feedbackForm" class="feedback-form-card">
+        <form id="bugReportForm" enctype="multipart/form-data" method="POST" action="/bug-report">
+            <div class="mb-4">
+                <label class="form-label fw-semibold">Category <span class="text-danger">*</span></label>
+                <div class="category-pills d-flex flex-wrap gap-2">
+                    <label class="category-pill">
+                        <input type="radio" name="category" value="Bug" checked hidden>
+                        <span><i class="bi bi-bug me-1"></i> Bug</span>
+                    </label>
+                    <label class="category-pill">
+                        <input type="radio" name="category" value="Feature Request" hidden>
+                        <span><i class="bi bi-lightbulb me-1"></i> Feature Request</span>
+                    </label>
+                    <label class="category-pill">
+                        <input type="radio" name="category" value="Improvement" hidden>
+                        <span><i class="bi bi-wrench me-1"></i> Improvement</span>
+                    </label>
+                    <label class="category-pill">
+                        <input type="radio" name="category" value="Account" hidden>
+                        <span><i class="bi bi-person me-1"></i> Account</span>
+                    </label>
+                    <label class="category-pill">
+                        <input type="radio" name="category" value="Other" hidden>
+                        <span><i class="bi bi-three-dots me-1"></i> Other</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label fw-semibold">Title <span class="text-danger">*</span></label>
+                <div class="position-relative">
+                    <input type="text" name="title" class="form-control" placeholder="Brief summary of your feedback" maxlength="80" required>
+                    <span class="char-counter">0/80</span>
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label fw-semibold">Description <span class="text-danger">*</span></label>
+                <div class="position-relative">
+                    <textarea name="description" class="form-control" rows="5" placeholder="Provide details about your feedback..." maxlength="4000" required></textarea>
+                    <span class="char-counter textarea-counter">0/4000</span>
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label fw-semibold">Contact Email (optional)</label>
+                <input type="email" name="contact_email" id="contactEmail" class="form-control" placeholder="your@email.com - only if you want a response">
+                <div id="emailError" class="text-danger small mt-1 d-none" style="font-weight:500;">Please enter a valid email address (e.g. name@gmail.com)</div>
+            </div>
+
+            <div class="diagnostics-toggle mb-4">
+                <div class="d-flex justify-content-between align-items-center p-3 rounded" style="background: #f0fdf4; border: 1px solid #bbf7d0;">
+                    <div>
+                        <div class="fw-semibold">Include diagnostics</div>
+                        <div class="text-muted small">Route, URL, timestamp, and browser info</div>
+                    </div>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" name="include_diagnostics" id="diagnosticsToggle" checked style="width: 3em; height: 1.5em; cursor: pointer;">
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label fw-semibold">Attachments (optional)</label>
+                <div class="screenshot-upload-area" id="uploadArea">
+                    <input type="file" name="screenshot" id="screenshotInput" accept="image/png,image/jpeg,image/webp" hidden>
+                    <div class="upload-placeholder" id="uploadPlaceholder" onclick="document.getElementById('screenshotInput').click()">
+                        <i class="bi bi-paperclip me-1"></i> Add screenshot
+                    </div>
+                    <div class="upload-preview d-none" id="uploadPreview">
+                        <img id="previewImg" src="" alt="Preview" class="img-thumbnail" style="max-height: 120px;">
+                        <button type="button" class="btn btn-sm btn-outline-danger ms-2" id="removeScreenshot">
+                            <i class="bi bi-x-lg"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="text-muted small mt-1">PNG, JPG, or WebP. Max 5MB.</div>
+            </div>
+
+            <button type="submit" class="btn btn-submit w-100" id="submitBtn">
+                Submit Feedback
+            </button>
+        </form>
+    </div>
+
+    <div id="successOverlay" class="success-overlay d-none">
+        <div class="success-content">
+            <div class="cricket-animation">
+                <div class="cricket-ball-anim">
+                    <svg viewBox="0 0 100 100" width="80" height="80">
+                        <circle cx="50" cy="50" r="45" fill="#c0392b" stroke="#922b21" stroke-width="2"/>
+                        <path d="M 30 25 Q 50 5 70 25" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+                        <path d="M 30 75 Q 50 95 70 75" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+                        <line x1="28" y1="30" x2="28" y2="70" stroke="white" stroke-width="1.5" stroke-dasharray="4,3"/>
+                        <line x1="72" y1="30" x2="72" y2="70" stroke="white" stroke-width="1.5" stroke-dasharray="4,3"/>
+                    </svg>
+                </div>
+                <div class="stumps-hit">
+                    <div class="stump s1"></div>
+                    <div class="stump s2"></div>
+                    <div class="stump s3"></div>
+                    <div class="bail b1"></div>
+                    <div class="bail b2"></div>
+                </div>
+                <div class="sparkles">
+                    <i class="bi bi-star-fill sparkle sp1"></i>
+                    <i class="bi bi-star-fill sparkle sp2"></i>
+                    <i class="bi bi-star-fill sparkle sp3"></i>
+                    <i class="bi bi-star-fill sparkle sp4"></i>
+                    <i class="bi bi-star-fill sparkle sp5"></i>
+                    <i class="bi bi-star-fill sparkle sp6"></i>
+                </div>
+            </div>
+            <h3 class="mt-4 fw-bold" style="color: var(--success-color);">Howzat! Feedback Submitted!</h3>
+            <p class="text-muted">Thank you for helping us improve Cricket Match Intelligence.</p>
+            <a href="/" class="btn btn-outline-success mt-2">Back to Home</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const pills = document.querySelectorAll('.category-pill');
+    pills.forEach(pill => {
+        pill.addEventListener('click', function() {
+            pills.forEach(p => p.classList.remove('active'));
+            this.classList.add('active');
+            this.querySelector('input').checked = true;
+        });
+        if (pill.querySelector('input').checked) pill.classList.add('active');
+    });
+
+    document.querySelectorAll('input[maxlength], textarea[maxlength]').forEach(el => {
+        const counter = el.closest('.position-relative').querySelector('.char-counter');
+        if (!counter) return;
+        el.addEventListener('input', function() {
+            counter.textContent = this.value.length + '/' + this.maxLength;
+        });
+    });
+
+    const fileInput = document.getElementById('screenshotInput');
+    const placeholder = document.getElementById('uploadPlaceholder');
+    const preview = document.getElementById('uploadPreview');
+    const previewImg = document.getElementById('previewImg');
+    const removeBtn = document.getElementById('removeScreenshot');
+
+    fileInput.addEventListener('change', function() {
+        if (this.files && this.files[0]) {
+            if (this.files[0].size > 5 * 1024 * 1024) {
+                alert('File must be under 5MB');
+                this.value = '';
+                return;
+            }
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                previewImg.src = e.target.result;
+                placeholder.classList.add('d-none');
+                preview.classList.remove('d-none');
+            };
+            reader.readAsDataURL(this.files[0]);
+        }
+    });
+
+    removeBtn.addEventListener('click', function() {
+        fileInput.value = '';
+        previewImg.src = '';
+        preview.classList.add('d-none');
+        placeholder.classList.remove('d-none');
+    });
+
+    const emailInput = document.getElementById('contactEmail');
+    const emailError = document.getElementById('emailError');
+    const emailRegex = /^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]*[a-zA-Z][a-zA-Z0-9.\-]*\.[a-zA-Z]{2,6}$/;
+
+    emailInput.addEventListener('input', function() {
+        if (this.value && !emailRegex.test(this.value)) {
+            this.classList.add('is-invalid');
+            emailError.classList.remove('d-none');
+        } else {
+            this.classList.remove('is-invalid');
+            emailError.classList.add('d-none');
+        }
+    });
+
+    document.getElementById('bugReportForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        if (emailInput.value && !emailRegex.test(emailInput.value)) {
+            emailInput.classList.add('is-invalid');
+            emailError.classList.remove('d-none');
+            emailInput.focus();
+            return;
+        }
+
+        const btn = document.getElementById('submitBtn');
+        btn.disabled = true;
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Submitting...';
+
+        const formData = new FormData(this);
+        if (document.getElementById('diagnosticsToggle').checked) {
+            formData.append('diagnostics_url', window.location.href);
+            formData.append('diagnostics_ua', navigator.userAgent);
+            formData.append('diagnostics_screen', window.innerWidth + 'x' + window.innerHeight);
+            formData.append('diagnostics_time', new Date().toISOString());
+        }
+
+        fetch('/bug-report', {
+            method: 'POST',
+            body: formData,
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        })
+        .then(resp => resp.json().then(data => ({ ok: resp.ok, data })))
+        .then(({ ok, data }) => {
+            if (data.success) {
+                document.getElementById('feedbackForm').classList.add('d-none');
+                document.getElementById('successOverlay').classList.remove('d-none');
+            } else {
+                if (data.error && data.error.toLowerCase().includes('email')) {
+                    emailInput.classList.add('is-invalid');
+                    emailError.textContent = data.error;
+                    emailError.classList.remove('d-none');
+                    emailInput.focus();
+                } else {
+                    alert(data.error || 'Something went wrong. Please try again.');
+                }
+                btn.disabled = false;
+                btn.innerHTML = 'Submit Feedback';
+            }
+        })
+        .catch(() => {
+            alert('Network error. Please try again.');
+            btn.disabled = false;
+            btn.innerHTML = 'Submit Feedback';
+        });
+    });
+});
+</script>
+{% endblock %}

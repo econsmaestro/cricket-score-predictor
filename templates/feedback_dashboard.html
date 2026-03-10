@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="feedback-dashboard">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1><i class="bi bi-chat-heart"></i> Feedback Dashboard</h1>
+        <a href="{{ url_for('export_feedback') }}" class="btn btn-success btn-lg">
+            <i class="bi bi-file-earmark-excel"></i> Export to Excel
+        </a>
+    </div>
+    
+    <div class="row g-4 mb-4">
+        <div class="col-md-4">
+            <div class="feedback-stats-card">
+                <div class="stat-value">{{ total_feedback }}</div>
+                <div class="stat-label">Total Feedback</div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="feedback-stats-card positive">
+                <div class="stat-value">{{ positive_count }}</div>
+                <div class="stat-label"><i class="bi bi-hand-thumbs-up-fill"></i> Positive</div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="feedback-stats-card negative">
+                <div class="stat-value">{{ negative_count }}</div>
+                <div class="stat-label"><i class="bi bi-hand-thumbs-down-fill"></i> Negative</div>
+            </div>
+        </div>
+    </div>
+    
+    {% if total_feedback > 0 %}
+    <div class="feedback-table">
+        <table class="table table-hover mb-0">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Type</th>
+                    <th>Reasons</th>
+                    <th>Comments</th>
+                    <th>Match Info</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for feedback in feedback_list %}
+                <tr>
+                    <td>{{ feedback.created_at.strftime('%Y-%m-%d %H:%M') if feedback.created_at else 'N/A' }}</td>
+                    <td>
+                        {% if feedback.is_positive %}
+                        <span class="feedback-badge bg-success text-white">
+                            <i class="bi bi-hand-thumbs-up-fill"></i> Positive
+                        </span>
+                        {% else %}
+                        <span class="feedback-badge bg-danger text-white">
+                            <i class="bi bi-hand-thumbs-down-fill"></i> Negative
+                        </span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if not feedback.is_positive %}
+                            {% if feedback.reason_wrong_player %}<span class="badge bg-secondary me-1">Wrong Player</span>{% endif %}
+                            {% if feedback.reason_unrealistic %}<span class="badge bg-secondary me-1">Unrealistic</span>{% endif %}
+                            {% if feedback.reason_ui_confusing %}<span class="badge bg-secondary me-1">UI Confusing</span>{% endif %}
+                            {% if feedback.reason_bug_error %}<span class="badge bg-secondary me-1">Bug/Error</span>{% endif %}
+                        {% else %}
+                            -
+                        {% endif %}
+                    </td>
+                    <td>{{ feedback.feedback_text[:100] if feedback.feedback_text else '-' }}{{ '...' if feedback.feedback_text and feedback.feedback_text|length > 100 else '' }}</td>
+                    <td>
+                        {% if feedback.venue %}
+                        <small>
+                            {{ feedback.venue[:20] }}{% if feedback.venue|length > 20 %}...{% endif %}<br>
+                            <span class="text-muted">{{ feedback.current_score }} → {{ feedback.predicted_score }}</span>
+                        </small>
+                        {% else %}
+                        -
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="alert alert-info text-center">
+        <i class="bi bi-info-circle me-2"></i>
+        No feedback has been submitted yet.
+    </div>
+    {% endif %}
+    
+    <div class="text-center mt-4">
+        <a href="{{ url_for('index') }}" class="btn btn-primary">
+            <i class="bi bi-arrow-left"></i> Back to Predictions
+        </a>
+    </div>
+</div>
+{% endblock %}

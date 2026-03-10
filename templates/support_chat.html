@@ -1,0 +1,458 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row justify-content-center mt-4">
+    <div class="col-lg-8 col-md-10">
+        <div class="card shadow-sm" style="border-radius: 16px; overflow: hidden; border: 1px solid #e0e0e0;">
+            <div class="card-header d-flex align-items-center justify-content-between" style="background: linear-gradient(135deg, #1a365d 0%, #2d5a87 100%); padding: 16px 20px;">
+                <div class="d-flex align-items-center gap-2">
+                    <div style="width: 36px; height: 36px; background: rgba(255,255,255,0.15); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                        <i class="bi bi-robot text-white" style="font-size: 18px;"></i>
+                    </div>
+                    <div>
+                        <h5 class="mb-0 text-white" style="font-size: 16px; font-weight: 600;">CricPredictor Support</h5>
+                        <span style="font-size: 11px; color: rgba(255,255,255,0.7);">AI-powered assistant</span>
+                    </div>
+                </div>
+                <button id="clearChat" class="btn btn-sm" style="background: rgba(255,255,255,0.12); color: white; border: none; border-radius: 8px; font-size: 12px; padding: 5px 12px;" title="Start new conversation">
+                    <i class="bi bi-arrow-counterclockwise me-1"></i>New Chat
+                </button>
+            </div>
+
+            <div id="chatMessages" style="height: 450px; overflow-y: auto; padding: 20px; background: #f8f9fa; -webkit-overflow-scrolling: touch;">
+                {% if not history %}
+                <div id="welcomeMsg" class="text-center py-5">
+                    <div style="width: 64px; height: 64px; background: linear-gradient(135deg, #1a365d, #2d5a87); border-radius: 16px; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;">
+                        <i class="bi bi-chat-dots-fill text-white" style="font-size: 28px;"></i>
+                    </div>
+                    <h5 style="color: #1a365d; font-weight: 600;">How can I help you today?</h5>
+                    <p class="text-muted mb-4" style="font-size: 14px; max-width: 360px; margin: 0 auto;">Ask me about the app, cricket stats, predictions, or report any issues.</p>
+                    <div class="d-flex flex-wrap justify-content-center gap-2 px-2">
+                        <button class="quick-prompt btn btn-sm" style="background: white; border: 1px solid #dee2e6; border-radius: 20px; font-size: 13px; padding: 8px 14px; color: #495057;">How does the prediction work?</button>
+                        <button class="quick-prompt btn btn-sm" style="background: white; border: 1px solid #dee2e6; border-radius: 20px; font-size: 13px; padding: 8px 14px; color: #495057;">What formats are supported?</button>
+                        <button class="quick-prompt btn btn-sm" style="background: white; border: 1px solid #dee2e6; border-radius: 20px; font-size: 13px; padding: 8px 14px; color: #495057;">Report a problem</button>
+                    </div>
+                </div>
+                {% else %}
+                {% for msg in history %}
+                <div class="d-flex mb-3 {% if msg.role == 'user' %}justify-content-end{% else %}justify-content-start{% endif %}">
+                    {% if msg.role == 'assistant' %}
+                    <div style="width: 28px; height: 28px; background: linear-gradient(135deg, #1a365d, #2d5a87); border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-right: 8px; margin-top: 2px;">
+                        <i class="bi bi-robot text-white" style="font-size: 13px;"></i>
+                    </div>
+                    {% endif %}
+                    <div style="max-width: 75%; padding: 10px 14px; border-radius: 14px; font-size: 14px; line-height: 1.5; {% if msg.role == 'user' %}background: #1a365d; color: white; border-bottom-right-radius: 4px;{% else %}background: white; color: #333; border: 1px solid #e0e0e0; border-bottom-left-radius: 4px;{% endif %}">
+                        {% if msg.role == 'assistant' %}{{ msg.message | markdown_links }}{% else %}{{ msg.message }}{% endif %}
+                        {% if msg.attachment_filename %}
+                        {% set ext = msg.attachment_filename.rsplit('.', 1)[-1].lower() %}
+                        {% if ext in ['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp', 'svg'] %}
+                        <div style="margin-top: 8px;">
+                            <a href="/static/chat_uploads/{{ msg.attachment_filename }}" target="_blank">
+                                <img src="/static/chat_uploads/{{ msg.attachment_filename }}" alt="{{ msg.attachment_original_name }}" style="max-width: 100%; max-height: 200px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2);">
+                            </a>
+                        </div>
+                        {% else %}
+                        <div style="margin-top: 8px;">
+                            <a href="/static/chat_uploads/{{ msg.attachment_filename }}" target="_blank" download="{{ msg.attachment_original_name }}" style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 8px; font-size: 12px; text-decoration: none; {% if msg.role == 'user' %}background: rgba(255,255,255,0.15); color: white;{% else %}background: #f0f4f8; color: #1a365d;{% endif %}">
+                                <i class="bi bi-file-earmark-arrow-down"></i>
+                                <span style="max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{ msg.attachment_original_name }}</span>
+                            </a>
+                        </div>
+                        {% endif %}
+                        {% endif %}
+                    </div>
+                    {% if msg.role == 'user' %}
+                    <div style="width: 28px; height: 28px; background: #6c757d; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-left: 8px; margin-top: 2px;">
+                        <i class="bi bi-person-fill text-white" style="font-size: 13px;"></i>
+                    </div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+                {% endif %}
+            </div>
+
+            <div id="quotaBar" class="d-flex align-items-center justify-content-between" style="background: #f0f4f8; border-top: 1px solid #e9ecef; padding: 6px 16px; font-size: 12px; color: #5a6a7a;">
+                <span>
+                    <i class="bi bi-chat-square-text me-1"></i>
+                    <span id="quotaText">{{ remaining }} of {{ weekly_limit }} messages left this week</span>
+                </span>
+                {% if renews_at %}
+                <span id="renewInfo" data-renews="{{ renews_at }}" style="color: #8a9ab5;">
+                    <i class="bi bi-arrow-repeat me-1"></i>Renews <span id="renewTime"></span>
+                </span>
+                {% endif %}
+            </div>
+            {% if remaining <= 0 %}
+            <div id="quotaExceeded" class="text-center py-3" style="background: #fff3cd; border-top: 1px solid #e9ecef; padding: 10px 16px;">
+                <i class="bi bi-exclamation-triangle-fill text-warning me-1"></i>
+                <span style="font-size: 13px; color: #856404;">Weekly message limit reached. Your quota renews soon.</span>
+            </div>
+            {% endif %}
+            <div id="attachmentPreview" style="display: none; background: #edf2f7; border-top: 1px solid #e9ecef; padding: 8px 16px;">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div class="d-flex align-items-center gap-2" style="min-width: 0;">
+                        <i class="bi bi-paperclip" style="color: #1a365d;"></i>
+                        <span id="attachmentName" style="font-size: 13px; color: #495057; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"></span>
+                        <span id="attachmentSize" style="font-size: 11px; color: #8a9ab5; flex-shrink: 0;"></span>
+                    </div>
+                    <button type="button" id="removeAttachment" class="btn btn-sm p-0" style="color: #dc3545; border: none; background: none; font-size: 16px; line-height: 1;">
+                        <i class="bi bi-x-circle-fill"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="card-footer" style="background: white; border-top: 1px solid #e9ecef; padding: 12px 16px;">
+                <form id="chatForm" class="d-flex gap-2 align-items-end">
+                    <input type="file" id="fileInput" style="display: none;">
+                    <button type="button" id="attachBtn" class="btn" style="background: transparent; border: 1px solid #dee2e6; border-radius: 12px; width: 42px; height: 42px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: #6c757d;" title="Attach file (max 10 MB)" {% if remaining <= 0 %}disabled{% endif %}>
+                        <i class="bi bi-paperclip" style="font-size: 18px;"></i>
+                    </button>
+                    <div class="flex-grow-1 position-relative">
+                        <textarea id="chatInput" class="form-control" rows="1" maxlength="1000" placeholder="{% if remaining <= 0 %}Message limit reached{% else %}Type your message...{% endif %}" {% if remaining <= 0 %}disabled{% endif %} style="border-radius: 12px; border: 1px solid #dee2e6; padding: 10px 14px; resize: none; font-size: 14px; min-height: 42px; max-height: 100px;"></textarea>
+                        <span id="charCount" style="position: absolute; right: 10px; bottom: 4px; font-size: 10px; color: #aaa;">0/1000</span>
+                    </div>
+                    <button type="submit" id="sendBtn" class="btn" style="background: linear-gradient(135deg, #1a365d, #2d5a87); color: white; border: none; border-radius: 12px; width: 42px; height: 42px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;" disabled>
+                        <i class="bi bi-send-fill" style="font-size: 16px;"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <p class="text-center text-muted mt-2" style="font-size: 12px;">
+            Powered by AI. Responses may not always be accurate. Max file size: 10 MB.
+        </p>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+(function() {
+    const CSRF = '{{ csrf_token }}';
+    const chatMessages = document.getElementById('chatMessages');
+    const chatForm = document.getElementById('chatForm');
+    const chatInput = document.getElementById('chatInput');
+    const sendBtn = document.getElementById('sendBtn');
+    const charCount = document.getElementById('charCount');
+    const clearChat = document.getElementById('clearChat');
+    const welcomeMsg = document.getElementById('welcomeMsg');
+    const quotaText = document.getElementById('quotaText');
+    const fileInput = document.getElementById('fileInput');
+    const attachBtn = document.getElementById('attachBtn');
+    const attachmentPreview = document.getElementById('attachmentPreview');
+    const attachmentName = document.getElementById('attachmentName');
+    const attachmentSize = document.getElementById('attachmentSize');
+    const removeAttachment = document.getElementById('removeAttachment');
+    let remaining = {{ remaining }};
+    const weeklyLimit = {{ weekly_limit }};
+    let pendingFile = null;
+
+    function formatFileSize(bytes) {
+        if (bytes < 1024) return bytes + ' B';
+        if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
+        return (bytes / 1048576).toFixed(1) + ' MB';
+    }
+
+    const IMAGE_EXTS = ['jpg','jpeg','png','gif','webp','bmp','svg'];
+
+    function isImage(filename) {
+        const ext = filename.split('.').pop().toLowerCase();
+        return IMAGE_EXTS.includes(ext);
+    }
+
+    attachBtn.addEventListener('click', function() {
+        fileInput.click();
+    });
+
+    function setPendingFile(file) {
+        if (file.size > 10 * 1024 * 1024) {
+            alert('File too large. Maximum size is 10 MB.');
+            return;
+        }
+        pendingFile = file;
+        attachmentName.textContent = file.name;
+        attachmentSize.textContent = formatFileSize(file.size);
+        const thumbEl = document.getElementById('attachmentThumb');
+        if (thumbEl) thumbEl.remove();
+        if (isImage(file.name)) {
+            const thumb = document.createElement('img');
+            thumb.id = 'attachmentThumb';
+            thumb.src = URL.createObjectURL(file);
+            thumb.style.cssText = 'width:32px;height:32px;object-fit:cover;border-radius:4px;flex-shrink:0;';
+            attachmentPreview.querySelector('.d-flex').prepend(thumb);
+        }
+        attachmentPreview.style.display = 'block';
+        updateSendState();
+    }
+
+    fileInput.addEventListener('change', function() {
+        if (this.files && this.files[0]) {
+            setPendingFile(this.files[0]);
+        }
+    });
+
+    document.addEventListener('paste', function(e) {
+        if (remaining <= 0) return;
+        const items = e.clipboardData && e.clipboardData.items;
+        if (!items) return;
+        for (let i = 0; i < items.length; i++) {
+            if (items[i].type.indexOf('image') !== -1) {
+                e.preventDefault();
+                const blob = items[i].getAsFile();
+                if (blob) {
+                    const ext = blob.type.split('/')[1] || 'png';
+                    const file = new File([blob], 'screenshot.' + ext.replace('jpeg', 'jpg'), {type: blob.type});
+                    setPendingFile(file);
+                }
+                return;
+            }
+        }
+    });
+
+    removeAttachment.addEventListener('click', function() {
+        pendingFile = null;
+        fileInput.value = '';
+        attachmentPreview.style.display = 'none';
+        const thumbEl = document.getElementById('attachmentThumb');
+        if (thumbEl) thumbEl.remove();
+        updateSendState();
+    });
+
+    function updateSendState() {
+        sendBtn.disabled = !(chatInput.value.trim() || pendingFile);
+    }
+
+    function formatRelativeTime(isoStr) {
+        if (!isoStr) return '';
+        const renewDate = new Date(isoStr);
+        const now = new Date();
+        const diffMs = renewDate - now;
+        if (diffMs <= 0) return 'soon';
+        const diffHrs = Math.floor(diffMs / 3600000);
+        const diffMins = Math.floor((diffMs % 3600000) / 60000);
+        if (diffHrs >= 24) {
+            const days = Math.floor(diffHrs / 24);
+            return 'in ' + days + (days === 1 ? ' day' : ' days');
+        }
+        if (diffHrs > 0) return 'in ' + diffHrs + 'h ' + diffMins + 'm';
+        return 'in ' + diffMins + 'm';
+    }
+
+    const renewEl = document.getElementById('renewTime');
+    const renewInfo = document.getElementById('renewInfo');
+    if (renewEl && renewInfo) {
+        const renewsAt = renewInfo.getAttribute('data-renews');
+        function updateRenewTime() {
+            renewEl.textContent = formatRelativeTime(renewsAt);
+        }
+        updateRenewTime();
+        setInterval(updateRenewTime, 60000);
+    }
+
+    function disableChat() {
+        chatInput.disabled = true;
+        chatInput.placeholder = 'Message limit reached';
+        sendBtn.disabled = true;
+        attachBtn.disabled = true;
+        let exceeded = document.getElementById('quotaExceeded');
+        if (!exceeded) {
+            exceeded = document.createElement('div');
+            exceeded.id = 'quotaExceeded';
+            exceeded.className = 'text-center py-3';
+            exceeded.style.cssText = 'background:#fff3cd;border-top:1px solid #e9ecef;padding:10px 16px;';
+            exceeded.innerHTML = '<i class="bi bi-exclamation-triangle-fill text-warning me-1"></i><span style="font-size:13px;color:#856404;">Weekly message limit reached. Your quota renews soon.</span>';
+            const quotaBar = document.getElementById('quotaBar');
+            quotaBar.after(exceeded);
+        }
+    }
+
+    function updateQuota(newRemaining, renewsAtStr) {
+        remaining = newRemaining;
+        quotaText.textContent = remaining + ' of ' + weeklyLimit + ' messages left this week';
+        if (renewsAtStr && renewEl && renewInfo) {
+            renewInfo.setAttribute('data-renews', renewsAtStr);
+            renewEl.textContent = formatRelativeTime(renewsAtStr);
+            renewInfo.style.display = '';
+        }
+        if (remaining <= 0) disableChat();
+    }
+
+    function scrollToBottom() {
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+    scrollToBottom();
+
+    chatInput.addEventListener('input', function() {
+        this.style.height = 'auto';
+        this.style.height = Math.min(this.scrollHeight, 100) + 'px';
+        charCount.textContent = this.value.length + '/1000';
+        updateSendState();
+    });
+
+    chatInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            if (this.value.trim() || pendingFile) chatForm.dispatchEvent(new Event('submit'));
+        }
+    });
+
+    function appendMessage(role, text, attachmentInfo) {
+        if (welcomeMsg) welcomeMsg.remove();
+        const wrapper = document.createElement('div');
+        wrapper.className = 'd-flex mb-3 ' + (role === 'user' ? 'justify-content-end' : 'justify-content-start');
+
+        let avatarHtml = '';
+        if (role === 'assistant') {
+            avatarHtml = '<div style="width:28px;height:28px;background:linear-gradient(135deg,#1a365d,#2d5a87);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-right:8px;margin-top:2px;"><i class="bi bi-robot text-white" style="font-size:13px;"></i></div>';
+        }
+        let avatarRight = '';
+        if (role === 'user') {
+            avatarRight = '<div style="width:28px;height:28px;background:#6c757d;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-left:8px;margin-top:2px;"><i class="bi bi-person-fill text-white" style="font-size:13px;"></i></div>';
+        }
+
+        const bubbleStyle = role === 'user'
+            ? 'background:#1a365d;color:white;border-bottom-right-radius:4px;'
+            : 'background:white;color:#333;border:1px solid #e0e0e0;border-bottom-left-radius:4px;';
+
+        let contentHtml = '';
+        if (text) {
+            contentHtml = text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
+            if (role === 'assistant') {
+                contentHtml = contentHtml.replace(/\[([^\]]+)\]\((\/[^)]*)\)/g, '<a href="$2" style="color:#2d5a87;text-decoration:underline;font-weight:500;">$1</a>');
+            }
+        }
+
+        if (attachmentInfo) {
+            if (attachmentInfo.is_image) {
+                contentHtml += '<div style="margin-top:8px;"><a href="' + attachmentInfo.url + '" target="_blank"><img src="' + attachmentInfo.url + '" alt="' + attachmentInfo.name.replace(/"/g,'&quot;') + '" style="max-width:100%;max-height:200px;border-radius:8px;border:1px solid rgba(255,255,255,0.2);"></a></div>';
+            } else {
+                const linkStyle = role === 'user'
+                    ? 'background:rgba(255,255,255,0.15);color:white;'
+                    : 'background:#f0f4f8;color:#1a365d;';
+                contentHtml += '<div style="margin-top:8px;"><a href="' + attachmentInfo.url + '" target="_blank" download="' + attachmentInfo.name.replace(/"/g,'&quot;') + '" style="display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:8px;font-size:12px;text-decoration:none;' + linkStyle + '"><i class="bi bi-file-earmark-arrow-down"></i><span style="max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' + attachmentInfo.name.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;') + '</span></a></div>';
+            }
+        }
+
+        wrapper.innerHTML = avatarHtml +
+            '<div style="max-width:75%;padding:10px 14px;border-radius:14px;font-size:14px;line-height:1.5;' + bubbleStyle + '">' +
+            contentHtml +
+            '</div>' + avatarRight;
+
+        chatMessages.appendChild(wrapper);
+        scrollToBottom();
+        return wrapper;
+    }
+
+    function showTyping() {
+        const el = document.createElement('div');
+        el.id = 'typingIndicator';
+        el.className = 'd-flex mb-3 justify-content-start';
+        el.innerHTML = '<div style="width:28px;height:28px;background:linear-gradient(135deg,#1a365d,#2d5a87);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-right:8px;margin-top:2px;"><i class="bi bi-robot text-white" style="font-size:13px;"></i></div>' +
+            '<div style="background:white;border:1px solid #e0e0e0;border-radius:14px;border-bottom-left-radius:4px;padding:10px 18px;">' +
+            '<div class="typing-dots"><span></span><span></span><span></span></div></div>';
+        chatMessages.appendChild(el);
+        scrollToBottom();
+    }
+
+    function hideTyping() {
+        const el = document.getElementById('typingIndicator');
+        if (el) el.remove();
+    }
+
+    chatForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const msg = chatInput.value.trim();
+        if (!msg && !pendingFile) return;
+
+        let localAttachInfo = null;
+        if (pendingFile) {
+            const fname = pendingFile.name;
+            const localUrl = URL.createObjectURL(pendingFile);
+            localAttachInfo = {
+                url: localUrl,
+                name: fname,
+                is_image: isImage(fname)
+            };
+        }
+
+        appendMessage('user', msg, localAttachInfo);
+        chatInput.value = '';
+        chatInput.style.height = 'auto';
+        charCount.textContent = '0/1000';
+        sendBtn.disabled = true;
+        chatInput.disabled = true;
+        attachBtn.disabled = true;
+        showTyping();
+
+        const formData = new FormData();
+        formData.append('message', msg);
+        formData.append('csrf_token', CSRF);
+        if (pendingFile) {
+            formData.append('attachment', pendingFile);
+        }
+
+        pendingFile = null;
+        fileInput.value = '';
+        attachmentPreview.style.display = 'none';
+
+        fetch('/api/support-chat', {
+            method: 'POST',
+            body: formData
+        })
+        .then(r => r.json())
+        .then(data => {
+            hideTyping();
+            if (data.quota_exceeded) {
+                appendMessage('assistant', data.error);
+                updateQuota(0, data.renews_at);
+            } else if (data.reply) {
+                appendMessage('assistant', data.reply);
+                if (data.remaining !== undefined) {
+                    updateQuota(data.remaining, data.renews_at);
+                }
+            } else if (data.error) {
+                appendMessage('assistant', data.error);
+            }
+        })
+        .catch(() => {
+            hideTyping();
+            appendMessage('assistant', 'Something went wrong. Please try again.');
+        })
+        .finally(() => {
+            if (remaining > 0) {
+                chatInput.disabled = false;
+                attachBtn.disabled = false;
+                chatInput.focus();
+            }
+        });
+    });
+
+    document.querySelectorAll('.quick-prompt').forEach(btn => {
+        btn.addEventListener('click', function() {
+            chatInput.value = this.textContent;
+            chatInput.dispatchEvent(new Event('input'));
+            chatForm.dispatchEvent(new Event('submit'));
+        });
+    });
+
+    clearChat.addEventListener('click', function() {
+        fetch('/api/support-chat/clear', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({csrf_token: CSRF})})
+        .then(r => r.json())
+        .then(() => { window.location.reload(); });
+    });
+})();
+</script>
+<style>
+.typing-dots { display: flex; gap: 4px; align-items: center; height: 20px; }
+.typing-dots span {
+    width: 7px; height: 7px; background: #adb5bd; border-radius: 50%;
+    animation: typingBounce 1.4s infinite ease-in-out both;
+}
+.typing-dots span:nth-child(1) { animation-delay: 0s; }
+.typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+.typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+@keyframes typingBounce {
+    0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
+    40% { transform: scale(1); opacity: 1; }
+}
+#attachBtn:hover:not(:disabled) { background: #f0f4f8 !important; color: #1a365d !important; }
+</style>
+{% endblock %}

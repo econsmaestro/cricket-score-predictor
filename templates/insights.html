@@ -1,0 +1,691 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="text-center mb-4">
+        <h2 class="fw-bold"><i class="bi bi-lightbulb me-2"></i>Match Insights</h2>
+        <p class="text-muted">Dismissal risk analysis based on match situation, pitch, bowler & batsman profiles</p>
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ 'danger' if category == 'error' else category }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    {% if not insights_data %}
+
+    <div class="card shadow-sm mb-4 border-0">
+        <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
+            <h5 class="mb-0"><i class="bi bi-broadcast me-2"></i>Load from Live Match</h5>
+            <button type="button" class="btn btn-sm btn-outline-light" onclick="refreshInsightMatches()">
+                <i class="bi bi-arrow-clockwise me-1"></i>Refresh
+            </button>
+        </div>
+        <div class="card-body">
+            <p class="text-muted small mb-2">Select a live match to auto-fill all fields below</p>
+            <div class="row g-3">
+                <div class="col-12 col-md-4">
+                    <label class="form-label fw-semibold">Format</label>
+                    <select class="form-select" id="insightLiveFormat" onchange="fetchInsightMatches()">
+                        <option value="mens_t20">Men's T20</option>
+                        <option value="womens_t20">Women's T20</option>
+                        <option value="mens_odi">Men's ODI</option>
+                        <option value="womens_odi">Women's ODI</option>
+                    </select>
+                </div>
+                <div class="col-12 col-md-8">
+                    <label class="form-label fw-semibold">Live Match</label>
+                    <select class="form-select" id="insightLiveMatch" onchange="loadInsightMatch()">
+                        <option value="">Select a match...</option>
+                    </select>
+                </div>
+            </div>
+            <div id="insightLiveStatus" class="mt-2"></div>
+            <div id="insightLoadingSpinner" class="text-center py-2" style="display: none;">
+                <div class="spinner-border spinner-border-sm text-primary" role="status"></div>
+                <small class="text-muted ms-2">Fetching match data...</small>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-dark text-white">
+            <h5 class="mb-0"><i class="bi bi-sliders me-2"></i>Enter Match Situation</h5>
+        </div>
+        <div class="card-body">
+            <form method="POST" action="/insights" id="insightsForm">
+                <div class="row g-3">
+                    <div class="col-12 col-md-6">
+                        <label class="form-label fw-semibold">Match Format</label>
+                        <select class="form-select" name="match_format" id="insightFormat">
+                            <option value="mens_t20">Men's T20</option>
+                            <option value="womens_t20">Women's T20</option>
+                            <option value="mens_odi">Men's ODI</option>
+                            <option value="womens_odi">Women's ODI</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <label class="form-label fw-semibold">Venue</label>
+                        <select class="form-select" name="venue" id="insightVenue" required>
+                            <option value="">Select Venue</option>
+                            {% for country, venue_list in venues_by_country.items() %}
+                            <optgroup label="{{ country }}">
+                                {% for v in venue_list %}
+                                <option value="{{ v }}">{{ v }}</option>
+                                {% endfor %}
+                            </optgroup>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <label class="form-label fw-semibold">Current Score</label>
+                        <input type="number" class="form-control" name="current_score" min="0" value="0" required>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <label class="form-label fw-semibold">Wickets Fallen</label>
+                        <input type="number" class="form-control" name="wickets_fallen" min="0" max="9" value="0" required>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <label class="form-label fw-semibold">Overs Completed</label>
+                        <input type="number" class="form-control" name="overs_completed" min="0" step="0.1" value="0" required>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <label class="form-label fw-semibold">Innings</label>
+                        <select class="form-select" name="innings" id="insightInnings">
+                            <option value="1">1st Innings</option>
+                            <option value="2">2nd Innings (Chase)</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-6" id="targetRow" style="display:none;">
+                        <label class="form-label fw-semibold">Target Score</label>
+                        <input type="number" class="form-control" name="target" min="0" value="0">
+                    </div>
+                </div>
+
+                <hr class="my-3">
+                <h6 class="fw-bold text-muted text-uppercase mb-3"><i class="bi bi-person-fill me-1"></i>Batsmen at Crease</h6>
+                <div class="row g-3">
+                    <div class="col-12 col-md-4">
+                        <label class="form-label">Batsman 1</label>
+                        <select class="form-select insight-player-select" name="batsman1_name" required>
+                            <option value="">Select batsman...</option>
+                            {% for player in all_players %}
+                            <option value="{{ player.name }}">{{ player.name }} ({{ player.country }})</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-6 col-md-4">
+                        <label class="form-label">Runs Scored</label>
+                        <input type="number" class="form-control" name="batsman1_runs" min="0" value="0">
+                    </div>
+                    <div class="col-6 col-md-4">
+                        <label class="form-label">Balls Faced</label>
+                        <input type="number" class="form-control" name="batsman1_balls" min="0" value="0">
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <label class="form-label">Batsman 2</label>
+                        <select class="form-select insight-player-select" name="batsman2_name">
+                            <option value="">Select batsman...</option>
+                            {% for player in all_players %}
+                            <option value="{{ player.name }}">{{ player.name }} ({{ player.country }})</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-6 col-md-4">
+                        <label class="form-label">Runs Scored</label>
+                        <input type="number" class="form-control" name="batsman2_runs" min="0" value="0">
+                    </div>
+                    <div class="col-6 col-md-4">
+                        <label class="form-label">Balls Faced</label>
+                        <input type="number" class="form-control" name="batsman2_balls" min="0" value="0">
+                    </div>
+                </div>
+
+                <hr class="my-3">
+                <h6 class="fw-bold text-muted text-uppercase mb-3"><i class="bi bi-bullseye me-1"></i>Current Bowler</h6>
+                <div class="row g-3">
+                    <div class="col-12 col-md-6">
+                        <label class="form-label">Bowler Name</label>
+                        <select class="form-select insight-player-select" name="next_over_bowler" required>
+                            <option value="">Select bowler...</option>
+                            {% for player in all_players %}
+                            <option value="{{ player.name }}">{{ player.name }} ({{ player.country }})</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                <div class="mt-4 d-grid d-md-block text-center">
+                    <button type="submit" class="btn btn-lg px-md-5" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none;">
+                        <i class="bi bi-lightbulb me-2"></i>Get Dismissal Insights
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    {% else %}
+
+    <div class="mb-3">
+        <a href="/insights" class="btn btn-outline-secondary"><i class="bi bi-arrow-left me-1"></i>New Analysis</a>
+        <a href="/" class="btn btn-outline-primary ms-2"><i class="bi bi-calculator me-1"></i>Score Predictor</a>
+    </div>
+
+    <div class="card shadow-sm mb-4 border-0" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);">
+        <div class="card-body text-white p-4">
+            <div class="row align-items-center">
+                <div class="col-md-4">
+                    <span class="badge bg-info mb-2">{{ format_label }}</span>
+                    <h4 class="fw-bold mb-1">{{ current_score }}/{{ wickets }} <small class="fw-normal text-white-50">after {{ overs }} overs</small></h4>
+                    {% if innings == 2 and target > 0 %}
+                    <p class="mb-0 text-warning"><i class="bi bi-crosshair me-1"></i>Chasing {{ target }} — Need {{ target - current_score }} more runs</p>
+                    {% endif %}
+                    <div class="mt-2">
+                        <small class="text-white-50">Bowling</small>
+                        <p class="mb-0 fw-semibold">{{ next_bowler }}</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <small class="text-white-50">Venue & Pitch</small>
+                    <p class="mb-1 fw-semibold">{{ venue }}</p>
+                    <div class="d-flex flex-wrap gap-1">
+                        <span class="badge
+                            {% if venue_conditions.pitch_type == 'pace-friendly' %}bg-danger
+                            {% elif venue_conditions.pitch_type == 'spin-friendly' %}bg-success
+                            {% elif venue_conditions.pitch_type == 'batting-paradise' %}bg-warning text-dark
+                            {% else %}bg-secondary{% endif %}">
+                            {{ venue_conditions.pitch_type|replace('-', ' ')|title }}
+                        </span>
+                        {% if pitch_tempo and pitch_tempo != 'default' %}
+                        <span class="badge
+                            {% if pitch_tempo == 'high_bounce' %}bg-danger
+                            {% elif pitch_tempo == 'low_slow' %}bg-success
+                            {% elif pitch_tempo == 'true_pace' %}bg-primary
+                            {% elif pitch_tempo == 'batting_road' %}bg-warning text-dark
+                            {% else %}bg-secondary{% endif %}">
+                            {% if pitch_tempo == 'high_bounce' %}High Bounce
+                            {% elif pitch_tempo == 'low_slow' %}Low & Slow
+                            {% elif pitch_tempo == 'true_pace' %}True Pace
+                            {% elif pitch_tempo == 'batting_road' %}Batting Road
+                            {% endif %}
+                        </span>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    {% if weather_data %}
+                    <small class="text-white-50">Conditions</small>
+                    <p class="mb-1 small">{{ weather_data.description }}</p>
+                    <div class="d-flex flex-wrap gap-1">
+                        {% if weather_data.typical_conditions == 'overcast_cool' %}
+                        <span class="badge bg-secondary"><i class="bi bi-cloud me-1"></i>Overcast</span>
+                        {% elif weather_data.typical_conditions == 'hot_humid' %}
+                        <span class="badge bg-warning text-dark"><i class="bi bi-thermometer-sun me-1"></i>Hot & Humid</span>
+                        {% elif weather_data.typical_conditions == 'hot_dry' %}
+                        <span class="badge bg-danger"><i class="bi bi-sun me-1"></i>Hot & Dry</span>
+                        {% elif weather_data.typical_conditions == 'dry_warm' %}
+                        <span class="badge bg-info"><i class="bi bi-sun me-1"></i>Dry & Warm</span>
+                        {% else %}
+                        <span class="badge bg-secondary"><i class="bi bi-cloud-sun me-1"></i>{{ weather_data.typical_conditions|replace('_', ' ')|title }}</span>
+                        {% endif %}
+                        {% if weather_data.dew_factor >= 0.6 %}
+                        <span class="badge bg-info"><i class="bi bi-droplet me-1"></i>Dew Factor</span>
+                        {% endif %}
+                        {% if weather_data.humidity == 'high' %}
+                        <span class="badge bg-secondary"><i class="bi bi-moisture me-1"></i>High Humidity</span>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% if insights_data|length > 1 %}
+    <div class="card shadow-sm mb-3 border-0">
+        <div class="card-body py-3">
+            <label class="fw-semibold me-3"><i class="bi bi-person-check me-1"></i>Select Batsman</label>
+            <div class="btn-group" role="group">
+                {% for insight in insights_data %}
+                <button type="button" class="btn {% if loop.first %}btn-primary{% else %}btn-outline-primary{% endif %} batsman-tab-btn"
+                        data-batsman-idx="{{ loop.index0 }}" onclick="switchBatsmanInsight(this, {{ loop.index0 }})">
+                    <i class="bi bi-person-fill me-1"></i>{{ insight.batsman_name }}
+                </button>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    {% for insight in insights_data %}
+    <div class="card shadow-sm mb-4 border-0 batsman-insight-card" data-batsman-idx="{{ loop.index0 }}" {% if not loop.first and insights_data|length > 1 %}style="display: none;"{% endif %}>
+        <div class="card-header border-0 py-3" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+            <div class="d-flex justify-content-between align-items-center">
+                <h5 class="mb-0 text-white fw-bold"><i class="bi bi-person-fill me-2"></i>{{ insight.batsman_name }}</h5>
+                <div>
+                    <span class="badge
+                        {% if insight.overall_risk == 'High' %}bg-danger
+                        {% elif insight.overall_risk == 'Medium' %}bg-warning text-dark
+                        {% else %}bg-success{% endif %} me-2">
+                        <i class="bi bi-exclamation-triangle me-1"></i>{{ insight.overall_risk }} Risk
+                    </span>
+                    <span class="badge bg-light text-dark">
+                        <i class="bi bi-shield-check me-1"></i>{{ insight.confidence }} Confidence
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="card-body p-4">
+            <div class="alert alert-info border-0 mb-4" style="background: #eef2ff;">
+                <div class="d-flex align-items-start">
+                    <i class="bi bi-lightbulb-fill text-primary me-3 fs-4 mt-1"></i>
+                    <div>
+                        <strong class="d-block mb-1">Key Insight</strong>
+                        {{ insight.key_insight }}
+                        <div class="mt-1 text-muted"><small><i class="bi bi-geo-alt me-1"></i>{{ insight.match_context }}</small></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-4">
+                <div class="col-md-4">
+                    <div class="text-center p-3 rounded" style="background: #f8f9fa;">
+                        <small class="text-muted text-uppercase fw-semibold">Estimated Survival</small>
+                        <h3 class="mb-0 fw-bold pulse-metric" style="font-family: 'Roboto Mono', monospace; color: #667eea;">~{{ insight.survival_estimate }} balls</h3>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="text-center p-3 rounded {% if insight.overall_risk == 'High' %}glow-danger-bg{% endif %}" style="background: #f8f9fa;">
+                        <small class="text-muted text-uppercase fw-semibold">Overall Risk</small>
+                        <h3 class="mb-0 fw-bold
+                            {% if insight.overall_risk == 'High' %}text-danger collapse-danger
+                            {% elif insight.overall_risk == 'Medium' %}text-warning
+                            {% else %}text-success{% endif %}">
+                            {{ insight.overall_risk }}
+                        </h3>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="text-center p-3 rounded" style="background: #f8f9fa;">
+                        <small class="text-muted text-uppercase fw-semibold">Confidence</small>
+                        <h3 class="mb-0 fw-bold" style="color: #667eea;">{{ insight.confidence }}</h3>
+                    </div>
+                </div>
+            </div>
+
+            <div class="decision-support mb-4">
+                <div class="ds-item">
+                    <span class="ds-label"><i class="bi bi-info-circle-fill text-primary me-1"></i>What this means:</span>
+                    {% if insight.overall_risk == 'High' %}
+                    {{ insight.batsman_name }} is under significant pressure. The combination of match situation, bowling conditions, and pitch behaviour makes dismissal highly probable in the near term.
+                    {% elif insight.overall_risk == 'Medium' %}
+                    {{ insight.batsman_name }} faces a moderate challenge. While not in immediate danger, one poor shot or a good delivery could trigger a dismissal.
+                    {% else %}
+                    {{ insight.batsman_name }} is well-set and comfortable. Conditions are in the batsman's favour — expect continued run-scoring with low dismissal risk.
+                    {% endif %}
+                </div>
+                <div class="ds-item">
+                    <span class="ds-label"><i class="bi bi-compass-fill text-success me-1"></i>Tactical implication:</span>
+                    {% if insight.survival_estimate <= 12 %}
+                    Bowling side should maintain current plan — a wicket is imminent. Set catching fielders and bowl to the plan consistently.
+                    {% elif insight.survival_estimate <= 24 %}
+                    Bowling captain should consider a bowling change or field adjustment to create pressure before the batsman settles further.
+                    {% else %}
+                    The batsman is dug in. Bowling side needs a creative plan — consider a short-ball barrage, spin change, or wider line to break the rhythm.
+                    {% endif %}
+                </div>
+                <div class="ds-item">
+                    <span class="ds-label"><i class="bi bi-star-fill text-warning me-1"></i>Fantasy impact:</span>
+                    {% if insight.overall_risk == 'High' %}
+                    Risky fantasy pick — could get out cheaply. Consider replacing with a safer middle-order option. Bowler bowling to this batsman is a high-value pick.
+                    {% elif insight.overall_risk == 'Medium' %}
+                    Moderate fantasy value. If this batsman survives the next few overs, expect a strong contribution — a calculated gamble worth taking.
+                    {% else %}
+                    Premium fantasy pick — high likelihood of a substantial innings. Back this batsman as captain or vice-captain for bonus points.
+                    {% endif %}
+                </div>
+            </div>
+
+            <h6 class="fw-bold text-uppercase text-muted mb-3"><i class="bi bi-bar-chart me-1"></i>Dismissal Mode Probabilities</h6>
+
+            {% for d in insight.dismissal_modes %}
+            <div class="mb-3 p-3 rounded border dismissal-bar-animate" style="border-left: 4px solid {{ d.color }} !important;">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <span class="fw-semibold">
+                        <i class="{{ d.icon }} me-2" style="color: {{ d.color }};"></i>{{ d.label }}
+                    </span>
+                    <span class="fw-bold fs-5 {% if d.probability >= 0.25 %}pulse-metric{% endif %}" style="font-family: 'Roboto Mono', monospace; color: {{ d.color }};">{{ (d.probability * 100)|round(0)|int }}%</span>
+                </div>
+                <div class="progress mb-2" style="height: 10px; border-radius: 5px;">
+                    <div class="progress-bar" role="progressbar"
+                         style="width: {{ (d.probability * 100)|round(0)|int }}%; background-color: {{ d.color }}; border-radius: 5px;"
+                         aria-valuenow="{{ (d.probability * 100)|round(0)|int }}" aria-valuemin="0" aria-valuemax="100">
+                    </div>
+                </div>
+                {% if d.reasons %}
+                <div class="mt-2">
+                    {% for reason in d.reasons %}
+                    <small class="text-muted d-block"><i class="bi bi-arrow-return-right me-1"></i>{{ reason }}</small>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+
+            <div class="mt-4 p-3 rounded" style="background: #f1f3f5;">
+                <h6 class="fw-bold text-uppercase text-muted mb-2"><i class="bi bi-info-circle me-1"></i>Data Confidence</h6>
+                {% for cr in insight.confidence_reasons %}
+                <small class="d-block text-muted">
+                    {% if 'found' in cr or 'Strong' in cr or 'Good' in cr or 'available' in cr %}
+                    <i class="bi bi-check-circle text-success me-1"></i>
+                    {% else %}
+                    <i class="bi bi-dash-circle text-warning me-1"></i>
+                    {% endif %}
+                    {{ cr }}
+                </small>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+
+    {% endif %}
+</div>
+
+<script>
+function switchBatsmanInsight(btn, idx) {
+    document.querySelectorAll('.batsman-insight-card').forEach(function(card) {
+        card.style.display = 'none';
+    });
+    var target = document.querySelector('.batsman-insight-card[data-batsman-idx="' + idx + '"]');
+    if (target) target.style.display = '';
+    document.querySelectorAll('.batsman-tab-btn').forEach(function(b) {
+        b.classList.remove('btn-primary');
+        b.classList.add('btn-outline-primary');
+    });
+    btn.classList.remove('btn-outline-primary');
+    btn.classList.add('btn-primary');
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    var inningsSelect = document.getElementById('insightInnings');
+    var targetRow = document.getElementById('targetRow');
+    if (inningsSelect) {
+        inningsSelect.addEventListener('change', function() {
+            targetRow.style.display = this.value === '2' ? '' : 'none';
+        });
+    }
+
+    if (typeof $ !== 'undefined' && $.fn.select2) {
+        $('.insight-player-select').select2({
+            theme: 'bootstrap-5',
+            placeholder: 'Search player...',
+            allowClear: true,
+            width: '100%'
+        });
+        $('#insightVenue').select2({
+            theme: 'bootstrap-5',
+            placeholder: 'Search venues...',
+            allowClear: true,
+            width: '100%'
+        });
+    }
+
+    if (document.getElementById('insightLiveFormat')) {
+        fetchAllInsightMatches();
+    }
+});
+
+function fetchAllInsightMatches() {
+    var fmtEl = document.getElementById('insightLiveFormat');
+    if (!fmtEl) return;
+    var select = document.getElementById('insightLiveMatch');
+    var statusDiv = document.getElementById('insightLiveStatus');
+    select.style.display = 'none';
+    var shimmer = select.nextElementSibling;
+    if (!shimmer || !shimmer.classList.contains('skeleton-shimmer-block')) {
+        shimmer = document.createElement('div');
+        shimmer.className = 'skeleton-shimmer-block';
+        select.parentNode.insertBefore(shimmer, select.nextSibling);
+    }
+    shimmer.style.display = 'block';
+    statusDiv.innerHTML = '<small class="text-muted"><i class="bi bi-hourglass-split me-1"></i>Searching for live matches across all formats...</small>';
+
+    var formats = ['mens_t20', 'womens_t20', 'mens_odi', 'womens_odi'];
+    var allMatches = [];
+    var done = 0;
+
+    formats.forEach(function(fmt) {
+        fetch('/api/live-matches?format=' + fmt)
+            .then(function(r) { return r.json(); })
+            .then(function(data) {
+                if (data.success && data.matches) {
+                    data.matches.forEach(function(m) {
+                        if (m.status !== 'Completed') {
+                            m._format = fmt;
+                            allMatches.push(m);
+                        }
+                    });
+                }
+            })
+            .catch(function() {})
+            .finally(function() {
+                done++;
+                if (done === formats.length) {
+                    renderInsightMatches(allMatches, select, statusDiv, fmtEl);
+                }
+            });
+    });
+}
+
+function fetchInsightMatches() {
+    var fmtEl = document.getElementById('insightLiveFormat');
+    if (!fmtEl) return;
+    var fmt = fmtEl.value;
+    var select = document.getElementById('insightLiveMatch');
+    var statusDiv = document.getElementById('insightLiveStatus');
+    select.style.display = 'none';
+    var shimmer2 = select.nextElementSibling;
+    if (!shimmer2 || !shimmer2.classList.contains('skeleton-shimmer-block')) {
+        shimmer2 = document.createElement('div');
+        shimmer2.className = 'skeleton-shimmer-block';
+        select.parentNode.insertBefore(shimmer2, select.nextSibling);
+    }
+    shimmer2.style.display = 'block';
+    statusDiv.innerHTML = '<small class="text-muted"><i class="bi bi-hourglass-split me-1"></i>Searching for matches...</small>';
+
+    fetch('/api/live-matches?format=' + fmt)
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+            var matches = [];
+            if (data.success && data.matches) {
+                data.matches.forEach(function(m) {
+                    if (m.status !== 'Completed') {
+                        m._format = fmt;
+                        matches.push(m);
+                    }
+                });
+            }
+            renderInsightMatches(matches, select, statusDiv, fmtEl);
+        })
+        .catch(function() {
+            var shimmerErr = select.nextElementSibling;
+            if (shimmerErr && shimmerErr.classList.contains('skeleton-shimmer-block')) shimmerErr.style.display = 'none';
+            select.style.display = 'block';
+            select.innerHTML = '<option value="">Error loading matches</option>';
+            statusDiv.innerHTML = '<small class="text-danger"><i class="bi bi-exclamation-circle me-1"></i>Could not fetch matches.</small>';
+        });
+}
+
+function renderInsightMatches(allMatches, select, statusDiv, fmtEl) {
+    var shimmerEl = select.nextElementSibling;
+    if (shimmerEl && shimmerEl.classList.contains('skeleton-shimmer-block')) shimmerEl.style.display = 'none';
+    select.style.display = 'block';
+    allMatches.sort(function(a, b) {
+        if (a.status === 'Live' && b.status !== 'Live') return -1;
+        if (a.status !== 'Live' && b.status === 'Live') return 1;
+        return 0;
+    });
+
+    select.innerHTML = '<option value="">Select a match...</option>';
+    var liveCount = 0, upcomingCount = 0;
+    var formatLabels = { mens_t20: "Men's T20", womens_t20: "Women's T20", mens_odi: "Men's ODI", womens_odi: "Women's ODI" };
+
+    allMatches.forEach(function(match) {
+        var opt = document.createElement('option');
+        opt.value = match.id;
+        var label = match.display_text.replace(/ \((Live|Upcoming|Completed)\)$/, '');
+        var tag = match.status === 'Live' ? ' [LIVE]' : '';
+        opt.textContent = '[' + (formatLabels[match._format] || match._format) + '] ' + label + tag;
+        opt.dataset.status = match.status;
+        opt.dataset.teams = JSON.stringify(match.teams || []);
+        opt.dataset.fmt = match._format;
+        if (match.status === 'Upcoming') {
+            opt.style.color = '#6c757d';
+            upcomingCount++;
+        } else {
+            liveCount++;
+        }
+        select.appendChild(opt);
+    });
+
+    if (liveCount > 0 || upcomingCount > 0) {
+        var parts = [];
+        if (liveCount > 0) parts.push(liveCount + ' live');
+        if (upcomingCount > 0) parts.push(upcomingCount + ' upcoming');
+        statusDiv.innerHTML = '<small class="text-success"><i class="bi bi-check-circle me-1"></i>Found ' + parts.join(', ') + ' match(es) — auto-loading first match...</small>';
+        if (select.options.length > 1) {
+            select.selectedIndex = 1;
+            var firstFmt = select.options[1].dataset.fmt;
+            if (firstFmt) fmtEl.value = firstFmt;
+            loadInsightMatch();
+        }
+    } else {
+        select.innerHTML = '<option value="">No live matches found</option>';
+        statusDiv.innerHTML = '<small class="text-warning"><i class="bi bi-info-circle me-1"></i>No active matches. Enter details manually below.</small>';
+    }
+}
+
+function refreshInsightMatches() {
+    var statusDiv = document.getElementById('insightLiveStatus');
+    if (!statusDiv) return;
+    statusDiv.innerHTML = '<small class="text-muted"><i class="bi bi-arrow-clockwise me-1"></i>Refreshing...</small>';
+    fetch('/api/live-matches/refresh', { method: 'POST' })
+        .then(function() { fetchInsightMatches(); })
+        .catch(function() { fetchInsightMatches(); });
+}
+
+function loadInsightMatch() {
+    var select = document.getElementById('insightLiveMatch');
+    if (!select) return;
+    var matchId = select.value;
+    var spinner = document.getElementById('insightLoadingSpinner');
+    var statusDiv = document.getElementById('insightLiveStatus');
+    if (!matchId) return;
+
+    var selectedOption = select.options[select.selectedIndex];
+    var fmt = (selectedOption && selectedOption.dataset.fmt) || document.getElementById('insightLiveFormat').value;
+    document.getElementById('insightLiveFormat').value = fmt;
+    spinner.style.display = 'block';
+    statusDiv.innerHTML = '<small class="text-info"><i class="bi bi-download me-1"></i>Loading match details...</small>';
+
+    document.getElementById('insightFormat').value = fmt;
+
+    fetch('/api/live-match/' + matchId + '?format=' + fmt)
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+            spinner.style.display = 'none';
+            if (data.success && data.match) {
+                var m = data.match;
+
+                if (m.current_score !== undefined) {
+                    document.querySelector('input[name="current_score"]').value = m.current_score;
+                }
+                if (m.wickets !== undefined) {
+                    document.querySelector('input[name="wickets_fallen"]').value = parseInt(m.wickets) || 0;
+                }
+                if (m.overs !== undefined) {
+                    document.querySelector('input[name="overs_completed"]').value = m.overs;
+                }
+                if (m.innings) {
+                    document.getElementById('insightInnings').value = m.innings;
+                    document.getElementById('targetRow').style.display = m.innings == 2 ? '' : 'none';
+                }
+                if (m.target && m.target > 0) {
+                    document.getElementById('insightInnings').value = '2';
+                    document.getElementById('targetRow').style.display = '';
+                    document.querySelector('input[name="target"]').value = m.target;
+                }
+
+                if (m.venue) {
+                    var venueSelect = document.getElementById('insightVenue');
+                    var venueFound = false;
+                    for (var i = 0; i < venueSelect.options.length; i++) {
+                        if (venueSelect.options[i].value && m.venue.indexOf(venueSelect.options[i].value.split(',')[0]) !== -1) {
+                            venueSelect.value = venueSelect.options[i].value;
+                            if ($.fn.select2) $(venueSelect).trigger('change');
+                            venueFound = true;
+                            break;
+                        }
+                    }
+                    if (!venueFound) {
+                        for (var i = 0; i < venueSelect.options.length; i++) {
+                            var optText = venueSelect.options[i].value.toLowerCase();
+                            var matchVenue = m.venue.toLowerCase();
+                            if (optText && (matchVenue.indexOf(optText.split(',')[0]) !== -1 || optText.indexOf(matchVenue.split(',')[0]) !== -1)) {
+                                venueSelect.value = venueSelect.options[i].value;
+                                if ($.fn.select2) $(venueSelect).trigger('change');
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                if (m.batsmen && m.batsmen.length > 0) {
+                    var b1 = m.batsmen[0];
+                    if (b1 && b1.name) {
+                        var sel1 = $('select[name="batsman1_name"]');
+                        var opt1 = new Option(b1.name, b1.name, true, true);
+                        sel1.append(opt1).trigger('change');
+                        document.querySelector('input[name="batsman1_runs"]').value = b1.runs || 0;
+                        document.querySelector('input[name="batsman1_balls"]').value = b1.balls || 0;
+                    }
+                    if (m.batsmen.length > 1) {
+                        var b2 = m.batsmen[1];
+                        if (b2 && b2.name) {
+                            var sel2 = $('select[name="batsman2_name"]');
+                            var opt2 = new Option(b2.name, b2.name, true, true);
+                            sel2.append(opt2).trigger('change');
+                            document.querySelector('input[name="batsman2_runs"]').value = b2.runs || 0;
+                            document.querySelector('input[name="batsman2_balls"]').value = b2.balls || 0;
+                        }
+                    }
+                }
+
+                if (m.bowlers && m.bowlers.length > 0) {
+                    var currentBowler = m.bowlers[m.bowlers.length - 1];
+                    if (currentBowler && currentBowler.name) {
+                        var bowlerSel = $('select[name="next_over_bowler"]');
+                        var bowlerOpt = new Option(currentBowler.name, currentBowler.name, true, true);
+                        bowlerSel.append(bowlerOpt).trigger('change');
+                    }
+                }
+
+                statusDiv.innerHTML = '<small class="text-success"><i class="bi bi-check-circle me-1"></i>Match data loaded! Review and adjust as needed.</small>';
+            } else {
+                statusDiv.innerHTML = '<small class="text-warning"><i class="bi bi-exclamation-triangle me-1"></i>Could not load full details. Enter data manually.</small>';
+            }
+        })
+        .catch(function() {
+            spinner.style.display = 'none';
+            statusDiv.innerHTML = '<small class="text-danger"><i class="bi bi-x-circle me-1"></i>Error loading match data.</small>';
+        });
+}
+</script>
+{% endblock %}

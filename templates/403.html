@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}Access Denied{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card text-center shadow">
+                <div class="card-body py-5">
+                    <i class="bi bi-shield-exclamation text-danger" style="font-size: 4rem;"></i>
+                    <h2 class="mt-4">Access Denied</h2>
+                    <p class="text-muted mb-4">Sorry, there was an issue with authentication. Please try again.</p>
+                    <a href="/" class="btn btn-primary"><i class="bi bi-house me-2"></i>Return Home</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

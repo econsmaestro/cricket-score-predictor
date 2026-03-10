@@ -1,0 +1,853 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="results-container">
+    {% if is_demo %}
+    <div class="alert alert-success mb-4 d-flex align-items-center justify-content-between flex-wrap gap-2">
+        <div>
+            <i class="bi bi-play-circle-fill me-2"></i>
+            <strong>Demo Mode</strong> — {{ demo_title }}
+            <span class="text-muted ms-2">This is a sample prediction with pre-filled data</span>
+        </div>
+        <div class="d-flex gap-2">
+            <a href="{{ url_for('demo_prediction') }}" class="btn btn-sm btn-outline-success">
+                <i class="bi bi-shuffle me-1"></i>Try Another
+            </a>
+            <a href="{{ url_for('index') }}" class="btn btn-sm btn-success">
+                <i class="bi bi-pencil-square me-1"></i>Make Your Own Prediction
+            </a>
+        </div>
+    </div>
+    {% endif %}
+    <div class="match-summary mb-4">
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <h2 class="venue-name">
+                    <i class="bi bi-geo-alt-fill"></i>
+                    {{ match_state.venue }}
+                </h2>
+                {% if result.pitch_type %}
+                <div class="venue-conditions mb-2">
+                    {% set pitch_icons = {'pace-friendly': 'wind', 'spin-friendly': 'arrow-repeat', 'batting-paradise': 'bat', 'balanced': 'dash-circle'} %}
+                    {% set pitch_colors = {'pace-friendly': 'info', 'spin-friendly': 'warning', 'batting-paradise': 'success', 'balanced': 'secondary'} %}
+                    <span class="badge bg-{{ pitch_colors.get(result.pitch_type, 'secondary') }}">
+                        <i class="bi bi-{{ pitch_icons.get(result.pitch_type, 'dash-circle') }}"></i>
+                        {{ result.pitch_type|replace('-', ' ')|title }}
+                    </span>
+                    {% if result.pitch_description %}
+                    <small class="ms-2" style="color: rgba(255,255,255,0.85);">{{ result.pitch_description }}</small>
+                    {% endif %}
+                    {% if result.fielding_team %}
+                    {% set eff_pct = (result.fielding_efficiency * 100)|int %}
+                    {% set eff_color = 'success' if eff_pct >= 90 else ('warning' if eff_pct >= 80 else 'danger') %}
+                    <span class="badge bg-{{ eff_color }} ms-2">
+                        <i class="bi bi-shield-check"></i>
+                        {{ result.fielding_team }} fielding {{ eff_pct }}%
+                    </span>
+                    {% endif %}
+                </div>
+                {% endif %}
+                <p class="current-state">
+                    <span class="score-display">{{ match_state.current_score }}/{{ match_state.wickets_fallen }}</span>
+                    <span class="overs-display">({{ "%.1f"|format(match_state.overs_completed) }} overs)</span>
+                </p>
+            </div>
+            <div class="col-md-6 text-md-end">
+                {% set format_labels = {'mens_t20': "Men's T20", 'womens_t20': "Women's T20", 'mens_odi': "Men's ODI", 'womens_odi': "Women's ODI"} %}
+                {% set format_colors = {'mens_t20': 'primary', 'womens_t20': 'danger', 'mens_odi': 'success', 'womens_odi': 'warning'} %}
+                <span class="badge bg-{{ format_colors.get(match_state.match_format, 'primary') }} fs-6 me-2">
+                    <i class="bi bi-trophy"></i>
+                    {{ format_labels.get(match_state.match_format, "Men's T20") }}
+                </span>
+                <span class="badge bg-success fs-6">
+                    <i class="bi bi-check-circle"></i>
+                    Prediction Ready
+                </span>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row g-4">
+        {% set is_odi = 'odi' in match_state.match_format %}
+        {% set max_overs = 50 if is_odi else 20 %}
+        {% set remaining_overs = max_overs - match_state.overs_completed %}
+        {% set projected_rr = (result.predicted_final_score / max_overs)|round(1) %}
+        {% set wickets_remaining = 10 - result.predicted_wickets %}
+        {% set wickets_to_fall = result.predicted_wickets - match_state.wickets_fallen %}
+        {% set high_score_threshold = 180 if not is_odi else 320 %}
+        {% set low_score_threshold = 140 if not is_odi else 240 %}
+
+        <div class="col-md-4">
+            {% if result.is_chase %}
+            <div class="prediction-card final-score-card" style="background: linear-gradient(135deg, {% if result.win_probability >= 0.5 %}#198754, #20c997{% else %}#dc3545, #fd7e14{% endif %}); color: white;">
+                <div class="card-icon" style="color: white;">
+                    <i class="bi bi-trophy-fill"></i>
+                </div>
+                <h3 class="card-title" style="color: white;">Chase Probability</h3>
+                <div class="prediction-value">
+                    <span class="main-number pulse-metric count-up" style="color: white;" data-target="{{ (result.win_probability * 100)|int }}" data-suffix="%">0%</span>
+                </div>
+                <div class="prediction-range" style="color: rgba(255,255,255,0.85);">
+                    Target: {{ match_state.target }} &bull; Need {{ result.runs_needed }} off {{ "%.1f"|format((max_overs if is_odi else 20) - match_state.overs_completed) }} ov
+                </div>
+                <div class="progress mt-2" style="height: 12px; background: rgba(255,255,255,0.3); border-radius: 6px;">
+                    <div class="progress-bar {% if result.win_probability >= 0.5 %}bg-success{% else %}bg-danger{% endif %}" style="width: {{ result.win_probability * 100 }}%; border-radius: 6px;"></div>
+                </div>
+                {% set chase_overs_left = (max_overs if is_odi else 20) - match_state.overs_completed %}
+                {% set wickets_in_hand = 10 - match_state.wickets_fallen %}
+                {% set easy_chase = result.required_run_rate <= 6 and result.runs_needed <= 36 %}
+                {% set gettable_chase = result.required_run_rate <= 9 and result.runs_needed <= 60 %}
+                <div class="decision-support mt-3 text-start" style="background: rgba(0,0,0,0.45); border-radius: 10px; padding: 1rem;">
+                    <div class="ds-item" style="color: #fff;">
+                        <span class="ds-label"><i class="bi bi-info-circle-fill me-1" style="color: #87ceeb;"></i>What this means:</span>
+                        {% if result.win_probability >= 0.75 %}
+                        The chasing side is in a dominant position. The required rate is manageable and wickets in hand give them a huge cushion.
+                        {% elif easy_chase %}
+                        A very gettable target — just {{ result.runs_needed }} needed. Even with few wickets left, steady batting should get them home.
+                        {% elif gettable_chase %}
+                        The equation is achievable at {{ "%.1f"|format(result.required_run_rate) }} per over. The batting side needs to stay calm and rotate strike.
+                        {% elif result.win_probability >= 0.5 %}
+                        The chase is on but it's not over. The batting side is ahead but one cluster of wickets could shift everything.
+                        {% elif result.win_probability >= 0.25 %}
+                        The bowling side has the edge. The asking rate is climbing and wickets are falling — the chase is under strain.
+                        {% elif result.runs_needed <= 20 %}
+                        Close but tense — {{ result.runs_needed }} runs needed with limited wickets. One good over could seal it, but the pressure is real.
+                        {% else %}
+                        An uphill battle for the chasing side. The required rate is steep and wickets are running out.
+                        {% endif %}
+                    </div>
+                    <div class="ds-item" style="color: #fff;">
+                        <span class="ds-label"><i class="bi bi-compass-fill me-1" style="color: #90ee90;"></i>Tactical implication:</span>
+                        {% if result.win_probability >= 0.75 %}
+                        Batting team can play risk-free cricket. Rotate strike, pick off bad balls, and close the game out calmly.
+                        {% elif easy_chase %}
+                        No need to take risks. Rotate the strike and pick the gaps — singles and twos will finish the job.
+                        {% elif gettable_chase %}
+                        Mix rotation with the occasional boundary. Target the weaker bowler and stay composed at the crease.
+                        {% elif result.win_probability >= 0.5 %}
+                        One big over can swing it. Batting team should target the weakest bowler and look for boundaries.
+                        {% elif result.win_probability >= 0.25 %}
+                        Bowling captain should keep pressure with best bowlers. Set sweeper covers and force risky shots.
+                        {% elif result.runs_needed <= 20 %}
+                        Batsmen should back themselves to find the gaps. A couple of boundaries will bring the equation right down.
+                        {% else %}
+                        Bowling side should keep it tight and build dot-ball pressure. The asking rate does the rest.
+                        {% endif %}
+                    </div>
+                    <div class="ds-item" style="color: #fff;">
+                        <span class="ds-label"><i class="bi bi-star-fill me-1" style="color: #ffd700;"></i>Fantasy impact:</span>
+                        {% if result.win_probability >= 0.75 %}
+                        Set batsmen will score freely — high strike rate bonuses incoming. Low fantasy value for bowlers.
+                        {% elif easy_chase or gettable_chase %}
+                        The remaining batsmen will likely finish the job — steady fantasy returns from strike rotation and the winning bonus.
+                        {% elif result.win_probability >= 0.5 %}
+                        High-drama phase — both batsmen and bowlers can deliver big points. All-rounders are the safest picks.
+                        {% elif result.win_probability >= 0.25 %}
+                        Bowlers picking up wickets will earn multi-wicket bonuses. Economy and dot-ball points stack up.
+                        {% elif result.runs_needed <= 20 %}
+                        A tight finish means every run matters. The bowler who defends this could earn huge fantasy points.
+                        {% else %}
+                        Late wickets and dot balls will dominate. Bowlers with death-overs skill are the top fantasy picks now.
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% else %}
+            <div class="prediction-card final-score-card">
+                <div class="card-icon">
+                    <i class="bi bi-trophy"></i>
+                </div>
+                <h3 class="card-title">Predicted Final Score</h3>
+                <div class="prediction-value">
+                    <span class="main-number pulse-metric count-up" data-target="{{ result.predicted_final_score }}">0</span>
+                    <span class="wickets-suffix">/{{ result.predicted_wickets }}</span>
+                </div>
+                <div class="prediction-range">
+                    Range: {{ result.score_range[0] }} - {{ result.score_range[1] }}
+                </div>
+                <div class="decision-support mt-3 text-start">
+                    <div class="ds-item">
+                        <span class="ds-label"><i class="bi bi-info-circle-fill text-primary me-1"></i>What this means:</span>
+                        {% if result.predicted_final_score >= high_score_threshold %}
+                        A strong, above-par total. The batting side is in a commanding position and likely to post a match-winning score.
+                        {% elif result.predicted_final_score <= low_score_threshold %}
+                        A below-par total. The bowling side has done well to restrict scoring — this is a chaseable target.
+                        {% else %}
+                        A competitive total in the par range. The match is evenly poised and could go either way.
+                        {% endif %}
+                    </div>
+                    <div class="ds-item">
+                        <span class="ds-label"><i class="bi bi-compass-fill text-success me-1"></i>Tactical implication:</span>
+                        {% if result.predicted_final_score >= high_score_threshold %}
+                        Bowling side needs early wickets in the chase. Set aggressive fields in the powerplay and attack with pace.
+                        {% elif result.predicted_final_score <= low_score_threshold %}
+                        Chasing side should bat conservatively in the powerplay — preserve wickets and accelerate in middle overs.
+                        {% else %}
+                        Both teams have a fair chance. Batting team should push for 10-15 more runs; bowling team must be disciplined.
+                        {% endif %}
+                    </div>
+                    <div class="ds-item">
+                        <span class="ds-label"><i class="bi bi-star-fill text-warning me-1"></i>Fantasy impact:</span>
+                        {% if result.predicted_final_score >= high_score_threshold %}
+                        High-value batting game. Captain/vice-captain picks from the batting side will likely deliver big fantasy points.
+                        {% elif result.predicted_final_score <= low_score_threshold %}
+                        Bowlers are the premium picks. Economy bonuses and wicket hauls make bowlers high-value fantasy assets.
+                        {% else %}
+                        All-rounders become key differential picks — contributing with both bat and ball in a balanced game.
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+        
+        <div class="col-md-4">
+            <div class="prediction-card wickets-card">
+                <div class="card-icon">
+                    <i class="bi bi-bar-chart"></i>
+                </div>
+                <h3 class="card-title">Wickets to Fall</h3>
+                <div class="prediction-value">
+                    <span class="main-number count-up {% if wickets_to_fall >= 4 %}collapse-danger{% endif %}" data-target="{{ wickets_to_fall }}">0</span>
+                    <span class="wickets-suffix">more</span>
+                </div>
+                <div class="prediction-detail">
+                    Total wickets: {{ result.predicted_wickets }}
+                </div>
+                <div class="wicket-probability mt-2">
+                    <small>Wicket probability next over: <span class="{% if result.wicket_probability >= 0.25 %}glow-danger{% elif result.wicket_probability >= 0.15 %}glow-warning{% endif %}">{{ "%.0f"|format(result.wicket_probability * 100) }}%</span></small>
+                </div>
+                <div class="decision-support mt-3 text-start">
+                    <div class="ds-item">
+                        <span class="ds-label"><i class="bi bi-info-circle-fill text-primary me-1"></i>What this means:</span>
+                        {% if wickets_to_fall <= 1 %}
+                        The batting lineup is rock-solid. Minimal wicket risk suggests a deep, well-set batting order will bat through.
+                        {% elif wickets_to_fall <= 3 %}
+                        Moderate collapse risk — a few wickets will fall but the batting side should have enough depth to finish strong.
+                        {% else %}
+                        High collapse risk. The tail will be exposed and the death overs scoring could drop significantly.
+                        {% endif %}
+                    </div>
+                    <div class="ds-item">
+                        <span class="ds-label"><i class="bi bi-compass-fill text-success me-1"></i>Tactical implication:</span>
+                        {% if wickets_to_fall <= 1 %}
+                        Batting team can play fearlessly — set batsmen should target big overs without fear of losing shape.
+                        {% elif wickets_to_fall <= 3 %}
+                        Rotate strike smartly. One established batsman should anchor while the other attacks — avoid double wickets.
+                        {% else %}
+                        Bowling captain should stagger best bowlers across death overs. A cluster of wickets will trigger a scoring collapse.
+                        {% endif %}
+                    </div>
+                    <div class="ds-item">
+                        <span class="ds-label"><i class="bi bi-star-fill text-warning me-1"></i>Fantasy impact:</span>
+                        {% if wickets_to_fall <= 1 %}
+                        Batsmen will score bulk of remaining runs. High strike rate bonuses expected — pick power hitters.
+                        {% elif wickets_to_fall <= 3 %}
+                        Bowlers taking 2-3 wickets get bonus points. Pick strike bowlers for the death overs phase.
+                        {% else %}
+                        Multi-wicket haul likely — death bowlers (yorker specialists) become must-have fantasy picks.
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="prediction-card next-over-card">
+                <div class="card-icon">
+                    <i class="bi bi-arrow-right-circle"></i>
+                </div>
+                <h3 class="card-title">Next Over Prediction</h3>
+                <div class="prediction-value">
+                    <span class="main-number count-up {% if result.predicted_next_over_runs >= 12 %}glow-danger{% elif result.predicted_next_over_runs <= 4 %}glow-success{% endif %}" data-target="{{ result.predicted_next_over_runs }}">0</span>
+                    <span class="wickets-suffix">runs</span>
+                </div>
+                <div class="bowler-info">
+                    {% if result.bowler_specified %}
+                    <i class="bi bi-person"></i> {{ match_state.next_over_bowler }}
+                    {% if result.bowler_type != 'unknown' %}
+                    <span class="badge bg-{{ 'info' if result.bowler_type == 'pace' else 'warning' }} ms-1">
+                        <i class="bi bi-{{ 'wind' if result.bowler_type == 'pace' else 'arrow-repeat' }}"></i>
+                        {{ result.bowler_type|capitalize }}
+                    </span>
+                    {% if result.venue_bowler_advantage > 1.05 %}
+                    <span class="badge bg-success ms-1" title="Bowler suited to pitch conditions">
+                        <i class="bi bi-arrow-up-circle"></i> +{{ "%.0f"|format((result.venue_bowler_advantage - 1) * 100) }}%
+                    </span>
+                    {% elif result.venue_bowler_advantage < 0.95 %}
+                    <span class="badge bg-danger ms-1" title="Conditions not ideal for this bowler">
+                        <i class="bi bi-arrow-down-circle"></i> {{ "%.0f"|format((1 - result.venue_bowler_advantage) * 100) }}%
+                    </span>
+                    {% endif %}
+                    {% endif %}
+                    {% else %}
+                    <span class="badge bg-secondary"><i class="bi bi-robot me-1"></i>Auto (Team Average)</span>
+                    {% endif %}
+                </div>
+                {% if result.bowler_specified and result.auto_next_over_runs > 0 %}
+                <div class="impact-preview mt-2 p-2 rounded" style="background: #f0f4ff; border-left: 3px solid #667eea;">
+                    <small class="fw-semibold text-muted d-block mb-1"><i class="bi bi-graph-up me-1"></i>Bowler Impact Preview</small>
+                    <div class="d-flex gap-3">
+                        <small class="text-muted">Next over (Auto): <strong>{{ result.auto_next_over_runs }} runs</strong></small>
+                        <small class="text-primary">With {{ match_state.next_over_bowler.split(' ')[-1] }} bowling: <strong>{{ result.predicted_next_over_runs }} runs</strong></small>
+                    </div>
+                    {% if result.predicted_next_over_runs < result.auto_next_over_runs %}
+                    <small class="text-success"><i class="bi bi-arrow-down-short"></i>{{ result.auto_next_over_runs - result.predicted_next_over_runs }} fewer runs — good bowling choice!</small>
+                    {% elif result.predicted_next_over_runs > result.auto_next_over_runs %}
+                    <small class="text-danger"><i class="bi bi-arrow-up-short"></i>{{ result.predicted_next_over_runs - result.auto_next_over_runs }} more runs — consider a different bowler</small>
+                    {% else %}
+                    <small class="text-muted"><i class="bi bi-dash"></i>Same as team average</small>
+                    {% endif %}
+                </div>
+                {% endif %}
+                <div class="ball-breakdown mt-3">
+                    <h6 class="text-muted mb-2">Expected Ball-by-Ball (6 balls)</h6>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="badge bg-success fs-6">
+                            <i class="bi bi-lightning"></i> {{ result.boundary_count }} Boundaries
+                        </span>
+                        <span class="badge bg-secondary fs-6">
+                            <i class="bi bi-circle"></i> {{ result.dot_ball_count }} Dots
+                        </span>
+                        <span class="badge bg-primary fs-6">
+                            <i class="bi bi-1-circle"></i> {{ result.singles_doubles_count }} Singles/Doubles
+                        </span>
+                    </div>
+                    <div class="progress" style="height: 20px;">
+                        <div class="progress-bar bg-success" style="width: {{ (result.boundary_count / 6 * 100)|round }}%">{{ result.boundary_count }}</div>
+                        <div class="progress-bar bg-primary" style="width: {{ (result.singles_doubles_count / 6 * 100)|round }}%">{{ result.singles_doubles_count }}</div>
+                        <div class="progress-bar bg-secondary" style="width: {{ (result.dot_ball_count / 6 * 100)|round }}%">{{ result.dot_ball_count }}</div>
+                    </div>
+                </div>
+                <div class="decision-support mt-3 text-start">
+                    <div class="ds-item">
+                        <span class="ds-label"><i class="bi bi-info-circle-fill text-primary me-1"></i>What this means:</span>
+                        {% if result.predicted_next_over_runs >= 12 %}
+                        An expensive over is expected. The bowler is under pressure and boundaries are highly likely.
+                        {% elif result.predicted_next_over_runs >= 8 %}
+                        Above-average scoring predicted. The batsmen are in control and looking to accelerate.
+                        {% elif result.predicted_next_over_runs <= 4 %}
+                        A tight, defensive over. Dot-ball pressure will build and scoring will be difficult.
+                        {% else %}
+                        A standard over with moderate scoring. Neither side has a clear upper hand.
+                        {% endif %}
+                    </div>
+                    <div class="ds-item">
+                        <span class="ds-label"><i class="bi bi-compass-fill text-success me-1"></i>Tactical implication:</span>
+                        {% if result.predicted_next_over_runs >= 12 %}
+                        Captain should consider a bowling change. Defensive field with boundary riders is essential.
+                        {% elif result.predicted_next_over_runs >= 8 %}
+                        A wicket-taking delivery is needed. Bowl full and target the stumps — yorkers or sharp spin.
+                        {% elif result.predicted_next_over_runs <= 4 %}
+                        Batsmen should look to rotate strike and break the dot-ball sequence with singles.
+                        {% else %}
+                        Maintain current plans. No drastic changes needed from either side.
+                        {% endif %}
+                    </div>
+                    <div class="ds-item">
+                        <span class="ds-label"><i class="bi bi-star-fill text-warning me-1"></i>Fantasy impact:</span>
+                        {% if result.predicted_next_over_runs >= 12 %}
+                        Batsmen on strike will likely earn boundary bonuses. Avoid this bowler in fantasy — economy penalty incoming.
+                        {% elif result.predicted_next_over_runs <= 4 %}
+                        Economy bonus for the bowler — great fantasy value. Maiden over possibility adds premium points.
+                        {% else %}
+                        Neutral impact. Watch for a wicket to shift the fantasy value dynamics.
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    {% if result.is_chase %}
+    <div class="row g-4 mt-2">
+        <div class="col-12">
+            <div class="prediction-card chase-card" style="background: linear-gradient(135deg, #1a2a4a, #2c3e6b); color: white;">
+                <div class="row align-items-center">
+                    <div class="col-md-4 text-center">
+                        <div class="card-icon" style="color: #87ceeb;">
+                            <i class="bi bi-graph-up-arrow"></i>
+                        </div>
+                        <h3 class="card-title" style="color: white;">Chase Summary</h3>
+                        <div class="prediction-value">
+                            <span class="main-number count-up" style="color: white; font-size: 2.5rem;" data-target="{{ result.predicted_final_score }}">0</span>
+                            <span style="color: rgba(255,255,255,0.7); font-size: 1.2rem;">/{{ result.predicted_wickets }}</span>
+                        </div>
+                        <div style="color: rgba(255,255,255,0.7); font-size: 0.85rem;">Predicted Final Score</div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="chase-details p-3" style="background: rgba(255,255,255,0.1); border-radius: 10px;">
+                            <div class="row text-center" style="color: white;">
+                                <div class="col-3">
+                                    <h4 class="mb-0">{{ result.runs_needed }}</h4>
+                                    <small>Runs Needed</small>
+                                </div>
+                                <div class="col-3">
+                                    <h4 class="mb-0">{{ "%.2f"|format(result.required_run_rate) }}</h4>
+                                    <small>Required RR</small>
+                                </div>
+                                <div class="col-3">
+                                    <h4 class="mb-0">{{ match_state.target }}</h4>
+                                    <small>Target</small>
+                                </div>
+                                <div class="col-3">
+                                    <h4 class="mb-0">{{ 10 - match_state.wickets_fallen }}</h4>
+                                    <small>Wickets Left</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-3" style="color: rgba(255,255,255,0.85); font-size: 0.85rem;">
+                            <i class="bi bi-info-circle me-1"></i>
+                            Score range: {{ result.score_range[0] }} – {{ result.score_range[1] }} &bull;
+                            {% if result.predicted_final_score >= match_state.target %}
+                            Predicted to reach the target
+                            {% else %}
+                            Predicted to fall {{ match_state.target - result.predicted_final_score }} runs short
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    
+    <div class="momentum-factors mt-4">
+        <h3 class="section-title">
+            <i class="bi bi-speedometer2"></i>
+            Match Momentum & Prediction Factors
+        </h3>
+        <div class="row g-3">
+            <div class="col-lg-5">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title mb-3">
+                            <i class="bi bi-activity text-primary me-2"></i>Momentum
+                            <span class="badge bg-light text-muted ms-2" style="font-size: 0.65rem;">CONTEXT ONLY</span>
+                        </h5>
+
+                        {% set short_rr = result.momentum_short_term_rr %}
+                        {% set medium_rr = result.momentum_medium_term_rr %}
+                        {% set long_rr = result.momentum_long_term_rr %}
+                        {% set par_rr = 8.0 if not is_odi else 5.5 %}
+                        {% set low_rr = 6.0 if not is_odi else 4.0 %}
+                        {% set last_over_est = (short_rr * 1)|round|int %}
+                        {% set overs_window = 10 if is_odi else 5 %}
+                        {% set last_5_overs_est = (medium_rr * overs_window)|round|int %}
+                        {% set mf = result.momentum_factor %}
+
+                        {% if is_live_data %}
+                        <div class="d-flex gap-2 mb-3">
+                            <div class="flex-fill p-3 rounded text-center" style="background: linear-gradient(135deg, #2c3e50, #34495e);">
+                                <div class="fw-bold text-white" style="font-size: 1.6rem;">{{ last_over_est }}</div>
+                                <small style="color: rgba(255,255,255,0.7);">Last over</small>
+                                <div class="mt-1">
+                                    <span class="badge bg-{{ 'success' if short_rr >= par_rr else ('warning' if short_rr >= low_rr else 'danger') }}" style="font-size: 0.7rem;">
+                                        {{ "%.1f"|format(short_rr) }} RPO
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="flex-fill p-3 rounded text-center" style="background: linear-gradient(135deg, #2c3e50, #34495e);">
+                                <div class="fw-bold text-white" style="font-size: 1.6rem;">{{ last_5_overs_est }}</div>
+                                <small style="color: rgba(255,255,255,0.7);">Last {{ '5' if not is_odi else '10' }} overs</small>
+                                <div class="mt-1">
+                                    <span class="badge bg-{{ 'success' if medium_rr >= par_rr else ('warning' if medium_rr >= low_rr else 'danger') }}" style="font-size: 0.7rem;">
+                                        {{ "%.1f"|format(medium_rr) }} RPO
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                <small class="fw-semibold"><i class="bi bi-lightning-fill text-warning me-1"></i>Current Batsmen</small>
+                                <small class="fw-bold">{{ "%.1f"|format(short_rr) }} RPO</small>
+                            </div>
+                            <div class="progress" style="height: 6px;">
+                                <div class="progress-bar bg-warning" style="width: {{ (short_rr / (16 if not is_odi else 10) * 100)|int }}%"></div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                <small class="fw-semibold"><i class="bi bi-graph-up text-info me-1"></i>Bowling Spells</small>
+                                <small class="fw-bold">{{ "%.1f"|format(medium_rr) }} RPO</small>
+                            </div>
+                            <div class="progress" style="height: 6px;">
+                                <div class="progress-bar bg-info" style="width: {{ (medium_rr / (16 if not is_odi else 10) * 100)|int }}%"></div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                <small class="fw-semibold"><i class="bi bi-bar-chart-line text-secondary me-1"></i>Overall Innings</small>
+                                <small class="fw-bold">{{ "%.1f"|format(long_rr) }} RPO</small>
+                            </div>
+                            <div class="progress" style="height: 6px;">
+                                <div class="progress-bar bg-secondary" style="width: {{ (long_rr / (16 if not is_odi else 10) * 100)|int }}%"></div>
+                            </div>
+                            <small class="text-muted">{{ match_state.current_score }} runs in {{ "%.1f"|format(match_state.overs_completed) }} overs</small>
+                        </div>
+
+                        <div class="p-2 rounded text-center" style="background: {{ '#d4edda' if mf >= 1.05 else ('#f8d7da' if mf <= 0.95 else '#fff3cd') }};">
+                            <small class="fw-bold">
+                                {% if mf >= 1.05 %}
+                                <i class="bi bi-arrow-up-circle-fill text-success me-1"></i>Positive momentum — scoring above par
+                                {% elif mf <= 0.95 %}
+                                <i class="bi bi-arrow-down-circle-fill text-danger me-1"></i>Under pressure — scoring below par
+                                {% else %}
+                                <i class="bi bi-dash-circle-fill text-warning me-1"></i>Neutral momentum — scoring near par
+                                {% endif %}
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-7">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title mb-3">
+                            <i class="bi bi-sliders text-success me-2"></i>Prediction Factors
+                        </h5>
+                        <div class="row g-2">
+                            <div class="col-sm-6">
+                                <div class="p-2 rounded" style="background: #f8f9fa;">
+                                    <div class="d-flex align-items-center">
+                                        <div class="me-2" style="width: 36px; height: 36px; background: #667eea; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                                            <i class="bi bi-speedometer text-white"></i>
+                                        </div>
+                                        <div>
+                                            <div class="fw-bold" style="font-size: 1.1rem;">{{ "%.2f"|format(result.current_run_rate) }}</div>
+                                            <small class="text-muted">Current Run Rate</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="p-2 rounded" style="background: #f8f9fa;">
+                                    <div class="d-flex align-items-center">
+                                        <div class="me-2" style="width: 36px; height: 36px; background: #28a745; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                                            <i class="bi bi-shield text-white"></i>
+                                        </div>
+                                        <div>
+                                            <div class="fw-bold" style="font-size: 1.1rem;">{{ result.wickets_in_hand }}</div>
+                                            <small class="text-muted">Wickets in Hand</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="p-2 rounded" style="background: #f8f9fa;">
+                                    <div class="d-flex align-items-center">
+                                        <div class="me-2" style="width: 36px; height: 36px; background: #fd7e14; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                                            <i class="bi bi-clock text-white"></i>
+                                        </div>
+                                        <div>
+                                            <div class="fw-bold" style="font-size: 1.1rem;">{{ "%.1f"|format(result.overs_remaining) }}</div>
+                                            <small class="text-muted">Overs Remaining</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="p-2 rounded" style="background: #f8f9fa;">
+                                    <div class="d-flex align-items-center">
+                                        <div class="me-2" style="width: 36px; height: 36px; background: #dc3545; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                                            <i class="bi bi-person-arms-up text-white"></i>
+                                        </div>
+                                        <div>
+                                            <div class="fw-bold" style="font-size: 1.1rem;">{{ result.batsman_smoothed_sr }}</div>
+                                            <small class="text-muted">Smoothed SR</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% if result.is_chase %}
+                            <div class="col-sm-6">
+                                <div class="p-2 rounded" style="background: #f8f9fa;">
+                                    <div class="d-flex align-items-center">
+                                        <div class="me-2" style="width: 36px; height: 36px; background: #6f42c1; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                                            <i class="bi bi-bullseye text-white"></i>
+                                        </div>
+                                        <div>
+                                            <div class="fw-bold" style="font-size: 1.1rem;">{{ "%.2f"|format(result.required_run_rate) }}</div>
+                                            <small class="text-muted">Required Run Rate</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endif %}
+                            <div class="col-sm-6">
+                                <div class="p-2 rounded" style="background: #f8f9fa;">
+                                    <div class="d-flex align-items-center">
+                                        <div class="me-2" style="width: 36px; height: 36px; background: #20c997; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                                            <i class="bi bi-arrow-left-right text-white"></i>
+                                        </div>
+                                        <div>
+                                            <div class="fw-bold" style="font-size: 1.1rem;">{{ "%.2f"|format(result.momentum_factor) }}x</div>
+                                            <small class="text-muted">Momentum Multiplier</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-3 p-2 rounded" style="background: #f0f4ff; border-left: 3px solid #667eea;">
+                            <small class="text-muted">
+                                <i class="bi bi-info-circle me-1"></i>
+                                Projected score of <strong>{{ result.predicted_final_score }}</strong> is driven by the factors above
+                                — weighted across multiple time windows. Momentum is informational context, not the primary driver.
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% if match_state.batsmen %}
+    <div class="batsmen-stats mt-4">
+        <h3 class="section-title">
+            <i class="bi bi-people"></i>
+            Batsmen at Crease
+        </h3>
+        <div class="row g-3">
+            {% for batsman in match_state.batsmen %}
+            <div class="col-md-6">
+                <div class="batsman-stat-card">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <h5>{{ batsman.name }}</h5>
+                        {% if batsmen_stats and batsman.name in batsmen_stats %}
+                        <span class="badge bg-primary">Career: {{ batsmen_stats[batsman.name].runs }} runs</span>
+                        {% endif %}
+                    </div>
+                    <div class="stat-row">
+                        <span>{{ batsman.runs }} runs ({{ batsman.balls_faced }} balls)</span>
+                        <span class="strike-rate">SR: {{ "%.1f"|format(batsman.strike_rate) }}</span>
+                    </div>
+                    {% if batsmen_stats and batsman.name in batsmen_stats %}
+                    <div class="career-stats mt-2">
+                        <small class="text-muted">
+                            <i class="bi bi-info-circle"></i>
+                            {{ stats_label }}: {{ batsmen_stats[batsman.name].matches }} matches | 
+                            {{ batsmen_stats[batsman.name].runs }} runs |
+                            Avg: {{ batsmen_stats[batsman.name].avg }} | 
+                            SR: {{ batsmen_stats[batsman.name].sr }} |
+                            50s: {{ batsmen_stats[batsman.name].fifties }} |
+                            100s: {{ batsmen_stats[batsman.name].hundreds }}
+                        </small>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+    
+    {% if bowler_stats and result.bowler_specified %}
+    <div class="bowler-stats mt-4">
+        <h3 class="section-title">
+            <i class="bi bi-bullseye"></i>
+            Next Over Bowler - {{ match_state.next_over_bowler }}
+        </h3>
+        <div class="bowler-career-card">
+            <div class="row">
+                <div class="col-md-3 col-6">
+                    <div class="stat-box">
+                        <div class="stat-value">{{ bowler_stats.wickets }}</div>
+                        <div class="stat-label">{{ stats_label }} Wickets</div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="stat-box">
+                        <div class="stat-value">{{ bowler_stats.avg }}</div>
+                        <div class="stat-label">Average</div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="stat-box">
+                        <div class="stat-value">{{ bowler_stats.econ }}</div>
+                        <div class="stat-label">Economy</div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="stat-box">
+                        <div class="stat-value">{{ bowler_stats.best }}</div>
+                        <div class="stat-label">Best Figures</div>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-3">
+                <small style="color: rgba(255,255,255,0.75);">
+                    <i class="bi bi-calendar"></i> {{ bowler_stats.matches }} {{ stats_label }} matches | 
+                    <i class="bi bi-clock"></i> {{ bowler_stats.overs }} overs bowled
+                </small>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    
+    <div class="alert alert-warning mt-4" role="alert">
+        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+        <strong>Disclaimer:</strong> Actual match outcomes may vary significantly from these predictions. This tool is for entertainment purposes only and is not intended for gambling or betting.
+    </div>
+    
+    <!-- Feedback Section -->
+    <div class="feedback-section mt-4" id="feedbackSection">
+        <div class="feedback-card">
+            <h4 class="text-center mb-3">
+                <i class="bi bi-chat-heart"></i> Was this prediction useful?
+            </h4>
+            
+            {% if not current_user.is_authenticated %}
+            <!-- Login Required Message -->
+            <div class="text-center py-3">
+                <p class="text-muted mb-3">Please log in to share your feedback</p>
+                <a href="{{ url_for('login_and_redirect', next='/bug-report') }}" class="btn btn-primary">
+                    <i class="bi bi-person me-1"></i> Log In to Give Feedback
+                </a>
+            </div>
+            {% else %}
+            <!-- Positive Feedback Form -->
+            <div class="feedback-buttons text-center mb-3" id="feedbackButtons">
+                <form action="{{ url_for('submit_feedback_form') }}" method="POST" class="d-inline">
+                    <input type="hidden" name="is_positive" value="true">
+                    <input type="hidden" name="venue" value="{{ match_state.venue }}">
+                    <input type="hidden" name="match_format" value="{{ match_state.match_format }}">
+                    <input type="hidden" name="current_score" value="{{ match_state.current_score }}">
+                    <input type="hidden" name="predicted_score" value="{{ result.predicted_final_score }}">
+                    <div class="d-flex align-items-center gap-2 justify-content-center mb-2">
+                        <input type="email" name="contact_email" class="form-control form-control-sm" style="max-width: 240px;" placeholder="Email for a reply (optional)">
+                    </div>
+                    <button type="submit" class="btn btn-outline-success btn-lg mx-2 feedback-btn">
+                        <i class="bi bi-hand-thumbs-up-fill"></i> Yes
+                    </button>
+                </form>
+                <button type="button" class="btn btn-outline-danger btn-lg mx-2 feedback-btn" onclick="document.getElementById('feedbackButtons').style.display='none'; document.getElementById('negativeFeedbackForm').style.display='block';">
+                    <i class="bi bi-hand-thumbs-down-fill"></i> No
+                </button>
+            </div>
+            
+            <!-- Negative Feedback Form (hidden by default) -->
+            <form action="{{ url_for('submit_feedback_form') }}" method="POST" id="negativeFeedbackForm" style="display: none;" class="mt-4">
+                <input type="hidden" name="is_positive" value="false">
+                <input type="hidden" name="venue" value="{{ match_state.venue }}">
+                <input type="hidden" name="match_format" value="{{ match_state.match_format }}">
+                <input type="hidden" name="current_score" value="{{ match_state.current_score }}">
+                <input type="hidden" name="predicted_score" value="{{ result.predicted_final_score }}">
+                
+                <h5 class="mb-3">What went wrong? <small class="text-muted">(select all that apply)</small></h5>
+                <div class="feedback-reasons-list">
+                    <ul>
+                        <li class="feedback-reason-item">
+                            <input class="form-check-input" type="checkbox" id="reasonWrongPlayer" name="reason_wrong_player" value="true">
+                            <label class="form-check-label" for="reasonWrongPlayer">
+                                Player not found / wrong player
+                            </label>
+                        </li>
+                        <li class="feedback-reason-item">
+                            <input class="form-check-input" type="checkbox" id="reasonUnrealistic" name="reason_unrealistic" value="true">
+                            <label class="form-check-label" for="reasonUnrealistic">
+                                Prediction seems unrealistic
+                            </label>
+                        </li>
+                        <li class="feedback-reason-item">
+                            <input class="form-check-input" type="checkbox" id="reasonUIConfusing" name="reason_ui_confusing" value="true">
+                            <label class="form-check-label" for="reasonUIConfusing">
+                                UI confusing
+                            </label>
+                        </li>
+                        <li class="feedback-reason-item">
+                            <input class="form-check-input" type="checkbox" id="reasonBugError" name="reason_bug_error" value="true">
+                            <label class="form-check-label" for="reasonBugError">
+                                Bug / error
+                            </label>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="mt-3">
+                    <label for="feedbackText" class="form-label">Additional comments <small class="text-muted">(optional, max 300 characters)</small></label>
+                    <textarea class="form-control" id="feedbackText" name="feedback_text" rows="3" maxlength="300" placeholder="Tell us more about the issue..."></textarea>
+                    <div class="form-text text-end"><span id="charCount">0</span>/300</div>
+                </div>
+                
+                <div class="mt-3">
+                    <label for="feedbackEmail" class="form-label">Email <small class="text-muted">(optional — we'll send you a reply)</small></label>
+                    <input type="email" class="form-control" id="feedbackEmail" name="contact_email" placeholder="your@email.com">
+                </div>
+                
+                <div class="text-center mt-3">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-send"></i> Submit Feedback
+                    </button>
+                    <button type="button" class="btn btn-outline-secondary ms-2" onclick="document.getElementById('negativeFeedbackForm').style.display='none'; document.getElementById('feedbackButtons').style.display='block';">
+                        Cancel
+                    </button>
+                </div>
+            </form>
+            {% endif %}
+        </div>
+    </div>
+    
+    <div class="text-center mt-4">
+        <a href="{{ url_for('index') }}" class="btn btn-primary btn-lg">
+            <i class="bi bi-arrow-left"></i>
+            New Prediction
+        </a>
+    </div>
+</div>
+
+<script>
+var feedbackTextEl = document.getElementById('feedbackText');
+if (feedbackTextEl) {
+    feedbackTextEl.addEventListener('input', function() {
+        document.getElementById('charCount').textContent = this.value.length;
+    });
+}
+
+function animateCountUp(el) {
+    var target = parseInt(el.getAttribute('data-target')) || 0;
+    var suffix = el.getAttribute('data-suffix') || '';
+    var duration = 1200;
+    var start = 0;
+    var startTime = null;
+
+    function step(timestamp) {
+        if (!startTime) startTime = timestamp;
+        var progress = Math.min((timestamp - startTime) / duration, 1);
+        var eased = 1 - Math.pow(1 - progress, 3);
+        var current = Math.round(eased * target);
+        el.textContent = current + suffix;
+        if (progress < 1) {
+            requestAnimationFrame(step);
+        } else {
+            el.textContent = target + suffix;
+        }
+    }
+
+    requestAnimationFrame(step);
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    var elements = document.querySelectorAll('.count-up[data-target]');
+    if (typeof IntersectionObserver !== 'undefined') {
+        elements.forEach(function(el) {
+            var observer = new IntersectionObserver(function(entries) {
+                entries.forEach(function(entry) {
+                    if (entry.isIntersecting) {
+                        animateCountUp(el);
+                        observer.unobserve(el);
+                    }
+                });
+            }, { threshold: 0.3 });
+            observer.observe(el);
+        });
+    } else {
+        elements.forEach(function(el) {
+            el.textContent = (el.getAttribute('data-target') || '0') + (el.getAttribute('data-suffix') || '');
+        });
+    }
+});
+</script>
+{% endblock %}
