@@ -5,14 +5,14 @@
       <stop offset="100%" stop-color="#5c0a15"/>
     </radialGradient>
     <clipPath id="ballClip">
-      <circle cx="42" cy="50" r="34"/>
+      <circle cx="48" cy="50" r="34"/>
     </clipPath>
   </defs>
-  <!-- Cricket ball centred slightly left to leave room for bolt -->
-  <circle cx="42" cy="50" r="34" fill="url(#ballGrad)"/>
+  <!-- Ball centred so that ball+bolt combined is centred at 50,50 -->
+  <circle cx="48" cy="50" r="34" fill="url(#ballGrad)"/>
   <!-- Seam lines -->
-  <path d="M42 16 C24 29, 24 45, 42 50 C60 55, 60 71, 42 84" stroke="#7a0a1a" stroke-width="2" fill="none" stroke-linecap="round" clip-path="url(#ballClip)"/>
-  <path d="M42 16 C60 29, 60 45, 42 50 C24 55, 24 71, 42 84" stroke="#7a0a1a" stroke-width="2" fill="none" stroke-linecap="round" clip-path="url(#ballClip)"/>
-  <!-- Dark blue lightning bolt overlapping right side of ball -->
-  <polygon points="64,10 46,50 59,50 42,90 80,44 66,44" fill="#0d2b6e" stroke="#0a2060" stroke-width="1" stroke-linejoin="round"/>
+  <path d="M48 16 C30 29, 30 45, 48 50 C66 55, 66 71, 48 84" stroke="#7a0a1a" stroke-width="2" fill="none" stroke-linecap="round" clip-path="url(#ballClip)"/>
+  <path d="M48 16 C66 29, 66 45, 48 50 C30 55, 30 71, 48 84" stroke="#7a0a1a" stroke-width="2" fill="none" stroke-linecap="round" clip-path="url(#ballClip)"/>
+  <!-- Dark blue bolt — shifted right so overall design centre = 50,50 -->
+  <polygon points="70,10 52,50 65,50 48,90 86,44 72,44" fill="#0d2b6e" stroke="#0a2060" stroke-width="1" stroke-linejoin="round"/>
 </svg>
