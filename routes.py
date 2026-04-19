@@ -2001,6 +2001,12 @@ def hub_ind_aus():
     return render_template("hub_page.html", hub=HUB_PAGES["india-vs-australia-prediction"])
 
 
+@app.route("/favicon.ico")
+def favicon():
+    """Serve favicon for browsers and Google search results."""
+    return send_file("static/cricket_ball_logo.png", mimetype="image/png")
+
+
 @app.route("/about")
 def about():
     """About page with app description and creator info."""
