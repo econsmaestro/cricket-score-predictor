@@ -11,6 +11,14 @@ def make_session_permanent():
     """Ensure all browser sessions persist across requests."""
     session.permanent = True
 
+@app.before_request
+def redirect_to_custom_domain():
+    """301 redirect from old replit.app domain to custom domain for SEO continuity."""
+    host = request.host
+    if host and "replit.app" in host:
+        url = request.url.replace(host, "cricket-score-predictor.com", 1)
+        return redirect(url, code=301)
+
 import io
 import re
 from prediction import (
