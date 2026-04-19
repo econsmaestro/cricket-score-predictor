@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row justify-content-center mt-4 mb-5">
+    <div class="col-lg-8">
+
+        <div class="card shadow-sm mb-4">
+            <div class="card-body p-4">
+                <h1 class="fw-bold mb-1" style="color: var(--primary-color, #1a6b3a);">
+                    <i class="bi bi-shield-check-fill me-2"></i>Privacy Policy
+                </h1>
+                <p class="text-muted mb-0">Last updated: April 2026</p>
+            </div>
+        </div>
+
+        <div class="card shadow-sm mb-4">
+            <div class="card-body p-4">
+                <h2 class="h5 fw-bold mb-3">Overview</h2>
+                <p class="mb-0">Cricket Match Intelligence is a free, entertainment-focused cricket prediction tool. We take your privacy seriously and collect only the minimum data necessary to operate the service.</p>
+            </div>
+        </div>
+
+        <div class="card shadow-sm mb-4">
+            <div class="card-body p-4">
+                <h2 class="h5 fw-bold mb-3">What we collect</h2>
+                <ul class="list-unstyled mb-0">
+                    <li class="mb-3">
+                        <i class="bi bi-person-fill text-success me-2"></i>
+                        <strong>Account information (optional)</strong><br>
+                        <span class="text-muted ms-4">If you log in via Replit OAuth, we store your display name and profile image to personalise your experience. You can use the tool without logging in.</span>
+                    </li>
+                    <li class="mb-3">
+                        <i class="bi bi-chat-left-text-fill text-success me-2"></i>
+                        <strong>Feedback and bug reports</strong><br>
+                        <span class="text-muted ms-4">Any ratings, comments, or bug reports you submit voluntarily are stored to help improve the tool.</span>
+                    </li>
+                    <li class="mb-3">
+                        <i class="bi bi-bar-chart-fill text-success me-2"></i>
+                        <strong>Anonymous page views</strong><br>
+                        <span class="text-muted ms-4">We log anonymous visit counts per page to understand which features are most used. No personal identifiers are attached.</span>
+                    </li>
+                    <li class="mb-0">
+                        <i class="bi bi-robot text-success me-2"></i>
+                        <strong>Support chat messages</strong><br>
+                        <span class="text-muted ms-4">If you use the Third Umpire AI support chat, messages are processed by OpenAI and stored temporarily for the duration of your session only.</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="card shadow-sm mb-4">
+            <div class="card-body p-4">
+                <h2 class="h5 fw-bold mb-3">What we do not collect</h2>
+                <ul class="list-unstyled mb-0">
+                    <li class="mb-1"><i class="bi bi-x-circle-fill text-danger me-2"></i>No passwords or payment information</li>
+                    <li class="mb-1"><i class="bi bi-x-circle-fill text-danger me-2"></i>No location tracking</li>
+                    <li class="mb-1"><i class="bi bi-x-circle-fill text-danger me-2"></i>No advertising or third-party tracking cookies</li>
+                    <li class="mb-0"><i class="bi bi-x-circle-fill text-danger me-2"></i>No sale of data to third parties</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="card shadow-sm mb-4">
+            <div class="card-body p-4">
+                <h2 class="h5 fw-bold mb-3">Third-party services</h2>
+                <p>The app uses the following external services, each with their own privacy policies:</p>
+                <ul class="mb-0">
+                    <li><strong>Replit</strong> — hosting and OAuth authentication</li>
+                    <li><strong>OpenAI</strong> — powers the Third Umpire AI support chat</li>
+                    <li><strong>Cricbuzz / ESPN Cricinfo</strong> — live match data (read-only scraping, no user data shared)</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="card shadow-sm mb-4">
+            <div class="card-body p-4">
+                <h2 class="h5 fw-bold mb-3">Data retention</h2>
+                <p class="mb-0">Feedback and bug reports are retained indefinitely to improve the tool. Anonymous page view counts are aggregated and retained for analytics. If you would like your data removed, use the Feedback page to send a request.</p>
+            </div>
+        </div>
+
+        <div class="card shadow-sm mb-4">
+            <div class="card-body p-4">
+                <h2 class="h5 fw-bold mb-3">Contact</h2>
+                <p class="mb-0">This tool is independently developed by Anjaneya Sharma. For any privacy-related queries, please use the <a href="/bug-report" class="text-success">Feedback page</a>.</p>
+            </div>
+        </div>
+
+        <div class="text-center">
+            <a href="/" class="btn btn-success px-4"><i class="bi bi-lightning-fill me-2"></i>Back to Predictor</a>
+            <a href="/about" class="btn btn-outline-secondary ms-2 px-4"><i class="bi bi-info-circle me-2"></i>About</a>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

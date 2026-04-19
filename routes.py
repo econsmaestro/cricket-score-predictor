@@ -1792,6 +1792,18 @@ def api_support_chat_clear():
     return jsonify({"success": True})
 
 
+@app.route("/about")
+def about():
+    """About page with app description and creator info."""
+    return render_template("about.html")
+
+
+@app.route("/privacy-policy")
+def privacy_policy():
+    """Privacy policy page."""
+    return render_template("privacy.html")
+
+
 @app.route("/robots.txt")
 def robots_txt():
     """Serve robots.txt for search engine crawlers."""
@@ -1817,7 +1829,9 @@ def sitemap_xml():
         ("/demo", "0.9", "weekly"),
         ("/prematch", "0.8", "weekly"),
         ("/insights", "0.8", "weekly"),
-        ("/support-chat", "0.7", "monthly"),
+        ("/about", "0.7", "monthly"),
+        ("/privacy-policy", "0.5", "monthly"),
+        ("/support-chat", "0.6", "monthly"),
     ]
     from flask import Response
     from datetime import date
