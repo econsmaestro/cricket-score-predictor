@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- Cricket ball body -->
+  <circle cx="50" cy="50" r="46" fill="#c0392b"/>
+  <circle cx="50" cy="50" r="46" fill="url(#ballGrad)"/>
+  <!-- Seam lines -->
+  <path d="M50 4 C30 20, 30 40, 50 50 C70 60, 70 80, 50 96" stroke="#8b0000" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <path d="M50 4 C70 20, 70 40, 50 50 C30 60, 30 80, 50 96" stroke="#8b0000" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <!-- Dark blue lightning bolt -->
+  <polygon points="55,12 38,52 50,52 44,88 64,44 51,44" fill="#0d2b6e" stroke="#1a3a8f" stroke-width="1.5" stroke-linejoin="round"/>
+  <!-- Gradient def -->
+  <defs>
+    <radialGradient id="ballGrad" cx="38%" cy="35%" r="65%">
+      <stop offset="0%" stop-color="#e74c3c" stop-opacity="1"/>
+      <stop offset="100%" stop-color="#922b21" stop-opacity="1"/>
+    </radialGradient>
+  </defs>
+</svg>

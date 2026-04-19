@@ -2004,7 +2004,7 @@ def hub_ind_aus():
 @app.route("/favicon.ico")
 def favicon():
     """Serve favicon for browsers and Google search results."""
-    return send_file("static/cricket_ball_logo.png", mimetype="image/png")
+    return send_file("static/cricket_logo.svg", mimetype="image/svg+xml")
 
 
 @app.route("/about")
