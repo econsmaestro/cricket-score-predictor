@@ -1782,3 +1782,49 @@ def api_support_chat_clear():
         return jsonify({"error": "Invalid request."}), 403
     session['chat_session_id'] = uuid.uuid4().hex
     return jsonify({"success": True})
+
+
+@app.route("/robots.txt")
+def robots_txt():
+    """Serve robots.txt for search engine crawlers."""
+    content = (
+        "User-agent: *\n"
+        "Allow: /\n"
+        "Disallow: /admin\n"
+        "Disallow: /api/\n"
+        "Disallow: /auth/\n"
+        "\n"
+        "Sitemap: https://cricket-score-predictor-1.replit.app/sitemap.xml\n"
+    )
+    from flask import Response
+    return Response(content, mimetype="text/plain")
+
+
+@app.route("/sitemap.xml")
+def sitemap_xml():
+    """Serve sitemap.xml listing all public pages for search engines."""
+    base = "https://cricket-score-predictor-1.replit.app"
+    pages = [
+        ("", "1.0", "daily"),
+        ("/demo", "0.9", "weekly"),
+        ("/prematch", "0.8", "weekly"),
+        ("/insights", "0.8", "weekly"),
+        ("/support-chat", "0.7", "monthly"),
+    ]
+    from flask import Response
+    from datetime import date
+    today = date.today().isoformat()
+    urls = ""
+    for path, priority, freq in pages:
+        urls += (
+            f"  <url>\n"
+            f"    <loc>{base}{path}</loc>\n"
+            f"    <lastmod>{today}</lastmod>\n"
+            f"    <changefreq>{freq}</changefreq>\n"
+            f"    <priority>{priority}</priority>\n"
+            f"  </url>\n"
+        )
+    xml = f"""<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+{urls}</urlset>"""
+    return Response(xml, mimetype="application/xml")
