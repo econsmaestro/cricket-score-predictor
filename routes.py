@@ -1801,6 +1801,11 @@ HUB_PAGES = {
         "intro": "The Indian Premier League is the highest-scoring T20 competition in the world, with flat pitches, short boundaries, and the best T20 specialists in one place. Use Cricket Match Intelligence to predict final scores for any IPL match in real time.",
         "cta_url": "/?format=mens_t20",
         "cta_text": "Predict an IPL Match",
+        "related": [
+            {"url": "/rcb-vs-csk", "label": "RCB vs CSK Prediction"},
+            {"url": "/t20-predictions", "label": "T20 Score Predictor"},
+            {"url": "/india-vs-australia-prediction", "label": "India vs Australia"},
+        ],
         "sections": [
             {
                 "icon": "bi-trophy-fill",
@@ -1837,6 +1842,11 @@ HUB_PAGES = {
         "intro": "RCB vs CSK is consistently one of the most-watched IPL fixtures. Chinnaswamy Stadium's short square boundaries and Chepauk's spin-friendly surface make these two grounds produce contrasting match dynamics. The Cricket Match Intelligence engine accounts for both venue profiles when generating predictions.",
         "cta_url": "/?format=mens_t20",
         "cta_text": "Predict RCB vs CSK Now",
+        "related": [
+            {"url": "/ipl-predictions", "label": "All IPL Predictions"},
+            {"url": "/t20-predictions", "label": "T20 Score Predictor"},
+            {"url": "/india-vs-australia-prediction", "label": "India vs Australia"},
+        ],
         "sections": [
             {
                 "icon": "bi-geo-alt-fill",
@@ -1868,6 +1878,11 @@ HUB_PAGES = {
         "intro": "T20 cricket is the fastest-evolving format in the game. Scores, tactics, and player roles change rapidly. Cricket Match Intelligence uses a multi-phase statistical model to predict T20 final scores, wickets, and next-over performance based on the current match state.",
         "cta_url": "/?format=mens_t20",
         "cta_text": "Predict a T20 Match",
+        "related": [
+            {"url": "/ipl-predictions", "label": "IPL Score Predictions"},
+            {"url": "/t20-world-cup-predictions", "label": "T20 World Cup Predictions"},
+            {"url": "/rcb-vs-csk", "label": "RCB vs CSK Prediction"},
+        ],
         "sections": [
             {
                 "icon": "bi-bar-chart-steps",
@@ -1899,6 +1914,11 @@ HUB_PAGES = {
         "intro": "The ICC T20 World Cup brings together the world's best T20 sides across multiple venues with vastly different conditions. From low-scoring spinner's paradises to high-octane batting feasts, Cricket Match Intelligence accounts for every venue's unique profile when generating predictions.",
         "cta_url": "/?format=mens_t20",
         "cta_text": "Predict a World Cup Match",
+        "related": [
+            {"url": "/t20-predictions", "label": "T20 Score Predictor"},
+            {"url": "/india-vs-australia-prediction", "label": "India vs Australia"},
+            {"url": "/ipl-predictions", "label": "IPL Score Predictions"},
+        ],
         "sections": [
             {
                 "icon": "bi-geo-alt-fill",
@@ -1925,6 +1945,11 @@ HUB_PAGES = {
         "intro": "India vs Australia is one of the most contested rivalries in international cricket, producing memorable matches across all formats. The Cricket Match Intelligence engine has detailed player profiles for all current Indian and Australian cricketers, with venue-specific data for their most common grounds.",
         "cta_url": "/",
         "cta_text": "Predict India vs Australia",
+        "related": [
+            {"url": "/t20-predictions", "label": "T20 Score Predictor"},
+            {"url": "/t20-world-cup-predictions", "label": "T20 World Cup Predictions"},
+            {"url": "/ipl-predictions", "label": "IPL Score Predictions"},
+        ],
         "sections": [
             {
                 "icon": "bi-bar-chart-fill",

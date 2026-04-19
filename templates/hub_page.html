@@ -66,10 +66,20 @@
             </div>
         </div>
 
-        <div class="text-center">
-            <a href="/about" class="btn btn-outline-secondary btn-sm me-2"><i class="bi bi-info-circle me-1"></i>About</a>
-            <a href="/privacy-policy" class="btn btn-outline-secondary btn-sm"><i class="bi bi-shield-check me-1"></i>Privacy</a>
+        {% if hub.related %}
+        <div class="card shadow-sm mb-4">
+            <div class="card-body p-4">
+                <h2 class="h6 fw-bold mb-3 text-muted text-uppercase" style="letter-spacing:.5px;">Related Pages</h2>
+                <div class="d-flex flex-wrap gap-2">
+                    <a href="{{ hub.cta_url }}" class="btn btn-success btn-sm"><i class="bi bi-lightning-fill me-1"></i>{{ hub.cta_text }}</a>
+                    {% for link in hub.related %}
+                    <a href="{{ link.url }}" class="btn btn-outline-secondary btn-sm">{{ link.label }}</a>
+                    {% endfor %}
+                    <a href="/about" class="btn btn-outline-secondary btn-sm"><i class="bi bi-info-circle me-1"></i>About</a>
+                </div>
+            </div>
         </div>
+        {% endif %}
 
     </div>
 </div>
