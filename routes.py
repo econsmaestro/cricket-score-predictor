@@ -1792,6 +1792,190 @@ def api_support_chat_clear():
     return jsonify({"success": True})
 
 
+HUB_PAGES = {
+    "ipl-predictions": {
+        "meta_title": "IPL Score Predictions 2025 – AI Cricket Match Predictor",
+        "meta_desc": "Get AI-powered IPL score predictions for every match. Predict final scores, wickets, and win probability for RCB, CSK, MI, KKR and all IPL teams.",
+        "title": "IPL Score Predictions",
+        "subtitle": "AI-powered final score forecasts for every Indian Premier League match — powered by live data and a 705+ player database.",
+        "intro": "The Indian Premier League is the highest-scoring T20 competition in the world, with flat pitches, short boundaries, and the best T20 specialists in one place. Use Cricket Match Intelligence to predict final scores for any IPL match in real time.",
+        "cta_url": "/?format=mens_t20",
+        "cta_text": "Predict an IPL Match",
+        "sections": [
+            {
+                "icon": "bi-trophy-fill",
+                "heading": "Why IPL Scoring is Different",
+                "bullets": [
+                    "Average T20 score in IPL is 163–170, significantly higher than international T20s (155–162).",
+                    "Wankhede, Chinnaswamy, and Eden Gardens are historically the highest-scoring grounds.",
+                    "Death-over specialists like Bumrah, Boult, and Chahal have specific economy profiles built into the engine.",
+                    "The model applies IPL-specific venue multipliers for 12 IPL stadiums.",
+                ]
+            },
+            {
+                "icon": "bi-bar-chart-fill",
+                "heading": "How IPL Predictions Work",
+                "body": "Enter the current score, overs bowled, wickets fallen, and active bowlers. The AI engine reads the current run rate, momentum, pitch conditions, and wickets in hand to project the final total. For chases, it also calculates win probability based on the required run rate curve."
+            },
+            {
+                "icon": "bi-star-fill",
+                "heading": "Popular IPL Matchups",
+                "cards": [
+                    {"badge": "CSK vs MI", "badge_color": "#f5a623", "title": "Chennai vs Mumbai", "body": "Two most successful IPL franchises. Wankhede pitches favour batsmen; Chepauk favours spin."},
+                    {"badge": "RCB vs KKR", "badge_color": "#c0392b", "title": "Bangalore vs Kolkata", "body": "Chinnaswamy's short boundaries regularly produce 190+ totals. Eden Gardens favours pace."},
+                    {"badge": "MI vs DC", "badge_color": "#1a6b3a", "title": "Mumbai vs Delhi", "body": "Wankhede vs Kotla — two very different pitch profiles producing contrasting scores."},
+                ],
+                "card_cols": "4"
+            }
+        ]
+    },
+    "rcb-vs-csk": {
+        "meta_title": "RCB vs CSK Score Prediction – IPL Match AI Predictor",
+        "meta_desc": "Predict RCB vs CSK IPL match scores with AI. Get final score forecasts, wicket predictions, and win probability for Royal Challengers vs Chennai Super Kings.",
+        "title": "RCB vs CSK Score Prediction",
+        "subtitle": "Royal Challengers Bengaluru vs Chennai Super Kings — one of cricket's greatest rivalries. Predict the score with AI.",
+        "intro": "RCB vs CSK is consistently one of the most-watched IPL fixtures. Chinnaswamy Stadium's short square boundaries and Chepauk's spin-friendly surface make these two grounds produce contrasting match dynamics. The Cricket Match Intelligence engine accounts for both venue profiles when generating predictions.",
+        "cta_url": "/?format=mens_t20",
+        "cta_text": "Predict RCB vs CSK Now",
+        "sections": [
+            {
+                "icon": "bi-geo-alt-fill",
+                "heading": "Venue Impact on Scores",
+                "cards": [
+                    {"badge": "M. Chinnaswamy", "badge_color": "#c0392b", "title": "RCB Home Ground", "body": "One of the smallest grounds in IPL. Short boundaries and flat pitches regularly produce 200+ scores. Favours big-hitting batsmen."},
+                    {"badge": "MA Chidambaram", "badge_color": "#f5a623", "title": "CSK Home Ground", "body": "Slower, spin-friendly surface. Scores typically 150–170. Off-spinners and leg-spinners extract significant turn."},
+                ],
+                "card_cols": "6"
+            },
+            {
+                "icon": "bi-cpu",
+                "heading": "What the Predictor Considers",
+                "bullets": [
+                    "Current score, overs bowled, and wickets fallen",
+                    "Active batsmen's strike rates and balls faced (set batsman boost applied after 15 balls)",
+                    "Bowler economy rates and overs remaining in spell",
+                    "Venue-specific scoring multiplier (Chinnaswamy: flat/high-scoring; Chepauk: spin/moderate)",
+                    "Wickets-in-hand acceleration for death overs when 0–3 wickets lost",
+                ]
+            }
+        ]
+    },
+    "t20-predictions": {
+        "meta_title": "T20 Score Predictor – AI Cricket Match Score Forecast",
+        "meta_desc": "Predict T20 match scores instantly with AI. Supports Men's and Women's T20 internationals across 290+ venues. Get final score, wickets, and win probability.",
+        "title": "T20 Score Predictor",
+        "subtitle": "AI-powered score forecasting for Men's and Women's T20 internationals. Enter the match state — get a prediction in seconds.",
+        "intro": "T20 cricket is the fastest-evolving format in the game. Scores, tactics, and player roles change rapidly. Cricket Match Intelligence uses a multi-phase statistical model to predict T20 final scores, wickets, and next-over performance based on the current match state.",
+        "cta_url": "/?format=mens_t20",
+        "cta_text": "Predict a T20 Match",
+        "sections": [
+            {
+                "icon": "bi-bar-chart-steps",
+                "heading": "T20 Phases & Scoring Patterns",
+                "cards": [
+                    {"badge": "Powerplay (0–6)", "badge_color": "#1565c0", "title": "High Variance Phase", "body": "Fielding restrictions allow aggressive batting. Top-order batsmen set the tone. Average: 7–9 RPO."},
+                    {"badge": "Middle (7–15)", "badge_color": "#6a1f6e", "title": "Build or Accelerate", "body": "Depends on wickets in hand. Teams with 7+ wickets accelerate; those with 4–5 consolidate. Average: 7–8 RPO."},
+                    {"badge": "Death (16–20)", "badge_color": "#b71c1c", "title": "Maximum Acceleration", "body": "Set batsmen and low wicket count can produce 12–15 RPO. Tail collapses modelled separately. Average: 9–12 RPO."},
+                ],
+                "card_cols": "4"
+            },
+            {
+                "icon": "bi-globe",
+                "heading": "Supported T20 Formats",
+                "bullets": [
+                    "Men's T20 Internationals — all ICC member nations",
+                    "Women's T20 Internationals — 87 nations in database",
+                    "IPL, BBL, and other franchise leagues (manual input)",
+                    "T20 World Cup matches across all group stages and knockouts",
+                ]
+            }
+        ]
+    },
+    "t20-world-cup-predictions": {
+        "meta_title": "T20 World Cup Score Predictions – AI Match Predictor",
+        "meta_desc": "Predict T20 World Cup match scores with AI. Get final score forecasts, wicket predictions, and win probability for all T20 WC fixtures.",
+        "title": "T20 World Cup Score Predictions",
+        "subtitle": "AI-powered match predictions for the ICC Men's and Women's T20 World Cup — every fixture, every venue.",
+        "intro": "The ICC T20 World Cup brings together the world's best T20 sides across multiple venues with vastly different conditions. From low-scoring spinner's paradises to high-octane batting feasts, Cricket Match Intelligence accounts for every venue's unique profile when generating predictions.",
+        "cta_url": "/?format=mens_t20",
+        "cta_text": "Predict a World Cup Match",
+        "sections": [
+            {
+                "icon": "bi-geo-alt-fill",
+                "heading": "Venue Profiles Matter Most at World Cups",
+                "body": "World Cups are often decided by conditions as much as talent. The engine profiles each venue — pitch type, ground dimensions, average first-innings score, and historical batting/bowling balance — to generate venue-calibrated predictions rather than generic run-rate extrapolations."
+            },
+            {
+                "icon": "bi-trophy-fill",
+                "heading": "Key World Cup Matchups to Predict",
+                "cards": [
+                    {"badge": "IND vs PAK", "badge_color": "#1a6b3a", "title": "India vs Pakistan", "body": "The most-watched match in cricket. High-pressure dynamics, spin-friendly surfaces, and chasing teams historically struggle."},
+                    {"badge": "AUS vs ENG", "badge_color": "#c0392b", "title": "Australia vs England", "body": "Ashes rivalry in T20 format. Both sides play aggressive cricket; high-scoring affairs are common."},
+                    {"badge": "SA vs NZ", "badge_color": "#2980b9", "title": "South Africa vs New Zealand", "body": "Two consistent but unpredictable sides. Seam and pace-friendly conditions in most venues suit both attacks."},
+                ],
+                "card_cols": "4"
+            }
+        ]
+    },
+    "india-vs-australia-prediction": {
+        "meta_title": "India vs Australia Score Prediction – AI Cricket Predictor",
+        "meta_desc": "Predict India vs Australia cricket match scores with AI. Supports T20 and ODI formats across all venues. Get final score, wickets, and win probability.",
+        "title": "India vs Australia Score Prediction",
+        "subtitle": "One of cricket's premier rivalries — predict any India vs Australia match across T20 and ODI formats.",
+        "intro": "India vs Australia is one of the most contested rivalries in international cricket, producing memorable matches across all formats. The Cricket Match Intelligence engine has detailed player profiles for all current Indian and Australian cricketers, with venue-specific data for their most common grounds.",
+        "cta_url": "/",
+        "cta_text": "Predict India vs Australia",
+        "sections": [
+            {
+                "icon": "bi-bar-chart-fill",
+                "heading": "Typical Scoring Patterns",
+                "cards": [
+                    {"badge": "T20 in India", "badge_color": "#1a6b3a", "title": "High-Scoring Affairs", "body": "Flat pitches at Wankhede, Eden Gardens, and Chinnaswamy regularly produce 180–200 totals. Australia's pace attack and India's batting depth make these contests high-variance."},
+                    {"badge": "T20 in Australia", "badge_color": "#f5a623", "title": "Pace-Friendly Conditions", "body": "MCG, SCG, and Gabba have larger outfields. Scores typically 155–175. Australian fast bowlers thrive in home conditions."},
+                    {"badge": "ODI Matches", "badge_color": "#2980b9", "title": "300+ Par Scores", "body": "Both sides are capable of posting 300+ in ODIs. Chases are common — the win probability model is particularly useful for ODI second innings."},
+                ],
+                "card_cols": "4"
+            },
+            {
+                "icon": "bi-cpu",
+                "heading": "Player Profiles in the Database",
+                "bullets": [
+                    "Indian batsmen: Rohit Sharma, Virat Kohli, Shubman Gill, KL Rahul, Hardik Pandya and 40+ more",
+                    "Indian bowlers: Jasprit Bumrah, Mohammed Shami, Axar Patel, Kuldeep Yadav and more",
+                    "Australian batsmen: David Warner, Travis Head, Steve Smith, Glenn Maxwell and more",
+                    "Australian bowlers: Pat Cummins, Josh Hazlewood, Mitchell Starc, Adam Zampa and more",
+                ]
+            }
+        ]
+    }
+}
+
+
+@app.route("/ipl-predictions")
+def hub_ipl():
+    return render_template("hub_page.html", hub=HUB_PAGES["ipl-predictions"])
+
+
+@app.route("/rcb-vs-csk")
+def hub_rcb_csk():
+    return render_template("hub_page.html", hub=HUB_PAGES["rcb-vs-csk"])
+
+
+@app.route("/t20-predictions")
+def hub_t20():
+    return render_template("hub_page.html", hub=HUB_PAGES["t20-predictions"])
+
+
+@app.route("/t20-world-cup-predictions")
+def hub_t20_wc():
+    return render_template("hub_page.html", hub=HUB_PAGES["t20-world-cup-predictions"])
+
+
+@app.route("/india-vs-australia-prediction")
+def hub_ind_aus():
+    return render_template("hub_page.html", hub=HUB_PAGES["india-vs-australia-prediction"])
+
+
 @app.route("/about")
 def about():
     """About page with app description and creator info."""
@@ -1826,7 +2010,12 @@ def sitemap_xml():
     base = "https://cricket-score-predictor.com"
     pages = [
         ("", "1.0", "daily"),
-        ("/demo", "0.9", "weekly"),
+        ("/ipl-predictions", "0.95", "daily"),
+        ("/t20-predictions", "0.95", "daily"),
+        ("/t20-world-cup-predictions", "0.9", "weekly"),
+        ("/india-vs-australia-prediction", "0.9", "weekly"),
+        ("/rcb-vs-csk", "0.9", "weekly"),
+        ("/demo", "0.85", "weekly"),
         ("/prematch", "0.8", "weekly"),
         ("/insights", "0.8", "weekly"),
         ("/about", "0.7", "monthly"),
