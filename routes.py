@@ -1794,7 +1794,7 @@ def robots_txt():
         "Disallow: /api/\n"
         "Disallow: /auth/\n"
         "\n"
-        "Sitemap: https://cricket-score-predictor-1.replit.app/sitemap.xml\n"
+        "Sitemap: https://cricket-score-predictor.com/sitemap.xml\n"
     )
     from flask import Response
     return Response(content, mimetype="text/plain")
@@ -1803,7 +1803,7 @@ def robots_txt():
 @app.route("/sitemap.xml")
 def sitemap_xml():
     """Serve sitemap.xml listing all public pages for search engines."""
-    base = "https://cricket-score-predictor-1.replit.app"
+    base = "https://cricket-score-predictor.com"
     pages = [
         ("", "1.0", "daily"),
         ("/demo", "0.9", "weekly"),
