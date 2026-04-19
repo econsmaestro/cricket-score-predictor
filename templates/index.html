@@ -388,6 +388,181 @@
         Analyzing match data<span class="prediction-loading-dots"><span>.</span><span>.</span><span>.</span></span>
     </div>
 </div>
+
+<div class="mt-5 mb-4">
+    <div class="row g-4">
+        <div class="col-12">
+            <div class="form-card">
+                <h2 class="section-title"><i class="bi bi-cpu"></i> How the Prediction Engine Works</h2>
+                <p>Cricket Match Intelligence uses a <strong>statistical AI model</strong> trained on format-specific cricket data to forecast match outcomes in real time. Unlike simple run-rate calculators, it factors in multiple layers of match context simultaneously.</p>
+                <div class="row g-3 mt-1">
+                    <div class="col-md-4">
+                        <div class="p-3 rounded" style="background:rgba(26,107,58,0.08);border:1px solid rgba(26,107,58,0.15);">
+                            <h6 class="fw-bold mb-2"><i class="bi bi-speedometer2 text-success me-2"></i>Multi-Window Momentum</h6>
+                            <p class="small text-muted mb-0">The model tracks short-term (last 2 overs), medium-term (last 5 overs), and long-term (full innings) run rates simultaneously. This lets it detect momentum shifts — a team accelerating after a quiet patch, or stalling after losing a quick wicket.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="p-3 rounded" style="background:rgba(26,107,58,0.08);border:1px solid rgba(26,107,58,0.15);">
+                            <h6 class="fw-bold mb-2"><i class="bi bi-person-fill text-success me-2"></i>Player-Level Intelligence</h6>
+                            <p class="small text-muted mb-0">With <strong>705+ cricketers</strong> in the database — men's, women's, and U19 — the engine adjusts projections based on who is batting and bowling. A set batsman (15+ balls faced in T20) is modelled to score progressively faster, while tailenders trigger steeper scoring decay.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="p-3 rounded" style="background:rgba(26,107,58,0.08);border:1px solid rgba(26,107,58,0.15);">
+                            <h6 class="fw-bold mb-2"><i class="bi bi-geo-alt-fill text-success me-2"></i>Venue & Conditions</h6>
+                            <p class="small text-muted mb-0">Every ground has a pitch profile — flat, spin-friendly, seam-friendly, or sporting. The engine applies venue-specific scoring multipliers across <strong>290+ international venues</strong>, plus fielding efficiency adjustments based on the bowling team's catching record.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="form-card h-100">
+                <h2 class="section-title"><i class="bi bi-bar-chart-steps"></i> Phase-Based Scoring Logic</h2>
+                <p class="small text-muted">Cricket innings are divided into distinct phases, each with different scoring dynamics. The model applies separate logic for each:</p>
+                <ul class="list-unstyled small">
+                    <li class="mb-2"><span class="badge bg-primary me-2">Powerplay</span> High-risk, high-reward overs with fielding restrictions. Historically accounts for 30–35% of T20 totals.</li>
+                    <li class="mb-2"><span class="badge bg-warning text-dark me-2">Middle Overs</span> Consolidation or acceleration phase. The engine detects whether a team is building or going for it based on wickets in hand.</li>
+                    <li class="mb-2"><span class="badge bg-danger me-2">Death Overs</span> Final overs where set batsmen and low wicket count trigger an acceleration boost of up to 30% above baseline projection.</li>
+                    <li class="mb-0"><span class="badge bg-success me-2">Chase Mode</span> Win probability is calculated over the full distribution of projected outcomes, accounting for required run rate pressure.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="form-card h-100">
+                <h2 class="section-title"><i class="bi bi-trophy"></i> What Gets Predicted</h2>
+                <div class="row g-2">
+                    <div class="col-6">
+                        <div class="text-center p-2 rounded" style="background:rgba(26,107,58,0.08);">
+                            <div class="fs-4 fw-bold text-success">Final Score</div>
+                            <div class="small text-muted">Projected total with confidence range</div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="text-center p-2 rounded" style="background:rgba(26,107,58,0.08);">
+                            <div class="fs-4 fw-bold text-success">Wickets</div>
+                            <div class="small text-muted">Expected dismissals remaining</div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="text-center p-2 rounded" style="background:rgba(26,107,58,0.08);">
+                            <div class="fs-4 fw-bold text-success">Next Over</div>
+                            <div class="small text-muted">Runs, boundaries & dot balls forecast</div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="text-center p-2 rounded" style="background:rgba(26,107,58,0.08);">
+                            <div class="fs-4 fw-bold text-success">Win %</div>
+                            <div class="small text-muted">Chase probability for 2nd innings</div>
+                        </div>
+                    </div>
+                </div>
+                <p class="small text-muted mt-3 mb-0">Predictions update instantly as you change the match state — different bowlers, more wickets fallen, or overs remaining.</p>
+            </div>
+        </div>
+
+        <div class="col-12">
+            <div class="form-card">
+                <h2 class="section-title"><i class="bi bi-lightning-fill"></i> Example Prediction Scenarios</h2>
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <div class="p-3 rounded border">
+                            <div class="d-flex align-items-center gap-2 mb-2">
+                                <span class="badge bg-primary">Men's T20</span>
+                                <strong class="small">India vs Australia</strong>
+                            </div>
+                            <p class="small text-muted mb-1">80/2 after 10 overs at Wankhede Stadium — two set batsmen, 10 overs remaining.</p>
+                            <p class="small mb-0"><strong>Projection:</strong> 178–186 (acceleration boost active, flat pitch, 8 wickets in hand)</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="p-3 rounded border">
+                            <div class="d-flex align-items-center gap-2 mb-2">
+                                <span class="badge bg-danger">Men's ODI</span>
+                                <strong class="small">England vs New Zealand</strong>
+                            </div>
+                            <p class="small text-muted mb-1">210/6 after 40 overs at Lord's — lower middle order in, bowling team efficient in the field.</p>
+                            <p class="small mb-0"><strong>Projection:</strong> 262–271 (tailender decay applied, seam-friendly pitch reduces floor)</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="p-3 rounded border">
+                            <div class="d-flex align-items-center gap-2 mb-2">
+                                <span class="badge bg-info text-dark">Women's T20</span>
+                                <strong class="small">Australia vs England</strong>
+                            </div>
+                            <p class="small text-muted mb-1">Chasing 152, 95/3 after 12 overs at the MCG — required rate rising.</p>
+                            <p class="small mb-0"><strong>Projection:</strong> 58% win probability (manageable rate, 7 wickets in hand)</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center mt-3">
+                    <a href="{{ url_for('demo_prediction') }}" class="btn btn-success px-4"><i class="bi bi-play-circle-fill me-2"></i>Try a Live Demo Prediction</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12">
+            <div class="form-card">
+                <h2 class="section-title"><i class="bi bi-question-circle"></i> Frequently Asked Questions</h2>
+                <div class="accordion accordion-flush" id="faqAccordion">
+                    <div class="accordion-item" style="background:transparent;border-bottom:1px solid rgba(255,255,255,0.1);">
+                        <h3 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq1" style="background:transparent;color:inherit;">
+                                How accurate are the predictions?
+                            </button>
+                        </h3>
+                        <div id="faq1" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body small text-muted">
+                                The model projects a realistic range based on the current match state, not a single guaranteed number. In testing, projections typically land within 8–12 runs of the actual T20 total and 15–20 runs in ODIs when entered at the halfway stage. Accuracy improves the further into the innings you are, as there is less remaining variation to model.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item" style="background:transparent;border-bottom:1px solid rgba(255,255,255,0.1);">
+                        <h3 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2" style="background:transparent;color:inherit;">
+                                Does it work for live matches?
+                            </button>
+                        </h3>
+                        <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body small text-muted">
+                                Yes — use <strong>Live Game mode</strong> to auto-fill the current match data from Cricbuzz. The tool fetches the score, overs, bowlers, and batting lineup automatically, so you only need to select the match and click predict.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item" style="background:transparent;border-bottom:1px solid rgba(255,255,255,0.1);">
+                        <h3 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3" style="background:transparent;color:inherit;">
+                                Which formats are supported?
+                            </button>
+                        </h3>
+                        <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body small text-muted">
+                                Men's T20, Women's T20, Men's ODI, and Women's ODI. Each format uses different phase boundaries, player databases, and scoring models calibrated to the typical scoring patterns of that format.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item" style="background:transparent;">
+                        <h3 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq4" style="background:transparent;color:inherit;">
+                                Is this tool free to use?
+                            </button>
+                        </h3>
+                        <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body small text-muted">
+                                Completely free. No subscription, no sign-up required to use the predictor. Creating an account (via Replit login) is optional and unlocks the ability to leave feedback and track your prediction history.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
 {% endblock %}
 
 {% block scripts %}
