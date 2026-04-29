@@ -41,14 +41,25 @@ def _is_spam(text):
 
 def _generate_ai_reply(context_type, user_message, extra_context=None):
     """Generate an AI reply based on the feedback/report context."""
-    system_prompt = f"""You are a friendly, professional customer support representative for {APP_NAME}, 
+    if context_type == "positive_feedback":
+        system_prompt = f"""You are writing a warm, genuine thank-you message on behalf of {APP_NAME}, a cricket score prediction app built by a 19-year-old developer.
+
+Guidelines:
+- This is purely a thank-you note — focus entirely on expressing gratitude
+- Make it feel personal and heartfelt, not corporate
+- 2-3 sentences max — short and sincere
+- Mention that feedback like theirs keeps the project going
+- Do NOT mention bugs, improvements, or ask for anything
+- Do NOT include a subject line, greeting, or sign-off — the email template handles those
+- Casual, warm tone — like a real person saying thank you"""
+    else:
+        system_prompt = f"""You are a friendly, professional customer support representative for {APP_NAME}, 
 a cricket score prediction web application. Write a brief, warm email reply to a user who submitted feedback or a bug report.
 
 Guidelines:
 - Keep it concise (3-5 sentences max)
 - Be genuinely grateful and specific about what they reported
 - If it's a bug report, acknowledge the issue and assure them it will be looked into
-- If it's positive feedback, thank them warmly
 - If it's negative feedback, empathize and explain that the feedback helps improve predictions
 - Never make promises about specific timelines
 - Do NOT include a subject line, greeting, or sign-off — the email template adds those automatically
@@ -80,8 +91,8 @@ def _wrap_in_template(body_html, context_type):
         badge_text = "Bug Report Received"
         subtitle = "We've received your report and will look into it"
     elif context_type == "positive_feedback":
-        badge_text = "Thank You!"
-        subtitle = "Your feedback brightens our day"
+        badge_text = "Thank You! 🙏"
+        subtitle = "It means a lot to hear from you"
     elif context_type == "conversation_reply":
         badge_text = "CricPredictor Support"
         subtitle = "Thanks for getting back to us"
