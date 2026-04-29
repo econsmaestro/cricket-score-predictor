@@ -15,6 +15,29 @@ APP_NAME = "Cricket Match Intelligence"
 
 EMAIL_STYLE = ""
 
+# Minimum character count before a submission is considered meaningful
+_SPAM_MIN_LENGTH = 8
+# If more than this fraction of characters are consonants with no spaces, likely gibberish
+_SPAM_CONSONANT_RATIO = 0.75
+
+
+def _is_spam(text):
+    """Return True if text looks like nonsense/spam and should not trigger an email reply."""
+    if not text:
+        return True
+    text = text.strip()
+    if len(text) < _SPAM_MIN_LENGTH:
+        return True
+    # Single word (no spaces) with very high consonant ratio = likely gibberish
+    if ' ' not in text:
+        consonants = sum(1 for c in text.lower() if c in 'bcdfghjklmnpqrstvwxyz')
+        if len(text) > 0 and consonants / len(text) >= _SPAM_CONSONANT_RATIO:
+            return True
+    # All the same character repeated
+    if len(set(text.lower())) <= 2 and len(text) > 4:
+        return True
+    return False
+
 
 def _generate_ai_reply(context_type, user_message, extra_context=None):
     """Generate an AI reply based on the feedback/report context."""
@@ -103,6 +126,9 @@ def send_feedback_reply(to_email, is_positive, feedback_text, venue=None, match_
     """Send an AI-generated reply to a user who submitted prediction feedback."""
     if not to_email:
         return False
+    if _is_spam(feedback_text):
+        logger.info(f"Skipping feedback reply — spam/nonsense detected: {repr(feedback_text)}")
+        return False
 
     context_type = "positive_feedback" if is_positive else "negative_feedback"
 
@@ -130,6 +156,9 @@ def send_feedback_reply(to_email, is_positive, feedback_text, venue=None, match_
 def send_bug_report_reply(to_email, category, title, description):
     """Send an AI-generated reply to a user who submitted a bug report."""
     if not to_email:
+        return False
+    if _is_spam(title) and _is_spam(description):
+        logger.info(f"Skipping bug report reply — spam/nonsense detected: title={repr(title)}, desc={repr(description)}")
         return False
 
     extra_context = f"Category: {category}, Title: {title}"
