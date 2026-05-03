@@ -727,12 +727,14 @@ def get_match_from_live_page(match_id: str) -> Optional[Dict]:
             match_data['innings'] = 2
             match_data['loaded_fields'].append('target')
         
-        need_match = re.search(r'need\s+(\d+)\s+(?:runs?|more)', page_text, re.I)
-        if need_match:
-            runs_needed = int(need_match.group(1))
-            match_data['target'] = match_data['current_score'] + runs_needed
-            match_data['innings'] = 2
-            match_data['loaded_fields'].append('target')
+        # Only use need_match as fallback when explicit target text was NOT found
+        if 'target' not in match_data['loaded_fields']:
+            need_match = re.search(r'need\s+(\d+)\s+(?:runs?|more)', page_text, re.I)
+            if need_match:
+                runs_needed = int(need_match.group(1))
+                match_data['target'] = match_data['current_score'] + runs_needed
+                match_data['innings'] = 2
+                match_data['loaded_fields'].append('target')
         
         try:
             batsmen = extract_batsmen(soup)
@@ -1003,12 +1005,13 @@ def get_cricbuzz_match_details(match_id: str) -> Optional[Dict]:
             match_data['innings'] = 2
             match_data['loaded_fields'].append('target')
         
-        need_match = re.search(r'need\s+(\d+)\s+(?:runs?|more)', page_text, re.I)
-        if need_match:
-            runs_needed = int(need_match.group(1))
-            match_data['target'] = match_data['current_score'] + runs_needed
-            match_data['innings'] = 2
-            if 'target' not in match_data['loaded_fields']:
+        # Only use need_match as fallback when explicit target text was NOT found
+        if 'target' not in match_data['loaded_fields']:
+            need_match = re.search(r'need\s+(\d+)\s+(?:runs?|more)', page_text, re.I)
+            if need_match:
+                runs_needed = int(need_match.group(1))
+                match_data['target'] = match_data['current_score'] + runs_needed
+                match_data['innings'] = 2
                 match_data['loaded_fields'].append('target')
         
         if match_data['innings'] == 1 and 'target' not in match_data['loaded_fields']:

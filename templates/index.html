@@ -168,11 +168,11 @@
                         <div class="col-4 col-md-4">
                             <label for="wickets_fallen" class="form-label">Wickets Fallen</label>
                             <div class="input-group">
-                                <button type="button" class="btn btn-outline-secondary" onclick="adjustWickets(-1)">
+                                <button type="button" class="btn btn-outline-secondary" id="wkt-minus-btn" onclick="adjustWickets(-1)" {% if form_data.get('wickets_fallen', '0') == '0' %}disabled{% endif %}>
                                     <i class="bi bi-dash"></i>
                                 </button>
                                 <input type="number" class="form-control text-center" id="wickets_fallen" name="wickets_fallen" min="0" max="9" value="{{ form_data.get('wickets_fallen', '0') }}" required>
-                                <button type="button" class="btn btn-outline-secondary" onclick="adjustWickets(1)">
+                                <button type="button" class="btn btn-outline-secondary" id="wkt-plus-btn" onclick="adjustWickets(1)" {% if form_data.get('wickets_fallen', '0') == '9' %}disabled{% endif %}>
                                     <i class="bi bi-plus"></i>
                                 </button>
                             </div>
@@ -848,9 +848,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function adjustWickets(delta) {
     const input = document.getElementById('wickets_fallen');
-    let value = parseInt(input.value) + delta;
-    value = Math.max(0, Math.min(9, value));
+    let current = parseInt(input.value);
+    if (isNaN(current)) current = 0;
+    let value = Math.max(0, Math.min(9, current + delta));
     input.value = value;
+    document.getElementById('wkt-minus-btn').disabled = (value === 0);
+    document.getElementById('wkt-plus-btn').disabled = (value === 9);
     updateBatsmenToCome();
 }
 
@@ -1229,6 +1232,11 @@ function populateFormFromMatch(match) {
         wicketsInput.offsetHeight;
         wicketsInput.style.display = '';
         console.log('Wickets input value after set:', wicketsInput.value, 'jQuery val:', $('#wickets_fallen').val());
+        // Update +/- button disabled states
+        const minusBtn = document.getElementById('wkt-minus-btn');
+        const plusBtn = document.getElementById('wkt-plus-btn');
+        if (minusBtn) minusBtn.disabled = (wicketsValue === 0);
+        if (plusBtn) plusBtn.disabled = (wicketsValue === 9);
     }
     if (match.overs !== undefined) {
         document.getElementById('overs_completed').value = match.overs;
