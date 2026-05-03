@@ -1387,9 +1387,15 @@ function populateFormFromMatch(match) {
                 for (let i = 0; i < ftSelect.options.length; i++) {
                     if (ftSelect.options[i].value.toLowerCase().includes(ftLower) || ftLower.includes(ftSelect.options[i].value.toLowerCase())) {
                         ftSelect.value = ftSelect.options[i].value;
+                        ftFound = true;
                         break;
                     }
                 }
+            }
+            if (!ftFound && match.fielding_team) {
+                const customOpt = new Option(match.fielding_team + ' (Live)', match.fielding_team, true, true);
+                ftSelect.add(customOpt);
+                ftSelect.value = match.fielding_team;
             }
         }
     }
@@ -1433,9 +1439,15 @@ function populateFormFromMatch(match) {
         yetToBatInfo = ' Yet to bat: ' + match.yet_to_bat.map(b => b.name).join(', ') + '.';
     }
     
+    let teamsInfo = '';
+    if (match.batting_team || match.fielding_team) {
+        const bat = match.batting_team || '—';
+        const field = match.fielding_team || '—';
+        teamsInfo = ' <span class="badge bg-success me-1">Bat: ' + bat + '</span><span class="badge bg-secondary">Field: ' + field + '</span>';
+    }
     const alert = document.createElement('div');
     alert.className = 'alert alert-success alert-dismissible fade show mt-3';
-    alert.innerHTML = '<i class="bi bi-check-circle me-2"></i><strong>Match data loaded!</strong> Score: ' + match.current_score + '/' + match.wickets + ' (' + match.overs + ' ov).' + (match.venue ? ' Venue: ' + match.venue + '.' : '') + yetToBatInfo + '<button type="button" class="btn-close" data-bs-dismiss="alert"></button>';
+    alert.innerHTML = '<i class="bi bi-check-circle me-2"></i><strong>Match data loaded!</strong> Score: ' + match.current_score + '/' + match.wickets + ' (' + match.overs + ' ov).' + (match.venue ? ' Venue: ' + match.venue + '.' : '') + ' ' + teamsInfo + yetToBatInfo + '<button type="button" class="btn-close" data-bs-dismiss="alert"></button>';
     document.getElementById('liveMatchSection').appendChild(alert);
     setTimeout(() => alert.remove(), 15000);
 }

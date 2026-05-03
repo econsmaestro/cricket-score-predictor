@@ -550,18 +550,63 @@ def api_match_details(match_id):
             if teams and len(teams) >= 2:
                 from prediction import TEAM_FIELDING_EFFICIENCY
                 TEAM_ALIASES = {
+                    # International abbreviations
                     "ind": "India", "aus": "Australia", "eng": "England", "nz": "New Zealand",
                     "sa": "South Africa", "pak": "Pakistan", "sl": "Sri Lanka", "ban": "Bangladesh",
                     "wi": "West Indies", "afg": "Afghanistan", "zim": "Zimbabwe", "ire": "Ireland",
                     "ned": "Netherlands", "sco": "Scotland", "nam": "Namibia", "usa": "USA",
                     "nep": "Nepal", "oma": "Oman", "uae": "UAE", "can": "Canada",
                     "ken": "Kenya", "uga": "Uganda", "png": "Papua New Guinea", "hk": "Hong Kong",
+                    # International full names
                     "india": "India", "australia": "Australia", "england": "England",
                     "new zealand": "New Zealand", "south africa": "South Africa",
                     "pakistan": "Pakistan", "sri lanka": "Sri Lanka", "bangladesh": "Bangladesh",
                     "west indies": "West Indies", "afghanistan": "Afghanistan",
                     "zimbabwe": "Zimbabwe", "ireland": "Ireland", "netherlands": "Netherlands",
                     "scotland": "Scotland", "namibia": "Namibia", "nepal": "Nepal",
+                    # IPL franchises → India
+                    "mumbai indians": "India", "mi": "India",
+                    "chennai super kings": "India", "csk": "India",
+                    "royal challengers bengaluru": "India", "royal challengers bangalore": "India", "rcb": "India",
+                    "kolkata knight riders": "India", "kkr": "India",
+                    "delhi capitals": "India", "dc": "India",
+                    "rajasthan royals": "India", "rr": "India",
+                    "punjab kings": "India", "pbks": "India", "kings xi punjab": "India",
+                    "sunrisers hyderabad": "India", "srh": "India",
+                    "lucknow super giants": "India", "lsg": "India",
+                    "gujarat titans": "India", "gt": "India",
+                    # WPL franchises → India W
+                    "mumbai indians women": "India W", "mi women": "India W",
+                    "royal challengers bengaluru women": "India W", "rcb women": "India W",
+                    "delhi capitals women": "India W", "dc women": "India W",
+                    "gujarat giants": "India W", "up warriorz": "India W",
+                    # BBL franchises → Australia
+                    "sydney sixers": "Australia", "sydney thunder": "Australia",
+                    "melbourne stars": "Australia", "melbourne renegades": "Australia",
+                    "brisbane heat": "Australia", "adelaide strikers": "Australia",
+                    "perth scorchers": "Australia", "hobart hurricanes": "Australia",
+                    # WBBL franchises → Australia W
+                    "sydney sixers women": "Australia W", "sydney thunder women": "Australia W",
+                    "melbourne stars women": "Australia W", "melbourne renegades women": "Australia W",
+                    "brisbane heat women": "Australia W", "adelaide strikers women": "Australia W",
+                    "perth scorchers women": "Australia W", "hobart hurricanes women": "Australia W",
+                    # PSL franchises → Pakistan
+                    "karachi kings": "Pakistan", "lahore qalandars": "Pakistan",
+                    "multan sultans": "Pakistan", "islamabad united": "Pakistan",
+                    "quetta gladiators": "Pakistan", "peshawar zalmi": "Pakistan",
+                    # CPL franchises → West Indies
+                    "trinidad and tobago red steel": "West Indies", "barbados royals": "West Indies",
+                    "jamaica tallawahs": "West Indies", "guyana amazon warriors": "West Indies",
+                    "saint kitts and nevis patriots": "West Indies", "st kitts and nevis patriots": "West Indies",
+                    "trinbago knight riders": "West Indies", "st lucia kings": "West Indies",
+                    "antigua and barbuda falcons": "West Indies",
+                    # SA20 franchises → South Africa
+                    "joburg super kings": "South Africa", "mi cape town": "South Africa",
+                    "paarl royals": "South Africa", "pretoria capitals": "South Africa",
+                    "durban's super giants": "South Africa", "sunrisers eastern cape": "South Africa",
+                    # ILT20 / UAE league
+                    "gulf giants": "UAE", "desert vipers": "UAE", "mi emirates": "UAE",
+                    "abu dhabi knight riders": "UAE", "sharjah warriors": "UAE", "dubai capitals": "UAE",
                 }
                 match_title = match_data.get('title', '') or match_data.get('match_format', '') or ''
                 is_womens = any(w in match_title.lower() for w in ['women', 'wmn', 'wodi', 'wt20'])
@@ -581,18 +626,25 @@ def api_match_details(match_id):
                         team = f"{team} W"
                     return team
                 bowling_team_raw = None
+                batting_team_raw = None
                 bowling_squad_idx = match_data.get('bowling_team_squad_idx')
                 if bowling_squad_idx is not None and len(teams) > bowling_squad_idx:
                     bowling_team_raw = teams[bowling_squad_idx]
+                    batting_squad_idx = 1 - bowling_squad_idx
+                    if batting_squad_idx < len(teams):
+                        batting_team_raw = teams[batting_squad_idx]
                 if not bowling_team_raw and len(teams) >= 2:
                     innings = match_data.get('innings', 1)
                     bowling_team_raw = teams[1] if innings == 1 else teams[0]
+                    batting_team_raw = teams[0] if innings == 1 else teams[1]
 
                 resolved = resolve_team(bowling_team_raw) if bowling_team_raw else None
                 if resolved:
                     match_data['fielding_team'] = resolved
                 elif bowling_team_raw:
                     match_data['fielding_team'] = bowling_team_raw
+                if batting_team_raw:
+                    match_data['batting_team'] = batting_team_raw
             return jsonify({
                 "success": True,
                 "match": match_data,
