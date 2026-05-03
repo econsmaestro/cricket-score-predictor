@@ -952,7 +952,7 @@ def get_cricbuzz_match_details(match_id: str) -> Optional[Dict]:
         title_tag = soup.find('title')
         if title_tag:
             title_text = title_tag.get_text()
-            title_after_pipe = title_text.split('|')[-1].strip() if '|' in title_text else title_text
+            title_after_pipe = title_text.split('|')[0].strip() if '|' in title_text else title_text
             teams = extract_teams_from_text(title_after_pipe)
         if not teams:
             teams = extract_teams_from_text(page_text[:200])
@@ -1017,6 +1017,14 @@ def get_cricbuzz_match_details(match_id: str) -> Optional[Dict]:
 
         all_score_patterns = list(re.finditer(r'([A-Z]{2,5})\s+(\d+)\s*/\s*(\d+)\s*\(\s*(\d+\.?\d*)\s*\)', page_text))
 
+        # Determine max overs for innings-complete check (T20=20, ODI=50)
+        _fmt = match_data.get('format', 't20').lower()
+        _max_ov = 50.0 if 'odi' in _fmt else 20.0
+
+        def _first_innings_complete(wickets, overs):
+            """True only when the 1st innings is clearly finished."""
+            return wickets >= 10 or overs >= (_max_ov - 1.0)
+
         if match_data['innings'] == 1 and len(all_score_patterns) >= 2:
             first_score = int(all_score_patterns[0].group(2))
             first_wickets = int(all_score_patterns[0].group(3))
@@ -1024,7 +1032,9 @@ def get_cricbuzz_match_details(match_id: str) -> Optional[Dict]:
             second_score = int(all_score_patterns[1].group(2))
             second_wickets = int(all_score_patterns[1].group(3))
             second_overs = float(all_score_patterns[1].group(4))
-            if is_valid_team_score(first_score, first_wickets, first_overs) and is_valid_team_score(second_score, second_wickets, second_overs):
+            if (is_valid_team_score(first_score, first_wickets, first_overs)
+                    and is_valid_team_score(second_score, second_wickets, second_overs)
+                    and _first_innings_complete(first_wickets, first_overs)):
                 match_data['innings'] = 2
                 match_data['target'] = first_score + 1
                 match_data['current_score'] = second_score
@@ -1048,17 +1058,20 @@ def get_cricbuzz_match_details(match_id: str) -> Optional[Dict]:
                     valid_flex.append((m, sc, wk, ov))
             if len(valid_flex) >= 2:
                 first_score = valid_flex[0][1]
+                first_wickets = valid_flex[0][2]
+                first_overs = valid_flex[0][3]
                 second_score = valid_flex[1][1]
                 second_wickets = valid_flex[1][2]
                 second_overs = valid_flex[1][3]
-                match_data['innings'] = 2
-                match_data['target'] = first_score + 1
-                match_data['current_score'] = second_score
-                match_data['wickets'] = second_wickets
-                match_data['overs'] = second_overs
-                if 'target' not in match_data['loaded_fields']:
-                    match_data['loaded_fields'].append('target')
-                logger.debug(f"Detected 2nd innings from flexible dual scores: target={first_score+1}, {second_score}/{second_wickets} ({second_overs})")
+                if _first_innings_complete(first_wickets, first_overs):
+                    match_data['innings'] = 2
+                    match_data['target'] = first_score + 1
+                    match_data['current_score'] = second_score
+                    match_data['wickets'] = second_wickets
+                    match_data['overs'] = second_overs
+                    if 'target' not in match_data['loaded_fields']:
+                        match_data['loaded_fields'].append('target')
+                    logger.debug(f"Detected 2nd innings from flexible dual scores: target={first_score+1}, {second_score}/{second_wickets} ({second_overs})")
 
         won_by_match = re.search(r'(\w[\w\s]*?)\s+won\s+by\s+(\d+)\s+(runs?|wickets?)', page_text, re.I)
         if won_by_match and match_data['innings'] == 1:

@@ -1271,7 +1271,18 @@ function populateFormFromMatch(match) {
             const runs = bowler.runs_conceded || 0;
             const wickets = bowler.wickets || 0;
             const oversBowled = parseFloat(bowler.overs_bowled || 0);
-            const oversRemaining = Math.max(0, config.maxBowlerOvers - oversBowled);
+            // Use server-computed value when available; fall back to cricket-aware arithmetic
+            function cricketOversRemaining(maxOv, bowled) {
+                const maxBalls = Math.round(maxOv) * 6;
+                const complete = Math.floor(bowled);
+                const ballsFrac = Math.round((bowled - complete) * 10);
+                const bowledBalls = complete * 6 + ballsFrac;
+                const rem = Math.max(0, maxBalls - bowledBalls);
+                return Math.floor(rem / 6) + (rem % 6) / 10;
+            }
+            const oversRemaining = (bowler.overs_remaining !== undefined)
+                ? bowler.overs_remaining
+                : cricketOversRemaining(config.maxBowlerOvers, oversBowled);
             const safeName = $('<span>').text(bowler.name).html();
 
             const row = document.createElement('tr');
