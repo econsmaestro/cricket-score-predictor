@@ -611,6 +611,19 @@ def get_match_details(match_id: str) -> Optional[Dict]:
         
         soup = BeautifulSoup(response.text, 'html.parser')
         
+        # Detect format for correct max-overs-per-bowler (T20=4, ODI=10)
+        _espn_title = soup.find('title')
+        _espn_title_lower = _espn_title.get_text().lower() if _espn_title else ''
+        _espn_t20_kw = ['t20', 'twenty20', 'ipl', 'indian premier', 'big bash', 'cpl', 'psl',
+                        'sa20', 'wpl', 'bbl', 'hundred', 'vitality blast', 'ram slam']
+        _espn_odi_kw = ['one-day international', 'one day international', 'odi']
+        if any(k in _espn_title_lower for k in _espn_t20_kw):
+            _espn_max_ov = 4.0
+        elif any(k in _espn_title_lower for k in _espn_odi_kw):
+            _espn_max_ov = 10.0
+        else:
+            _espn_max_ov = 4.0  # safe default
+
         score_elements = soup.find_all(class_=re.compile(r'score|runs', re.I))
         last_score = None
         for elem in score_elements:
@@ -633,7 +646,7 @@ def get_match_details(match_id: str) -> Optional[Dict]:
             logger.debug(f"Could not extract batsmen: {e}")
         
         try:
-            bowlers_data = extract_bowlers(soup)
+            bowlers_data = extract_bowlers(soup, max_overs_per_bowler=_espn_max_ov)
             if bowlers_data:
                 match_data['bowlers'] = bowlers_data
                 match_data['loaded_fields'].append('bowlers')
@@ -730,7 +743,7 @@ def get_match_from_live_page(match_id: str) -> Optional[Dict]:
             logger.debug(f"Could not extract batsmen in fallback: {e}")
         
         try:
-            bowlers = extract_bowlers(soup)
+            bowlers = extract_bowlers(soup, max_overs_per_bowler=_espn_max_ov)
             if bowlers:
                 match_data['bowlers'] = bowlers
                 match_data['loaded_fields'].append('bowlers')
@@ -1107,7 +1120,21 @@ def get_cricbuzz_match_details(match_id: str) -> Optional[Dict]:
         except Exception as e:
             logger.debug(f"Could not extract batsmen from Cricbuzz: {e}")
         
-        is_odi = 'ODI' in page_text or 'One Day' in page_text
+        # Detect format from page title — far more reliable than scanning full page_text
+        # (Cricbuzz nav always contains "ODI" links, causing false positives for T20 matches)
+        _title_lower = (title_text if title_tag else '').lower()
+        _t20_kw = ['t20', 'twenty20', 'ipl', 'indian premier', 'big bash', 'cpl', 'psl',
+                   'sa20', 'wpl', 'bbl', 'hundred', 'vitality blast', 'ram slam',
+                   'super smash', 'legends league', 'sma20', 'abu dhabi t20']
+        _odi_kw = ['one-day international', 'one day international', 'odi series',
+                   '- odi', 'vijay hazare', 'list a one']
+        if any(k in _title_lower for k in _t20_kw):
+            is_odi = False
+        elif any(k in _title_lower for k in _odi_kw):
+            is_odi = True
+        else:
+            # Only use page_text for explicit ODI phrases that won't appear in nav links
+            is_odi = bool(re.search(r'\bOne Day International\b|\bODI Series\b', page_text))
         max_overs_per_bowler = 10.0 if is_odi else 4.0
         
         bowler_patterns = [
