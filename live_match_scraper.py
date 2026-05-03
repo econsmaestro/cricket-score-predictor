@@ -1303,14 +1303,14 @@ def get_cricbuzz_match_details(match_id: str) -> Optional[Dict]:
                         ytb_html = ytb_match.group(0)
                         ytb_soup = BeautifulSoup(ytb_html, 'html.parser')
                         ytb_links = ytb_soup.find_all('a', href=re.compile(r'/profiles/\d+'))
-                        for link in ytb_links[:8]:
+                        for link in ytb_links[:9]:
                             pname = link.get_text(strip=True)
                             pname = re.sub(r'\s*\([wkc]+\)', '', pname).strip().rstrip(',')
                             if pname and len(pname) > 1:
                                 yet_to_bat.append({'name': pname})
                         if not yet_to_bat:
                             players = re.findall(r'>([A-Z][a-zA-Z\'\-]+ [A-Za-z\'\-]+(?:\s+[A-Za-z\'\-]+)?(?:\s*\([wkc]+\))?)', ytb_html)
-                            for p in players[:8]:
+                            for p in players[:9]:
                                 clean_name = re.sub(r'\s*\([wkc]+\)', '', p).strip().rstrip(',')
                                 yet_to_bat.append({'name': clean_name})
                         logger.debug(f"Extracted yet to bat from {current_batting_team}'s section: {[p['name'] for p in yet_to_bat]}")
@@ -1326,14 +1326,14 @@ def get_cricbuzz_match_details(match_id: str) -> Optional[Dict]:
                     if ytb_html:
                         ytb_soup = BeautifulSoup(ytb_html, 'html.parser')
                         ytb_links = ytb_soup.find_all('a', href=re.compile(r'/profiles/\d+'))
-                        for link in ytb_links[:8]:
+                        for link in ytb_links[:9]:
                             pname = link.get_text(strip=True)
                             pname = re.sub(r'\s*\([wkc]+\)', '', pname).strip().rstrip(',')
                             if pname and len(pname) > 1:
                                 yet_to_bat.append({'name': pname})
                         if not yet_to_bat:
                             players = re.findall(r'>([A-Z][a-zA-Z\'\-]+ [A-Za-z\'\-]+(?:\s+[A-Za-z\'\-]+)?(?:\s*\([wkc]+\))?)', ytb_html)
-                            for p in players[:8]:
+                            for p in players[:9]:
                                 clean_name = re.sub(r'\s*\([wkc]+\)', '', p).strip().rstrip(',')
                                 yet_to_bat.append({'name': clean_name})
                         logger.debug(f"Extracted yet to bat (fallback): {[p['name'] for p in yet_to_bat]}")

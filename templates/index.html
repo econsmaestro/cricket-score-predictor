@@ -1413,8 +1413,11 @@ function populateFormFromMatch(match) {
             if (!ftFound) {
                 const ftLower = match.fielding_team.toLowerCase();
                 for (let i = 0; i < ftSelect.options.length; i++) {
-                    if (ftSelect.options[i].value.toLowerCase().includes(ftLower) || ftLower.includes(ftSelect.options[i].value.toLowerCase())) {
-                        ftSelect.value = ftSelect.options[i].value;
+                    const optVal = ftSelect.options[i].value;
+                    if (!optVal) continue;  // skip the blank "Select (optional)" option
+                    const optLower = optVal.toLowerCase();
+                    if (optLower.includes(ftLower) || ftLower.includes(optLower)) {
+                        ftSelect.value = optVal;
                         ftFound = true;
                         break;
                     }
