@@ -1149,6 +1149,14 @@ function loadMatchData() {
         .then(data => {
             spinner.style.display = 'none';
             if (data.success && data.match) {
+                // Auto-switch format if the scraper detected one
+                if (data.match.format && formatConfig[data.match.format]) {
+                    const detectedFmt = data.match.format;
+                    if (detectedFmt !== currentFormat) {
+                        const fmtRadio = document.getElementById('format_' + detectedFmt);
+                        if (fmtRadio) { fmtRadio.checked = true; updateFormat(detectedFmt); }
+                    }
+                }
                 var matchOvers = parseFloat(data.match.overs || 0);
                 var config = formatConfig[currentFormat];
                 var maxOvers = config.maxOvers;
@@ -1458,7 +1466,8 @@ function populateFormFromMatch(match) {
     }
     const alert = document.createElement('div');
     alert.className = 'alert alert-success alert-dismissible fade show mt-3';
-    alert.innerHTML = '<i class="bi bi-check-circle me-2"></i><strong>Match data loaded!</strong> Score: ' + match.current_score + '/' + match.wickets + ' (' + match.overs + ' ov).' + (match.venue ? ' Venue: ' + match.venue + '.' : '') + ' ' + teamsInfo + yetToBatInfo + '<button type="button" class="btn-close" data-bs-dismiss="alert"></button>';
+    var compInfo = match.competition ? ' <span class="badge bg-warning text-dark">' + match.competition + '</span>' : '';
+    alert.innerHTML = '<i class="bi bi-check-circle me-2"></i><strong>Match data loaded!</strong>' + compInfo + ' Score: ' + match.current_score + '/' + match.wickets + ' (' + match.overs + ' ov).' + (match.venue ? ' Venue: ' + match.venue + '.' : '') + ' ' + teamsInfo + yetToBatInfo + '<button type="button" class="btn-close" data-bs-dismiss="alert"></button>';
     document.getElementById('liveMatchSection').appendChild(alert);
     setTimeout(() => alert.remove(), 15000);
 }

@@ -1140,7 +1140,39 @@ def get_cricbuzz_match_details(match_id: str) -> Optional[Dict]:
             # Only use page_text for explicit ODI phrases that won't appear in nav links
             is_odi = bool(re.search(r'\bOne Day International\b|\bODI Series\b', page_text))
         max_overs_per_bowler = 10.0 if is_odi else 4.0
-        
+
+        # Detect gender and expose detected format so the frontend can auto-select it
+        _is_womens = any(k in _title_lower for k in ["women's", "women", "wmn", "wodi", "wt20"])
+        if is_odi:
+            match_data['format'] = 'womens_odi' if _is_womens else 'mens_odi'
+        else:
+            match_data['format'] = 'womens_t20' if _is_womens else 'mens_t20'
+        if 'format' not in match_data['loaded_fields']:
+            match_data['loaded_fields'].append('format')
+
+        # Detect competition name for display purposes
+        _comp_map = [
+            ('indian premier', 'Indian Premier League (IPL)'),
+            ('ipl', 'Indian Premier League (IPL)'),
+            ("women's premier league", "Women's Premier League (WPL)"),
+            ('wpl', "Women's Premier League (WPL)"),
+            ('big bash', 'Big Bash League (BBL)'),
+            ('bbl', 'Big Bash League (BBL)'),
+            ('pakistan super league', 'Pakistan Super League (PSL)'),
+            ('psl', 'Pakistan Super League (PSL)'),
+            ('caribbean premier', 'Caribbean Premier League (CPL)'),
+            ('cpl', 'Caribbean Premier League (CPL)'),
+            ('sa20', 'SA20'),
+            ('the hundred', 'The Hundred'),
+            ('vitality blast', 'Vitality Blast'),
+            ('ram slam', 'Ram Slam T20'),
+            ('super smash', 'Super Smash'),
+        ]
+        for _key, _name in _comp_map:
+            if _key in _title_lower:
+                match_data['competition'] = _name
+                break
+
         bowler_patterns = [
             r'([A-Z][a-zA-Z]+(?:\s+[A-Z][a-zA-Z]+){1,3})\s+(\d+\.?\d*)-(\d+)-(\d+)-(\d+)',
             r'([A-Z][a-z]+ [A-Z][a-z]+(?:\s+[A-Z][a-z]+)?)[^0-9]*(\d+\.?\d*-\d+-\d+-\d+)',
