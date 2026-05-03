@@ -963,12 +963,16 @@ def get_cricbuzz_match_details(match_id: str) -> Optional[Dict]:
         
         teams = []
         title_tag = soup.find('title')
-        if title_tag:
-            title_text = title_tag.get_text()
-            title_after_pipe = title_text.split('|')[0].strip() if '|' in title_text else title_text
-            teams = extract_teams_from_text(title_after_pipe)
+        title_text = title_tag.get_text() if title_tag else ''
+        if title_text:
+            # Cricbuzz live titles look like "SRH 165/10 | KKR 236/5 - KKR vs SRH, IPL | Cricbuzz"
+            # The segment with "vs"/"v" contains the team names — search all segments
+            for segment in title_text.split('|'):
+                teams = extract_teams_from_text(segment.strip())
+                if teams:
+                    break
         if not teams:
-            teams = extract_teams_from_text(page_text[:200])
+            teams = extract_teams_from_text(page_text[:500])
         if teams:
             match_data['teams'] = teams
             match_data['loaded_fields'].append('teams')

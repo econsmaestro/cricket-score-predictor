@@ -22,7 +22,7 @@ def redirect_to_custom_domain():
 import io
 import re
 from prediction import (
-    IPL_VENUES, ALL_VENUES, get_venues_by_country, Batsman, Bowler, MatchState, predict_score, validate_bowling_rules, FORMAT_CONFIG, get_venue_timezone, FIELDING_TEAMS
+    IPL_VENUES, ALL_VENUES, get_venues_by_country, Batsman, Bowler, MatchState, predict_score, validate_bowling_rules, FORMAT_CONFIG, get_venue_timezone, FIELDING_TEAMS, PredictionResult
 )
 from insights import build_match_insights
 from prematch import build_prematch_analysis
@@ -653,16 +653,56 @@ def predict():
             flash("Wickets fallen cannot be negative", "error")
             return redirect(url_for("index"))
         
-        if wickets_fallen >= 10:
-            flash("The innings has ended - all 10 wickets have fallen. No prediction possible.", "error")
-            return redirect(url_for("index"))
+        if wickets_fallen >= 10 or overs_completed >= max_overs:
+            # Innings is complete — show the actual final score as the prediction
+            is_chase = innings == 2 and target > 0
+            runs_needed = max(0, target - current_score) if is_chase else 0
+            won = is_chase and current_score >= target
+            lost = is_chase and wickets_fallen >= 10 and current_score < target
+            win_prob = 1.0 if won else 0.0
+            finished_result = PredictionResult(
+                predicted_final_score=current_score,
+                predicted_wickets=wickets_fallen,
+                predicted_next_over_runs=0,
+                score_range=(current_score, current_score),
+                wicket_probability=0.0,
+                boundary_count=0,
+                dot_ball_count=0,
+                singles_doubles_count=0,
+                is_chase=is_chase,
+                runs_needed=runs_needed,
+                required_run_rate=0.0,
+                win_probability=win_prob,
+                overs_remaining=0.0,
+                wickets_in_hand=10 - wickets_fallen,
+            )
+            finished_state = MatchState(
+                current_score=current_score,
+                wickets_fallen=wickets_fallen,
+                overs_completed=overs_completed,
+                venue=venue if venue else "Unknown",
+                batsmen=[],
+                bowlers=[],
+                innings=innings,
+                target=target,
+                match_format=match_format,
+                fielding_team=fielding_team,
+            )
+            reason = "all 10 wickets have fallen" if wickets_fallen >= 10 else f"all {int(max_overs)} overs have been bowled"
+            flash(f"Innings complete ({reason}) — showing the final score.", "info")
+            return render_template(
+                "results.html",
+                result=finished_result,
+                match_state=finished_state,
+                venues=IPL_VENUES,
+                batsmen_stats={},
+                bowler_stats=None,
+                stats_label="Innings Complete",
+                is_live_data=(input_mode == "live"),
+            )
         
         if overs_completed < 0:
             flash("Overs completed cannot be negative", "error")
-            return redirect(url_for("index"))
-        
-        if overs_completed >= max_overs:
-            flash(f"The innings has ended - all {max_overs} overs have been bowled. No prediction possible.", "error")
             return redirect(url_for("index"))
         
         overs_decimal = overs_completed - int(overs_completed)
