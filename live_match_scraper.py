@@ -90,6 +90,21 @@ def extract_overs_from_text(text: str) -> Optional[float]:
     return None
 
 
+def cricket_overs_remaining(max_overs: float, overs_bowled: float) -> float:
+    """Calculate remaining overs using ball-based arithmetic to avoid float errors.
+
+    Cricket overs notation: X.Y where Y is balls (0-5), not a decimal fraction.
+    e.g. 3.1 means 3 complete overs + 1 ball = 19 balls, NOT 3.1 of an over.
+    Direct subtraction (4.0 - 3.1 = 0.9) gives an invalid cricket over value.
+    """
+    max_balls = int(round(max_overs)) * 6
+    complete = int(overs_bowled)
+    balls = int(round((overs_bowled - complete) * 10))
+    bowled_balls = complete * 6 + balls
+    remaining_balls = max(0, max_balls - bowled_balls)
+    return (remaining_balls // 6) + (remaining_balls % 6) / 10
+
+
 def extract_tournament_name(href: str) -> str:
     """Extract tournament name from Cricbuzz/ESPN URL slug"""
     parts = href.rstrip('/').split('/')
@@ -819,7 +834,7 @@ def extract_bowlers(soup: BeautifulSoup, max_overs_per_bowler: float = 4.0) -> L
                                         'maidens': int(figures.group(2)),
                                         'runs_conceded': int(figures.group(3)),
                                         'wickets': int(figures.group(4)),
-                                        'overs_remaining': max(0, max_overs_per_bowler - overs_bowled)
+                                        'overs_remaining': cricket_overs_remaining(max_overs_per_bowler, overs_bowled)
                                     })
                                     seen_names.add(name.lower())
         
@@ -846,7 +861,7 @@ def extract_bowlers(soup: BeautifulSoup, max_overs_per_bowler: float = 4.0) -> L
                                 'maidens': int(entry[2]),
                                 'runs_conceded': int(entry[3]),
                                 'wickets': int(entry[4]),
-                                'overs_remaining': max(0, max_overs_per_bowler - overs_bowled)
+                                'overs_remaining': cricket_overs_remaining(max_overs_per_bowler, overs_bowled)
                             })
                             seen_names.add(name.lower())
 
@@ -865,7 +880,7 @@ def extract_bowlers(soup: BeautifulSoup, max_overs_per_bowler: float = 4.0) -> L
                         'maidens': int(match[2]),
                         'runs_conceded': int(match[3]),
                         'wickets': int(match[4]),
-                        'overs_remaining': max(0, max_overs_per_bowler - overs_bowled)
+                        'overs_remaining': cricket_overs_remaining(max_overs_per_bowler, overs_bowled)
                     })
                     seen_names.add(name.lower())
         
@@ -889,7 +904,7 @@ def extract_bowlers(soup: BeautifulSoup, max_overs_per_bowler: float = 4.0) -> L
                                     'maidens': int(figures.group(2)),
                                     'runs_conceded': int(figures.group(3)),
                                     'wickets': int(figures.group(4)),
-                                    'overs_remaining': max(0, max_overs_per_bowler - overs_bowled)
+                                    'overs_remaining': cricket_overs_remaining(max_overs_per_bowler, overs_bowled)
                                 })
                                 seen_names.add(name.lower())
                             
@@ -1103,7 +1118,7 @@ def get_cricbuzz_match_details(match_id: str) -> Optional[Dict]:
                                 'maidens': int(match[2]),
                                 'runs_conceded': int(match[3]),
                                 'wickets': int(match[4]),
-                                'overs_remaining': max(0, max_overs_per_bowler - overs_bowled)
+                                'overs_remaining': cricket_overs_remaining(max_overs_per_bowler, overs_bowled)
                             })
                             seen_bowlers.add(name.lower())
                         elif len(match) == 2:
@@ -1117,7 +1132,7 @@ def get_cricbuzz_match_details(match_id: str) -> Optional[Dict]:
                                     'maidens': int(parts[1]),
                                     'runs_conceded': int(parts[2]),
                                     'wickets': int(parts[3]),
-                                    'overs_remaining': max(0, max_overs_per_bowler - overs_bowled)
+                                    'overs_remaining': cricket_overs_remaining(max_overs_per_bowler, overs_bowled)
                                 })
                                 seen_bowlers.add(name.lower())
                     except (ValueError, IndexError):
@@ -1198,7 +1213,7 @@ def get_cricbuzz_match_details(match_id: str) -> Optional[Dict]:
                                         'maidens': int(entry[2]),
                                         'runs_conceded': int(entry[3]),
                                         'wickets': int(entry[4]),
-                                        'overs_remaining': max(0, max_overs_per_bowler - overs_bowled)
+                                        'overs_remaining': cricket_overs_remaining(max_overs_per_bowler, overs_bowled)
                                     })
                             if match_data['bowlers'] and 'bowlers' not in match_data['loaded_fields']:
                                 match_data['loaded_fields'].append('bowlers')
@@ -1329,7 +1344,7 @@ def get_cricbuzz_match_details(match_id: str) -> Optional[Dict]:
                         'maidens': maidens,
                         'runs_conceded': runs,
                         'wickets': wickets,
-                        'overs_remaining': max(0, max_overs_per_bowler - overs_bowled)
+                        'overs_remaining': cricket_overs_remaining(max_overs_per_bowler, overs_bowled)
                     })
                     scorecard_seen.add(name.lower())
                     logger.debug(f"Extracted bowler from scorecard: {name} - {overs_bowled}-{maidens}-{runs}-{wickets}")
