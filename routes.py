@@ -1612,6 +1612,11 @@ def support_chat():
     """Render the AI-powered support chat page with session and CSRF management."""
     import uuid
     from datetime import datetime, timedelta
+
+    if not current_user.is_authenticated:
+        return render_template("support_chat.html", login_required=True,
+                               login_url=url_for('login_and_redirect', next='/support-chat'))
+
     chat_session_id = session.get('chat_session_id')
     if not chat_session_id:
         chat_session_id = uuid.uuid4().hex
@@ -1660,7 +1665,8 @@ def support_chat():
         renews_at = (oldest_msg.created_at + timedelta(days=7)).isoformat() + "Z"
 
     return render_template("support_chat.html", history=history, csrf_token=session['chat_csrf'],
-                           remaining=remaining, weekly_limit=WEEKLY_LIMIT, renews_at=renews_at)
+                           remaining=remaining, weekly_limit=WEEKLY_LIMIT, renews_at=renews_at,
+                           login_required=False)
 
 
 @app.route("/api/support-chat", methods=["POST"])
@@ -1671,6 +1677,10 @@ def api_support_chat():
     from datetime import datetime, timedelta
     from email_responder import generate_chat_reply
     from werkzeug.utils import secure_filename
+
+    if not current_user.is_authenticated:
+        return jsonify({"error": "login_required",
+                        "message": "Please sign in to use the support chat."}), 401
 
     if request.content_type and 'multipart/form-data' in request.content_type:
         token = request.form.get("csrf_token", "")

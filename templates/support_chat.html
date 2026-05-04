@@ -1,8 +1,41 @@
 {% extends "base.html" %}
 {% block content %}
+{% if login_required %}
+<div class="row justify-content-center mt-5">
+    <div class="col-lg-5 col-md-7 col-sm-10">
+        <div class="card shadow-sm text-center" style="border-radius: 20px; overflow: hidden; border: 1px solid #e0e0e0;">
+            <div class="card-header py-4" style="background: linear-gradient(135deg, #1a365d 0%, #2d5a87 100%);">
+                <div style="width: 64px; height: 64px; background: rgba(255,255,255,0.15); border-radius: 16px; display: flex; align-items: center; justify-content: center; margin: 0 auto 12px;">
+                    <i class="bi bi-chat-dots-fill text-white" style="font-size: 30px;"></i>
+                </div>
+                <h4 class="text-white mb-1" style="font-weight: 700;">Third Umpire AI</h4>
+                <p class="mb-0" style="color: rgba(255,255,255,0.75); font-size: 14px;">AI-powered support chat</p>
+            </div>
+            <div class="card-body px-4 py-4">
+                <p class="text-muted mb-1" style="font-size: 15px;">
+                    A <strong>free account</strong> is required to use the support chat.
+                </p>
+                <p class="text-muted mb-4" style="font-size: 13px;">
+                    This keeps the service fair for everyone and prevents abuse of the weekly message limit.
+                </p>
+                <a href="{{ login_url }}" class="btn btn-lg w-100 mb-3" style="background: linear-gradient(135deg, #1a365d, #2d5a87); color: white; border: none; border-radius: 12px; font-weight: 600; padding: 14px;">
+                    <i class="bi bi-person-check-fill me-2"></i>Sign in with Replit — it's free
+                </a>
+                <a href="/" class="btn btn-outline-secondary w-100" style="border-radius: 12px;">
+                    <i class="bi bi-arrow-left me-1"></i>Back to Predictor
+                </a>
+                <p class="text-muted mt-3 mb-0" style="font-size: 12px;">
+                    <i class="bi bi-shield-check me-1"></i>We only access your username and email address.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% else %}
 <div class="row justify-content-center mt-4">
     <div class="col-lg-8 col-md-10">
         <div class="card shadow-sm" style="border-radius: 16px; overflow: hidden; border: 1px solid #e0e0e0;">
+
             <div class="card-header d-flex align-items-center justify-content-between" style="background: linear-gradient(135deg, #1a365d 0%, #2d5a87 100%); padding: 16px 20px;">
                 <div class="d-flex align-items-center gap-2">
                     <div style="width: 36px; height: 36px; background: rgba(255,255,255,0.15); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
@@ -121,9 +154,11 @@
         </p>
     </div>
 </div>
+{% endif %}
 {% endblock %}
 
 {% block scripts %}
+{% if not login_required %}
 <script>
 (function() {
     const CSRF = '{{ csrf_token }}';
@@ -455,4 +490,5 @@
 }
 #attachBtn:hover:not(:disabled) { background: #f0f4f8 !important; color: #1a365d !important; }
 </style>
+{% endif %}
 {% endblock %}
