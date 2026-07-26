@@ -312,6 +312,67 @@
     </div>
   </div>
 
+  <!-- ================================================================ -->
+  <!-- Scraped Match Results                                             -->
+  <!-- ================================================================ -->
+  <div class="card shadow-sm mt-4" style="border-radius:12px;">
+    <div class="card-header d-flex align-items-center justify-content-between flex-wrap gap-2" style="background:#f8f9fa; border-radius:12px 12px 0 0; font-weight:600;">
+      <span><i class="bi bi-database-fill me-2"></i>Auto-Scraped Match Results
+        {% if stats.scraped_total is defined %}
+        <span class="badge bg-secondary ms-2" style="font-size:11px;">{{ stats.scraped_total }} total</span>
+        {% endif %}
+      </span>
+      <span class="text-muted fw-normal" style="font-size:12px;">
+        Last scraped: {{ stats.last_scrape if stats.last_scrape is defined else '—' }}
+        &nbsp;·&nbsp;
+        <a href="{{ request.path }}?relearn=1" class="text-primary text-decoration-none">retrigger learning</a>
+      </span>
+    </div>
+    <div class="card-body p-0">
+      {% if stats.scraped_recent and stats.scraped_recent|length > 0 %}
+      <div class="table-responsive">
+        <table class="table table-sm table-hover mb-0">
+          <thead style="font-size:12px; color:#6c757d; background:#f8f9fa;">
+            <tr>
+              <th class="ps-3">Match</th>
+              <th class="text-center">Fmt</th>
+              <th>Venue</th>
+              <th class="text-center">1st Inn</th>
+              <th class="text-center">2nd Inn</th>
+              <th>Result</th>
+              <th>Toss</th>
+              <th>Weather</th>
+              <th class="text-center">Date</th>
+            </tr>
+          </thead>
+          <tbody style="font-size:13px;">
+            {% for s in stats.scraped_recent %}
+            <tr>
+              <td class="ps-3" style="max-width:180px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="{{ s.teams }}">{{ s.teams }}</td>
+              <td class="text-center">
+                <span class="badge bg-light text-dark border" style="font-size:11px;">{{ s.format }}</span>
+              </td>
+              <td style="max-width:150px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="{{ s.venue }}">{{ s.venue }}</td>
+              <td class="text-center fw-semibold">{{ s.inn1 }}</td>
+              <td class="text-center">{{ s.inn2 }}</td>
+              <td style="max-width:160px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="{{ s.result }}">{{ s.result }}</td>
+              <td style="max-width:160px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; color:#6c757d;" title="{{ s.toss }}">{{ s.toss }}</td>
+              <td style="max-width:160px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; color:#6c757d; font-size:12px;" title="{{ s.weather }}">{{ s.weather }}</td>
+              <td class="text-center text-muted" style="font-size:12px; white-space:nowrap;">{{ s.date }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% else %}
+      <div class="p-4 text-center text-muted" style="font-size:14px;">
+        <i class="bi bi-hourglass-split me-2"></i>
+        First scrape running — check back shortly. Matches accumulate automatically every 24 hours.
+      </div>
+      {% endif %}
+    </div>
+  </div>
+
   <!-- How it works -->
   <div class="card shadow-sm mt-4" style="border-radius:12px; border-left:4px solid #1a365d;">
     <div class="card-body">

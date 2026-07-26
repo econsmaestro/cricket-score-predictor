@@ -82,6 +82,49 @@ class ModelAdjustment(db.Model):
     last_updated = db.Column(db.DateTime, default=datetime.utcnow)
     __table_args__ = (UniqueConstraint('adjustment_type', 'key', name='uq_adjustment_type_key'),)
 
+
+class ScrapedMatch(db.Model):
+    """A completed T20/ODI match scraped automatically by the background job."""
+    __tablename__ = 'scraped_match'
+    id = db.Column(db.Integer, primary_key=True)
+    match_id = db.Column(db.String(100), unique=True, nullable=False, index=True)
+    match_date = db.Column(db.Date, nullable=True)
+    venue = db.Column(db.String(120), nullable=True)
+    team1 = db.Column(db.String(100), nullable=False)
+    team2 = db.Column(db.String(100), nullable=False)
+    match_format = db.Column(db.String(20), nullable=True)       # 'T20' | 'ODI'
+    result_text = db.Column(db.String(200), nullable=True)
+    winner = db.Column(db.String(100), nullable=True)
+    inn1_score = db.Column(db.Integer, nullable=True)
+    inn1_wickets = db.Column(db.Integer, nullable=True)
+    inn1_overs = db.Column(db.Float, nullable=True)
+    inn2_score = db.Column(db.Integer, nullable=True)
+    inn2_wickets = db.Column(db.Integer, nullable=True)
+    inn2_overs = db.Column(db.Float, nullable=True)
+    toss_winner = db.Column(db.String(100), nullable=True)
+    toss_decision = db.Column(db.String(20), nullable=True)      # 'bat' | 'field'
+    team1_xi = db.Column(db.Text, nullable=True)                 # JSON list of player names
+    team2_xi = db.Column(db.Text, nullable=True)
+    # Weather at match time
+    weather_temp_c = db.Column(db.Float, nullable=True)
+    weather_humidity_pct = db.Column(db.Float, nullable=True)
+    weather_dewpoint_c = db.Column(db.Float, nullable=True)
+    weather_precip_mm = db.Column(db.Float, nullable=True)
+    weather_cloud_pct = db.Column(db.Float, nullable=True)
+    weather_wind_kph = db.Column(db.Float, nullable=True)
+    weather_description = db.Column(db.String(60), nullable=True)
+    weather_rain_risk = db.Column(db.String(10), nullable=True)  # Low/Medium/High
+    weather_dew_risk = db.Column(db.String(10), nullable=True)   # Low/Medium/High
+    source = db.Column(db.String(20), default='cricbuzz')
+    scraped_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+
+class AppConfig(db.Model):
+    """Simple key-value store for app-level config (e.g. last scrape timestamp)."""
+    __tablename__ = 'app_config'
+    key = db.Column(db.String(80), primary_key=True)
+    value = db.Column(db.Text, nullable=True)
+
 class Player(db.Model):
     """Cricket player profile with career batting and bowling statistics."""
     id = db.Column(db.Integer, primary_key=True)

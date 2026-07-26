@@ -237,13 +237,32 @@ def get_accuracy_stats() -> dict:
     Return a dict of accuracy statistics for the admin dashboard.
     """
     try:
-        from models import Prediction, ModelAdjustment, MatchOutcome
+        from models import Prediction, ModelAdjustment, MatchOutcome, ScrapedMatch, AppConfig
+        from background_jobs import get_last_scrape_time
 
         resolved = Prediction.query.filter(
             Prediction.actual_final_score.isnot(None)
         ).all()
 
         if not resolved:
+            scraped_total = ScrapedMatch.query.count()
+            scraped_recent = [
+                {
+                    'match_id': s.match_id,
+                    'date': s.match_date.strftime('%d %b %Y') if s.match_date else '—',
+                    'teams': f"{s.team1} vs {s.team2}",
+                    'venue': s.venue or '—',
+                    'format': s.match_format or '—',
+                    'result': s.result_text or '—',
+                    'inn1': f"{s.inn1_score}/{s.inn1_wickets}" if s.inn1_score else '—',
+                    'inn2': f"{s.inn2_score}/{s.inn2_wickets}" if s.inn2_score else '—',
+                    'toss': f"{s.toss_winner} elected to {s.toss_decision}" if s.toss_winner else '—',
+                    'weather': _fmt_weather(s),
+                    'source': s.source or 'auto',
+                }
+                for s in ScrapedMatch.query.order_by(ScrapedMatch.scraped_at.desc()).limit(30).all()
+            ]
+            last_scrape = get_last_scrape_time()
             return {
                 'total_resolved': 0,
                 'avg_error': None,
@@ -252,6 +271,9 @@ def get_accuracy_stats() -> dict:
                 'by_venue': [],
                 'adjustments': [],
                 'outcomes': [],
+                'scraped_total': scraped_total,
+                'scraped_recent': scraped_recent,
+                'last_scrape': last_scrape.strftime('%d %b %Y %H:%M UTC') if last_scrape else 'Never',
             }
 
         errors = [p.actual_final_score - p.predicted_final_score for p in resolved]
@@ -312,6 +334,27 @@ def get_accuracy_stats() -> dict:
             ).limit(30).all()
         ]
 
+        # Scraped matches (background job data)
+        scraped_total = ScrapedMatch.query.count()
+        scraped_recent = [
+            {
+                'match_id': s.match_id,
+                'date': s.match_date.strftime('%d %b %Y') if s.match_date else '—',
+                'teams': f"{s.team1} vs {s.team2}",
+                'venue': s.venue or '—',
+                'format': s.match_format or '—',
+                'result': s.result_text or '—',
+                'inn1': f"{s.inn1_score}/{s.inn1_wickets}" if s.inn1_score else '—',
+                'inn2': f"{s.inn2_score}/{s.inn2_wickets}" if s.inn2_score else '—',
+                'toss': f"{s.toss_winner} elected to {s.toss_decision}" if s.toss_winner else '—',
+                'weather': _fmt_weather(s),
+                'source': s.source or 'auto',
+            }
+            for s in ScrapedMatch.query.order_by(ScrapedMatch.scraped_at.desc()).limit(30).all()
+        ]
+
+        last_scrape = get_last_scrape_time()
+
         return {
             'total_resolved': len(resolved),
             'avg_error': round(sum(errors) / len(errors), 1),
@@ -320,6 +363,9 @@ def get_accuracy_stats() -> dict:
             'by_venue': by_venue,
             'adjustments': adjustments,
             'outcomes': outcomes,
+            'scraped_total': scraped_total,
+            'scraped_recent': scraped_recent,
+            'last_scrape': last_scrape.strftime('%d %b %Y %H:%M UTC') if last_scrape else 'Never',
         }
 
     except Exception as exc:
@@ -359,3 +405,23 @@ def _phase_key(overs_remaining: float, match_format: str) -> str:
         else:
             phase = 'death'
         return f't20_{phase}'
+
+
+# ---------------------------------------------------------------------------
+# Weather formatting helper
+# ---------------------------------------------------------------------------
+
+def _fmt_weather(s) -> str:
+    """Return a compact weather summary string for a ScrapedMatch row."""
+    parts = []
+    if s.weather_description:
+        parts.append(s.weather_description)
+    if s.weather_temp_c is not None:
+        parts.append(f"{s.weather_temp_c:.0f}°C")
+    if s.weather_humidity_pct is not None:
+        parts.append(f"{s.weather_humidity_pct:.0f}% RH")
+    if s.weather_dew_risk and s.weather_dew_risk != 'Low':
+        parts.append(f"Dew:{s.weather_dew_risk}")
+    if s.weather_rain_risk and s.weather_rain_risk != 'Low':
+        parts.append(f"Rain:{s.weather_rain_risk}")
+    return ', '.join(parts) if parts else '—'
