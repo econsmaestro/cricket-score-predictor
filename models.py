@@ -44,6 +44,8 @@ class Prediction(db.Model):
     """Stores a single score prediction made by the engine for historical tracking."""
     id = db.Column(db.Integer, primary_key=True)
     venue = db.Column(db.String(100), nullable=False)
+    match_id = db.Column(db.String(100), nullable=True, index=True)  # scraper match ID, links to MatchOutcome
+    match_format = db.Column(db.String(30), nullable=True)            # e.g. 'mens_t20', 'mens_odi'
     current_score = db.Column(db.Integer, nullable=False)
     wickets_fallen = db.Column(db.Integer, nullable=False)
     overs_remaining = db.Column(db.Float, nullable=False)
@@ -54,6 +56,31 @@ class Prediction(db.Model):
     actual_final_score = db.Column(db.Integer, nullable=True)
     actual_wickets = db.Column(db.Integer, nullable=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+
+class MatchOutcome(db.Model):
+    """Stores the confirmed final result for a match, used as ground truth for learning."""
+    __tablename__ = 'match_outcome'
+    id = db.Column(db.Integer, primary_key=True)
+    match_id = db.Column(db.String(100), unique=True, nullable=False, index=True)
+    venue = db.Column(db.String(100), nullable=True)
+    match_format = db.Column(db.String(30), nullable=True)   # e.g. 'mens_t20'
+    final_score = db.Column(db.Integer, nullable=False)
+    wickets = db.Column(db.Integer, nullable=True)
+    confirmed_at = db.Column(db.DateTime, default=datetime.utcnow)
+    source = db.Column(db.String(20), default='auto')        # 'auto' | 'manual'
+
+
+class ModelAdjustment(db.Model):
+    """Stores learned adjustment offsets for venue and phase corrections."""
+    __tablename__ = 'model_adjustment'
+    id = db.Column(db.Integer, primary_key=True)
+    adjustment_type = db.Column(db.String(20), nullable=False)   # 'venue' | 'phase'
+    key = db.Column(db.String(120), nullable=False)              # venue name or phase key
+    offset = db.Column(db.Float, nullable=False, default=0.0)    # additive (venue) or fractional (phase)
+    sample_count = db.Column(db.Integer, nullable=False, default=0)
+    last_updated = db.Column(db.DateTime, default=datetime.utcnow)
+    __table_args__ = (UniqueConstraint('adjustment_type', 'key', name='uq_adjustment_type_key'),)
 
 class Player(db.Model):
     """Cricket player profile with career batting and bowling statistics."""

@@ -602,6 +602,26 @@ def api_match_details(match_id):
                     match_data['fielding_team'] = bowling_team_raw
                 if batting_team_raw:
                     match_data['batting_team'] = batting_team_raw
+            # --- Auto-record outcome when scraper detects a completed match ---
+            if match_data.get('status') == 'Completed' and match_data.get('current_score'):
+                try:
+                    from learning_engine import record_match_outcome
+                    _venue_for_outcome = match_data.get('venue', '')
+                    _format_for_outcome = match_data.get('match_format', 'mens_t20')
+                    _score_for_outcome = int(match_data.get('current_score', 0))
+                    _wkts_for_outcome = int(match_data.get('wickets', 10))
+                    if _venue_for_outcome and _score_for_outcome > 0:
+                        record_match_outcome(
+                            match_id=match_id,
+                            venue=match_data.get('venue', _venue_for_outcome),
+                            match_format=_format_for_outcome,
+                            final_score=_score_for_outcome,
+                            wickets=_wkts_for_outcome,
+                            source='auto',
+                        )
+                except Exception as _le:
+                    logger.debug(f"Learning engine outcome record skipped: {_le}")
+
             return jsonify({
                 "success": True,
                 "match": match_data,
@@ -869,8 +889,11 @@ def predict():
         
         result = predict_score(match_state)
         
+        live_match_id = request.form.get("live_match_id", "").strip() or None
         prediction = Prediction(
             venue=venue,
+            match_id=live_match_id,
+            match_format=match_format,
             current_score=current_score,
             wickets_fallen=wickets_fallen,
             overs_remaining=max_overs - overs_completed,
@@ -1276,6 +1299,105 @@ def track_page_view():
         PageView.log_view(request)
     except Exception as e:
         app.logger.error(f"Error logging page view: {e}")
+
+
+@app.route("/accuracy", methods=["GET"])
+def accuracy_dashboard():
+    """Prediction accuracy stats and learned model adjustments. Override form shown to logged-in users."""
+    from learning_engine import get_accuracy_stats, run_learning_cycle
+    force_learn = request.args.get('relearn') == '1'
+    if force_learn:
+        if not current_user.is_authenticated:
+            flash("You must be logged in to retrigger learning.", "error")
+            return redirect(url_for('accuracy_dashboard'))
+        run_learning_cycle()
+        flash("Learning cycle complete.", "success")
+        return redirect(url_for('accuracy_dashboard'))
+    stats = get_accuracy_stats()
+    return render_template(
+        "accuracy_dashboard.html",
+        stats=stats,
+        venues=EXTENDED_VENUES,
+        formats=[
+            ("mens_t20", "Men's T20"),
+            ("womens_t20", "Women's T20"),
+            ("mens_odi", "Men's ODI"),
+            ("womens_odi", "Women's ODI"),
+        ],
+        is_admin=current_user.is_authenticated,
+    )
+
+
+@app.route("/accuracy/override", methods=["POST"])
+def accuracy_override():
+    """Admin: manually record or correct a match outcome."""
+    if not current_user.is_authenticated:
+        flash("You must be logged in to submit overrides.", "error")
+        return redirect(url_for('accuracy_dashboard'))
+    try:
+        from learning_engine import record_match_outcome
+        from models import MatchOutcome
+        match_id = request.form.get("match_id", "").strip()
+        venue = request.form.get("venue", "").strip()
+        match_format = request.form.get("match_format", "mens_t20")
+        final_score = request.form.get("final_score", "").strip()
+        wickets = request.form.get("wickets", "").strip()
+
+        if not match_id or not venue or not final_score:
+            flash("Match ID, venue, and final score are all required.", "error")
+            return redirect(url_for('accuracy_dashboard'))
+
+        final_score = int(final_score)
+        wickets = int(wickets) if wickets else 10
+
+        # If an outcome already exists for this match_id, update it
+        existing = MatchOutcome.query.filter_by(match_id=match_id).first()
+        if existing:
+            existing.venue = venue
+            existing.match_format = match_format
+            existing.final_score = final_score
+            existing.wickets = wickets
+            existing.source = 'manual'
+            existing.confirmed_at = datetime.utcnow()
+            # Backfill predictions too
+            from models import Prediction
+            preds = Prediction.query.filter_by(match_id=match_id).all()
+            for p in preds:
+                p.actual_final_score = final_score
+                p.actual_wickets = wickets
+            db.session.commit()
+            flash(f"Outcome for '{match_id}' updated ({final_score}/{wickets} at {venue}).", "success")
+        else:
+            record_match_outcome(match_id, venue, match_format, final_score, wickets, source='manual')
+            flash(f"Outcome recorded for '{match_id}' ({final_score}/{wickets} at {venue}).", "success")
+    except ValueError:
+        flash("Invalid score or wickets value — must be whole numbers.", "error")
+    except Exception as e:
+        flash(f"Error saving override: {e}", "error")
+    return redirect(url_for('accuracy_dashboard'))
+
+
+@app.route("/accuracy/outcome/<int:outcome_id>/delete", methods=["POST"])
+def accuracy_delete_outcome(outcome_id):
+    """Admin: delete a recorded match outcome."""
+    if not current_user.is_authenticated:
+        flash("You must be logged in to delete outcomes.", "error")
+        return redirect(url_for('accuracy_dashboard'))
+    try:
+        from models import MatchOutcome, Prediction
+        outcome = MatchOutcome.query.get_or_404(outcome_id)
+        match_id = outcome.match_id
+        # Clear backfilled actuals on linked predictions
+        preds = Prediction.query.filter_by(match_id=match_id).all()
+        for p in preds:
+            p.actual_final_score = None
+            p.actual_wickets = None
+        db.session.delete(outcome)
+        db.session.commit()
+        flash(f"Outcome for '{match_id}' deleted.", "success")
+    except Exception as e:
+        flash(f"Error deleting outcome: {e}", "error")
+    return redirect(url_for('accuracy_dashboard'))
 
 
 @app.route("/analytics", methods=["GET"])

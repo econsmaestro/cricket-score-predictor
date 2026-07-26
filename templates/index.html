@@ -115,6 +115,7 @@
     <form action="{{ url_for('predict') }}" method="POST" id="predictionForm">
         <input type="hidden" name="match_format" id="match_format_hidden" value="{{ form_data.get('match_format', 'mens_t20') }}">
         <input type="hidden" name="bowling_team_11" id="bowling_team_11" value="{{ form_data.get('bowling_team_11', '') }}">
+        <input type="hidden" name="live_match_id" id="live_match_id" value="">
         <div class="row g-4">
             <div class="col-lg-6">
                 <div class="form-card">
@@ -1179,6 +1180,8 @@ function loadMatchData() {
                     statusDiv.innerHTML = '<small class="text-danger"><i class="bi bi-x-circle me-1"></i>Match removed: ' + matchOvers + ' overs exceeds the ' + maxOvers + '-over ' + config.label + ' format limit.</small>';
                     return;
                 }
+                // Store the live match ID so the server can link prediction → outcome
+                document.getElementById('live_match_id').value = matchId || '';
                 populateFormFromMatch(data.match);
                 if (data.partial) {
                     var loaded = data.loaded_fields || [];

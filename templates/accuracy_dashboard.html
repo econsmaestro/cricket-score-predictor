@@ -1,0 +1,329 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container-fluid py-4" style="max-width: 1100px;">
+
+  <!-- Flash messages -->
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% for category, message in messages %}
+    <div class="alert alert-{{ 'danger' if category == 'error' else 'success' }} alert-dismissible fade show mb-3" style="border-radius:10px;">
+      <i class="bi bi-{{ 'x-circle' if category == 'error' else 'check-circle' }} me-2"></i>{{ message }}
+      <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    {% endfor %}
+  {% endwith %}
+
+  <!-- Header -->
+  <div class="d-flex align-items-center justify-content-between mb-4 flex-wrap gap-3">
+    <div>
+      <h2 class="mb-1" style="font-weight:700; color:#1a365d;">
+        <i class="bi bi-graph-up-arrow me-2"></i>Prediction Accuracy & Learning
+      </h2>
+      <p class="text-muted mb-0" style="font-size:14px;">
+        The model learns from real match outcomes and applies corrections to future predictions.
+      </p>
+    </div>
+    {% if is_admin %}
+    <a href="{{ request.path }}?relearn=1" class="btn btn-sm btn-outline-primary">
+      <i class="bi bi-arrow-clockwise me-1"></i>Retrigger Learning Cycle
+    </a>
+    {% endif %}
+  </div>
+
+  {% if stats.get('error') %}
+  <div class="alert alert-danger">
+    <i class="bi bi-exclamation-triangle me-2"></i>{{ stats.error }}
+  </div>
+  {% endif %}
+
+  <!-- ================================================================ -->
+  <!-- ADMIN: Manual Override Form                                        -->
+  <!-- ================================================================ -->
+  {% if is_admin %}
+  <div class="card shadow-sm mb-4" style="border-radius:12px; border-left:4px solid #1a365d;">
+    <div class="card-header d-flex align-items-center justify-content-between" style="background:#f0f4ff; border-radius:12px 12px 0 0; cursor:pointer;" data-bs-toggle="collapse" data-bs-target="#overrideForm">
+      <span style="font-weight:600; color:#1a365d;">
+        <i class="bi bi-pencil-square me-2"></i>Manual Outcome Override
+        <span class="badge bg-primary ms-2" style="font-size:11px;">Admin</span>
+      </span>
+      <i class="bi bi-chevron-down text-muted"></i>
+    </div>
+    <div class="collapse" id="overrideForm">
+      <div class="card-body">
+        <p class="text-muted mb-3" style="font-size:13px;">
+          Use this to manually record a match outcome the scraper missed, or to correct a wrong auto-scraped result.
+          If a Match ID already exists, it will be updated rather than duplicated.
+        </p>
+        <form method="POST" action="{{ url_for('accuracy_override') }}">
+          <div class="row g-3">
+            <div class="col-md-4">
+              <label class="form-label fw-semibold" style="font-size:13px;">Match ID <span class="text-muted fw-normal">(any unique label)</span></label>
+              <input type="text" name="match_id" class="form-control form-control-sm" placeholder="e.g. ind-aus-2026-07-26" required>
+              <div class="form-text">For live matches this is the scraper ID (shown in URL). For manual entries, use any unique string.</div>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label fw-semibold" style="font-size:13px;">Venue</label>
+              <select name="venue" class="form-select form-select-sm" required>
+                <option value="">— select venue —</option>
+                {% for v in venues %}
+                <option value="{{ v }}">{{ v }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label fw-semibold" style="font-size:13px;">Format</label>
+              <select name="match_format" class="form-select form-select-sm">
+                {% for val, label in formats %}
+                <option value="{{ val }}">{{ label }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="col-md-3">
+              <label class="form-label fw-semibold" style="font-size:13px;">Final Score (runs)</label>
+              <input type="number" name="final_score" class="form-control form-control-sm" min="0" max="600" placeholder="e.g. 187" required>
+            </div>
+            <div class="col-md-3">
+              <label class="form-label fw-semibold" style="font-size:13px;">Wickets Fallen</label>
+              <input type="number" name="wickets" class="form-control form-control-sm" min="0" max="10" placeholder="e.g. 6" value="10">
+            </div>
+            <div class="col-md-6 d-flex align-items-end">
+              <button type="submit" class="btn btn-primary btn-sm w-100">
+                <i class="bi bi-save me-1"></i>Save Outcome
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
+  {% if stats.total_resolved == 0 and not stats.get('error') %}
+  <div class="alert alert-info d-flex align-items-start gap-3" style="border-radius:12px;">
+    <i class="bi bi-info-circle-fill fs-4 mt-1" style="color:#0d6efd;"></i>
+    <div>
+      <strong>No resolved predictions yet.</strong><br>
+      <span style="font-size:14px;">
+        The learning engine activates automatically once match outcomes are collected.
+        Outcomes are recorded when the live match scraper detects a completed match that was
+        loaded via the "Load Live Match" dropdown before the prediction was submitted.
+        {% if is_admin %}You can also add outcomes manually using the form above.{% endif %}
+      </span>
+    </div>
+  </div>
+  {% else %}
+
+  <!-- Summary Cards -->
+  <div class="row g-3 mb-4">
+    <div class="col-6 col-md-3">
+      <div class="card text-center h-100 shadow-sm" style="border-radius:12px;">
+        <div class="card-body py-3">
+          <div style="font-size:2rem; font-weight:700; color:#1a365d;">{{ stats.total_resolved }}</div>
+          <div class="text-muted" style="font-size:13px;">Resolved Predictions</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="card text-center h-100 shadow-sm" style="border-radius:12px;">
+        <div class="card-body py-3">
+          <div style="font-size:2rem; font-weight:700; color:{% if stats.avg_abs_error <= 10 %}#198754{% elif stats.avg_abs_error <= 18 %}#f5a623{% else %}#dc3545{% endif %};">
+            {% if stats.avg_abs_error is not none %}±{{ stats.avg_abs_error }}{% else %}—{% endif %}
+          </div>
+          <div class="text-muted" style="font-size:13px;">Avg Absolute Error (runs)</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="card text-center h-100 shadow-sm" style="border-radius:12px;">
+        <div class="card-body py-3">
+          <div style="font-size:2rem; font-weight:700; color:{% if stats.avg_error and stats.avg_error > 0 %}#dc3545{% elif stats.avg_error and stats.avg_error < 0 %}#0d6efd{% else %}#198754{% endif %};">
+            {% if stats.avg_error is not none %}{{ "%+.1f"|format(stats.avg_error) }}{% else %}—{% endif %}
+          </div>
+          <div class="text-muted" style="font-size:13px;">Avg Bias (+ under, − over)</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="card text-center h-100 shadow-sm" style="border-radius:12px;">
+        <div class="card-body py-3">
+          <div style="font-size:2rem; font-weight:700; color:#1a365d;">
+            {% if stats.within_10 is not none %}{{ stats.within_10 }}%{% else %}—{% endif %}
+          </div>
+          <div class="text-muted" style="font-size:13px;">Within ±10 Runs</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row g-4">
+
+    <!-- By Venue -->
+    <div class="col-lg-6">
+      <div class="card shadow-sm h-100" style="border-radius:12px;">
+        <div class="card-header" style="background:#f8f9fa; border-radius:12px 12px 0 0; font-weight:600;">
+          <i class="bi bi-geo-alt me-2"></i>Error by Venue
+        </div>
+        <div class="card-body p-0">
+          {% if stats.by_venue %}
+          <div class="table-responsive">
+            <table class="table table-sm table-hover mb-0">
+              <thead style="font-size:12px; color:#6c757d; background:#f8f9fa;">
+                <tr>
+                  <th class="ps-3">Venue</th>
+                  <th class="text-center">Predictions</th>
+                  <th class="text-center">Avg |Error|</th>
+                  <th class="text-center">Bias</th>
+                </tr>
+              </thead>
+              <tbody style="font-size:13px;">
+                {% for row in stats.by_venue %}
+                <tr>
+                  <td class="ps-3" style="max-width:200px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="{{ row.venue }}">{{ row.venue }}</td>
+                  <td class="text-center">{{ row.count }}</td>
+                  <td class="text-center">
+                    <span class="badge {% if row.avg_abs_error <= 10 %}bg-success{% elif row.avg_abs_error <= 18 %}bg-warning text-dark{% else %}bg-danger{% endif %}">
+                      ±{{ row.avg_abs_error }}
+                    </span>
+                  </td>
+                  <td class="text-center" style="color:{% if row.bias > 2 %}#dc3545{% elif row.bias < -2 %}#0d6efd{% else %}#198754{% endif %};">
+                    {{ "%+.1f"|format(row.bias) }}
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+          {% else %}
+          <div class="p-4 text-center text-muted" style="font-size:14px;">No venue data yet.</div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <!-- Active Adjustments -->
+    <div class="col-lg-6">
+      <div class="card shadow-sm h-100" style="border-radius:12px;">
+        <div class="card-header" style="background:#f8f9fa; border-radius:12px 12px 0 0; font-weight:600;">
+          <i class="bi bi-sliders me-2"></i>Active Learned Adjustments
+          <span class="text-muted fw-normal" style="font-size:12px; margin-left:8px;">applied to every prediction</span>
+        </div>
+        <div class="card-body p-0">
+          {% if stats.adjustments %}
+          <div class="table-responsive">
+            <table class="table table-sm table-hover mb-0">
+              <thead style="font-size:12px; color:#6c757d; background:#f8f9fa;">
+                <tr>
+                  <th class="ps-3">Type</th>
+                  <th>Key</th>
+                  <th class="text-center">Correction</th>
+                  <th class="text-center">Samples</th>
+                  <th class="text-center">Updated</th>
+                </tr>
+              </thead>
+              <tbody style="font-size:13px;">
+                {% for adj in stats.adjustments %}
+                <tr>
+                  <td class="ps-3">
+                    <span class="badge {% if adj.type == 'venue' %}bg-primary{% else %}bg-secondary{% endif %}">{{ adj.type }}</span>
+                  </td>
+                  <td style="max-width:160px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="{{ adj.key }}">{{ adj.key }}</td>
+                  <td class="text-center" style="font-weight:600; color:{% if adj.offset > 0 %}#198754{% elif adj.offset < 0 %}#dc3545{% else %}#6c757d{% endif %};">
+                    {% if adj.type == 'venue' %}{{ "%+.1f"|format(adj.offset) }} runs{% else %}{{ "%+.1f"|format(adj.offset * 100) }}%{% endif %}
+                  </td>
+                  <td class="text-center text-muted">{{ adj.samples }}</td>
+                  <td class="text-center text-muted" style="font-size:12px;">{{ adj.updated }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+          {% else %}
+          <div class="p-4 text-center text-muted" style="font-size:14px;">
+            <i class="bi bi-info-circle me-1"></i>
+            Adjustments appear once 5 or more outcomes are collected per venue or phase.
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+  </div>
+  {% endif %}
+
+  <!-- ================================================================ -->
+  <!-- Recent Outcomes                                                    -->
+  <!-- ================================================================ -->
+  <div class="card shadow-sm mt-4" style="border-radius:12px;">
+    <div class="card-header" style="background:#f8f9fa; border-radius:12px 12px 0 0; font-weight:600;">
+      <i class="bi bi-check2-circle me-2"></i>Confirmed Match Outcomes
+      {% if is_admin %}
+      <span class="text-muted fw-normal" style="font-size:12px; margin-left:6px;">— you can delete incorrect entries below</span>
+      {% endif %}
+    </div>
+    <div class="card-body p-0">
+      {% if stats.outcomes %}
+      <div class="table-responsive">
+        <table class="table table-sm table-hover mb-0">
+          <thead style="font-size:12px; color:#6c757d; background:#f8f9fa;">
+            <tr>
+              <th class="ps-3">Match ID</th>
+              <th>Venue</th>
+              <th class="text-center">Format</th>
+              <th class="text-center">Final Score</th>
+              <th class="text-center">Wickets</th>
+              <th class="text-center">Source</th>
+              <th class="text-center">Confirmed</th>
+              {% if is_admin %}<th class="text-center">Action</th>{% endif %}
+            </tr>
+          </thead>
+          <tbody style="font-size:13px;">
+            {% for o in stats.outcomes %}
+            <tr>
+              <td class="ps-3 text-muted" style="font-size:12px; font-family:monospace; max-width:140px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="{{ o.match_id }}">{{ o.match_id[:22] }}{% if o.match_id|length > 22 %}…{% endif %}</td>
+              <td style="max-width:160px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="{{ o.venue }}">{{ o.venue or '—' }}</td>
+              <td class="text-center">
+                <span class="badge bg-light text-dark border" style="font-size:11px;">{{ o.format or '—' }}</span>
+              </td>
+              <td class="text-center fw-bold">{{ o.score }}</td>
+              <td class="text-center">{{ o.wickets if o.wickets is not none else '—' }}</td>
+              <td class="text-center">
+                <span class="badge {% if o.source == 'auto' %}bg-success{% else %}bg-warning text-dark{% endif %}">
+                  {% if o.source == 'auto' %}<i class="bi bi-robot me-1"></i>auto{% else %}<i class="bi bi-pencil me-1"></i>manual{% endif %}
+                </span>
+              </td>
+              <td class="text-center text-muted" style="font-size:12px;">{{ o.confirmed }}</td>
+              {% if is_admin %}
+              <td class="text-center">
+                <form method="POST" action="{{ url_for('accuracy_delete_outcome', outcome_id=o.id) }}"
+                      onsubmit="return confirm('Delete outcome for {{ o.match_id[:30] }}? This will also clear the linked prediction actuals.')">
+                  <button type="submit" class="btn btn-outline-danger btn-sm py-0 px-2" style="font-size:11px;">
+                    <i class="bi bi-trash"></i>
+                  </button>
+                </form>
+              </td>
+              {% endif %}
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% else %}
+      <div class="p-4 text-center text-muted" style="font-size:14px;">No outcomes recorded yet.</div>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- How it works -->
+  <div class="card shadow-sm mt-4" style="border-radius:12px; border-left:4px solid #1a365d;">
+    <div class="card-body">
+      <h6 class="mb-2" style="font-weight:700; color:#1a365d;"><i class="bi bi-lightbulb me-2"></i>How the learning engine works</h6>
+      <ol class="mb-0" style="font-size:13px; line-height:1.8; color:#495057;">
+        <li><strong>Outcome collection</strong> — when the scraper detects a completed live match, the final score is saved automatically. Any prediction made for that match (via the live-match dropdown) is instantly backfilled with the real score. You can also add outcomes manually using the override form above.</li>
+        <li><strong>Error analysis</strong> — after each new outcome, the engine computes the difference between what was predicted and what actually happened, grouped by venue and by match phase (based on how many overs remained when the prediction was made).</li>
+        <li><strong>Adjustment learning</strong> — adjustments are blended using an Exponential Moving Average (α = 0.3), so recent matches carry more weight than old ones. A minimum of <strong>5 samples</strong> is required before an adjustment is applied to live predictions.</li>
+        <li><strong>Application</strong> — venue offsets are added to the projected final score; phase multipliers scale the remaining-runs projection up or down. Both are capped (±25 runs / ±15%) to prevent runaway corrections from small samples.</li>
+      </ol>
+    </div>
+  </div>
+
+</div>
+{% endblock %}

@@ -877,8 +877,18 @@ def predict_score(match_state: MatchState) -> PredictionResult:
                 phase_wickets *= 1.3
             phase_projected_wickets += phase_wickets
     
-    predicted_final_score = int(match_state.current_score + phase_projected_runs)
-    
+    # Apply learned model adjustments (venue bias + phase calibration)
+    try:
+        from learning_engine import get_venue_adjustment, get_phase_adjustment
+        overs_rem = max_overs - match_state.overs_completed
+        phase_mult = 1.0 + get_phase_adjustment(overs_rem, match_state.match_format)
+        venue_adj = get_venue_adjustment(match_state.venue)
+        predicted_final_score = int(
+            match_state.current_score + phase_projected_runs * phase_mult + venue_adj
+        )
+    except Exception:
+        predicted_final_score = int(match_state.current_score + phase_projected_runs)
+
     min_rpo = 3.5 if is_odi else 4
     max_rpo = 12 if is_odi else 18
     predicted_final_score = max(predicted_final_score, match_state.current_score + int(effective_overs_remaining * min_rpo))
