@@ -129,8 +129,19 @@ def run_learning_cycle():
         for venue, errs in venue_errors.items():
             if len(errs) < MIN_SAMPLES:
                 continue
-            mean_err = sum(errs) / len(errs)
-            _upsert_adjustment(db, ModelAdjustment, 'venue', venue, mean_err, len(errs))
+            clean, dropped = _filter_outliers(errs)
+            if dropped:
+                logger.info(
+                    f"Venue '{venue}': dropped {len(dropped)} outlier error(s) "
+                    f"{[round(e,1) for e in dropped]} before computing adjustment."
+                )
+            if len(clean) < MIN_SAMPLES:
+                logger.info(
+                    f"Venue '{venue}': too few non-outlier samples ({len(clean)}) after filtering — skipping."
+                )
+                continue
+            mean_err = sum(clean) / len(clean)
+            _upsert_adjustment(db, ModelAdjustment, 'venue', venue, mean_err, len(clean))
 
         # --- Phase adjustments (fractional multiplier on projected runs) ---
         phase_groups: dict[str, list] = {}
@@ -142,12 +153,27 @@ def run_learning_cycle():
             if len(preds) < MIN_SAMPLES:
                 continue
             errors = [p.actual_final_score - p.predicted_final_score for p in preds]
-            avg_predicted = sum(p.predicted_final_score for p in preds) / len(preds)
+            clean_errs, dropped = _filter_outliers(errors)
+            if dropped:
+                logger.info(
+                    f"Phase '{phase_key}': dropped {len(dropped)} outlier error(s) "
+                    f"{[round(e,1) for e in dropped]} before computing adjustment."
+                )
+            if len(clean_errs) < MIN_SAMPLES:
+                logger.info(
+                    f"Phase '{phase_key}': too few non-outlier samples ({len(clean_errs)}) after filtering — skipping."
+                )
+                continue
+            # Only use the predictions whose errors survived filtering
+            clean_set = set(id(p) for p, e in zip(preds, errors)
+                            if e in clean_errs)  # fast enough for small N
+            clean_preds = [p for p in preds if id(p) in clean_set]
+            avg_predicted = sum(p.predicted_final_score for p in clean_preds) / len(clean_preds)
             if avg_predicted > 0:
-                frac_err = (sum(errors) / len(errors)) / avg_predicted
+                frac_err = (sum(clean_errs) / len(clean_errs)) / avg_predicted
             else:
                 frac_err = 0.0
-            _upsert_adjustment(db, ModelAdjustment, 'phase', phase_key, frac_err, len(preds))
+            _upsert_adjustment(db, ModelAdjustment, 'phase', phase_key, frac_err, len(clean_preds))
 
         db.session.commit()
         logger.info(
@@ -163,6 +189,51 @@ def run_learning_cycle():
             db.session.rollback()
         except Exception:
             pass
+
+
+def _filter_outliers(errors: list[float]) -> tuple[list[float], list[float]]:
+    """
+    Remove statistical outliers from a list of prediction errors using
+    Tukey's IQR fences (Q1 − 1.5×IQR, Q3 + 1.5×IQR).
+
+    Returns (clean_errors, dropped_errors).
+
+    Rationale: a once-in-a-lifetime performance produces a prediction error
+    far outside the normal spread for that venue/phase. Including it in the
+    mean would make the model permanently expect miracles (or collapses).
+    IQR fencing is symmetric — it trims freakishly high *and* freakishly
+    low scores equally, without assuming normality.
+
+    With fewer than 4 samples the quartile calculation is unreliable, so
+    the list is returned unchanged.
+    """
+    if len(errors) < 4:
+        return errors, []
+
+    sorted_e = sorted(errors)
+    n = len(sorted_e)
+
+    # Quartiles via linear interpolation (same as numpy's default)
+    def quartile(data, q):
+        pos = q * (len(data) - 1)
+        lo, hi = int(pos), min(int(pos) + 1, len(data) - 1)
+        frac = pos - lo
+        return data[lo] + frac * (data[hi] - data[lo])
+
+    q1 = quartile(sorted_e, 0.25)
+    q3 = quartile(sorted_e, 0.75)
+    iqr = q3 - q1
+
+    # If IQR is zero (e.g., all errors identical) don't filter anything
+    if iqr == 0:
+        return errors, []
+
+    lower = q1 - 1.5 * iqr
+    upper = q3 + 1.5 * iqr
+
+    clean   = [e for e in errors if lower <= e <= upper]
+    dropped = [e for e in errors if e < lower or e > upper]
+    return clean, dropped
 
 
 def _upsert_adjustment(db, ModelAdjustment, adj_type: str, key: str,
