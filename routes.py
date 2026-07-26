@@ -1,4 +1,4 @@
-from flask import render_template, request, redirect, url_for, flash, jsonify, session, send_file
+from flask import render_template, request, redirect, url_for, flash, jsonify, session, send_file, abort
 from app import app, db
 from models import Prediction, DiscoveredPlayer, PredictionFeedback, PageView, User, BugReport, SupportChat
 from flask_login import current_user
