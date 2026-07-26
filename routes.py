@@ -1301,15 +1301,21 @@ def track_page_view():
         app.logger.error(f"Error logging page view: {e}")
 
 
+def _is_admin():
+    """Return True only for the designated developer/admin account."""
+    import os
+    admin_id = os.environ.get('ADMIN_USER_ID', '')
+    return current_user.is_authenticated and str(current_user.id) == admin_id
+
+
 @app.route("/accuracy", methods=["GET"])
 def accuracy_dashboard():
-    """Prediction accuracy stats and learned model adjustments. Override form shown to logged-in users."""
+    """Prediction accuracy stats — admin only."""
+    if not _is_admin():
+        abort(404)
     from learning_engine import get_accuracy_stats, run_learning_cycle
     force_learn = request.args.get('relearn') == '1'
     if force_learn:
-        if not current_user.is_authenticated:
-            flash("You must be logged in to retrigger learning.", "error")
-            return redirect(url_for('accuracy_dashboard'))
         run_learning_cycle()
         flash("Learning cycle complete.", "success")
         return redirect(url_for('accuracy_dashboard'))
@@ -1324,16 +1330,15 @@ def accuracy_dashboard():
             ("mens_odi", "Men's ODI"),
             ("womens_odi", "Women's ODI"),
         ],
-        is_admin=current_user.is_authenticated,
+        is_admin=True,
     )
 
 
 @app.route("/accuracy/override", methods=["POST"])
 def accuracy_override():
     """Admin: manually record or correct a match outcome."""
-    if not current_user.is_authenticated:
-        flash("You must be logged in to submit overrides.", "error")
-        return redirect(url_for('accuracy_dashboard'))
+    if not _is_admin():
+        abort(404)
     try:
         from learning_engine import record_match_outcome
         from models import MatchOutcome
@@ -1380,7 +1385,7 @@ def accuracy_override():
 @app.route("/accuracy/outcome/<int:outcome_id>/delete", methods=["POST"])
 def accuracy_delete_outcome(outcome_id):
     """Admin: delete a recorded match outcome."""
-    if not current_user.is_authenticated:
+    if not _is_admin():
         flash("You must be logged in to delete outcomes.", "error")
         return redirect(url_for('accuracy_dashboard'))
     try:

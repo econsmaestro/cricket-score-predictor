@@ -1,4 +1,4 @@
-modules = ["python-3.11", "nodejs-20", "python3"]
+modules = ["python-3.11", "nodejs-20", "python3", "postgresql-16"]
 
 [workflows]
 runButton = "Project"
@@ -38,3 +38,8 @@ packages = ["freetype", "glibcLocales", "lcms2", "libimagequant", "libjpeg", "li
 
 [agent]
 integrations = ["google-mail:1.0.0"]
+
+[userenv]
+
+[userenv.shared]
+ADMIN_USER_ID = "38814631"
