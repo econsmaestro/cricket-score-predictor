@@ -1311,6 +1311,9 @@ def _is_admin():
 @app.route("/accuracy", methods=["GET"])
 def accuracy_dashboard():
     """Prediction accuracy stats — admin only."""
+    if not current_user.is_authenticated:
+        session["next_url"] = request.url_root.rstrip("/") + "/accuracy"
+        return redirect(url_for('replit_auth.login'))
     if not _is_admin():
         abort(404)
     from learning_engine import get_accuracy_stats, run_learning_cycle
