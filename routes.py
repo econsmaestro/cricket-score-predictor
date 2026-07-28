@@ -272,22 +272,15 @@ def get_extended_venues_by_country():
         vbc[country] = sorted(set(vbc[country]))
     return vbc
 
-def _get_team_next_match(team_name: str) -> dict | None:
-    """Return the next live or upcoming match for a given team, or None."""
-    if not team_name:
-        return None
+def _get_upcoming_matches() -> list:
+    """Return all live and upcoming matches, sorted live-first."""
     try:
         matches = get_cached_live_matches()
-        team_lower = team_name.lower()
-        for m in matches:
-            teams = [t.lower() for t in (m.get('teams') or [])]
-            display = m.get('display_text', '').lower()
-            if any(team_lower in t for t in teams) or team_lower in display:
-                if m.get('status') in ('Live', 'Upcoming'):
-                    return m
+        filtered = [m for m in matches if m.get('status') in ('Live', 'Upcoming')]
+        filtered.sort(key=lambda m: 0 if m.get('status') == 'Live' else 1)
+        return filtered
     except Exception:
-        pass
-    return None
+        return []
 
 
 @app.route("/", methods=["GET"])
@@ -300,14 +293,15 @@ def index():
     venues_by_country = get_extended_venues_by_country()
     positive_feedback = PredictionFeedback.query.filter_by(is_positive=True).order_by(PredictionFeedback.created_at.desc()).limit(5).all()
 
-    # Favourite team & their next match (for logged-in users)
+    # All live/upcoming matches for the match cards strip
+    upcoming_matches = _get_upcoming_matches()
+
+    # Favourite team for logged-in users
     favourite_team = None
-    team_next_match = None
     if current_user.is_authenticated:
         pref = UserPreference.query.filter_by(user_id=str(current_user.id)).first()
         if pref and pref.favourite_team:
             favourite_team = pref.favourite_team
-            team_next_match = _get_team_next_match(favourite_team)
 
     return render_template(
         "index.html",
@@ -321,7 +315,7 @@ def index():
         positive_feedback=positive_feedback,
         fielding_teams=ALL_CRICKET_TEAMS,
         favourite_team=favourite_team,
-        team_next_match=team_next_match,
+        upcoming_matches=upcoming_matches,
     )
 
 
