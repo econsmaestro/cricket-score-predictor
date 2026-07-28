@@ -1,6 +1,6 @@
 from flask import render_template, request, redirect, url_for, flash, jsonify, session, send_file, abort
 from app import app, db
-from models import Prediction, DiscoveredPlayer, PredictionFeedback, PageView, User, BugReport, SupportChat
+from models import Prediction, DiscoveredPlayer, PredictionFeedback, PageView, User, BugReport, SupportChat, UserPreference
 from flask_login import current_user
 from replit_auth import make_replit_blueprint
 
@@ -272,6 +272,24 @@ def get_extended_venues_by_country():
         vbc[country] = sorted(set(vbc[country]))
     return vbc
 
+def _get_team_next_match(team_name: str) -> dict | None:
+    """Return the next live or upcoming match for a given team, or None."""
+    if not team_name:
+        return None
+    try:
+        matches = get_cached_live_matches()
+        team_lower = team_name.lower()
+        for m in matches:
+            teams = [t.lower() for t in (m.get('teams') or [])]
+            display = m.get('display_text', '').lower()
+            if any(team_lower in t for t in teams) or team_lower in display:
+                if m.get('status') in ('Live', 'Upcoming'):
+                    return m
+    except Exception:
+        pass
+    return None
+
+
 @app.route("/", methods=["GET"])
 def index():
     """Render the main prediction form with venue, player, and feedback data."""
@@ -281,7 +299,48 @@ def index():
     form_data = session.pop('form_data', {})
     venues_by_country = get_extended_venues_by_country()
     positive_feedback = PredictionFeedback.query.filter_by(is_positive=True).order_by(PredictionFeedback.created_at.desc()).limit(5).all()
-    return render_template("index.html", venues=EXTENDED_VENUES, venues_by_country=venues_by_country, batsmen=all_players, bowlers=all_players, all_players=all_players, countries=countries, form_data=form_data, positive_feedback=positive_feedback, fielding_teams=ALL_CRICKET_TEAMS)
+
+    # Favourite team & their next match (for logged-in users)
+    favourite_team = None
+    team_next_match = None
+    if current_user.is_authenticated:
+        pref = UserPreference.query.filter_by(user_id=str(current_user.id)).first()
+        if pref and pref.favourite_team:
+            favourite_team = pref.favourite_team
+            team_next_match = _get_team_next_match(favourite_team)
+
+    return render_template(
+        "index.html",
+        venues=EXTENDED_VENUES,
+        venues_by_country=venues_by_country,
+        batsmen=all_players,
+        bowlers=all_players,
+        all_players=all_players,
+        countries=countries,
+        form_data=form_data,
+        positive_feedback=positive_feedback,
+        fielding_teams=ALL_CRICKET_TEAMS,
+        favourite_team=favourite_team,
+        team_next_match=team_next_match,
+    )
+
+
+@app.route("/api/set-favourite-team", methods=["POST"])
+def set_favourite_team():
+    """Save or update the logged-in user's favourite team."""
+    if not current_user.is_authenticated:
+        return jsonify({'error': 'Login required'}), 401
+    team = request.json.get('team', '').strip() if request.is_json else request.form.get('team', '').strip()
+    if not team:
+        return jsonify({'error': 'Team name required'}), 400
+    pref = UserPreference.query.filter_by(user_id=str(current_user.id)).first()
+    if pref:
+        pref.favourite_team = team
+    else:
+        pref = UserPreference(user_id=str(current_user.id), favourite_team=team)
+        db.session.add(pref)
+    db.session.commit()
+    return jsonify({'ok': True, 'team': team})
 
 @app.route("/api/players", methods=["GET"])
 def api_players():

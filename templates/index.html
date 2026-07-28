@@ -7,6 +7,91 @@
         <strong>Disclaimer:</strong> This is for entertainment purposes only. Actual match outcomes may vary significantly from predictions. This tool is not intended for gambling or betting purposes.
     </div>
     
+    {# ── Favourite team card ───────────────────────────────────────────── #}
+    {% if current_user.is_authenticated %}
+      {% if team_next_match %}
+      {# User has a fav team AND there's a live/upcoming match #}
+      <div class="card border-0 shadow-sm mb-4" style="border-radius:14px; background:linear-gradient(135deg,#1a4731 0%,#22693f 100%); color:#fff;">
+        <div class="card-body px-4 py-3">
+          <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+            <div>
+              <div class="d-flex align-items-center gap-2 mb-1">
+                <span style="font-size:1.3rem;">🏏</span>
+                <span class="fw-bold" style="font-size:1.05rem;">{{ favourite_team }}</span>
+                <span class="badge bg-light text-dark ms-1" style="font-size:11px;">Your team</span>
+                {% if team_next_match.status == 'Live' %}
+                <span class="badge bg-danger ms-1" style="font-size:11px; animation: pulse 1.5s infinite;">● LIVE</span>
+                {% else %}
+                <span class="badge ms-1" style="font-size:11px; background:rgba(255,255,255,0.2);">Upcoming</span>
+                {% endif %}
+              </div>
+              <div style="font-size:0.95rem; opacity:0.92;">{{ team_next_match.display_text }}</div>
+            </div>
+            <div class="d-flex gap-2 align-items-center">
+              <a href="{{ url_for('prematch') }}?match_id={{ team_next_match.id }}" class="btn btn-sm btn-light fw-semibold" style="border-radius:8px;">
+                <i class="bi bi-bar-chart-fill me-1"></i>Pre-Match Insights
+              </a>
+              <button class="btn btn-sm btn-outline-light" style="border-radius:8px; font-size:12px;" onclick="document.getElementById('changeFavTeam').classList.toggle('d-none')">
+                Change team
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% elif favourite_team %}
+      {# Has a fav team but no match on right now #}
+      <div class="card border-0 shadow-sm mb-4" style="border-radius:14px; background:#f0fdf4; border-left:4px solid #16a34a!important;">
+        <div class="card-body px-4 py-3 d-flex align-items-center justify-content-between flex-wrap gap-2">
+          <div>
+            <span class="fw-semibold text-success">🏏 {{ favourite_team }}</span>
+            <span class="text-muted ms-2" style="font-size:13px;">— no match on right now. Check back later.</span>
+          </div>
+          <button class="btn btn-sm btn-outline-secondary" style="font-size:12px;" onclick="document.getElementById('changeFavTeam').classList.toggle('d-none')">Change team</button>
+        </div>
+      </div>
+      {% else %}
+      {# Logged in but hasn't picked a team yet #}
+      <div class="card border-0 shadow-sm mb-4" style="border-radius:14px; background:#f8fafc;">
+        <div class="card-body px-4 py-3">
+          <div class="d-flex align-items-center gap-3 flex-wrap">
+            <span style="font-size:1.5rem;">🏏</span>
+            <div>
+              <div class="fw-semibold" style="font-size:0.95rem;">Follow your team</div>
+              <div class="text-muted" style="font-size:13px;">We'll surface their next match here every time you visit.</div>
+            </div>
+            <button class="btn btn-sm btn-success ms-auto" onclick="document.getElementById('changeFavTeam').classList.toggle('d-none')" style="border-radius:8px;">Pick a team</button>
+          </div>
+        </div>
+      </div>
+      {% endif %}
+
+      {# Team picker (hidden by default, shown on toggle) #}
+      <div id="changeFavTeam" class="{% if not favourite_team %}{% else %}d-none{% endif %} mb-3">
+        <div class="card border-success shadow-sm" style="border-radius:12px;">
+          <div class="card-body px-4 py-3">
+            <label class="form-label fw-semibold text-success mb-2"><i class="bi bi-star-fill me-1"></i>Choose your favourite team</label>
+            <div class="d-flex gap-2">
+              <select id="favTeamSelect" class="form-select" style="max-width:280px;">
+                <option value="">-- Select a team --</option>
+                {% for team in fielding_teams %}
+                <option value="{{ team }}" {% if team == favourite_team %}selected{% endif %}>{{ team }}</option>
+                {% endfor %}
+              </select>
+              <button class="btn btn-success px-3" onclick="saveFavTeam()"><i class="bi bi-check-lg me-1"></i>Save</button>
+              {% if favourite_team %}<button class="btn btn-outline-secondary px-3" onclick="document.getElementById('changeFavTeam').classList.add('d-none')">Cancel</button>{% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+
+    {% else %}
+    {# Not logged in — subtle prompt #}
+    <div class="alert alert-light border mb-4 py-2 px-3 d-flex align-items-center gap-2" style="border-radius:10px; font-size:13px;">
+      <span>🏏</span>
+      <span class="text-muted"><a href="{{ url_for('replit_auth.login') }}" class="text-success fw-semibold text-decoration-none">Log in</a> to follow your team and see their next match instantly.</span>
+    </div>
+    {% endif %}
+
     {% if positive_feedback %}
     <div class="testimonials-section mb-4">
         <h5 class="text-center mb-3"><i class="bi bi-star-fill text-warning me-2"></i>What Users Say</h5>
@@ -625,6 +710,22 @@
 
 {% block scripts %}
 <script>
+function saveFavTeam() {
+    const team = document.getElementById('favTeamSelect').value;
+    if (!team) return;
+    fetch('/api/set-favourite-team', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ team })
+    })
+    .then(r => r.json())
+    .then(data => {
+        if (data.ok) window.location.reload();
+        else alert('Could not save — please try again.');
+    })
+    .catch(() => alert('Could not save — please try again.'));
+}
+
 let currentFormat = 'mens_t20';
 let currentGender = 'men';
 

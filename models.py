@@ -125,6 +125,15 @@ class AppConfig(db.Model):
     key = db.Column(db.String(80), primary_key=True)
     value = db.Column(db.Text, nullable=True)
 
+
+class UserPreference(db.Model):
+    """Stores per-user preferences — currently just their favourite cricket team."""
+    __tablename__ = 'user_preference'
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.String(100), db.ForeignKey('users.id'), nullable=False, unique=True, index=True)
+    favourite_team = db.Column(db.String(100), nullable=True)
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
 class Player(db.Model):
     """Cricket player profile with career batting and bowling statistics."""
     id = db.Column(db.Integer, primary_key=True)
