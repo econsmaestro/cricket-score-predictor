@@ -140,9 +140,8 @@
                 <div class="testimonial-card">
                     <div class="d-flex align-items-center gap-2 mb-2">
                         <i class="bi bi-hand-thumbs-up-fill text-success"></i>
-                        {% if fb.username %}
-                        <strong class="text-primary">{{ fb.username }}</strong>
-                        {% endif %}
+                        {% set fan_names = ['Cricket Fan', 'Match Predictor', 'Cricket Enthusiast', 'Die-Hard Fan', 'Stats Lover', 'Cricket Nerd', 'Match Watcher', 'Boundary Hawk'] %}
+                        <strong class="text-primary">{{ fan_names[fb.id % fan_names|length] }}</strong>
                         <small class="text-muted ms-auto">{{ fb.created_at.strftime('%b %d, %Y') if fb.created_at else '' }}</small>
                     </div>
                     {% if fb.feedback_text %}
