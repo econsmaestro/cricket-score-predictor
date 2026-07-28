@@ -379,6 +379,168 @@ def get_phase_expectations(venue, match_format):
     return {"innings_1": innings_1, "innings_2": innings_2}
 
 
+def _bat_chase_tactical(bat_chase, weather):
+    """Generate specific bat-first vs chase tactical advice from conditions."""
+    chase_pct = bat_chase['chase_wins']
+    bat_pct = bat_chase['bat_first_wins']
+    dew = weather.get('dew_factor', 0.3)
+    swing = weather.get('swing_window', 'first_6')
+    conditions = weather.get('typical_conditions', 'varied')
+
+    if chase_pct >= 58:
+        base = "Win the toss and chase without hesitation."
+        if dew >= 0.6:
+            return (base + " Heavy dew under lights will make the surface slicker and spinners will lose grip — "
+                    "batting second is a significant advantage. If defending, bowl your best pacers in the powerplay "
+                    "before the ball gets wet and aim for par + 20.")
+        return (base + " Chasing teams here have a proven edge — the target is visible, the outfield quickens under "
+                "floodlights, and pressure is on the defending side. Keep wickets in hand through the powerplay "
+                "and launch in the death.")
+
+    if chase_pct >= 54:
+        if dew >= 0.5:
+            return ("Slight preference for chasing. Dew settles quickly at this venue — front-load your best pacers "
+                    "in the powerplay before the ball turns slippery. If forced to bat first, aim 15+ above par "
+                    "to account for the second-innings batting advantage.")
+        return ("Chasing is marginally preferred but not a lock. If batting first, be aggressive in the back 5 overs "
+                "to give your bowlers a total they can defend. Don't hold wickets in hand at the expense of runs here.")
+
+    if bat_pct >= 58:
+        if 'overcast' in conditions or swing in ('all_innings', 'first_10'):
+            return ("Bat first — the overcast skies that look threatening are deceptive. Getting through the new ball "
+                    "under cloud cover is tough but the surface settles. A first-innings platform of 170+ is hard to "
+                    "chase as the pitch dries and conditions clear for the bowling side.")
+        return ("Bat first with confidence. The pitch deteriorates significantly through two innings — a first-innings "
+                "score of par + 15 becomes very difficult to chase as the surface gets two-paced and slower.")
+
+    if bat_pct >= 54:
+        return ("Slight lean toward batting first. The pitch doesn't hold its pace through two innings — set a total, "
+                "then use the wearing surface with your spinners in the chase. Don't be afraid to attack from over 1.")
+
+    # Neutral — but give specific actionable advice
+    if dew >= 0.6:
+        return ("Toss is close, but tonight's dew is the deciding factor. Under lights the surface will ease — "
+                "chasing is the smarter call if dew arrives early. If you do bat first, target par + 10 minimum "
+                "to overcome the second-innings batting advantage, and bowl your best spinner early before the "
+                "ball loses grip.")
+    if 'overcast' in conditions or swing in ('all_innings', 'first_10'):
+        return ("Overcast conditions tilt this toward bowling first. Swing will be available early — "
+                "use your best inswing bowler in the powerplay to attack the top order, then chase under "
+                "clearer skies as the cloud cover typically lifts through the evening.")
+    if swing == 'first_4':
+        return ("Bowl first and exploit the first 4 overs — the new ball will dart around significantly. "
+                "Once the shine goes the surface flattens and run-scoring becomes easier. A chase on a "
+                "true surface is the ideal scenario at this venue.")
+    return ("No strong toss preference — both strategies are viable here. Either way, the powerplay is decisive: "
+            "a strong start with the bat sets you up to attack in the death; a strong start with the ball "
+            "builds pressure that compounds through the innings. Don't let the first 6 slip.")
+
+
+def _surface_tactical(surface, weather):
+    """Generate specific surface/pitch tactical advice from pitch and weather data."""
+    pace_pct = surface.get('pace_wicket_pct', 50)
+    spin_pct = surface.get('spin_wicket_pct', 40)
+    tempo = surface.get('pitch_tempo', 'default')
+    swing = weather.get('swing_window', 'first_6')
+    conditions = weather.get('typical_conditions', 'varied')
+    dew = weather.get('dew_factor', 0.3)
+
+    if pace_pct >= 60:
+        swing_detail = {
+            'first_4': "Open with your most dangerous swinger — movement is extreme in the first 4 overs. Attack hard.",
+            'first_6': "Front-load your pace spearhead in the powerplay. The new ball will swing and seam — attack the top 3.",
+            'first_10': "Use pace for the full first 10 overs, including a second spell in overs 8–10. The ball keeps moving longer here.",
+            'all_innings': "The ball swings throughout — don't rest your pace spearhead. A second spell in overs 14–16 can be as dangerous as the powerplay.",
+        }.get(swing, "Attack with pace in the powerplay — new ball movement is your primary weapon.")
+        return (f"Pace is king here — {pace_pct}% of wickets fall to seam. {swing_detail} "
+                + ("Expect high bounce short of length — a short-pitched barrage can create awkward dismissals. " if tempo == 'high_bounce' else "")
+                + "Spinners should focus purely on economy and cutting off boundaries — this is not their surface.")
+
+    if spin_pct >= 50:
+        dew_warning = (" Watch the dew — if playing under lights, the ball may stop gripping in the second innings. "
+                       "Your spinners need to take wickets in the first innings while conditions hold." if dew >= 0.6 else "")
+        if tempo == 'low_slow':
+            return (f"Spinners will win this match — {spin_pct}% of wickets go to turn, and the surface is low and slow. "
+                    "Consider opening the bowling with your best spinner — it works on this surface. Batsmen must hit "
+                    "against the turn early before the pitch dries further and grip increases." + dew_warning
+                    + " An extra spinner in the XI could be the selection masterstroke here.")
+        return (f"This is a spinner's surface — {spin_pct}% of wickets to turn. Deploy your best spinner aggressively "
+                "through overs 8–16 when the surface assists most. Batsmen should look to use their feet and "
+                "attack the spinner before they settle into a rhythm." + dew_warning
+                + " Picking an extra spinner gives the captain more attacking options in the crucial middle phase.")
+
+    if tempo == 'batting_road':
+        return ("This is a flat road — bowlers have nowhere to hide. "
+                "Use full-pitched yorker-length deliveries at off-stump and vary your pace aggressively in the death. "
+                "Spinners must bowl very straight with a leg-side field — don't give width. "
+                "The captain who gets the powerplay fielding restrictions right and uses them aggressively wins the match.")
+
+    if tempo == 'true_pace':
+        return ("The pitch carries well and rewards disciplined, full-pitched bowling. "
+                "Good length gets edges; back of a length gets cut away. Bowl at the top of off-stump and trust your best "
+                "quick bowler in the powerplay — pace on this surface is more dangerous than spin or cutters. "
+                "Save your slower-ball specialist for the death when batsmen are looking to go big.")
+
+    if tempo == 'high_bounce':
+        return (f"Bounce is the key weapon — {pace_pct}% of wickets to pace. "
+                "Bowl short of a length at the body — deliveries that climb into the ribs create false shots. "
+                "Batsmen must get onto the front foot and drive through the line rather than pulling or cutting. "
+                "Spinners should stick to off-stump and avoid the short ball — their strength here is containment, not wickets.")
+
+    # Balanced
+    if swing in ('first_4', 'first_6'):
+        return (f"A balanced contest — pace takes {pace_pct}%, spin takes {spin_pct}%. "
+                "Use pace in the powerplay to exploit the new ball moving through the air, then hand over to your "
+                "spinner in overs 8–15. Read each batsman individually — some will struggle against pace, others against turn. "
+                "Flexibility and a captain who switches plans quickly wins on this pitch.")
+    return (f"A genuine 50-50 surface — pace takes {pace_pct}%, spin takes {spin_pct}%. "
+            "Rotate your bowlers based on the live match situation rather than a rigid plan. "
+            "The captain who adapts quickest wins — don't let any bowler bowl through a bad spell.")
+
+
+def _par_score_tactical(par_score, weather, surface):
+    """Generate specific par score and scoring-vibe tactical advice."""
+    vibe = par_score.get('scoring_vibe', 'balanced')
+    par = par_score.get('par_score', 165)
+    dew = weather.get('dew_factor', 0.3)
+    tempo = surface.get('pitch_tempo', 'default')
+
+    if vibe == 'high-scoring':
+        dew_line = (" Dew will flatten any demons in the pitch for the chasing team — if chasing, stay patient early and "
+                    "back the surface to come good." if dew >= 0.5
+                    else " If chasing, don't let the rate climb past 10 in the death — power-hitting windows close fast on flat surfaces.")
+        return (f"Par is {par} — batting first, treat anything under par + 15 as a dangerous score to defend. "
+                "Attack aggressively from the powerplay: the outfield is fast, the boundaries are accessible, and "
+                "this crowd rewards big hitting. Don't consolidate through overs 8–14 — rotate strike at 8+ and "
+                "accelerate the moment a bowler gives you width." + dew_line)
+
+    if vibe == 'low-scoring spin battle':
+        return (f"Par here is only {par} — this is a bowler's match and every run is earned. "
+                "Batting first: rotate strike obsessively and treat 6 an over through overs 6–15 as perfectly acceptable. "
+                "The pitch will play harder for the chasing team as it deteriorates — a score of {par} is a genuine "
+                "defending total. Don't give away wickets trying to accelerate prematurely. "
+                "Bowling: bowl stump-to-stump, cut off the boundary, and let the pitch do the work. "
+                "Every dot ball builds enormous pressure in a low-scoring game.")
+
+    if vibe == 'pace-dominated':
+        bat_line = ("Get through the new ball — absorb overs 1–5, accepting 4–5 runs an over, then explode once "
+                    "the shine goes and the seamers tire. Don't play big shots against the new ball." if tempo != 'batting_road'
+                    else "The surface is flat enough to take on the pace — back your eye and play your natural game from ball 1.")
+        return (f"Pace bowlers set the tone — par of {par} reflects the seam-friendly nature of this surface. "
+                f"Batting: {bat_line} "
+                "Bowling: the new ball is everything — use your two best seamers for the full powerplay, then hold one in "
+                "reserve for a second spell in overs 14–16 when the ball starts reversing.")
+
+    # Balanced/default
+    dew_line = (f" Dew could tilt the balance — batting first, aim {par + 10}+ to account for a slicker pitch "
+                "in the second innings." if dew >= 0.6
+                else " The first 6 overs set the tempo for the entire innings — don't let a slow powerplay force "
+                     "you into risky big-hitting later when wickets in hand matter most.")
+    return (f"Par is {par} — a competitive but achievable target in either innings. "
+            "Execute your powerplay plan cleanly: batting first, look to be {par - 10} to {par} at the halfway point "
+            "with at least 6 wickets in hand so you can accelerate freely in the death." + dew_line)
+
+
 def build_prematch_analysis(venue, match_format, match_time=None, team1=None, team2=None):
     """Assemble the complete pre-match analysis dict for a venue and format.
 
@@ -403,6 +565,10 @@ def build_prematch_analysis(venue, match_format, match_time=None, team1=None, te
     surface = get_surface_description(venue, match_format)
     par_score = get_par_score_analysis(venue, match_format)
     phases = get_phase_expectations(venue, match_format)
+
+    bat_chase['tactical_implication'] = _bat_chase_tactical(bat_chase, weather)
+    surface['tactical_implication'] = _surface_tactical(surface, weather)
+    par_score['tactical_implication'] = _par_score_tactical(par_score, weather, surface)
 
     format_labels = {
         'mens_t20': "Men's T20",

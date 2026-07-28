@@ -282,13 +282,7 @@
                         </div>
                         <div class="ds-item">
                             <span class="ds-label"><i class="bi bi-compass-fill text-success me-1"></i>Tactical implication:</span>
-                            {% if analysis.bat_chase.chase_wins >= 54 %}
-                            If batting first, aim for 15-20 runs above par. The chasing team will be confident, so you need an above-average total to defend.
-                            {% elif analysis.bat_chase.bat_first_wins >= 54 %}
-                            If chasing, be aggressive in the powerplay. Don't let the required rate climb — this pitch gets harder to bat on.
-                            {% else %}
-                            No extreme strategy needed. Play according to conditions on the day and adapt to the match situation.
-                            {% endif %}
+                            {{ analysis.bat_chase.tactical_implication }}
                         </div>
                         <div class="ds-item">
                             <span class="ds-label"><i class="bi bi-star-fill text-warning me-1"></i>Fantasy impact:</span>
@@ -359,13 +353,7 @@
                         </div>
                         <div class="ds-item">
                             <span class="ds-label"><i class="bi bi-compass-fill text-success me-1"></i>Tactical implication:</span>
-                            {% if analysis.surface.pace_wicket_pct >= 55 %}
-                            Load up on quality pace bowlers. Use them in the powerplay and death overs. Spinners should focus on economy and containment.
-                            {% elif analysis.surface.spin_wicket_pct >= 50 %}
-                            Deploy spinners through the middle overs aggressively. Consider an extra spinner in the lineup and use pace only in powerplay/death.
-                            {% else %}
-                            Flexibility is key. Rotate pace and spin based on match situations — the pitch doesn't heavily favour either.
-                            {% endif %}
+                            {{ analysis.surface.tactical_implication }}
                         </div>
                         <div class="ds-item">
                             <span class="ds-label"><i class="bi bi-star-fill text-warning me-1"></i>Fantasy impact:</span>
@@ -446,13 +434,7 @@
                                 </div>
                                 <div class="ds-item">
                                     <span class="ds-label"><i class="bi bi-compass-fill text-success me-1"></i>Tactical implication:</span>
-                                    {% if analysis.par_score.scoring_vibe == 'high-scoring' %}
-                                    Batting first? Set a big target (par + 15-20). Chasing? Don't panic early — runs will come. Save wickets for the death overs push.
-                                    {% elif analysis.par_score.scoring_vibe == 'low-scoring spin battle' %}
-                                    Play cautiously in the powerplay. Rotate strike, minimise dot balls, and build pressure with fielding. Every run matters.
-                                    {% else %}
-                                    Adapt to the match flow. Don't force scoring if the pitch is playing slow — let the ball come to the bat.
-                                    {% endif %}
+                                    {{ analysis.par_score.tactical_implication }}
                                 </div>
                                 <div class="ds-item">
                                     <span class="ds-label"><i class="bi bi-star-fill text-warning me-1"></i>Fantasy impact:</span>
