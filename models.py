@@ -15,7 +15,14 @@ class User(UserMixin, db.Model):
     profile_image_url = db.Column(db.String, nullable=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
-    
+
+    # Stripe / subscription fields
+    stripe_customer_id = db.Column(db.String, nullable=True, unique=True)
+    stripe_subscription_id = db.Column(db.String, nullable=True)
+    subscription_status = db.Column(db.String(20), nullable=True)   # active | canceled | past_due | trialing
+    subscription_period_end = db.Column(db.DateTime, nullable=True)
+    is_pro = db.Column(db.Boolean, default=False, nullable=False)
+
     @property
     def display_name(self):
         """Return the best available display name: first name, email prefix, or truncated ID."""
@@ -24,6 +31,11 @@ class User(UserMixin, db.Model):
         if self.email:
             return self.email.split('@')[0]
         return f"User {self.id[:8]}"
+
+    @property
+    def subscription_active(self):
+        """True when the user has a live Pro subscription."""
+        return self.subscription_status in ('active', 'trialing')
 
 
 class OAuth(OAuthConsumerMixin, db.Model):
@@ -465,3 +477,62 @@ class BugReport(db.Model):
     screenshot_filename = db.Column(db.String(255), nullable=True)
     username = db.Column(db.String(100), nullable=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+
+# ---------------------------------------------------------------------------
+# Monetization models
+# ---------------------------------------------------------------------------
+
+class ConversionEvent(db.Model):
+    """Funnel event emitted by the front-end or server to track user behaviour.
+
+    Events flow through /api/events/track and are consumed by the analytics
+    dashboard to understand the conversion path from visitor → Pro subscriber.
+    """
+    __tablename__ = 'conversion_events'
+    id = db.Column(db.Integer, primary_key=True)
+    event_type = db.Column(db.String(60), nullable=False, index=True)
+    user_id = db.Column(db.String, db.ForeignKey('users.id'), nullable=True)
+    session_id = db.Column(db.String(64), nullable=True, index=True)
+    metadata = db.Column(db.Text, nullable=True)   # JSON blob
+    created_at = db.Column(db.DateTime, default=datetime.utcnow, index=True)
+
+    user = db.relationship('User', backref='conversion_events')
+
+    # Recognised event_type values (non-exhaustive):
+    #   prediction_completed  prematch_opened  signup_completed
+    #   upgrade_clicked       purchase_completed  alert_created
+
+
+class SavedPrediction(db.Model):
+    """A Pro user's saved snapshot of a prediction for later review."""
+    __tablename__ = 'saved_predictions'
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.String, db.ForeignKey('users.id'), nullable=False)
+    prediction_id = db.Column(db.Integer, db.ForeignKey('prediction.id'), nullable=True)
+    venue = db.Column(db.String(100), nullable=True)
+    match_format = db.Column(db.String(20), nullable=True)
+    predicted_score = db.Column(db.Integer, nullable=True)
+    actual_score = db.Column(db.Integer, nullable=True)   # filled in after match ends
+    notes = db.Column(db.String(500), nullable=True)
+    snapshot_json = db.Column(db.Text, nullable=True)     # full PredictionResult as JSON
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    user = db.relationship('User', backref='saved_predictions')
+    prediction = db.relationship('Prediction', backref='saves')
+
+
+class MatchAlert(db.Model):
+    """Pro user opt-in to receive email alerts before matches at given venues/teams."""
+    __tablename__ = 'match_alerts'
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.String, db.ForeignKey('users.id'), nullable=False)
+    alert_email = db.Column(db.String(200), nullable=False)
+    teams = db.Column(db.Text, nullable=True)    # comma-separated team names
+    venues = db.Column(db.Text, nullable=True)   # comma-separated venue names
+    formats = db.Column(db.String(100), nullable=True)  # e.g. "mens_t20,mens_odi"
+    is_active = db.Column(db.Boolean, default=True)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    user = db.relationship('User', backref='match_alerts')

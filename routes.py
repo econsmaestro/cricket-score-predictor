@@ -1,6 +1,7 @@
 from flask import render_template, request, redirect, url_for, flash, jsonify, session, send_file, abort
 from app import app, db
-from models import Prediction, DiscoveredPlayer, PredictionFeedback, PageView, User, BugReport, SupportChat, UserPreference
+from models import (Prediction, DiscoveredPlayer, PredictionFeedback, PageView, User, BugReport,
+                   SupportChat, UserPreference, ConversionEvent, SavedPrediction, MatchAlert)
 from flask_login import current_user
 from replit_auth import make_replit_blueprint
 
@@ -2311,3 +2312,316 @@ def sitemap_xml():
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 {urls}</urlset>"""
     return Response(xml, mimetype="application/xml")
+
+
+# ===========================================================================
+# MONETIZATION — Matchday Pro (Stripe subscriptions, event tracking, Pro features)
+# ===========================================================================
+
+from functools import wraps
+import json as _json
+
+def require_pro(f):
+    """Decorator: redirect non-Pro users to the pricing page."""
+    @wraps(f)
+    def _inner(*args, **kwargs):
+        if not current_user.is_authenticated:
+            session["next_url"] = request.url
+            return redirect(url_for('replit_auth.login'))
+        if not current_user.is_pro:
+            flash("This feature is part of Matchday Pro. Upgrade to unlock it.", "warning")
+            _track_event("upgrade_clicked", {"source": request.path})
+            return redirect(url_for('pricing'))
+        return f(*args, **kwargs)
+    return _inner
+
+
+def _track_event(event_type: str, metadata: dict = None):
+    """Persist a conversion event. Silently ignores DB errors."""
+    try:
+        user_id = current_user.id if current_user.is_authenticated else None
+        ev = ConversionEvent(
+            event_type=event_type,
+            user_id=user_id,
+            session_id=session.get("chat_session_id") or session.get("_id", ""),
+            metadata=_json.dumps(metadata or {}),
+        )
+        db.session.add(ev)
+        db.session.commit()
+    except Exception:
+        db.session.rollback()
+
+
+# ---------------------------------------------------------------------------
+# Public event tracking API (called from JS)
+# ---------------------------------------------------------------------------
+
+@app.route("/api/events/track", methods=["POST"])
+def api_track_event():
+    """Record a client-side funnel event.
+
+    Body JSON: {"event_type": "prediction_completed", "metadata": {...}}
+    """
+    data = request.get_json(silent=True) or {}
+    event_type = str(data.get("event_type", ""))[:60]
+    metadata = data.get("metadata", {})
+    if not event_type:
+        return jsonify({"error": "event_type required"}), 400
+    _track_event(event_type, metadata)
+    return jsonify({"ok": True})
+
+
+# ---------------------------------------------------------------------------
+# Pricing page
+# ---------------------------------------------------------------------------
+
+@app.route("/pricing")
+def pricing():
+    """Public pricing / upgrade page."""
+    _track_event("pricing_viewed")
+    from stripe_helper import PUBLISHABLE_KEY, is_configured
+    return render_template(
+        "pricing.html",
+        stripe_publishable_key=PUBLISHABLE_KEY,
+        stripe_configured=is_configured(),
+    )
+
+
+# ---------------------------------------------------------------------------
+# Stripe checkout
+# ---------------------------------------------------------------------------
+
+@app.route("/subscribe", methods=["POST"])
+def subscribe():
+    """Create a Stripe Checkout session and redirect the user to it."""
+    from replit_auth import require_login as _rl
+    if not current_user.is_authenticated:
+        session["next_url"] = url_for('pricing')
+        return redirect(url_for('replit_auth.login'))
+
+    from stripe_helper import create_checkout_session, is_configured
+    if not is_configured():
+        flash("Payment system is not configured yet. Please check back soon.", "warning")
+        return redirect(url_for('pricing'))
+
+    _track_event("upgrade_clicked", {"source": "subscribe_button"})
+
+    success_url = url_for('subscription_success', _external=True) + "?session_id={CHECKOUT_SESSION_ID}"
+    cancel_url = url_for('subscription_cancel', _external=True)
+
+    try:
+        checkout = create_checkout_session(current_user, success_url, cancel_url)
+        return redirect(checkout.url, code=303)
+    except Exception as e:
+        flash(f"Could not start checkout: {e}", "danger")
+        return redirect(url_for('pricing'))
+
+
+@app.route("/subscription/success")
+def subscription_success():
+    """Post-checkout landing page. Stripe redirects here after payment."""
+    _track_event("purchase_completed", {"session_id": request.args.get("session_id", "")})
+    return render_template("subscription_success.html")
+
+
+@app.route("/subscription/cancel")
+def subscription_cancel():
+    """Shown when user clicks 'back' on the Stripe checkout page."""
+    return render_template("subscription_cancel.html")
+
+
+@app.route("/subscription/portal", methods=["POST"])
+def subscription_portal():
+    """Redirect Pro user to Stripe Customer Portal to manage/cancel."""
+    if not current_user.is_authenticated or not current_user.stripe_customer_id:
+        return redirect(url_for('pricing'))
+
+    from stripe_helper import create_portal_session
+    portal = create_portal_session(
+        current_user.stripe_customer_id,
+        return_url=url_for('pricing', _external=True),
+    )
+    return redirect(portal.url, code=303)
+
+
+# ---------------------------------------------------------------------------
+# Stripe webhook (must NOT require login; uses raw body)
+# ---------------------------------------------------------------------------
+
+@app.route("/stripe/webhook", methods=["POST"])
+def stripe_webhook():
+    """Handle Stripe webhook events to keep subscription status in sync."""
+    payload = request.get_data()
+    sig_header = request.headers.get("Stripe-Signature", "")
+
+    from stripe_helper import handle_webhook, sync_subscription_to_user
+    try:
+        event = handle_webhook(payload, sig_header)
+    except Exception as e:
+        app.logger.warning("Stripe webhook error: %s", e)
+        return jsonify({"error": str(e)}), 400
+
+    obj = event["data"]["object"]
+
+    if event["type"] in (
+        "customer.subscription.created",
+        "customer.subscription.updated",
+        "customer.subscription.deleted",
+    ):
+        customer_id = obj.get("customer")
+        user = User.query.filter_by(stripe_customer_id=customer_id).first()
+        if user:
+            import stripe as _stripe
+            sub = _stripe.Subscription.retrieve(obj["id"])
+            sync_subscription_to_user(user, sub)
+
+    elif event["type"] == "invoice.payment_succeeded":
+        customer_id = obj.get("customer")
+        user = User.query.filter_by(stripe_customer_id=customer_id).first()
+        if user and not user.is_pro:
+            user.is_pro = True
+            db.session.commit()
+
+    elif event["type"] == "invoice.payment_failed":
+        customer_id = obj.get("customer")
+        user = User.query.filter_by(stripe_customer_id=customer_id).first()
+        if user:
+            user.subscription_status = "past_due"
+            user.is_pro = False
+            db.session.commit()
+
+    return jsonify({"status": "ok"})
+
+
+# ---------------------------------------------------------------------------
+# Pro: Saved Predictions
+# ---------------------------------------------------------------------------
+
+@app.route("/pro/predictions")
+@require_pro
+def pro_predictions():
+    """Pro user saved-predictions history page."""
+    saves = (SavedPrediction.query
+             .filter_by(user_id=current_user.id)
+             .order_by(SavedPrediction.created_at.desc())
+             .limit(50)
+             .all())
+    return render_template("pro_predictions.html", saves=saves)
+
+
+@app.route("/pro/predictions/save", methods=["POST"])
+@require_pro
+def pro_save_prediction():
+    """Save the current prediction result for later review."""
+    data = request.get_json(silent=True) or {}
+    save = SavedPrediction(
+        user_id=current_user.id,
+        prediction_id=data.get("prediction_id"),
+        venue=data.get("venue", "")[:100],
+        match_format=data.get("match_format", "")[:20],
+        predicted_score=data.get("predicted_score"),
+        notes=data.get("notes", "")[:500],
+        snapshot_json=_json.dumps(data.get("snapshot", {})),
+    )
+    db.session.add(save)
+    db.session.commit()
+    _track_event("prediction_saved", {"venue": save.venue})
+    return jsonify({"ok": True, "id": save.id})
+
+
+@app.route("/pro/predictions/<int:save_id>/actual", methods=["POST"])
+@require_pro
+def pro_update_actual(save_id):
+    """Update a saved prediction with the real final score."""
+    save = SavedPrediction.query.filter_by(id=save_id, user_id=current_user.id).first_or_404()
+    data = request.get_json(silent=True) or {}
+    save.actual_score = data.get("actual_score")
+    save.notes = data.get("notes", save.notes or "")[:500]
+    db.session.commit()
+    return jsonify({"ok": True})
+
+
+# ---------------------------------------------------------------------------
+# Pro: Match Alerts
+# ---------------------------------------------------------------------------
+
+@app.route("/pro/alerts", methods=["GET"])
+@require_pro
+def pro_alerts():
+    """Pro user match-alert management page."""
+    alerts = MatchAlert.query.filter_by(user_id=current_user.id).order_by(MatchAlert.created_at.desc()).all()
+    from prediction import ALL_VENUES, FIELDING_TEAMS
+    return render_template(
+        "pro_alerts.html",
+        alerts=alerts,
+        all_venues=ALL_VENUES,
+        all_teams=FIELDING_TEAMS,
+        user_email=current_user.email or "",
+    )
+
+
+@app.route("/pro/alerts", methods=["POST"])
+@require_pro
+def pro_create_alert():
+    """Create or update a match alert for the current Pro user."""
+    data = request.form
+    alert_email = data.get("alert_email", current_user.email or "").strip()
+    teams = ",".join(request.form.getlist("teams"))
+    venues = ",".join(request.form.getlist("venues"))
+    formats = ",".join(request.form.getlist("formats"))
+
+    if not alert_email:
+        flash("Please provide an email address for alerts.", "warning")
+        return redirect(url_for('pro_alerts'))
+
+    alert = MatchAlert(
+        user_id=current_user.id,
+        alert_email=alert_email,
+        teams=teams,
+        venues=venues,
+        formats=formats,
+        is_active=True,
+    )
+    db.session.add(alert)
+    db.session.commit()
+    _track_event("alert_created", {"teams": teams, "venues": venues})
+    flash("Match alert created! You'll receive emails before relevant matches.", "success")
+    return redirect(url_for('pro_alerts'))
+
+
+@app.route("/pro/alerts/<int:alert_id>/delete", methods=["POST"])
+@require_pro
+def pro_delete_alert(alert_id):
+    """Delete a match alert."""
+    alert = MatchAlert.query.filter_by(id=alert_id, user_id=current_user.id).first_or_404()
+    db.session.delete(alert)
+    db.session.commit()
+    flash("Alert deleted.", "info")
+    return redirect(url_for('pro_alerts'))
+
+
+# ---------------------------------------------------------------------------
+# Conversion funnel in analytics dashboard (extend existing analytics route)
+# ---------------------------------------------------------------------------
+
+@app.route("/api/funnel")
+def api_funnel():
+    """Return conversion funnel counts for the analytics dashboard."""
+    from sqlalchemy import func
+    from datetime import timedelta, datetime
+    thirty_days_ago = datetime.utcnow() - timedelta(days=30)
+
+    rows = (db.session.query(ConversionEvent.event_type, func.count(ConversionEvent.id))
+            .filter(ConversionEvent.created_at >= thirty_days_ago)
+            .group_by(ConversionEvent.event_type)
+            .all())
+    funnel = {r[0]: r[1] for r in rows}
+
+    pro_count = User.query.filter_by(is_pro=True).count()
+    total_users = User.query.count()
+
+    return jsonify({
+        "funnel_30d": funnel,
+        "pro_subscribers": pro_count,
+        "total_registered": total_users,
+    })

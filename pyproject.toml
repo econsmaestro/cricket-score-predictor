@@ -27,5 +27,6 @@ dependencies = [
     "scikit-learn>=1.8.0",
     "sqlalchemy>=2.0.45",
     "trafilatura>=2.0.0",
+    "stripe>=7.0.0",
     "werkzeug>=3.1.4",
 ]
