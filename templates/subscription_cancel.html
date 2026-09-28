@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="text-center py-5">
+  <div class="mb-4" style="font-size: 3rem;">👋</div>
+  <h2 class="fw-bold mb-2">No worries — you can upgrade anytime</h2>
+  <p class="text-muted mb-4">Your checkout was cancelled and you haven't been charged.</p>
+  <a href="{{ url_for('pricing') }}" class="btn btn-warning btn-lg me-2">See Pro features</a>
+  <a href="/" class="btn btn-outline-secondary btn-lg">Back to predictions</a>
+</div>
+{% endblock %}

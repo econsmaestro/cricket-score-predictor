@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="py-4">
+  <div class="mb-4">
+    <h2 class="fw-bold mb-0"><i class="bi bi-bell-fill text-warning me-2"></i>Match Alerts</h2>
+    <p class="text-muted">Get an email before matches involving your chosen teams or venues.</p>
+  </div>
+
+  <div class="row g-4">
+    <!-- Create alert form -->
+    <div class="col-md-5">
+      <div class="card border-0 shadow-sm">
+        <div class="card-header bg-warning text-dark fw-semibold">
+          <i class="bi bi-plus-circle me-2"></i>Create new alert
+        </div>
+        <div class="card-body">
+          <form method="POST" action="{{ url_for('pro_create_alert') }}">
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Alert email</label>
+              <input type="email" name="alert_email" class="form-control" value="{{ user_email }}" required>
+              <div class="form-text">We'll send match preview emails here.</div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Teams <span class="text-muted fw-normal">(optional)</span></label>
+              <select name="teams" class="form-select" multiple size="5">
+                {% for team in all_teams %}
+                <option value="{{ team }}">{{ team }}</option>
+                {% endfor %}
+              </select>
+              <div class="form-text">Hold Ctrl/Cmd to select multiple.</div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Formats</label>
+              <div class="d-flex gap-3 flex-wrap">
+                {% for fmt, label in [('mens_t20','Men\'s T20'),('womens_t20','Women\'s T20'),('mens_odi','Men\'s ODI'),('womens_odi','Women\'s ODI')] %}
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" name="formats" value="{{ fmt }}" id="fmt_{{ fmt }}" checked>
+                  <label class="form-check-label" for="fmt_{{ fmt }}">{{ label }}</label>
+                </div>
+                {% endfor %}
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-warning w-100 fw-bold">
+              <i class="bi bi-bell me-1"></i>Create alert
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Existing alerts -->
+    <div class="col-md-7">
+      <h5 class="fw-semibold mb-3">Your alerts</h5>
+      {% if alerts %}
+        {% for alert in alerts %}
+        <div class="card border-0 shadow-sm mb-3">
+          <div class="card-body d-flex justify-content-between align-items-start">
+            <div>
+              <div class="mb-1"><i class="bi bi-envelope me-1 text-muted"></i>{{ alert.alert_email }}</div>
+              {% if alert.teams %}
+              <div class="mb-1 small text-muted"><i class="bi bi-people me-1"></i>Teams: {{ alert.teams }}</div>
+              {% endif %}
+              {% if alert.venues %}
+              <div class="mb-1 small text-muted"><i class="bi bi-geo-alt me-1"></i>Venues: {{ alert.venues }}</div>
+              {% endif %}
+              {% if alert.formats %}
+              <div class="small text-muted"><i class="bi bi-tag me-1"></i>{{ alert.formats }}</div>
+              {% endif %}
+            </div>
+            <form method="POST" action="{{ url_for('pro_delete_alert', alert_id=alert.id) }}" onsubmit="return confirm('Delete this alert?')">
+              <button type="submit" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+            </form>
+          </div>
+        </div>
+        {% endfor %}
+      {% else %}
+        <div class="text-center text-muted py-4">
+          <i class="bi bi-bell-slash fs-2 d-block mb-2"></i>
+          No alerts yet. Create one to get started.
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}
