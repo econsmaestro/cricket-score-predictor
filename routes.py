@@ -2648,14 +2648,22 @@ def backtest_status():
 @app.route("/backtest/run", methods=["POST"])
 def backtest_run():
     from backtest import run_backtest, compute_metrics, generate_summary
+    from backtest_data import FORMATS
     data = request.get_json(silent=True) or {}
     max_matches = min(int(data.get("max_matches", 100)), 2000)
     try:
-        results = run_backtest(max_matches=max_matches)
-        metrics = compute_metrics(results)
-        summary = generate_summary(metrics)
-        _backtest_cache["last"] = results
-        return jsonify({"results": results, "metrics": metrics, "summary": summary})
+        all_results = {}
+        all_metrics = {}
+        all_summaries = {}
+        for fmt in FORMATS:
+            results = run_backtest(fmt=fmt, max_matches=max_matches)
+            metrics = compute_metrics(results, fmt=fmt)
+            summary = generate_summary(metrics, fmt=fmt)
+            all_results[fmt] = results
+            all_metrics[fmt] = metrics
+            all_summaries[fmt] = summary
+        _backtest_cache["last"] = all_results
+        return jsonify({"results": all_results, "metrics": all_metrics, "summaries": all_summaries})
     except Exception as e:
         import traceback
         traceback.print_exc()
@@ -2665,12 +2673,14 @@ def backtest_run():
 @app.route("/backtest/export.csv")
 def backtest_export():
     import csv
-    results = _backtest_cache.get("last", [])
+    fmt = request.args.get("fmt", "mens_t20")
+    all_results = _backtest_cache.get("last", {})
+    results = all_results.get(fmt, []) if isinstance(all_results, dict) else all_results
     if not results:
         return "No backtest results cached. Run a backtest first.", 404
     output = io.StringIO()
     fields = [
-        "match_id", "date", "venue", "batting_team", "checkpoint",
+        "match_id", "date", "venue", "batting_team", "format", "checkpoint",
         "score_at_cp", "wickets_at_cp", "predicted", "pred_low", "pred_high",
         "actual", "error", "abs_error", "in_range", "range_width",
     ]
@@ -2682,5 +2692,5 @@ def backtest_export():
         io.BytesIO(output.read().encode()),
         mimetype="text/csv",
         as_attachment=True,
-        download_name="backtest_results.csv",
+        download_name=f"backtest_{fmt}.csv",
     )

@@ -1,4 +1,4 @@
-"""Download, cache, and parse Cricsheet Men's T20I ball-by-ball data."""
+"""Download, cache, and parse Cricsheet ball-by-ball data for all four formats."""
 import json
 import zipfile
 import pickle
@@ -8,27 +8,67 @@ from pathlib import Path
 logger = logging.getLogger(__name__)
 
 CACHE_DIR = Path("backtest_cache")
-DATA_ZIP = CACHE_DIR / "t20s_male_json.zip"
-PARSED_CACHE = CACHE_DIR / "parsed_matches.pkl"
-CRICSHEET_URL = "https://cricsheet.org/downloads/t20s_male_json.zip"
 
-MIN_CHECKPOINT_OVER = 16
+FORMATS = {
+    "mens_t20": {
+        "url": "https://cricsheet.org/downloads/t20s_male_json.zip",
+        "zip_name": "t20s_male_json.zip",
+        "match_type": "T20",
+        "gender": "male",
+        "max_overs": 20,
+        "min_checkpoint_over": 16,
+    },
+    "womens_t20": {
+        "url": "https://cricsheet.org/downloads/t20s_female_json.zip",
+        "zip_name": "t20s_female_json.zip",
+        "match_type": "T20",
+        "gender": "female",
+        "max_overs": 20,
+        "min_checkpoint_over": 16,
+    },
+    "mens_odi": {
+        "url": "https://cricsheet.org/downloads/odis_male_json.zip",
+        "zip_name": "odis_male_json.zip",
+        "match_type": "ODI",
+        "gender": "male",
+        "max_overs": 50,
+        "min_checkpoint_over": 45,
+    },
+    "womens_odi": {
+        "url": "https://cricsheet.org/downloads/odis_female_json.zip",
+        "zip_name": "odis_female_json.zip",
+        "match_type": "ODI",
+        "gender": "female",
+        "max_overs": 50,
+        "min_checkpoint_over": 45,
+    },
+}
 
 
-def download_data(force=False):
-    """Download Cricsheet T20I JSON zip if not already cached."""
+def _zip_path(fmt):
+    return CACHE_DIR / FORMATS[fmt]["zip_name"]
+
+
+def _cache_path(fmt):
+    return CACHE_DIR / f"parsed_{fmt}.pkl"
+
+
+def download_data(fmt, force=False):
+    """Download Cricsheet zip for the given format if not already cached."""
     CACHE_DIR.mkdir(exist_ok=True)
-    if DATA_ZIP.exists() and not force:
+    zp = _zip_path(fmt)
+    if zp.exists() and not force:
         return
     import requests
-    logger.info("Downloading Cricsheet T20I data...")
-    resp = requests.get(CRICSHEET_URL, stream=True, timeout=180,
+    url = FORMATS[fmt]["url"]
+    logger.info("Downloading %s data from %s ...", fmt, url)
+    resp = requests.get(url, stream=True, timeout=300,
                         headers={"User-Agent": "cricket-backtest/1.0"})
     resp.raise_for_status()
-    with open(DATA_ZIP, "wb") as f:
+    with open(zp, "wb") as f:
         for chunk in resp.iter_content(65536):
             f.write(chunk)
-    logger.info("Download complete: %s", DATA_ZIP)
+    logger.info("Download complete: %s", zp)
 
 
 def _parse_innings(innings_data):
@@ -48,18 +88,20 @@ def _parse_innings(innings_data):
     return overs
 
 
-def parse_matches(force=False):
-    """Return list of parsed first-innings match dicts, downloading if needed."""
-    if PARSED_CACHE.exists() and not force:
-        with open(PARSED_CACHE, "rb") as f:
+def parse_matches(fmt="mens_t20", force=False):
+    """Return list of parsed first-innings match dicts for the given format."""
+    cp = _cache_path(fmt)
+    if cp.exists() and not force:
+        with open(cp, "rb") as f:
             return pickle.load(f)
 
-    download_data()
+    download_data(fmt)
+    cfg = FORMATS[fmt]
     matches = []
 
-    with zipfile.ZipFile(DATA_ZIP) as zf:
+    with zipfile.ZipFile(_zip_path(fmt)) as zf:
         names = [n for n in zf.namelist() if n.endswith(".json")]
-        logger.info("Parsing %d JSON files...", len(names))
+        logger.info("Parsing %d JSON files for %s...", len(names), fmt)
         for name in names:
             try:
                 with zf.open(name) as f:
@@ -68,9 +110,9 @@ def parse_matches(force=False):
                 continue
 
             info = data.get("info", {})
-            if info.get("match_type") != "T20":
+            if info.get("match_type") != cfg["match_type"]:
                 continue
-            if info.get("gender") != "male":
+            if info.get("gender") != cfg["gender"]:
                 continue
 
             innings_list = data.get("innings", [])
@@ -80,11 +122,11 @@ def parse_matches(force=False):
             first = innings_list[0]
             overs = _parse_innings(first)
 
-            if len(overs) < MIN_CHECKPOINT_OVER:
+            if len(overs) < cfg["min_checkpoint_over"]:
                 continue
 
             total_wickets = sum(len(d["wickets"]) for o in overs for d in o["deliveries"])
-            if len(overs) < 20 and total_wickets < 10:
+            if len(overs) < cfg["max_overs"] and total_wickets < 10:
                 continue
 
             total_runs = sum(d["runs_total"] for o in overs for d in o["deliveries"])
@@ -102,24 +144,30 @@ def parse_matches(force=False):
                 "overs": overs,
                 "actual_final_score": total_runs,
                 "actual_wickets": total_wickets,
+                "format": fmt,
             })
 
     matches.sort(key=lambda m: m["date"], reverse=True)
-    logger.info("Parsed %d valid matches", len(matches))
+    logger.info("Parsed %d valid matches for %s", len(matches), fmt)
 
-    with open(PARSED_CACHE, "wb") as f:
+    with open(cp, "wb") as f:
         pickle.dump(matches, f)
 
     return matches
 
 
 def get_data_info():
-    """Return dict with cache status and match count."""
-    if PARSED_CACHE.exists():
-        try:
-            with open(PARSED_CACHE, "rb") as f:
-                matches = pickle.load(f)
-            return {"cached": True, "count": len(matches)}
-        except Exception:
-            pass
-    return {"cached": False, "count": 0}
+    """Return cache status for all formats."""
+    result = {}
+    for fmt in FORMATS:
+        cp = _cache_path(fmt)
+        if cp.exists():
+            try:
+                with open(cp, "rb") as f:
+                    m = pickle.load(f)
+                result[fmt] = {"cached": True, "count": len(m)}
+                continue
+            except Exception:
+                pass
+        result[fmt] = {"cached": False, "count": 0}
+    return result

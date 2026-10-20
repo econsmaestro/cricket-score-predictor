@@ -4,23 +4,23 @@
 {% block content %}
 <div class="container py-4">
   <h2 class="fw-bold mb-1">Model Backtesting</h2>
-  <p class="text-muted mb-4">Replay historical Men's T20I first innings at checkpoints (6, 10, 11, 15, 16 overs) and measure prediction accuracy against the actual final score.</p>
+  <p class="text-muted mb-4">Replay historical first innings at checkpoints and measure prediction accuracy across all four formats.</p>
 
   <!-- Config card -->
   <div class="card mb-4 shadow-sm">
     <div class="card-body">
       <div class="row g-3 align-items-end">
         <div class="col-md-4">
-          <label class="form-label fw-semibold">Matches to test</label>
+          <label class="form-label fw-semibold">Matches per format</label>
           <input type="number" id="maxMatches" class="form-control" value="100" min="10" max="2000" step="10">
-          <div class="form-text">More matches = more accurate metrics but slower (~2 s per 100).</div>
+          <div class="form-text">100 matches × 4 formats = 400 tests. First run downloads ~150 MB total.</div>
         </div>
         <div class="col-md-3">
           <button id="runBtn" class="btn btn-primary w-100">
-            <i class="bi bi-play-fill me-1"></i> Run Backtest
+            <i class="bi bi-play-fill me-1"></i> Run All Formats
           </button>
         </div>
-        <div class="col-md-5 d-flex align-items-center" id="dataStatus"></div>
+        <div class="col-md-5" id="dataStatus"></div>
       </div>
     </div>
   </div>
@@ -29,41 +29,38 @@
   <div id="progressCard" class="card mb-4 d-none">
     <div class="card-body text-center py-4">
       <div class="spinner-border text-primary mb-3" role="status"></div>
-      <p class="mb-0 text-muted" id="progressMsg">Downloading data and running predictions… this may take a minute on first run.</p>
+      <p class="mb-0 text-muted">Downloading data and running predictions across all formats — this may take a few minutes on first run…</p>
     </div>
   </div>
 
   <!-- Results -->
   <div id="resultsSection" class="d-none">
 
+    <!-- Format tabs -->
+    <ul class="nav nav-tabs mb-3" id="formatTabs">
+      <li class="nav-item"><a class="nav-link active" data-fmt="mens_t20"   href="#">Men's T20I</a></li>
+      <li class="nav-item"><a class="nav-link"        data-fmt="womens_t20" href="#">Women's T20I</a></li>
+      <li class="nav-item"><a class="nav-link"        data-fmt="mens_odi"   href="#">Men's ODI</a></li>
+      <li class="nav-item"><a class="nav-link"        data-fmt="womens_odi" href="#">Women's ODI</a></li>
+    </ul>
+
     <!-- Summary -->
     <div class="card mb-4 border-info">
-      <div class="card-header bg-info bg-opacity-10 fw-semibold">
-        <i class="bi bi-chat-quote me-2"></i>Summary
-      </div>
+      <div class="card-header bg-info bg-opacity-10 fw-semibold"><i class="bi bi-chat-quote me-2"></i>Summary</div>
       <div class="card-body"><p id="summaryText" class="mb-0"></p></div>
     </div>
 
     <!-- Metrics table -->
     <div class="card mb-4 shadow-sm">
-      <div class="card-header fw-semibold">
-        <i class="bi bi-table me-2"></i>Accuracy Metrics
-      </div>
+      <div class="card-header fw-semibold"><i class="bi bi-table me-2"></i>Accuracy Metrics</div>
       <div class="card-body p-0">
         <div class="table-responsive">
           <table class="table table-sm table-hover mb-0">
             <thead class="table-dark">
               <tr>
-                <th>Checkpoint</th>
-                <th title="Predictions counted">N</th>
-                <th title="Mean Absolute Error">MAE</th>
-                <th title="Root Mean Squared Error">RMSE</th>
-                <th title="Average predicted minus actual (positive = overshoots)">Bias</th>
-                <th title="% where actual falls inside the predicted range">Hit Rate %</th>
-                <th title="Average width of the predicted range">Avg Width</th>
-                <th title="MAE for matches finishing under 160">MAE &lt;160</th>
-                <th title="MAE for matches finishing 160–200">MAE 160–200</th>
-                <th title="MAE for matches finishing over 200">MAE 200+</th>
+                <th>Checkpoint</th><th>N</th><th>MAE</th><th>RMSE</th>
+                <th>Bias</th><th>Hit Rate %</th><th>Avg Width</th>
+                <th id="bucket1Head"></th><th id="bucket2Head"></th><th id="bucket3Head"></th>
               </tr>
             </thead>
             <tbody id="metricsBody"></tbody>
@@ -74,19 +71,17 @@
 
     <!-- Scatter plot -->
     <div class="card mb-4 shadow-sm">
-      <div class="card-header fw-semibold">
-        <i class="bi bi-graph-up-arrow me-2"></i>Predicted vs Actual Final Score
-      </div>
+      <div class="card-header fw-semibold"><i class="bi bi-graph-up-arrow me-2"></i>Predicted vs Actual</div>
       <div class="card-body">
         <canvas id="scatterChart" height="350"></canvas>
       </div>
     </div>
 
-    <!-- Per-match table + export -->
+    <!-- Per-match table -->
     <div class="card shadow-sm mb-4">
       <div class="card-header d-flex justify-content-between align-items-center fw-semibold">
         <span><i class="bi bi-list-ul me-2"></i>Per-Match Results</span>
-        <a id="exportBtn" href="/backtest/export.csv" class="btn btn-sm btn-outline-success">
+        <a id="exportBtn" href="#" class="btn btn-sm btn-outline-success">
           <i class="bi bi-download me-1"></i>Export CSV
         </a>
       </div>
@@ -95,64 +90,67 @@
           <table class="table table-sm table-striped table-hover mb-0">
             <thead class="table-dark sticky-top">
               <tr>
-                <th>Date</th>
-                <th>Venue</th>
-                <th>Batting Team</th>
-                <th>CP</th>
-                <th>Score@CP</th>
-                <th>Wkts@CP</th>
-                <th>Predicted</th>
-                <th>Range</th>
-                <th>Actual</th>
-                <th>Error</th>
-                <th>In Range?</th>
+                <th>Date</th><th>Venue</th><th>Batting Team</th>
+                <th>CP</th><th>Score@CP</th><th>Wkts</th>
+                <th>Predicted</th><th>Range</th><th>Actual</th>
+                <th>Error</th><th>In Range?</th>
               </tr>
             </thead>
             <tbody id="matchesBody"></tbody>
           </table>
         </div>
-        <div id="paginationControls" class="d-flex justify-content-between align-items-center p-2 border-top">
-          <button id="prevPage" class="btn btn-sm btn-outline-secondary" disabled>&#8592; Prev</button>
+        <div class="d-flex justify-content-between align-items-center p-2 border-top">
+          <button id="prevPage" class="btn btn-sm btn-outline-secondary" disabled>← Prev</button>
           <span id="pageInfo" class="text-muted small"></span>
-          <button id="nextPage" class="btn btn-sm btn-outline-secondary">Next &#8594;</button>
+          <button id="nextPage" class="btn btn-sm btn-outline-secondary">Next →</button>
         </div>
       </div>
     </div>
-
-  </div><!-- /resultsSection -->
+  </div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script>
 const PAGE_SIZE = 50;
-let allResults = [];
-let currentPage = 0;
-let scatterChartInstance = null;
-
 const CP_COLORS = {
-  6:  '#e74c3c',
-  10: '#e67e22',
-  11: '#f1c40f',
-  15: '#2ecc71',
-  16: '#3498db'
+  6:'#e74c3c', 10:'#e67e22', 11:'#f1c40f', 15:'#2ecc71', 16:'#3498db',
+  20:'#9b59b6', 25:'#1abc9c', 30:'#e74c3c', 40:'#e67e22', 45:'#3498db'
 };
+
+const FORMAT_LABELS = {
+  mens_t20:'Men\'s T20I', womens_t20:'Women\'s T20I',
+  mens_odi:'Men\'s ODI', womens_odi:'Women\'s ODI'
+};
+
+let allData = {};       // keyed by format
+let activeFmt = 'mens_t20';
+let currentPage = 0;
+let scatterChart = null;
+
+// Tab switching
+document.querySelectorAll('#formatTabs .nav-link').forEach(tab => {
+  tab.addEventListener('click', e => {
+    e.preventDefault();
+    document.querySelectorAll('#formatTabs .nav-link').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    activeFmt = tab.dataset.fmt;
+    currentPage = 0;
+    renderFormat(activeFmt);
+  });
+});
 
 document.getElementById('runBtn').addEventListener('click', runBacktest);
 document.getElementById('prevPage').addEventListener('click', () => { currentPage--; renderPage(); });
 document.getElementById('nextPage').addEventListener('click', () => { currentPage++; renderPage(); });
 
-// Check cache status on page load
-fetch('/backtest/status')
-  .then(r => r.json())
-  .then(d => {
-    const el = document.getElementById('dataStatus');
-    if (d.cached) {
-      el.innerHTML = `<span class="badge bg-success fs-6"><i class="bi bi-check-circle me-1"></i>Data cached — ${d.count} matches available</span>`;
-    } else {
-      el.innerHTML = `<span class="badge bg-warning text-dark fs-6"><i class="bi bi-cloud-download me-1"></i>No cache — first run downloads ~50 MB</span>`;
-    }
-  })
-  .catch(() => {});
+// Cache status on load
+fetch('/backtest/status').then(r => r.json()).then(info => {
+  const el = document.getElementById('dataStatus');
+  const lines = Object.entries(info).map(([fmt, d]) =>
+    `<span class="badge ${d.cached ? 'bg-success' : 'bg-warning text-dark'} me-1">${FORMAT_LABELS[fmt]}: ${d.cached ? d.count + ' matches' : 'not cached'}</span>`
+  );
+  el.innerHTML = lines.join('');
+});
 
 function runBacktest() {
   const n = parseInt(document.getElementById('maxMatches').value) || 100;
@@ -162,30 +160,24 @@ function runBacktest() {
 
   fetch('/backtest/run', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ max_matches: n })
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({max_matches: n})
   })
-  .then(r => {
-    if (!r.ok) return r.json().then(e => { throw new Error(e.error || r.statusText); });
-    return r.json();
-  })
+  .then(r => r.ok ? r.json() : r.json().then(e => { throw new Error(e.error || r.statusText); }))
   .then(data => {
     document.getElementById('progressCard').classList.add('d-none');
     document.getElementById('runBtn').disabled = false;
-    allResults = data.results;
+    // data.results keyed by format, data.metrics keyed by format, data.summaries keyed by format
+    for (const fmt of Object.keys(data.results)) {
+      allData[fmt] = {
+        results: data.results[fmt],
+        metrics: data.metrics[fmt],
+        summary: data.summaries[fmt],
+      };
+    }
     currentPage = 0;
-    renderMetrics(data.metrics);
-    renderSummary(data.summary);
-    renderScatter(data.results);
-    renderPage();
+    renderFormat(activeFmt);
     document.getElementById('resultsSection').classList.remove('d-none');
-    // Refresh status badge
-    fetch('/backtest/status').then(r=>r.json()).then(d=>{
-      if (d.cached) {
-        document.getElementById('dataStatus').innerHTML =
-          `<span class="badge bg-success fs-6"><i class="bi bi-check-circle me-1"></i>Data cached — ${d.count} matches available</span>`;
-      }
-    }).catch(()=>{});
   })
   .catch(err => {
     document.getElementById('progressCard').classList.add('d-none');
@@ -194,50 +186,59 @@ function runBacktest() {
   });
 }
 
-function renderMetrics(metrics) {
-  const tbody = document.getElementById('metricsBody');
-  const fmtBias = b => {
-    if (b > 0) return `<span class="text-danger">+${b}</span>`;
-    if (b < 0) return `<span class="text-primary">${b}</span>`;
-    return b;
-  };
-
-  function makeRow(label, m, bold) {
-    if (!m) return '';
-    const bm = m.bucket_mae;
-    const cls = bold ? 'fw-bold table-active' : '';
-    return `<tr class="${cls}">
-      <td>${label}</td>
-      <td>${m.n}</td>
-      <td>${m.mae}</td>
-      <td>${m.rmse}</td>
-      <td>${fmtBias(m.bias)}</td>
-      <td>${m.hit_rate}%</td>
-      <td>${m.avg_width}</td>
-      <td>${bm.under_160 !== null && bm.under_160 !== undefined ? bm.under_160 : '—'}</td>
-      <td>${bm['160_200'] !== null && bm['160_200'] !== undefined ? bm['160_200'] : '—'}</td>
-      <td>${bm.over_200 !== null && bm.over_200 !== undefined ? bm.over_200 : '—'}</td>
-    </tr>`;
-  }
-
-  let html = makeRow('Overall', metrics.overall, true);
-  const byCp = metrics.by_checkpoint;
-  for (const cp of [6, 10, 11, 15, 16]) {
-    html += makeRow(`After ${cp} overs`, byCp[cp], false);
-  }
-  tbody.innerHTML = html;
+function renderFormat(fmt) {
+  const d = allData[fmt];
+  if (!d) return;
+  renderSummary(d.summary);
+  renderMetrics(d.metrics, fmt);
+  renderScatter(d.results);
+  renderPage();
+  document.getElementById('exportBtn').href = `/backtest/export.csv?fmt=${fmt}`;
 }
 
 function renderSummary(text) {
   document.getElementById('summaryText').textContent = text;
 }
 
-function renderScatter(results) {
-  if (scatterChartInstance) {
-    scatterChartInstance.destroy();
-    scatterChartInstance = null;
+function renderMetrics(metrics, fmt) {
+  const isOdi = fmt.includes('odi');
+  const bucketLabels = isOdi
+    ? ['MAE &lt;250', 'MAE 250–300', 'MAE 300+']
+    : ['MAE &lt;160', 'MAE 160–200', 'MAE 200+'];
+  document.getElementById('bucket1Head').innerHTML = bucketLabels[0];
+  document.getElementById('bucket2Head').innerHTML = bucketLabels[1];
+  document.getElementById('bucket3Head').innerHTML = bucketLabels[2];
+
+  const ov = metrics.overall;
+  const by_cp = metrics.by_checkpoint;
+  const checkpoints = metrics.checkpoints || Object.keys(by_cp).map(Number).sort((a,b)=>a-b);
+
+  const fmtBias = b => b > 0
+    ? `<span class="text-danger">+${b}</span>`
+    : b < 0 ? `<span class="text-primary">${b}</span>` : b;
+
+  function row(label, m, bold) {
+    if (!m) return '';
+    const bm = m.bucket_mae || {};
+    const bucketVals = Object.values(bm).map(v => `<td>${v ?? '—'}</td>`).join('');
+    return `<tr class="${bold ? 'fw-bold table-active' : ''}">
+      <td>${label}</td><td>${m.n}</td>
+      <td>${m.mae}</td><td>${m.rmse}</td>
+      <td>${fmtBias(m.bias)}</td>
+      <td>${m.hit_rate}%</td><td>${m.avg_width}</td>
+      ${bucketVals}
+    </tr>`;
   }
 
+  let html = row('Overall', ov, true);
+  for (const cp of checkpoints) {
+    html += row(`After ${cp} overs`, by_cp[cp], false);
+  }
+  document.getElementById('metricsBody').innerHTML = html;
+}
+
+function renderScatter(results) {
+  if (scatterChart) { scatterChart.destroy(); }
   const datasets = {};
   for (const r of results) {
     const cp = r.checkpoint;
@@ -245,30 +246,27 @@ function renderScatter(results) {
       datasets[cp] = {
         label: `After ${cp} overs`,
         data: [],
-        backgroundColor: CP_COLORS[cp] + 'aa',
+        backgroundColor: (CP_COLORS[cp] || '#888') + 'aa',
         pointRadius: 3,
-        pointHoverRadius: 5,
       };
     }
-    datasets[cp].data.push({ x: r.actual, y: r.predicted });
+    datasets[cp].data.push({x: r.actual, y: r.predicted});
   }
-
   const allActuals = results.map(r => r.actual);
   const minV = Math.min(...allActuals) - 5;
   const maxV = Math.max(...allActuals) + 5;
 
-  const ctx = document.getElementById('scatterChart').getContext('2d');
-  scatterChartInstance = new Chart(ctx, {
+  scatterChart = new Chart(document.getElementById('scatterChart').getContext('2d'), {
     type: 'scatter',
     data: {
       datasets: [
         ...Object.values(datasets),
         {
           label: 'Perfect prediction',
-          data: [{ x: minV, y: minV }, { x: maxV, y: maxV }],
+          data: [{x:minV,y:minV},{x:maxV,y:maxV}],
           type: 'line',
           borderColor: '#aaa',
-          borderDash: [5, 5],
+          borderDash: [5,5],
           pointRadius: 0,
           borderWidth: 1,
         }
@@ -276,17 +274,7 @@ function renderScatter(results) {
     },
     options: {
       responsive: true,
-      plugins: {
-        legend: { position: 'bottom' },
-        tooltip: {
-          callbacks: {
-            label: ctx => {
-              const d = ctx.raw;
-              return `Actual ${d.x}, Predicted ${d.y}`;
-            }
-          }
-        }
-      },
+      plugins: { legend: { position: 'bottom' } },
       scales: {
         x: { title: { display: true, text: 'Actual Final Score' } },
         y: { title: { display: true, text: 'Predicted Final Score' } }
@@ -296,37 +284,35 @@ function renderScatter(results) {
 }
 
 function renderPage() {
+  const results = (allData[activeFmt] || {}).results || [];
   const start = currentPage * PAGE_SIZE;
   const end = start + PAGE_SIZE;
-  const page = allResults.slice(start, end);
-  const total = allResults.length;
+  const page = results.slice(start, end);
+  const total = results.length;
   const totalPages = Math.ceil(total / PAGE_SIZE);
 
-  const tbody = document.getElementById('matchesBody');
-  tbody.innerHTML = page.map(r => {
-    const errCls = r.error > 15 ? 'text-danger fw-semibold'
-                 : r.error < -15 ? 'text-primary fw-semibold' : '';
-    const rangeBadge = r.in_range
+  document.getElementById('matchesBody').innerHTML = page.map(r => {
+    const errCls = r.error > 15 ? 'text-danger' : r.error < -15 ? 'text-primary' : '';
+    const badge = r.in_range
       ? '<span class="badge bg-success">Yes</span>'
       : '<span class="badge bg-danger">No</span>';
-    const errSign = r.error > 0 ? '+' : '';
     return `<tr>
       <td>${r.date}</td>
-      <td class="text-truncate" style="max-width:140px" title="${r.venue}">${r.venue}</td>
+      <td class="text-truncate" style="max-width:130px" title="${r.venue}">${r.venue}</td>
       <td>${r.batting_team}</td>
-      <td><span class="badge rounded-pill" style="background:${CP_COLORS[r.checkpoint]}">${r.checkpoint}</span></td>
+      <td><span class="badge" style="background:${CP_COLORS[r.checkpoint]||'#888'}">${r.checkpoint}</span></td>
       <td>${r.score_at_cp}/${r.wickets_at_cp}</td>
       <td>${r.wickets_at_cp}</td>
       <td>${r.predicted}</td>
       <td>${r.pred_low}–${r.pred_high}</td>
-      <td><strong>${r.actual}</strong></td>
-      <td class="${errCls}">${errSign}${r.error}</td>
-      <td>${rangeBadge}</td>
+      <td>${r.actual}</td>
+      <td class="${errCls}">${r.error > 0 ? '+' : ''}${r.error}</td>
+      <td>${badge}</td>
     </tr>`;
   }).join('');
 
   document.getElementById('pageInfo').textContent =
-    `${start + 1}–${Math.min(end, total)} of ${total}`;
+    total ? `${start+1}–${Math.min(end,total)} of ${total}` : 'No results';
   document.getElementById('prevPage').disabled = currentPage === 0;
   document.getElementById('nextPage').disabled = currentPage >= totalPages - 1;
 }

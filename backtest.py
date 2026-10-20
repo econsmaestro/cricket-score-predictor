@@ -1,11 +1,30 @@
-"""Backtesting engine: replay historical T20I first innings at checkpoints."""
+"""Backtesting engine: replay historical first innings at checkpoints."""
 import math
 import logging
 from collections import defaultdict
 
 logger = logging.getLogger(__name__)
 
-CHECKPOINTS = [6, 10, 11, 15, 16]
+T20_CHECKPOINTS = [6, 10, 11, 15, 16]
+ODI_CHECKPOINTS = [10, 20, 30, 40, 45]
+
+FORMAT_CHECKPOINTS = {
+    "mens_t20":   T20_CHECKPOINTS,
+    "womens_t20": T20_CHECKPOINTS,
+    "mens_odi":   ODI_CHECKPOINTS,
+    "womens_odi": ODI_CHECKPOINTS,
+}
+
+# Score buckets for each format family
+T20_BUCKETS  = [("under_160", None, 160), ("160_200", 160, 200), ("over_200", 200, None)]
+ODI_BUCKETS  = [("under_250", None, 250), ("250_300", 250, 300), ("over_300", 300, None)]
+
+FORMAT_BUCKETS = {
+    "mens_t20":   T20_BUCKETS,
+    "womens_t20": T20_BUCKETS,
+    "mens_odi":   ODI_BUCKETS,
+    "womens_odi": ODI_BUCKETS,
+}
 
 _VENUE_MAP = None
 
@@ -13,8 +32,7 @@ _VENUE_MAP = None
 def _build_venue_map():
     from ipl_stats import VENUE_HISTORICAL_STATS
     known = list(VENUE_HISTORICAL_STATS.keys())
-    known_lower = [v.lower() for v in known]
-    return known, known_lower
+    return known, [v.lower() for v in known]
 
 
 def _resolve_venue(raw_venue):
@@ -22,7 +40,6 @@ def _resolve_venue(raw_venue):
     if _VENUE_MAP is None:
         _VENUE_MAP = _build_venue_map()
     known, known_lower = _VENUE_MAP
-
     if raw_venue in known:
         return raw_venue
     raw_lower = raw_venue.lower()
@@ -36,17 +53,18 @@ def _resolve_venue(raw_venue):
     return raw_venue
 
 
-def build_state_at_over(match, checkpoint_over):
+def build_state_at_over(match, checkpoint_over, fmt="mens_t20"):
     """Reconstruct MatchState from ball-by-ball data at checkpoint_over."""
     from prediction import MatchState, Batsman, Bowler
+    from backtest_data import FORMATS
+
+    max_bowler_overs = 4 if "t20" in fmt else 10
 
     current_score = 0
     wickets_fallen = 0
-
     batter_stats = {}
     batting_order = []
     current_batters = []
-
     bowler_stats = {}
 
     for over_data in match["overs"]:
@@ -104,38 +122,37 @@ def build_state_at_over(match, checkpoint_over):
             overs_bowled=ob,
             runs_conceded=s["runs"],
             wickets=s["wickets"],
-            overs_remaining=max(0.0, 4.0 - ob),
+            overs_remaining=max(0.0, float(max_bowler_overs) - ob),
         ))
-
-    venue = _resolve_venue(match["venue"])
 
     return MatchState(
         current_score=current_score,
         wickets_fallen=wickets_fallen,
         overs_completed=float(checkpoint_over),
-        venue=venue,
+        venue=_resolve_venue(match["venue"]),
         batsmen=batsmen,
         bowlers=bowlers,
         batsmen_to_come=batsmen_to_come,
         innings=1,
         target=0,
-        match_format="mens_t20",
+        match_format=fmt,
         fielding_team=match.get("fielding_team", ""),
     )
 
 
-def run_backtest(max_matches=200):
-    """Run backtest for up to max_matches games. Returns list of per-prediction dicts."""
+def run_backtest(fmt="mens_t20", max_matches=100):
+    """Run backtest for up to max_matches games of the given format."""
     from backtest_data import parse_matches
     from prediction import predict_score
 
-    matches = parse_matches()[:max_matches]
+    matches = parse_matches(fmt)[:max_matches]
+    checkpoints = FORMAT_CHECKPOINTS[fmt]
     results = []
 
     for match in matches:
-        for cp in CHECKPOINTS:
+        for cp in checkpoints:
             try:
-                state = build_state_at_over(match, cp)
+                state = build_state_at_over(match, cp, fmt)
                 pred = predict_score(state)
                 actual = match["actual_final_score"]
                 low, high = pred.score_range
@@ -144,6 +161,7 @@ def run_backtest(max_matches=200):
                     "date": match["date"],
                     "venue": match["venue"],
                     "batting_team": match["batting_team"],
+                    "format": fmt,
                     "checkpoint": cp,
                     "score_at_cp": state.current_score,
                     "wickets_at_cp": state.wickets_fallen,
@@ -157,13 +175,16 @@ def run_backtest(max_matches=200):
                     "range_width": high - low,
                 })
             except Exception as e:
-                logger.debug("Skipped %s cp=%d: %s", match["match_id"], cp, e)
+                logger.debug("Skipped %s cp=%d fmt=%s: %s", match["match_id"], cp, fmt, e)
 
     return results
 
 
-def compute_metrics(results):
-    """Aggregate metrics overall and per checkpoint."""
+def compute_metrics(results, fmt="mens_t20"):
+    """Aggregate metrics overall and per checkpoint for a single format."""
+    buckets_def = FORMAT_BUCKETS.get(fmt, T20_BUCKETS)
+    checkpoints = FORMAT_CHECKPOINTS.get(fmt, T20_CHECKPOINTS)
+
     def _metrics(rows):
         n = len(rows)
         if n == 0:
@@ -176,15 +197,13 @@ def compute_metrics(results):
         hit_rate = sum(1 for r in rows if r["in_range"]) / n * 100
         avg_width = sum(r["range_width"] for r in rows) / n
 
-        buckets = {"under_160": [], "160_200": [], "over_200": []}
+        bucket_data = {key: [] for key, _, _ in buckets_def}
         for r in rows:
             a = r["actual"]
-            if a < 160:
-                buckets["under_160"].append(r["abs_error"])
-            elif a <= 200:
-                buckets["160_200"].append(r["abs_error"])
-            else:
-                buckets["over_200"].append(r["abs_error"])
+            for key, lo, hi in buckets_def:
+                if (lo is None or a >= lo) and (hi is None or a < hi):
+                    bucket_data[key].append(r["abs_error"])
+                    break
 
         return {
             "n": n,
@@ -194,64 +213,52 @@ def compute_metrics(results):
             "hit_rate": round(hit_rate, 1),
             "avg_width": round(avg_width, 1),
             "bucket_mae": {
-                "under_160": round(sum(v) / len(v), 1) if buckets["under_160"] else None,
-                "160_200": round(sum(v) / len(v), 1) if buckets["160_200"] else None,
-                "over_200": round(sum(v) / len(v), 1) if buckets["over_200"] else None,
+                k: round(sum(v) / len(v), 1) if v else None
+                for k, v in bucket_data.items()
             },
+            "bucket_labels": [key for key, _, _ in buckets_def],
         }
 
-    by_cp = {}
     cp_groups = defaultdict(list)
     for r in results:
         cp_groups[r["checkpoint"]].append(r)
-    for cp in CHECKPOINTS:
-        by_cp[cp] = _metrics(cp_groups.get(cp, []))
 
-    return {"overall": _metrics(results), "by_checkpoint": by_cp}
+    by_cp = {cp: _metrics(cp_groups.get(cp, [])) for cp in checkpoints}
+    return {"overall": _metrics(results), "by_checkpoint": by_cp, "checkpoints": checkpoints}
 
 
-def generate_summary(metrics):
-    """One-paragraph plain-English summary of where the model is weakest."""
+def generate_summary(metrics, fmt="mens_t20"):
+    """Plain-English summary of accuracy for a given format."""
     ov = metrics.get("overall")
     if not ov:
         return "No data."
 
-    lines = []
-    lines.append(
-        f"Across {ov['n']} predictions the model has an MAE of {ov['mae']} runs "
-        f"and RMSE of {ov['rmse']} runs."
-    )
+    label = {"mens_t20": "Men's T20I", "womens_t20": "Women's T20I",
+             "mens_odi": "Men's ODI", "womens_odi": "Women's ODI"}.get(fmt, fmt)
 
+    lines = [
+        f"{label}: across {ov['n']} predictions, MAE {ov['mae']} runs, RMSE {ov['rmse']} runs."
+    ]
     bias_dir = "overshoots" if ov["bias"] > 0 else "undershoots"
+    lines.append(f"Bias {ov['bias']:+.1f} runs (model {bias_dir} on average).")
     lines.append(
-        f"Bias is {ov['bias']:+.1f} runs (the model {bias_dir} on average)."
-    )
-
-    lines.append(
-        f"The predicted range captures the actual score {ov['hit_rate']:.1f}% of the time "
-        f"with an average range width of {ov['avg_width']:.0f} runs."
+        f"Actual score inside predicted range {ov['hit_rate']:.1f}% of the time "
+        f"(avg range width {ov['avg_width']:.0f} runs)."
     )
 
     bm = ov["bucket_mae"]
-    bucket_parts = []
-    if bm.get("under_160") is not None:
-        bucket_parts.append(f"low-scoring (<160): {bm['under_160']} runs MAE")
-    if bm.get("160_200") is not None:
-        bucket_parts.append(f"mid-range (160–200): {bm['160_200']} runs MAE")
-    if bm.get("over_200") is not None:
-        bucket_parts.append(f"high-scoring (200+): {bm['over_200']} runs MAE")
-    if bucket_parts:
-        lines.append("Error by final score bucket: " + ", ".join(bucket_parts) + ".")
+    parts = [f"{k.replace('_', ' ')}: {v} runs" for k, v in bm.items() if v is not None]
+    if parts:
+        lines.append("MAE by score bucket — " + ", ".join(parts) + ".")
 
     by_cp = metrics.get("by_checkpoint", {})
-    valid_cps = [cp for cp in by_cp if by_cp[cp]]
-    if valid_cps:
-        worst = max(valid_cps, key=lambda cp: by_cp[cp]["mae"])
-        best = min(valid_cps, key=lambda cp: by_cp[cp]["mae"])
+    valid = [cp for cp in by_cp if by_cp[cp]]
+    if valid:
+        worst = max(valid, key=lambda cp: by_cp[cp]["mae"])
+        best  = min(valid, key=lambda cp: by_cp[cp]["mae"])
         lines.append(
-            f"Predictions are least accurate at the {worst}-over checkpoint "
-            f"(MAE {by_cp[worst]['mae']} runs) and most accurate at {best} overs "
-            f"(MAE {by_cp[best]['mae']} runs)."
+            f"Weakest at {worst}-over mark (MAE {by_cp[worst]['mae']}), "
+            f"strongest at {best} overs (MAE {by_cp[best]['mae']})."
         )
 
     return " ".join(lines)
