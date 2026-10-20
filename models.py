@@ -494,7 +494,8 @@ class ConversionEvent(db.Model):
     event_type = db.Column(db.String(60), nullable=False, index=True)
     user_id = db.Column(db.String, db.ForeignKey('users.id'), nullable=True)
     session_id = db.Column(db.String(64), nullable=True, index=True)
-    metadata = db.Column(db.Text, nullable=True)   # JSON blob
+    # SQLAlchemy reserves the Python attribute "metadata". Preserve the DB name.
+    event_metadata = db.Column("metadata", db.Text, nullable=True)   # JSON blob
     created_at = db.Column(db.DateTime, default=datetime.utcnow, index=True)
 
     user = db.relationship('User', backref='conversion_events')

@@ -391,7 +391,7 @@ class TestAPIEndpoints:
         )
         assert response.status_code == 302
 
-    def test_predict_all_wickets_redirects(self, client):
+    def test_predict_all_wickets_shows_final_score(self, client):
         response = client.post(
             "/predict",
             data={
@@ -403,7 +403,8 @@ class TestAPIEndpoints:
             },
             follow_redirects=False,
         )
-        assert response.status_code == 302
+        assert response.status_code == 200
+        assert b"Innings complete" in response.data
 
     def test_insights_returns_200(self, client):
         response = client.get("/insights")

@@ -4,4 +4,5 @@ __pycache__/
 *.pyd
 .env
 backtest_cache/
+generated-artifacts/
 *.log

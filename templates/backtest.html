@@ -1,334 +1,408 @@
 {% extends "base.html" %}
-{% block page_title %}Backtest – Cricket Match Intelligence{% endblock %}
+{% block page_title %}Historical Backtest – Cricket Match Intelligence{% endblock %}
+{% block page_description %}Explore historical cricket score prediction replay results across men's and women's T20 and ODI formats.{% endblock %}
 
 {% block content %}
-<div class="container py-4">
-  <h2 class="fw-bold mb-1">Model Backtesting</h2>
-  <p class="text-muted mb-4">Replay historical Men's T20I first innings at checkpoints (6, 10, 11, 15, 16 overs) and measure prediction accuracy against the actual final score.</p>
+<style>
+  .bt-page { --bt-ink:#17334a; --bt-muted:#587184; --bt-line:#d7e5e7; --bt-paper:#f4f8f6; --bt-green:#16836e; --bt-green-dark:#116552; --bt-blue:#276e9b; color:var(--bt-ink); padding:clamp(1rem,3vw,2.25rem) 0 3rem; }
+  .bt-page * { box-sizing:border-box; }
+  .bt-page .eyebrow { color:var(--bt-green); text-transform:uppercase; letter-spacing:.13em; font-size:.72rem; font-weight:800; }
+  .bt-page h2,.bt-page h3 { color:var(--bt-ink); }
+  .bt-hero { padding:clamp(1.35rem,3vw,2.2rem); border-radius:18px; background:linear-gradient(115deg,#e8f3ef 0%,#edf5fa 100%); border:1px solid #d6e7e4; position:relative; overflow:hidden; }
+  .bt-hero:after { content:""; position:absolute; width:230px;height:230px;right:-60px;top:-100px;border:1px solid #bddbd2;border-radius:50%;box-shadow:0 0 0 23px #ffffff25,0 0 0 48px #ffffff20; pointer-events:none; }
+  .bt-hero h2 { font-size:clamp(1.65rem,4vw,2.5rem); font-weight:800; letter-spacing:-.045em; max-width:760px; margin:.45rem 0 .65rem; }
+  .bt-hero p { color:#476477; max-width:760px; margin:0; line-height:1.6; }
+  .bt-note { color:#506a79; font-size:.86rem; }
+  .bt-panel { background:#fff; border:1px solid var(--bt-line); border-radius:14px; box-shadow:0 5px 18px #17334a08; }
+  .bt-panel-head { border-bottom:1px solid #e6eeee; padding:1rem 1.15rem; }
+  .bt-panel-body { padding:1.15rem; }
+  .bt-format-select { border:1px solid #b9d2ce; min-height:46px; font-weight:700; color:var(--bt-ink); }
+  .bt-format-select:focus,.bt-search:focus { border-color:var(--bt-green); box-shadow:0 0 0 .2rem #16836e20; }
+  .bt-status-pill { display:inline-flex; align-items:center; gap:.45rem; border-radius:999px; padding:.42rem .7rem; background:#e8f4ef;color:#176c57;font-size:.8rem;font-weight:700; }
+  .bt-status-pill.unavailable { background:#f4efdf;color:#796320; }
+  .bt-overview { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }
+  .bt-stat { border-radius:12px; background:#f3f8f7; padding:1rem; min-height:94px; }
+  .bt-stat-label { display:block; color:#587184; font-size:.76rem; font-weight:700; }
+  .bt-stat-value { display:block; margin-top:.25rem; font-size:1.6rem; font-weight:800; letter-spacing:-.04em; line-height:1.15; font-variant-numeric:tabular-nums; }
+  .bt-stat-detail { display:block; color:#587184; font-size:.74rem; margin-top:.25rem; }
+  .bt-metric-grid { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:10px; }
+  .bt-metric { padding:.9rem; border-left:3px solid #75b9a6; background:#f5f9f7; min-width:0; }
+  .bt-metric strong { display:block; font-size:1.25rem; font-variant-numeric:tabular-nums; }
+  .bt-metric span { display:block; color:#547083; font-size:.75rem; margin-top:.2rem; }
+  .bt-section-title { font-size:1.08rem; font-weight:800; margin:0; }
+  .bt-table-wrap { overflow:auto; max-height:470px; border-radius:0 0 14px 14px; }
+  .bt-table { min-width:930px; margin:0; font-size:.84rem; }
+  .bt-table thead th { position:sticky; top:0; z-index:1; background:#eaf2f2; color:#29495c; border-bottom:1px solid #cfdfdf; white-space:nowrap; }
+  .bt-table tbody td { vertical-align:middle; }
+  .bt-table tbody tr:hover { background:#f0f8f5; }
+  .bt-format-list { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:10px; }
+  .bt-format-card { border:1px solid var(--bt-line); background:#fff; border-radius:12px; padding:.9rem; min-width:0; }
+  .bt-format-card.is-current { border-color:#67ad99; box-shadow:inset 0 0 0 1px #67ad9950; background:#f5faf8; }
+  .bt-format-card h4 { font-size:.88rem; font-weight:800; margin:0 0 .5rem; }
+  .bt-format-card p { font-size:.76rem; color:#587184; margin:0; line-height:1.45; }
+  .bt-format-card .bt-card-count { color:var(--bt-ink); font-size:1.05rem; font-weight:800; display:block; margin:.25rem 0; font-variant-numeric:tabular-nums; }
+  .bt-empty,.bt-error,.bt-loading { border-radius:12px; padding:1.1rem; }
+  .bt-empty { background:#f1f7f5; border:1px dashed #a9cbc1; color:#496779; }
+  .bt-error { background:#fcf1ee; border:1px solid #efc7bc; color:#753e32; }
+  .bt-loading { background:#f0f6f6; border:1px solid #d7e5e7; color:#496779; }
+  .bt-skeleton { height:14px; border-radius:8px; background:linear-gradient(90deg,#dfeae8,#f3f7f6,#dfeae8); background-size:200% 100%; animation:bt-shimmer 1.4s ease-in-out infinite; }
+  @keyframes bt-shimmer { to { background-position:-200% 0; } }
+  .bt-disclaimer { border-left:4px solid #d5a64c; background:#faf6e9; padding:.85rem 1rem; border-radius:0 9px 9px 0; color:#64572f; font-size:.86rem; line-height:1.55; }
+  .bt-pagination { display:flex; align-items:center; justify-content:space-between; gap:1rem; padding:.8rem 1rem; border-top:1px solid #e6eeee; }
+  .bt-range { white-space:nowrap; }
+  .bt-control-label { font-size:.78rem; color:#587184; font-weight:700; }
+  @media(max-width:767.98px) {
+    .bt-page { padding-top:1rem; }
+    .bt-format-list { grid-template-columns:repeat(2,minmax(0,1fr)); }
+    .bt-metric-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+    .bt-metric:last-child { grid-column:span 2; }
+    .bt-panel-head { padding:.9rem; }
+    .bt-panel-body { padding:.9rem; }
+    .bt-pagination { flex-wrap:wrap; }
+  }
+  @media(max-width:420px) { .bt-format-list { grid-template-columns:1fr 1fr; gap:7px; } .bt-format-card { padding:.7rem; } .bt-overview { gap:8px; } }
+</style>
 
-  <!-- Config card -->
-  <div class="card mb-4 shadow-sm">
-    <div class="card-body">
+<div class="bt-page">
+  <section class="bt-hero mb-4" aria-labelledby="backtest-title">
+    <div class="eyebrow">Historical replay · Cricsheet</div>
+    <h2 id="backtest-title">How do score forecasts hold up against completed innings?</h2>
+    <p>Review the current model’s predictions at in-innings checkpoints against actual final scores. Each format report covers up to 100 distinct matches; a match may contribute several checkpoint predictions.</p>
+  </section>
+
+  <section class="bt-panel mb-4" aria-label="Choose a report">
+    <div class="bt-panel-body">
       <div class="row g-3 align-items-end">
-        <div class="col-md-4">
-          <label class="form-label fw-semibold">Matches to test</label>
-          <input type="number" id="maxMatches" class="form-control" value="100" min="10" max="2000" step="10">
-          <div class="form-text">More matches = more accurate metrics but slower (~2 s per 100).</div>
+        <div class="col-12 col-md-5">
+          <label class="form-label fw-bold mb-1" for="formatSelect">Match format</label>
+          <select id="formatSelect" class="form-select bt-format-select" aria-describedby="formatHelp">
+            <option value="">Loading available formats…</option>
+          </select>
+          <div id="formatHelp" class="form-text">Only reports currently available can be opened.</div>
         </div>
-        <div class="col-md-3">
-          <button id="runBtn" class="btn btn-primary w-100">
-            <i class="bi bi-play-fill me-1"></i> Run Backtest
-          </button>
+        <div class="col-12 col-md-7 d-flex flex-wrap align-items-center gap-2">
+          <span id="reportStatus" class="bt-status-pill" role="status" aria-live="polite">Checking report availability</span>
+          <a id="exportBtn" class="btn btn-outline-success ms-md-auto d-none" href="#" download>
+            <i class="bi bi-download me-1" aria-hidden="true"></i>Download this report (CSV)
+          </a>
         </div>
-        <div class="col-md-5 d-flex align-items-center" id="dataStatus"></div>
       </div>
+    </div>
+  </section>
+
+  <div id="loadingState" class="bt-loading mb-4" role="status">
+    <div class="d-flex gap-3 align-items-center">
+      <div class="flex-grow-1"><div class="bt-skeleton mb-2" style="width:38%"></div><div class="bt-skeleton" style="width:72%"></div></div>
+      <span class="small">Loading historical report…</span>
     </div>
   </div>
-
-  <!-- Progress -->
-  <div id="progressCard" class="card mb-4 d-none">
-    <div class="card-body text-center py-4">
-      <div class="spinner-border text-primary mb-3" role="status"></div>
-      <p class="mb-0 text-muted" id="progressMsg">Downloading data and running predictions… this may take a minute on first run.</p>
+  <div id="errorState" class="bt-error mb-4 d-none" role="alert">
+    <div class="d-flex flex-column flex-sm-row justify-content-between gap-2 align-items-sm-center">
+      <div><strong>Report could not be loaded.</strong><div id="errorMessage" class="small mt-1"></div></div>
+      <button type="button" id="retryBtn" class="btn btn-sm btn-outline-danger">Try again</button>
     </div>
   </div>
+  <div id="emptyState" class="bt-empty mb-4 d-none" role="status"></div>
 
-  <!-- Results -->
-  <div id="resultsSection" class="d-none">
-
-    <!-- Summary -->
-    <div class="card mb-4 border-info">
-      <div class="card-header bg-info bg-opacity-10 fw-semibold">
-        <i class="bi bi-chat-quote me-2"></i>Summary
+  <div id="reportContent" class="d-none">
+    <section class="bt-panel mb-4" aria-labelledby="report-overview-heading">
+      <div class="bt-panel-head d-flex flex-wrap align-items-start justify-content-between gap-2">
+        <div>
+          <div class="eyebrow mb-1">Selected report</div>
+          <h3 class="bt-section-title" id="report-overview-heading">—</h3>
+        </div>
+        <span id="reportDate" class="bt-note"></span>
       </div>
-      <div class="card-body"><p id="summaryText" class="mb-0"></p></div>
-    </div>
-
-    <!-- Metrics table -->
-    <div class="card mb-4 shadow-sm">
-      <div class="card-header fw-semibold">
-        <i class="bi bi-table me-2"></i>Accuracy Metrics
+      <div class="bt-panel-body">
+        <div class="bt-overview mb-3">
+          <div class="bt-stat">
+            <span class="bt-stat-label">Distinct matches</span>
+            <span id="matchCount" class="bt-stat-value">—</span>
+            <span class="bt-stat-detail">Unique completed matches replayed</span>
+          </div>
+          <div class="bt-stat">
+            <span class="bt-stat-label">Checkpoint predictions</span>
+            <span id="predictionCount" class="bt-stat-value">—</span>
+            <span class="bt-stat-detail">Rows evaluated across checkpoints</span>
+          </div>
+        </div>
+        <p id="summaryText" class="mb-3"></p>
+        <div class="bt-metric-grid" aria-label="Overall prediction metrics">
+          <div class="bt-metric"><strong id="metricMae">—</strong><span>MAE · runs</span></div>
+          <div class="bt-metric"><strong id="metricRmse">—</strong><span>RMSE · runs</span></div>
+          <div class="bt-metric"><strong id="metricBias">—</strong><span>Bias · signed runs</span></div>
+          <div class="bt-metric"><strong id="metricHit">—</strong><span>Interval hit rate</span></div>
+          <div class="bt-metric"><strong id="metricWidth">—</strong><span>Average interval width · runs</span></div>
+        </div>
+        <p id="sourceLine" class="bt-note small mt-3 mb-0"></p>
       </div>
-      <div class="card-body p-0">
-        <div class="table-responsive">
-          <table class="table table-sm table-hover mb-0">
-            <thead class="table-dark">
-              <tr>
-                <th>Checkpoint</th>
-                <th title="Predictions counted">N</th>
-                <th title="Mean Absolute Error">MAE</th>
-                <th title="Root Mean Squared Error">RMSE</th>
-                <th title="Average predicted minus actual (positive = overshoots)">Bias</th>
-                <th title="% where actual falls inside the predicted range">Hit Rate %</th>
-                <th title="Average width of the predicted range">Avg Width</th>
-                <th title="MAE for matches finishing under 160">MAE &lt;160</th>
-                <th title="MAE for matches finishing 160–200">MAE 160–200</th>
-                <th title="MAE for matches finishing over 200">MAE 200+</th>
-              </tr>
-            </thead>
-            <tbody id="metricsBody"></tbody>
-          </table>
+    </section>
+
+    <section class="bt-panel mb-4" aria-labelledby="checkpoint-heading">
+      <div class="bt-panel-head">
+        <h3 class="bt-section-title" id="checkpoint-heading">Results by checkpoint</h3>
+        <p class="bt-note small mb-0 mt-1">Error metrics are measured in runs. Interval hit rate means the actual score fell within the predicted range; it is not an accuracy percentage.</p>
+      </div>
+      <div class="table-responsive">
+        <table class="table table-sm bt-table">
+          <thead><tr><th scope="col">After overs</th><th scope="col">Predictions</th><th scope="col">MAE (runs)</th><th scope="col">RMSE (runs)</th><th scope="col">Bias (runs)</th><th scope="col">Interval hit rate</th><th scope="col">Avg range width (runs)</th></tr></thead>
+          <tbody id="checkpointBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="bt-panel mb-4" aria-labelledby="formats-heading">
+      <div class="bt-panel-head">
+        <h3 class="bt-section-title" id="formats-heading">Coverage across formats</h3>
+        <p class="bt-note small mb-0 mt-1">Availability reflects the status endpoint. Counts are reported values; a format without a report is never represented as having 100 matches.</p>
+      </div>
+      <div class="bt-panel-body"><div id="formatSummaries" class="bt-format-list"></div></div>
+    </section>
+
+    <section class="bt-panel" aria-labelledby="match-table-heading">
+      <div class="bt-panel-head d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+        <div><h3 class="bt-section-title" id="match-table-heading">Checkpoint-level evidence</h3><p id="rowsSummary" class="bt-note small mb-0 mt-1"></p></div>
+        <div class="d-flex flex-column flex-sm-row gap-2">
+          <div>
+            <label for="checkpointFilter" class="bt-control-label">Checkpoint</label>
+            <select id="checkpointFilter" class="form-select form-select-sm"><option value="">All checkpoints</option></select>
+          </div>
+          <div>
+            <label for="matchSearch" class="bt-control-label">Find a match or venue</label>
+            <input id="matchSearch" class="form-control form-control-sm bt-search" type="search" placeholder="Search rows" autocomplete="off">
+          </div>
         </div>
       </div>
-    </div>
-
-    <!-- Scatter plot -->
-    <div class="card mb-4 shadow-sm">
-      <div class="card-header fw-semibold">
-        <i class="bi bi-graph-up-arrow me-2"></i>Predicted vs Actual Final Score
+      <div class="bt-table-wrap">
+        <table class="table table-sm table-hover bt-table">
+          <thead><tr><th scope="col">Date</th><th scope="col">Venue</th><th scope="col">Batting team</th><th scope="col">Fielding team</th><th scope="col">After overs</th><th scope="col">Score / wickets</th><th scope="col">Predicted</th><th scope="col">Predicted range</th><th scope="col">Actual</th><th scope="col">Error</th><th scope="col">Within range</th></tr></thead>
+          <tbody id="matchesBody"></tbody>
+        </table>
       </div>
-      <div class="card-body">
-        <canvas id="scatterChart" height="350"></canvas>
-      </div>
-    </div>
-
-    <!-- Per-match table + export -->
-    <div class="card shadow-sm mb-4">
-      <div class="card-header d-flex justify-content-between align-items-center fw-semibold">
-        <span><i class="bi bi-list-ul me-2"></i>Per-Match Results</span>
-        <a id="exportBtn" href="/backtest/export.csv" class="btn btn-sm btn-outline-success">
-          <i class="bi bi-download me-1"></i>Export CSV
-        </a>
-      </div>
-      <div class="card-body p-0">
-        <div class="table-responsive" style="max-height:420px;overflow-y:auto;">
-          <table class="table table-sm table-striped table-hover mb-0">
-            <thead class="table-dark sticky-top">
-              <tr>
-                <th>Date</th>
-                <th>Venue</th>
-                <th>Batting Team</th>
-                <th>CP</th>
-                <th>Score@CP</th>
-                <th>Wkts@CP</th>
-                <th>Predicted</th>
-                <th>Range</th>
-                <th>Actual</th>
-                <th>Error</th>
-                <th>In Range?</th>
-              </tr>
-            </thead>
-            <tbody id="matchesBody"></tbody>
-          </table>
-        </div>
-        <div id="paginationControls" class="d-flex justify-content-between align-items-center p-2 border-top">
-          <button id="prevPage" class="btn btn-sm btn-outline-secondary" disabled>&#8592; Prev</button>
-          <span id="pageInfo" class="text-muted small"></span>
-          <button id="nextPage" class="btn btn-sm btn-outline-secondary">Next &#8594;</button>
+      <div id="tableEmpty" class="bt-empty m-3 d-none">No rows match these filters. Adjust your search or checkpoint selection.</div>
+      <div class="bt-pagination">
+        <span id="pageInfo" class="small text-muted bt-range" aria-live="polite"></span>
+        <div class="d-flex gap-2">
+          <button type="button" id="prevPage" class="btn btn-sm btn-outline-secondary" disabled>Previous</button>
+          <button type="button" id="nextPage" class="btn btn-sm btn-outline-secondary" disabled>Next</button>
         </div>
       </div>
-    </div>
-
-  </div><!-- /resultsSection -->
+    </section>
+    <aside class="bt-disclaimer mt-4">
+      <strong>How to interpret this replay.</strong>
+      <span id="methodologyText">This is a historical replay using the current model, not an out-of-time training holdout. These results should not be read as independently validated accuracy or as a guarantee of future performance.</span>
+    </aside>
+  </div>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script>
-const PAGE_SIZE = 50;
-let allResults = [];
-let currentPage = 0;
-let scatterChartInstance = null;
+(() => {
+  "use strict";
+  const PAGE_SIZE = 25;
+  const select = document.getElementById("formatSelect");
+  const statusEl = document.getElementById("reportStatus");
+  const names = {mens_odi:"Men’s ODI",mens_t20:"Men’s T20I",womens_t20:"Women’s T20I",womens_odi:"Women’s ODI"};
+  const number = value => value === null || value === undefined || value === "" || !Number.isFinite(Number(value)) ? "—" : Number(value).toLocaleString(undefined,{maximumFractionDigits:2});
+  let reports = [];
+  let currentReport = null;
+  let visibleRows = [];
+  let page = 0;
 
-const CP_COLORS = {
-  6:  '#e74c3c',
-  10: '#e67e22',
-  11: '#f1c40f',
-  15: '#2ecc71',
-  16: '#3498db'
-};
-
-document.getElementById('runBtn').addEventListener('click', runBacktest);
-document.getElementById('prevPage').addEventListener('click', () => { currentPage--; renderPage(); });
-document.getElementById('nextPage').addEventListener('click', () => { currentPage++; renderPage(); });
-
-// Check cache status on page load
-fetch('/backtest/status')
-  .then(r => r.json())
-  .then(d => {
-    const el = document.getElementById('dataStatus');
-    if (d.cached) {
-      el.innerHTML = `<span class="badge bg-success fs-6"><i class="bi bi-check-circle me-1"></i>Data cached — ${d.count} matches available</span>`;
-    } else {
-      el.innerHTML = `<span class="badge bg-warning text-dark fs-6"><i class="bi bi-cloud-download me-1"></i>No cache — first run downloads ~50 MB</span>`;
-    }
-  })
-  .catch(() => {});
-
-function runBacktest() {
-  const n = parseInt(document.getElementById('maxMatches').value) || 100;
-  document.getElementById('progressCard').classList.remove('d-none');
-  document.getElementById('resultsSection').classList.add('d-none');
-  document.getElementById('runBtn').disabled = true;
-
-  fetch('/backtest/run', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ max_matches: n })
-  })
-  .then(r => {
-    if (!r.ok) return r.json().then(e => { throw new Error(e.error || r.statusText); });
-    return r.json();
-  })
-  .then(data => {
-    document.getElementById('progressCard').classList.add('d-none');
-    document.getElementById('runBtn').disabled = false;
-    allResults = data.results;
-    currentPage = 0;
-    renderMetrics(data.metrics);
-    renderSummary(data.summary);
-    renderScatter(data.results);
-    renderPage();
-    document.getElementById('resultsSection').classList.remove('d-none');
-    // Refresh status badge
-    fetch('/backtest/status').then(r=>r.json()).then(d=>{
-      if (d.cached) {
-        document.getElementById('dataStatus').innerHTML =
-          `<span class="badge bg-success fs-6"><i class="bi bi-check-circle me-1"></i>Data cached — ${d.count} matches available</span>`;
+  const show = (id, yes) => document.getElementById(id).classList.toggle("d-none",!yes);
+  function setStatus(message, unavailable=false) {
+    statusEl.textContent = message;
+    statusEl.classList.toggle("unavailable", unavailable);
+  }
+  function showError(message) {
+    show("loadingState",false); show("reportContent",false); show("emptyState",false); show("errorState",true);
+    document.getElementById("errorMessage").textContent = message || "Please try again in a moment.";
+  }
+  async function loadStatus() {
+    setStatus("Checking report availability");
+    try {
+      const response = await fetch("/backtest/status",{headers:{Accept:"application/json"}});
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || "Could not check report availability.");
+      reports = Array.isArray(data.formats) ? data.formats : [];
+      select.replaceChildren();
+      reports.forEach(report => {
+        const option = document.createElement("option");
+        option.value = report.format;
+        option.textContent = `${report.label || names[report.format] || report.format} · ${report.available ? number(report.match_count) + " matches" : "report unavailable"}`;
+        select.append(option);
+      });
+      const available = reports.filter(item => item.available);
+      renderFormatSummaries();
+      if (!available.length) {
+        show("loadingState",false); show("errorState",false); show("reportContent",false); show("emptyState",true);
+        document.getElementById("emptyState").textContent = "No backtest reports are currently available. The page will not assume that any format contains 100 matches.";
+        setStatus("No reports available",true);
+        return;
       }
-    }).catch(()=>{});
-  })
-  .catch(err => {
-    document.getElementById('progressCard').classList.add('d-none');
-    document.getElementById('runBtn').disabled = false;
-    alert('Backtest failed: ' + err.message);
-  });
-}
-
-function renderMetrics(metrics) {
-  const tbody = document.getElementById('metricsBody');
-  const fmtBias = b => {
-    if (b > 0) return `<span class="text-danger">+${b}</span>`;
-    if (b < 0) return `<span class="text-primary">${b}</span>`;
-    return b;
-  };
-
-  function makeRow(label, m, bold) {
-    if (!m) return '';
-    const bm = m.bucket_mae;
-    const cls = bold ? 'fw-bold table-active' : '';
-    return `<tr class="${cls}">
-      <td>${label}</td>
-      <td>${m.n}</td>
-      <td>${m.mae}</td>
-      <td>${m.rmse}</td>
-      <td>${fmtBias(m.bias)}</td>
-      <td>${m.hit_rate}%</td>
-      <td>${m.avg_width}</td>
-      <td>${bm.under_160 !== null && bm.under_160 !== undefined ? bm.under_160 : '—'}</td>
-      <td>${bm['160_200'] !== null && bm['160_200'] !== undefined ? bm['160_200'] : '—'}</td>
-      <td>${bm.over_200 !== null && bm.over_200 !== undefined ? bm.over_200 : '—'}</td>
-    </tr>`;
-  }
-
-  let html = makeRow('Overall', metrics.overall, true);
-  const byCp = metrics.by_checkpoint;
-  for (const cp of [6, 10, 11, 15, 16]) {
-    html += makeRow(`After ${cp} overs`, byCp[cp], false);
-  }
-  tbody.innerHTML = html;
-}
-
-function renderSummary(text) {
-  document.getElementById('summaryText').textContent = text;
-}
-
-function renderScatter(results) {
-  if (scatterChartInstance) {
-    scatterChartInstance.destroy();
-    scatterChartInstance = null;
-  }
-
-  const datasets = {};
-  for (const r of results) {
-    const cp = r.checkpoint;
-    if (!datasets[cp]) {
-      datasets[cp] = {
-        label: `After ${cp} overs`,
-        data: [],
-        backgroundColor: CP_COLORS[cp] + 'aa',
-        pointRadius: 3,
-        pointHoverRadius: 5,
-      };
+      const first = available[0];
+      select.value = first.format;
+      setStatus(`${available.length} of ${reports.length} reports available`);
+      await loadReport(first.format);
+    } catch (error) {
+      select.replaceChildren(new Option("Unable to load available formats",""));
+      showError(error.message);
+      setStatus("Availability check failed",true);
     }
-    datasets[cp].data.push({ x: r.actual, y: r.predicted });
   }
-
-  const allActuals = results.map(r => r.actual);
-  const minV = Math.min(...allActuals) - 5;
-  const maxV = Math.max(...allActuals) + 5;
-
-  const ctx = document.getElementById('scatterChart').getContext('2d');
-  scatterChartInstance = new Chart(ctx, {
-    type: 'scatter',
-    data: {
-      datasets: [
-        ...Object.values(datasets),
-        {
-          label: 'Perfect prediction',
-          data: [{ x: minV, y: minV }, { x: maxV, y: maxV }],
-          type: 'line',
-          borderColor: '#aaa',
-          borderDash: [5, 5],
-          pointRadius: 0,
-          borderWidth: 1,
-        }
-      ]
-    },
-    options: {
-      responsive: true,
-      plugins: {
-        legend: { position: 'bottom' },
-        tooltip: {
-          callbacks: {
-            label: ctx => {
-              const d = ctx.raw;
-              return `Actual ${d.x}, Predicted ${d.y}`;
-            }
-          }
-        }
-      },
-      scales: {
-        x: { title: { display: true, text: 'Actual Final Score' } },
-        y: { title: { display: true, text: 'Predicted Final Score' } }
-      }
+  function renderFormatSummaries() {
+    const host = document.getElementById("formatSummaries");
+    host.replaceChildren();
+    reports.forEach(item => {
+      const card = document.createElement("article");
+      card.className = "bt-format-card" + (currentReport && currentReport.format === item.format ? " is-current" : "");
+      const title = document.createElement("h4");
+      title.textContent = item.label || names[item.format] || item.format;
+      const value = document.createElement("span");
+      value.className = "bt-card-count";
+      value.textContent = item.available ? `${number(item.match_count)} matches` : "Not available";
+      const detail = document.createElement("p");
+      detail.textContent = item.available
+        ? `${number(item.prediction_count)} checkpoint predictions${item.generated_at ? " · updated " + formatDate(item.generated_at) : ""}`
+        : "No report data supplied for this format.";
+      card.append(title,value,detail);
+      host.append(card);
+    });
+  }
+  function formatDate(value) {
+    if (!value) return "date not supplied";
+    const date = new Date(value);
+    return Number.isNaN(date.getTime()) ? String(value) : date.toLocaleDateString(undefined,{year:"numeric",month:"short",day:"numeric"});
+  }
+  async function loadReport(format) {
+    if (!format) return;
+    currentReport = null;
+    show("loadingState",true); show("errorState",false); show("emptyState",false); show("reportContent",false);
+    document.getElementById("loadingState").querySelector(".small").textContent = `Loading ${names[format] || format} report…`;
+    document.getElementById("exportBtn").classList.add("d-none");
+    setStatus("Loading selected report");
+    try {
+      const response = await fetch(`/backtest/report/${encodeURIComponent(format)}`,{headers:{Accept:"application/json"}});
+      const data = await response.json();
+      if (!response.ok || !data.success) throw new Error(data.error || `The ${names[format] || format} report is unavailable.`);
+      currentReport = data;
+      renderReport(data);
+      document.getElementById("exportBtn").href = `/backtest/export.csv?format=${encodeURIComponent(format)}`;
+      document.getElementById("exportBtn").classList.remove("d-none");
+      show("loadingState",false); show("reportContent",true);
+      setStatus(`${number(data.match_count)} distinct matches · ${number(data.prediction_count)} checkpoint predictions`);
+      renderFormatSummaries();
+    } catch (error) {
+      showError(error.message);
+      setStatus("Selected report unavailable",true);
     }
+  }
+  function renderReport(data) {
+    const matches = Array.isArray(data.results) ? data.results : [];
+    document.getElementById("report-overview-heading").textContent = data.label || names[data.format] || data.format || "Historical report";
+    document.getElementById("reportDate").textContent = data.generated_at ? `Report date: ${formatDate(data.generated_at)}` : "Report date not supplied";
+    document.getElementById("matchCount").textContent = number(data.match_count);
+    document.getElementById("predictionCount").textContent = number(data.prediction_count);
+    document.getElementById("summaryText").textContent = data.summary || "No summary was supplied for this report.";
+    const overall = (data.metrics || {}).overall || {};
+    document.getElementById("metricMae").textContent = number(overall.mae);
+    document.getElementById("metricRmse").textContent = number(overall.rmse);
+    const bias = overall.bias;
+    document.getElementById("metricBias").textContent = bias === null || bias === undefined ? "—" : `${Number(bias)>0?"+":""}${number(bias)}`;
+    document.getElementById("metricHit").textContent = overall.hit_rate === null || overall.hit_rate === undefined ? "—" : `${number(overall.hit_rate)}%`;
+    document.getElementById("metricWidth").textContent = number(overall.avg_range_width);
+    document.getElementById("sourceLine").textContent = `Source: ${data.source || "Not supplied"} · Distinct match count and checkpoint prediction count are separate measures.`;
+    document.getElementById("methodologyText").textContent = `${data.methodology || "Historical replay using the current model."} This is not an out-of-time training holdout; these results are not independently validated accuracy and do not guarantee future performance.`;
+    renderCheckpoints(data);
+    setupRows(matches);
+  }
+  function renderCheckpoints(data) {
+    const body = document.getElementById("checkpointBody");
+    body.replaceChildren();
+    const metrics = (data.metrics || {}).by_checkpoint || {};
+    const checkpoints = Array.isArray(data.checkpoints) ? data.checkpoints : Object.keys(metrics);
+    checkpoints.forEach(cp => {
+      const item = metrics[cp] || metrics[String(cp)] || {};
+      const tr = document.createElement("tr");
+      const values = [`After ${cp} overs`,number(item.n),number(item.mae),number(item.rmse),item.bias === null || item.bias === undefined ? "—" : `${Number(item.bias)>0?"+":""}${number(item.bias)}`,item.hit_rate === null || item.hit_rate === undefined ? "—" : `${number(item.hit_rate)}%`,number(item.avg_range_width)];
+      values.forEach(value => { const td=document.createElement("td"); td.textContent=value; tr.append(td); });
+      body.append(tr);
+    });
+    if (!checkpoints.length) {
+      const tr=document.createElement("tr"),td=document.createElement("td");
+      td.colSpan=7;td.textContent="Checkpoint metrics were not included in this report.";tr.append(td);body.append(tr);
+    }
+  }
+  function setupRows(rows) {
+    visibleRows = rows.slice();
+    const filter = document.getElementById("checkpointFilter");
+    const oldValue = filter.value;
+    filter.replaceChildren(new Option("All checkpoints",""));
+    [...new Set(rows.map(row => String(row.checkpoint)))].sort((a,b)=>Number(a)-Number(b)).forEach(cp => filter.add(new Option(`After ${cp} overs`,cp)));
+    filter.value = [...filter.options].some(option=>option.value===oldValue) ? oldValue : "";
+    document.getElementById("matchSearch").value = "";
+    document.getElementById("rowsSummary").textContent = `${number(new Set(rows.map(row=>row.match_id).filter(value=>value!==null&&value!==undefined)).size)} distinct matches · ${number(rows.length)} checkpoint prediction rows`;
+    applyFilters();
+  }
+  function applyFilters() {
+    const cp = document.getElementById("checkpointFilter").value;
+    const query = document.getElementById("matchSearch").value.trim().toLocaleLowerCase();
+    visibleRows = (currentReport && Array.isArray(currentReport.results) ? currentReport.results : []).filter(row => {
+      if (cp && String(row.checkpoint) !== cp) return false;
+      if (!query) return true;
+      return [row.match_id,row.date,row.venue,row.batting_team,row.fielding_team].some(value=>String(value ?? "").toLocaleLowerCase().includes(query));
+    });
+    page=0;
+    renderRows();
+  }
+  function renderRows() {
+    const body=document.getElementById("matchesBody");
+    body.replaceChildren();
+    const total=visibleRows.length, pages=Math.ceil(total/PAGE_SIZE);
+    const start=page*PAGE_SIZE, subset=visibleRows.slice(start,start+PAGE_SIZE);
+    subset.forEach(row => {
+      const tr=document.createElement("tr");
+      const err = row.error;
+      const errorText = err === null || err === undefined ? "—" : `${Number(err)>0?"+":""}${number(err)}`;
+      const cells=[row.date,row.venue,row.batting_team,row.fielding_team,`After ${row.checkpoint ?? "—"}`,`${row.score_at_cp ?? "—"} / ${row.wickets_at_cp ?? "—"}`,row.predicted, row.pred_low !== null && row.pred_low !== undefined && row.pred_high !== null && row.pred_high !== undefined ? `${number(row.pred_low)}–${number(row.pred_high)}` : "—",row.actual,errorText];
+      cells.forEach((value,index) => {
+        const td=document.createElement("td");
+        td.textContent=value === null || value === undefined || value === "" ? "—" : String(value);
+        if(index===8) td.className="fw-bold";
+        if(index===9 && Number(err)>0) td.className="text-danger fw-semibold";
+        if(index===9 && Number(err)<0) td.className="text-primary fw-semibold";
+        tr.append(td);
+      });
+      const range=document.createElement("td");
+      const badge=document.createElement("span");
+      const inRange=row.in_range;
+      badge.className=`badge ${inRange===true?"bg-success":inRange===false?"bg-secondary":"bg-light text-dark border"}`;
+      badge.textContent=inRange===true?"Yes":inRange===false?"No":"Not reported";
+      range.append(badge);tr.append(range);body.append(tr);
+    });
+    show("tableEmpty",total===0);
+    document.getElementById("pageInfo").textContent=total ? `Rows ${start+1}–${Math.min(start+PAGE_SIZE,total)} of ${total}` : "No matching rows";
+    document.getElementById("prevPage").disabled=page<=0;
+    document.getElementById("nextPage").disabled=page>=pages-1 || !total;
+  }
+  select.addEventListener("change",()=>{
+    const item = reports.find(report => report.format === select.value);
+    if (item && !item.available) {
+      currentReport = null;
+      show("loadingState",false); show("errorState",false); show("reportContent",false); show("emptyState",true);
+      document.getElementById("emptyState").textContent = `${item.label || names[item.format] || item.format}: no report is currently available. The status endpoint did not supply match or prediction counts for this format.`;
+      document.getElementById("exportBtn").classList.add("d-none");
+      setStatus("Selected report unavailable",true);
+      renderFormatSummaries();
+      return;
+    }
+    loadReport(select.value);
   });
-}
-
-function renderPage() {
-  const start = currentPage * PAGE_SIZE;
-  const end = start + PAGE_SIZE;
-  const page = allResults.slice(start, end);
-  const total = allResults.length;
-  const totalPages = Math.ceil(total / PAGE_SIZE);
-
-  const tbody = document.getElementById('matchesBody');
-  tbody.innerHTML = page.map(r => {
-    const errCls = r.error > 15 ? 'text-danger fw-semibold'
-                 : r.error < -15 ? 'text-primary fw-semibold' : '';
-    const rangeBadge = r.in_range
-      ? '<span class="badge bg-success">Yes</span>'
-      : '<span class="badge bg-danger">No</span>';
-    const errSign = r.error > 0 ? '+' : '';
-    return `<tr>
-      <td>${r.date}</td>
-      <td class="text-truncate" style="max-width:140px" title="${r.venue}">${r.venue}</td>
-      <td>${r.batting_team}</td>
-      <td><span class="badge rounded-pill" style="background:${CP_COLORS[r.checkpoint]}">${r.checkpoint}</span></td>
-      <td>${r.score_at_cp}/${r.wickets_at_cp}</td>
-      <td>${r.wickets_at_cp}</td>
-      <td>${r.predicted}</td>
-      <td>${r.pred_low}–${r.pred_high}</td>
-      <td><strong>${r.actual}</strong></td>
-      <td class="${errCls}">${errSign}${r.error}</td>
-      <td>${rangeBadge}</td>
-    </tr>`;
-  }).join('');
-
-  document.getElementById('pageInfo').textContent =
-    `${start + 1}–${Math.min(end, total)} of ${total}`;
-  document.getElementById('prevPage').disabled = currentPage === 0;
-  document.getElementById('nextPage').disabled = currentPage >= totalPages - 1;
-}
+  document.getElementById("retryBtn").addEventListener("click",()=>reports.length ? loadReport(select.value) : loadStatus());
+  document.getElementById("checkpointFilter").addEventListener("change",applyFilters);
+  document.getElementById("matchSearch").addEventListener("input",applyFilters);
+  document.getElementById("prevPage").addEventListener("click",()=>{if(page>0){page--;renderRows();}});
+  document.getElementById("nextPage").addEventListener("click",()=>{if((page+1)*PAGE_SIZE<visibleRows.length){page++;renderRows();}});
+  loadStatus();
+})();
 </script>
 {% endblock %}
