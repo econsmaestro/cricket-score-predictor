@@ -1,0 +1,2 @@
+- [Publishing regression checks](publishing-regressions.md) — verify current files rather than assuming an earlier startup fix is still present.
+- [Backtesting scope](backtesting-scope.md) — 100 distinct fixtures per gender/format; retrospective replay is not independent out-of-time validation.

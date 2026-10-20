@@ -1,4 +1,4 @@
-"""Backtesting engine: replay historical T20I first innings at checkpoints."""
+"""Replay historical first innings with the production prediction engine."""
 import math
 import logging
 from collections import defaultdict
@@ -71,20 +71,27 @@ def build_state_at_over(match, checkpoint_over):
 
             if bowler not in bowler_stats:
                 bowler_stats[bowler] = {"balls": 0, "runs": 0, "wickets": 0}
-            bowler_stats[bowler]["runs"] += d["runs_total"]
+            bowler_stats[bowler]["runs"] += (
+                d["runs_total"] - extras.get("byes", 0) - extras.get("legbyes", 0)
+            )
             if not is_wide and not is_noball:
                 bowler_stats[bowler]["balls"] += 1
 
             current_score += d["runs_total"]
 
             for w in d.get("wickets", []):
+                from backtest_data import counts_as_team_wicket
                 player_out = w.get("player_out", "")
                 if player_out in batter_stats:
                     batter_stats[player_out]["out"] = True
                 if player_out in current_batters:
                     current_batters.remove(player_out)
-                wickets_fallen += 1
-                bowler_stats[bowler]["wickets"] += 1
+                wickets_fallen += int(counts_as_team_wicket(w))
+                if w.get("kind") not in {
+                    "run out", "retired hurt", "retired out", "obstructing the field",
+                    "retired not out",
+                }:
+                    bowler_stats[bowler]["wickets"] += 1
 
     batsmen = [
         Batsman(name=n, runs=batter_stats[n]["runs"], balls_faced=batter_stats[n]["balls"])
@@ -98,13 +105,16 @@ def build_state_at_over(match, checkpoint_over):
 
     bowlers = []
     for name, s in bowler_stats.items():
+        # Bowler.economy uses arithmetic division, so its overs are fractional
+        # overs rather than scorecard notation. Checkpoints are whole overs.
         ob = s["balls"] / 6.0
+        bowler_limit = 10 if match.get("match_format", "mens_t20").endswith("odi") else 4
         bowlers.append(Bowler(
             name=name,
             overs_bowled=ob,
             runs_conceded=s["runs"],
             wickets=s["wickets"],
-            overs_remaining=max(0.0, 4.0 - ob),
+            overs_remaining=max(0.0, bowler_limit - s["balls"] / 6),
         ))
 
     venue = _resolve_venue(match["venue"])
@@ -119,31 +129,39 @@ def build_state_at_over(match, checkpoint_over):
         batsmen_to_come=batsmen_to_come,
         innings=1,
         target=0,
-        match_format="mens_t20",
+        match_format=match.get("match_format", "mens_t20"),
         fielding_team=match.get("fielding_team", ""),
     )
 
 
-def run_backtest(max_matches=200):
+def run_backtest(max_matches=100, match_format="mens_t20"):
     """Run backtest for up to max_matches games. Returns list of per-prediction dicts."""
-    from backtest_data import parse_matches
+    from backtest_data import parse_matches, format_config
     from prediction import predict_score
 
-    matches = parse_matches()[:max_matches]
+    config = format_config(match_format)
+    matches = parse_matches(match_format=match_format, max_matches=max_matches)
+    if len(matches) < max_matches:
+        raise ValueError(f"Only {len(matches)} eligible {config['label']} matches; {max_matches} required")
     results = []
 
     for match in matches:
-        for cp in CHECKPOINTS:
+        match_results = []
+        for cp in config["checkpoints"]:
             try:
                 state = build_state_at_over(match, cp)
+                if state.wickets_fallen >= 10:
+                    raise ValueError(f"Innings already ended at checkpoint {cp}")
                 pred = predict_score(state)
                 actual = match["actual_final_score"]
                 low, high = pred.score_range
-                results.append({
+                match_results.append({
                     "match_id": match["match_id"],
                     "date": match["date"],
                     "venue": match["venue"],
                     "batting_team": match["batting_team"],
+                    "fielding_team": match["fielding_team"],
+                    "match_format": match_format,
                     "checkpoint": cp,
                     "score_at_cp": state.current_score,
                     "wickets_at_cp": state.wickets_fallen,
@@ -157,7 +175,8 @@ def run_backtest(max_matches=200):
                     "range_width": high - low,
                 })
             except Exception as e:
-                logger.debug("Skipped %s cp=%d: %s", match["match_id"], cp, e)
+                raise RuntimeError(f"Backtest failed for {match_format}/{match['match_id']} at {cp} overs") from e
+        results.extend(match_results)
 
     return results
 
@@ -193,10 +212,10 @@ def compute_metrics(results):
             "bias": round(bias, 1),
             "hit_rate": round(hit_rate, 1),
             "avg_width": round(avg_width, 1),
+            "avg_range_width": round(avg_width, 1),
             "bucket_mae": {
-                "under_160": round(sum(v) / len(v), 1) if buckets["under_160"] else None,
-                "160_200": round(sum(v) / len(v), 1) if buckets["160_200"] else None,
-                "over_200": round(sum(v) / len(v), 1) if buckets["over_200"] else None,
+                key: round(sum(values) / len(values), 1) if values else None
+                for key, values in buckets.items()
             },
         }
 
@@ -204,7 +223,7 @@ def compute_metrics(results):
     cp_groups = defaultdict(list)
     for r in results:
         cp_groups[r["checkpoint"]].append(r)
-    for cp in CHECKPOINTS:
+    for cp in sorted(cp_groups):
         by_cp[cp] = _metrics(cp_groups.get(cp, []))
 
     return {"overall": _metrics(results), "by_checkpoint": by_cp}
