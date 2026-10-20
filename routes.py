@@ -2625,3 +2625,62 @@ def api_funnel():
         "pro_subscribers": pro_count,
         "total_registered": total_users,
     })
+
+
+# ---------------------------------------------------------------------------
+# Backtest routes
+# ---------------------------------------------------------------------------
+
+_backtest_cache = {}
+
+
+@app.route("/backtest")
+def backtest_page():
+    return render_template("backtest.html")
+
+
+@app.route("/backtest/status")
+def backtest_status():
+    from backtest_data import get_data_info
+    return jsonify(get_data_info())
+
+
+@app.route("/backtest/run", methods=["POST"])
+def backtest_run():
+    from backtest import run_backtest, compute_metrics, generate_summary
+    data = request.get_json(silent=True) or {}
+    max_matches = min(int(data.get("max_matches", 200)), 2000)
+    try:
+        results = run_backtest(max_matches=max_matches)
+        metrics = compute_metrics(results)
+        summary = generate_summary(metrics)
+        _backtest_cache["last"] = results
+        return jsonify({"results": results, "metrics": metrics, "summary": summary})
+    except Exception as e:
+        import traceback
+        traceback.print_exc()
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route("/backtest/export.csv")
+def backtest_export():
+    import csv
+    results = _backtest_cache.get("last", [])
+    if not results:
+        return "No backtest results cached. Run a backtest first.", 404
+    output = io.StringIO()
+    fields = [
+        "match_id", "date", "venue", "batting_team", "checkpoint",
+        "score_at_cp", "wickets_at_cp", "predicted", "pred_low", "pred_high",
+        "actual", "error", "abs_error", "in_range", "range_width",
+    ]
+    writer = csv.DictWriter(output, fieldnames=fields, extrasaction="ignore")
+    writer.writeheader()
+    writer.writerows(results)
+    output.seek(0)
+    return send_file(
+        io.BytesIO(output.read().encode()),
+        mimetype="text/csv",
+        as_attachment=True,
+        download_name="backtest_results.csv",
+    )
