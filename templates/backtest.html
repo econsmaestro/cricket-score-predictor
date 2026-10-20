@@ -12,7 +12,7 @@
       <div class="row g-3 align-items-end">
         <div class="col-md-4">
           <label class="form-label fw-semibold">Matches to test</label>
-          <input type="number" id="maxMatches" class="form-control" value="200" min="10" max="2000" step="10">
+          <input type="number" id="maxMatches" class="form-control" value="100" min="10" max="2000" step="10">
           <div class="form-text">More matches = more accurate metrics but slower (~2 s per 100).</div>
         </div>
         <div class="col-md-3">
@@ -155,7 +155,7 @@ fetch('/backtest/status')
   .catch(() => {});
 
 function runBacktest() {
-  const n = parseInt(document.getElementById('maxMatches').value) || 200;
+  const n = parseInt(document.getElementById('maxMatches').value) || 100;
   document.getElementById('progressCard').classList.remove('d-none');
   document.getElementById('resultsSection').classList.add('d-none');
   document.getElementById('runBtn').disabled = true;

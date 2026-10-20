@@ -2649,7 +2649,7 @@ def backtest_status():
 def backtest_run():
     from backtest import run_backtest, compute_metrics, generate_summary
     data = request.get_json(silent=True) or {}
-    max_matches = min(int(data.get("max_matches", 200)), 2000)
+    max_matches = min(int(data.get("max_matches", 100)), 2000)
     try:
         results = run_backtest(max_matches=max_matches)
         metrics = compute_metrics(results)
