@@ -1,0 +1,401 @@
+match_id,date,venue,batting_team,fielding_team,match_format,checkpoint,score_at_cp,wickets_at_cp,predicted,pred_low,pred_high,actual,error,abs_error,in_range,range_width
+1528718,2026-10-14,"Allan Border Field, Brisbane",Bangladesh,Australia,womens_odi,10,23,3,163,139,187,172,-9,9,True,48
+1528718,2026-10-14,"Allan Border Field, Brisbane",Bangladesh,Australia,womens_odi,20,55,4,160,148,172,172,-12,12,True,24
+1528718,2026-10-14,"Allan Border Field, Brisbane",Bangladesh,Australia,womens_odi,30,92,4,162,150,174,172,-10,10,True,24
+1528718,2026-10-14,"Allan Border Field, Brisbane",Bangladesh,Australia,womens_odi,40,127,6,153,141,165,172,-19,19,False,24
+1528717,2026-10-11,"Allan Border Field, Brisbane",Bangladesh,Australia,womens_odi,10,17,3,157,134,180,220,-63,63,False,46
+1528717,2026-10-11,"Allan Border Field, Brisbane",Bangladesh,Australia,womens_odi,20,54,3,159,147,171,220,-61,61,False,24
+1528717,2026-10-11,"Allan Border Field, Brisbane",Bangladesh,Australia,womens_odi,30,103,3,173,160,186,220,-47,47,False,26
+1528717,2026-10-11,"Allan Border Field, Brisbane",Bangladesh,Australia,womens_odi,40,145,3,180,166,194,220,-40,40,False,28
+1528716,2026-10-09,"Allan Border Field, Brisbane",Bangladesh,Australia,womens_odi,10,34,3,174,148,200,166,8,8,True,52
+1528716,2026-10-09,"Allan Border Field, Brisbane",Bangladesh,Australia,womens_odi,20,64,4,169,156,182,166,3,3,True,26
+1528716,2026-10-09,"Allan Border Field, Brisbane",Bangladesh,Australia,womens_odi,30,92,5,162,150,174,166,-4,4,True,24
+1528716,2026-10-09,"Allan Border Field, Brisbane",Bangladesh,Australia,womens_odi,40,130,7,156,144,168,166,-10,10,True,24
+1554977,2026-09-30,Harare Sports Club,West Indies,Zimbabwe,womens_odi,10,38,0,225,192,258,271,-46,46,False,66
+1554977,2026-09-30,Harare Sports Club,West Indies,Zimbabwe,womens_odi,20,73,1,240,221,259,271,-31,31,False,38
+1554977,2026-09-30,Harare Sports Club,West Indies,Zimbabwe,womens_odi,30,142,1,305,281,329,271,34,34,False,48
+1554977,2026-09-30,Harare Sports Club,West Indies,Zimbabwe,womens_odi,40,214,3,289,266,312,271,18,18,True,46
+1554975,2026-09-24,Harare Sports Club,West Indies,Zimbabwe,womens_odi,10,48,0,263,224,302,299,-36,36,True,78
+1554975,2026-09-24,Harare Sports Club,West Indies,Zimbabwe,womens_odi,20,113,0,365,336,394,299,66,66,False,58
+1554975,2026-09-24,Harare Sports Club,West Indies,Zimbabwe,womens_odi,30,157,2,273,252,294,299,-26,26,False,42
+1554975,2026-09-24,Harare Sports Club,West Indies,Zimbabwe,womens_odi,40,201,3,251,231,271,299,-48,48,False,40
+1496554,2026-09-06,"County Ground, New Road, Worcester",England,Ireland,womens_odi,10,61,0,393,335,451,291,102,102,False,116
+1496554,2026-09-06,"County Ground, New Road, Worcester",England,Ireland,womens_odi,20,111,1,299,276,322,291,8,8,True,46
+1496554,2026-09-06,"County Ground, New Road, Worcester",England,Ireland,womens_odi,30,181,1,363,334,392,291,72,72,False,58
+1496554,2026-09-06,"County Ground, New Road, Worcester",England,Ireland,womens_odi,40,242,4,306,282,330,291,15,15,True,48
+1496553,2026-09-03,"County Ground, Derby",Ireland,England,womens_odi,10,33,2,173,148,198,165,8,8,True,50
+1496553,2026-09-03,"County Ground, Derby",Ireland,England,womens_odi,20,72,2,177,163,191,165,12,12,True,28
+1496553,2026-09-03,"County Ground, Derby",Ireland,England,womens_odi,30,101,4,171,158,184,165,6,6,True,26
+1496553,2026-09-03,"County Ground, Derby",Ireland,England,womens_odi,40,142,6,168,155,181,165,3,3,True,26
+1496552,2026-09-01,"Grace Road, Leicester",Ireland,England,womens_odi,10,51,1,226,193,259,281,-55,55,False,66
+1496552,2026-09-01,"Grace Road, Leicester",Ireland,England,womens_odi,20,97,1,247,228,266,281,-34,34,False,38
+1496552,2026-09-01,"Grace Road, Leicester",Ireland,England,womens_odi,30,149,2,219,202,236,281,-62,62,False,34
+1496552,2026-09-01,"Grace Road, Leicester",Ireland,England,womens_odi,40,204,4,240,221,259,281,-41,41,False,38
+1549212,2026-08-17,"Amini Park, Port Moresby",Papua New Guinea,Thailand,womens_odi,10,28,1,168,143,193,122,46,46,False,50
+1549212,2026-08-17,"Amini Park, Port Moresby",Papua New Guinea,Thailand,womens_odi,20,45,3,150,138,162,122,28,28,False,24
+1549212,2026-08-17,"Amini Park, Port Moresby",Papua New Guinea,Thailand,womens_odi,30,67,6,119,110,128,122,-3,3,True,18
+1549212,2026-08-17,"Amini Park, Port Moresby",Papua New Guinea,Thailand,womens_odi,40,94,7,120,111,129,122,-2,2,True,18
+1549211,2026-08-15,"Amini Park, Port Moresby",Thailand,Papua New Guinea,womens_odi,10,25,1,177,151,203,191,-14,14,True,52
+1549211,2026-08-15,"Amini Park, Port Moresby",Thailand,Papua New Guinea,womens_odi,20,73,2,226,208,244,191,35,35,False,36
+1549211,2026-08-15,"Amini Park, Port Moresby",Thailand,Papua New Guinea,womens_odi,30,125,4,206,190,222,191,15,15,True,32
+1549211,2026-08-15,"Amini Park, Port Moresby",Thailand,Papua New Guinea,womens_odi,40,163,7,189,174,204,191,-2,2,True,30
+1549210,2026-08-13,"Amini Park, Port Moresby",Thailand,Papua New Guinea,womens_odi,10,26,1,214,182,246,237,-23,23,True,64
+1549210,2026-08-13,"Amini Park, Port Moresby",Thailand,Papua New Guinea,womens_odi,20,79,2,261,241,281,237,24,24,False,40
+1549210,2026-08-13,"Amini Park, Port Moresby",Thailand,Papua New Guinea,womens_odi,30,129,2,263,242,284,237,26,26,False,42
+1549210,2026-08-13,"Amini Park, Port Moresby",Thailand,Papua New Guinea,womens_odi,40,174,3,228,210,246,237,-9,9,True,36
+1540541,2026-07-25,"Mahinda Rajapaksa International Cricket Stadium, Sooriyawewa, Hambantota",Pakistan,Sri Lanka,womens_odi,10,47,1,249,212,286,273,-24,24,True,74
+1540541,2026-07-25,"Mahinda Rajapaksa International Cricket Stadium, Sooriyawewa, Hambantota",Pakistan,Sri Lanka,womens_odi,20,91,2,227,209,245,273,-46,46,False,36
+1540541,2026-07-25,"Mahinda Rajapaksa International Cricket Stadium, Sooriyawewa, Hambantota",Pakistan,Sri Lanka,womens_odi,30,149,3,227,209,245,273,-46,46,False,36
+1540541,2026-07-25,"Mahinda Rajapaksa International Cricket Stadium, Sooriyawewa, Hambantota",Pakistan,Sri Lanka,womens_odi,40,203,3,254,234,274,273,-19,19,True,40
+1540540,2026-07-23,"Mahinda Rajapaksa International Cricket Stadium, Sooriyawewa, Hambantota",Sri Lanka,Pakistan,womens_odi,10,54,0,307,261,353,210,97,97,False,92
+1540540,2026-07-23,"Mahinda Rajapaksa International Cricket Stadium, Sooriyawewa, Hambantota",Sri Lanka,Pakistan,womens_odi,20,93,1,264,243,285,210,54,54,False,42
+1540540,2026-07-23,"Mahinda Rajapaksa International Cricket Stadium, Sooriyawewa, Hambantota",Sri Lanka,Pakistan,womens_odi,30,123,3,193,178,208,210,-17,17,False,30
+1540540,2026-07-23,"Mahinda Rajapaksa International Cricket Stadium, Sooriyawewa, Hambantota",Sri Lanka,Pakistan,womens_odi,40,166,4,207,191,223,210,-3,3,True,32
+1528546,2026-07-15,"Bready Cricket Club, Magheramason, Bready",West Indies,Ireland,womens_odi,10,40,1,238,203,273,257,-19,19,True,70
+1528546,2026-07-15,"Bready Cricket Club, Magheramason, Bready",West Indies,Ireland,womens_odi,20,86,5,183,169,197,257,-74,74,False,28
+1528546,2026-07-15,"Bready Cricket Club, Magheramason, Bready",West Indies,Ireland,womens_odi,30,150,5,220,203,237,257,-37,37,False,34
+1528546,2026-07-15,"Bready Cricket Club, Magheramason, Bready",West Indies,Ireland,womens_odi,40,205,7,231,213,249,257,-26,26,False,36
+1528545,2026-07-12,"Bready Cricket Club, Magheramason, Bready",Ireland,West Indies,womens_odi,10,40,1,228,194,262,241,-13,13,True,68
+1528545,2026-07-12,"Bready Cricket Club, Magheramason, Bready",Ireland,West Indies,womens_odi,20,74,3,179,165,193,241,-62,62,False,28
+1528545,2026-07-12,"Bready Cricket Club, Magheramason, Bready",Ireland,West Indies,womens_odi,30,125,3,202,186,218,241,-39,39,False,32
+1528545,2026-07-12,"Bready Cricket Club, Magheramason, Bready",Ireland,West Indies,womens_odi,40,180,3,227,209,245,241,-14,14,True,36
+1528544,2026-07-10,"Bready Cricket Club, Magheramason, Bready",Ireland,West Indies,womens_odi,10,49,1,245,209,281,269,-24,24,True,72
+1528544,2026-07-10,"Bready Cricket Club, Magheramason, Bready",Ireland,West Indies,womens_odi,20,105,2,272,251,293,269,3,3,True,42
+1528544,2026-07-10,"Bready Cricket Club, Magheramason, Bready",Ireland,West Indies,womens_odi,30,167,3,260,240,280,269,-9,9,True,40
+1528544,2026-07-10,"Bready Cricket Club, Magheramason, Bready",Ireland,West Indies,womens_odi,40,224,7,250,230,270,269,-19,19,True,40
+1496542,2026-05-10,"Riverside Ground, Chester-le-Street",New Zealand,England,womens_odi,10,39,1,196,167,225,210,-14,14,True,58
+1496542,2026-05-10,"Riverside Ground, Chester-le-Street",New Zealand,England,womens_odi,20,86,2,209,193,225,210,-1,1,True,32
+1496542,2026-05-10,"Riverside Ground, Chester-le-Street",New Zealand,England,womens_odi,30,128,2,219,202,236,210,9,9,True,34
+1496542,2026-05-10,"Riverside Ground, Chester-le-Street",New Zealand,England,womens_odi,40,171,4,206,190,222,210,-4,4,True,32
+1534073,2026-05-09,"National Stadium, Karachi",Zimbabwe,Pakistan,womens_odi,10,53,2,264,225,303,222,42,42,False,78
+1534073,2026-05-09,"National Stadium, Karachi",Zimbabwe,Pakistan,womens_odi,20,95,2,262,242,282,222,40,40,False,40
+1534073,2026-05-09,"National Stadium, Karachi",Zimbabwe,Pakistan,womens_odi,30,148,4,227,209,245,222,5,5,True,36
+1534073,2026-05-09,"National Stadium, Karachi",Zimbabwe,Pakistan,womens_odi,40,186,8,203,187,219,222,-19,19,False,32
+1534072,2026-05-06,"National Stadium, Karachi",Pakistan,Zimbabwe,womens_odi,10,57,0,373,318,428,343,30,30,True,110
+1534072,2026-05-06,"National Stadium, Karachi",Pakistan,Zimbabwe,womens_odi,20,120,0,409,377,441,343,66,66,False,64
+1534072,2026-05-06,"National Stadium, Karachi",Pakistan,Zimbabwe,womens_odi,30,185,0,410,378,442,343,67,67,False,64
+1534072,2026-05-06,"National Stadium, Karachi",Pakistan,Zimbabwe,womens_odi,40,239,2,316,291,341,343,-27,27,False,50
+1534071,2026-05-04,"National Stadium, Karachi",Pakistan,Zimbabwe,womens_odi,10,68,0,379,323,435,330,49,49,True,112
+1534071,2026-05-04,"National Stadium, Karachi",Pakistan,Zimbabwe,womens_odi,20,118,0,365,336,394,330,35,35,False,58
+1534071,2026-05-04,"National Stadium, Karachi",Pakistan,Zimbabwe,womens_odi,30,175,1,313,288,338,330,-17,17,True,50
+1534071,2026-05-04,"National Stadium, Karachi",Pakistan,Zimbabwe,womens_odi,40,223,4,281,259,303,330,-49,49,False,44
+1528281,2026-04-25,"Shahid Kamruzzaman Stadium, Rajshahi",Bangladesh,Sri Lanka,womens_odi,10,34,2,202,172,232,213,-11,11,True,60
+1528281,2026-04-25,"Shahid Kamruzzaman Stadium, Rajshahi",Bangladesh,Sri Lanka,womens_odi,20,63,2,168,155,181,213,-45,45,False,26
+1528281,2026-04-25,"Shahid Kamruzzaman Stadium, Rajshahi",Bangladesh,Sri Lanka,womens_odi,30,99,3,169,156,182,213,-44,44,False,26
+1528281,2026-04-25,"Shahid Kamruzzaman Stadium, Rajshahi",Bangladesh,Sri Lanka,womens_odi,40,147,5,182,168,196,213,-31,31,False,28
+1528280,2026-04-22,"Shahid Kamruzzaman Stadium, Rajshahi",Bangladesh,Sri Lanka,womens_odi,10,23,2,163,139,187,165,-2,2,True,48
+1528280,2026-04-22,"Shahid Kamruzzaman Stadium, Rajshahi",Bangladesh,Sri Lanka,womens_odi,20,65,4,170,157,183,165,5,5,True,26
+1528280,2026-04-22,"Shahid Kamruzzaman Stadium, Rajshahi",Bangladesh,Sri Lanka,womens_odi,30,111,5,181,167,195,165,16,16,False,28
+1528280,2026-04-22,"Shahid Kamruzzaman Stadium, Rajshahi",Bangladesh,Sri Lanka,womens_odi,40,142,6,168,155,181,165,3,3,True,26
+1528279,2026-04-20,"Shahid Kamruzzaman Stadium, Rajshahi",Sri Lanka,Bangladesh,womens_odi,10,44,0,255,217,293,205,50,50,False,76
+1528279,2026-04-20,"Shahid Kamruzzaman Stadium, Rajshahi",Sri Lanka,Bangladesh,womens_odi,20,90,2,249,230,268,205,44,44,False,38
+1528279,2026-04-20,"Shahid Kamruzzaman Stadium, Rajshahi",Sri Lanka,Bangladesh,womens_odi,30,126,3,199,184,214,205,-6,6,True,30
+1528279,2026-04-20,"Shahid Kamruzzaman Stadium, Rajshahi",Sri Lanka,Bangladesh,womens_odi,40,171,4,206,190,222,205,1,1,True,32
+1491712,2026-04-04,"Basin Reserve, Wellington",New Zealand,South Africa,womens_odi,10,32,3,172,147,197,306,-134,134,False,50
+1491712,2026-04-04,"Basin Reserve, Wellington",New Zealand,South Africa,womens_odi,20,71,3,176,162,190,306,-130,130,False,28
+1491712,2026-04-04,"Basin Reserve, Wellington",New Zealand,South Africa,womens_odi,30,121,3,191,176,206,306,-115,115,False,30
+1491712,2026-04-04,"Basin Reserve, Wellington",New Zealand,South Africa,womens_odi,40,215,4,256,236,276,306,-50,50,False,40
+1491711,2026-04-01,"Basin Reserve, Wellington",South Africa,New Zealand,womens_odi,10,53,1,272,232,312,346,-74,74,False,80
+1491711,2026-04-01,"Basin Reserve, Wellington",South Africa,New Zealand,womens_odi,20,96,1,261,241,281,346,-85,85,False,40
+1491711,2026-04-01,"Basin Reserve, Wellington",South Africa,New Zealand,womens_odi,30,175,2,296,273,319,346,-50,50,False,46
+1491711,2026-04-01,"Basin Reserve, Wellington",South Africa,New Zealand,womens_odi,40,243,3,306,282,330,346,-40,40,False,48
+1526568,2026-03-29,"Warner Park, Basseterre, St Kitts",Australia,West Indies,womens_odi,10,62,0,372,317,427,269,103,103,False,110
+1526568,2026-03-29,"Warner Park, Basseterre, St Kitts",Australia,West Indies,womens_odi,20,100,4,205,189,221,269,-64,64,False,32
+1526568,2026-03-29,"Warner Park, Basseterre, St Kitts",Australia,West Indies,womens_odi,30,135,4,205,189,221,269,-64,64,False,32
+1526568,2026-03-29,"Warner Park, Basseterre, St Kitts",Australia,West Indies,womens_odi,40,187,5,222,205,239,269,-47,47,False,34
+1491710,2026-03-29,"Hagley Oval, Christchurch",New Zealand,South Africa,womens_odi,10,46,1,225,192,258,268,-43,43,False,66
+1491710,2026-03-29,"Hagley Oval, Christchurch",New Zealand,South Africa,womens_odi,20,86,2,202,186,218,268,-66,66,False,32
+1491710,2026-03-29,"Hagley Oval, Christchurch",New Zealand,South Africa,womens_odi,30,120,4,190,175,205,268,-78,78,False,30
+1491710,2026-03-29,"Hagley Oval, Christchurch",New Zealand,South Africa,womens_odi,40,176,4,217,200,234,268,-51,51,False,34
+1526567,2026-03-27,"Warner Park, Basseterre, St Kitts",Australia,West Indies,womens_odi,10,70,0,419,357,481,341,78,78,False,124
+1526567,2026-03-27,"Warner Park, Basseterre, St Kitts",Australia,West Indies,womens_odi,20,135,1,387,357,417,341,46,46,False,60
+1526567,2026-03-27,"Warner Park, Basseterre, St Kitts",Australia,West Indies,womens_odi,30,186,3,264,243,285,341,-77,77,False,42
+1526567,2026-03-27,"Warner Park, Basseterre, St Kitts",Australia,West Indies,womens_odi,40,234,4,281,259,303,341,-60,60,False,44
+1491704,2026-03-11,"University Oval, Dunedin",New Zealand,Zimbabwe,womens_odi,10,38,0,205,175,235,303,-98,98,False,60
+1491704,2026-03-11,"University Oval, Dunedin",New Zealand,Zimbabwe,womens_odi,20,85,1,258,238,278,303,-45,45,False,40
+1491704,2026-03-11,"University Oval, Dunedin",New Zealand,Zimbabwe,womens_odi,30,154,2,309,285,333,303,6,6,True,48
+1491704,2026-03-11,"University Oval, Dunedin",New Zealand,Zimbabwe,womens_odi,40,210,3,277,255,299,303,-26,26,False,44
+1491702,2026-03-05,"University Oval, Dunedin",New Zealand,Zimbabwe,womens_odi,10,64,1,362,308,416,354,8,8,True,108
+1491702,2026-03-05,"University Oval, Dunedin",New Zealand,Zimbabwe,womens_odi,20,107,2,293,270,316,354,-61,61,False,46
+1491702,2026-03-05,"University Oval, Dunedin",New Zealand,Zimbabwe,womens_odi,30,170,2,337,311,363,354,-17,17,True,52
+1491702,2026-03-05,"University Oval, Dunedin",New Zealand,Zimbabwe,womens_odi,40,237,3,306,282,330,354,-48,48,False,48
+1478917,2026-03-01,"Bellerive Oval, Hobart",Australia,India,womens_odi,10,69,1,389,331,447,409,-20,20,True,116
+1478917,2026-03-01,"Bellerive Oval, Hobart",Australia,India,womens_odi,20,133,1,399,368,430,409,-10,10,True,62
+1478917,2026-03-01,"Bellerive Oval, Hobart",Australia,India,womens_odi,30,198,2,357,329,385,409,-52,52,False,56
+1478917,2026-03-01,"Bellerive Oval, Hobart",Australia,India,womens_odi,40,305,3,368,339,397,409,-41,41,False,58
+1477603,2026-03-01,"Kingsmead, Durban",Pakistan,South Africa,womens_odi,10,77,1,363,309,417,306,57,57,False,108
+1477603,2026-03-01,"Kingsmead, Durban",Pakistan,South Africa,womens_odi,20,137,1,360,332,388,306,54,54,False,56
+1477603,2026-03-01,"Kingsmead, Durban",Pakistan,South Africa,womens_odi,30,185,3,267,246,288,306,-39,39,False,42
+1477603,2026-03-01,"Kingsmead, Durban",Pakistan,South Africa,womens_odi,40,218,5,253,233,273,306,-53,53,False,40
+1478916,2026-02-27,"Bellerive Oval, Hobart",India,Australia,womens_odi,10,43,0,208,177,239,251,-43,43,False,62
+1478916,2026-02-27,"Bellerive Oval, Hobart",India,Australia,womens_odi,20,92,1,228,210,246,251,-23,23,False,36
+1478916,2026-02-27,"Bellerive Oval, Hobart",India,Australia,womens_odi,30,130,4,200,184,216,251,-51,51,False,32
+1478916,2026-02-27,"Bellerive Oval, Hobart",India,Australia,womens_odi,40,178,6,204,188,220,251,-47,47,False,32
+1523980,2026-02-25,"National Cricket Stadium, St George's, Grenada",Sri Lanka,West Indies,womens_odi,10,40,1,223,190,256,217,6,6,True,66
+1523980,2026-02-25,"National Cricket Stadium, St George's, Grenada",Sri Lanka,West Indies,womens_odi,20,70,2,175,161,189,217,-42,42,False,28
+1523980,2026-02-25,"National Cricket Stadium, St George's, Grenada",Sri Lanka,West Indies,womens_odi,30,120,2,211,195,227,217,-6,6,True,32
+1523980,2026-02-25,"National Cricket Stadium, St George's, Grenada",Sri Lanka,West Indies,womens_odi,40,161,5,196,181,211,217,-21,21,False,30
+1477602,2026-02-25,"SuperSport Park, Centurion",South Africa,Pakistan,womens_odi,10,64,1,284,242,326,361,-77,77,False,84
+1477602,2026-02-25,"SuperSport Park, Centurion",South Africa,Pakistan,womens_odi,20,126,3,281,259,303,361,-80,80,False,44
+1477602,2026-02-25,"SuperSport Park, Centurion",South Africa,Pakistan,womens_odi,30,178,3,294,271,317,361,-67,67,False,46
+1477602,2026-02-25,"SuperSport Park, Centurion",South Africa,Pakistan,womens_odi,40,237,5,279,257,301,361,-82,82,False,44
+1478915,2026-02-24,"Allan Border Field, Brisbane",India,Australia,womens_odi,10,47,2,217,185,249,214,3,3,True,64
+1478915,2026-02-24,"Allan Border Field, Brisbane",India,Australia,womens_odi,20,87,3,192,177,207,214,-22,22,False,30
+1478915,2026-02-24,"Allan Border Field, Brisbane",India,Australia,womens_odi,30,126,5,196,181,211,214,-18,18,False,30
+1478915,2026-02-24,"Allan Border Field, Brisbane",India,Australia,womens_odi,40,172,6,198,183,213,214,-16,16,False,30
+1523979,2026-02-22,"National Cricket Stadium, St George's, Grenada",Sri Lanka,West Indies,womens_odi,10,43,1,224,191,257,208,16,16,True,66
+1523979,2026-02-22,"National Cricket Stadium, St George's, Grenada",Sri Lanka,West Indies,womens_odi,20,76,2,182,168,196,208,-26,26,False,28
+1523979,2026-02-22,"National Cricket Stadium, St George's, Grenada",Sri Lanka,West Indies,womens_odi,30,127,4,203,187,219,208,-5,5,True,32
+1523979,2026-02-22,"National Cricket Stadium, St George's, Grenada",Sri Lanka,West Indies,womens_odi,40,184,6,210,194,226,208,2,2,True,32
+1523978,2026-02-20,"National Cricket Stadium, St George's, Grenada",Sri Lanka,West Indies,womens_odi,10,45,0,245,209,281,240,5,5,True,72
+1523978,2026-02-20,"National Cricket Stadium, St George's, Grenada",Sri Lanka,West Indies,womens_odi,20,79,1,204,188,220,240,-36,36,False,32
+1523978,2026-02-20,"National Cricket Stadium, St George's, Grenada",Sri Lanka,West Indies,womens_odi,30,130,1,239,220,258,240,-1,1,True,38
+1523978,2026-02-20,"National Cricket Stadium, St George's, Grenada",Sri Lanka,West Indies,womens_odi,40,176,2,230,212,248,240,-10,10,True,36
+1477596,2025-12-19,"The Wanderers Stadium, Johannesburg",Ireland,South Africa,womens_odi,10,39,1,179,153,205,205,-26,26,True,52
+1477596,2025-12-19,"The Wanderers Stadium, Johannesburg",Ireland,South Africa,womens_odi,20,94,1,248,229,267,205,43,43,False,38
+1477596,2025-12-19,"The Wanderers Stadium, Johannesburg",Ireland,South Africa,womens_odi,30,131,4,201,185,217,205,-4,4,True,32
+1477596,2025-12-19,"The Wanderers Stadium, Johannesburg",Ireland,South Africa,womens_odi,40,189,5,224,207,241,205,19,19,False,34
+1477595,2025-12-16,"St George's Park, Gqeberha",South Africa,Ireland,womens_odi,10,52,1,298,254,342,375,-77,77,False,88
+1477595,2025-12-16,"St George's Park, Gqeberha",South Africa,Ireland,womens_odi,20,117,2,350,322,378,375,-25,25,True,56
+1477595,2025-12-16,"St George's Park, Gqeberha",South Africa,Ireland,womens_odi,30,186,2,363,334,392,375,-12,12,True,58
+1477595,2025-12-16,"St George's Park, Gqeberha",South Africa,Ireland,womens_odi,40,256,3,323,298,348,375,-52,52,False,50
+1490443,2025-11-02,"Dr DY Patil Sports Academy, Navi Mumbai",India,South Africa,womens_odi,10,64,0,342,291,393,298,44,44,True,102
+1490443,2025-11-02,"Dr DY Patil Sports Academy, Navi Mumbai",India,South Africa,womens_odi,20,114,1,270,249,291,298,-28,28,False,42
+1490443,2025-11-02,"Dr DY Patil Sports Academy, Navi Mumbai",India,South Africa,womens_odi,30,172,3,254,234,274,298,-44,44,False,40
+1490443,2025-11-02,"Dr DY Patil Sports Academy, Navi Mumbai",India,South Africa,womens_odi,40,229,4,276,254,298,298,-22,22,True,44
+1490442,2025-10-30,"Dr DY Patil Sports Academy, Navi Mumbai",Australia,India,womens_odi,10,72,1,387,329,445,338,49,49,True,116
+1490442,2025-10-30,"Dr DY Patil Sports Academy, Navi Mumbai",Australia,India,womens_odi,20,135,1,391,360,422,338,53,53,False,62
+1490442,2025-10-30,"Dr DY Patil Sports Academy, Navi Mumbai",Australia,India,womens_odi,30,193,2,320,295,345,338,-18,18,True,50
+1490442,2025-10-30,"Dr DY Patil Sports Academy, Navi Mumbai",Australia,India,womens_odi,40,253,5,292,269,315,338,-46,46,False,46
+1490441,2025-10-29,"Barsapara Cricket Stadium, Guwahati",South Africa,England,womens_odi,10,58,0,304,259,349,319,-15,15,True,90
+1490441,2025-10-29,"Barsapara Cricket Stadium, Guwahati",South Africa,England,womens_odi,20,103,0,286,264,308,319,-33,33,False,44
+1490441,2025-10-29,"Barsapara Cricket Stadium, Guwahati",South Africa,England,womens_odi,30,149,3,260,240,280,319,-59,59,False,40
+1490441,2025-10-29,"Barsapara Cricket Stadium, Guwahati",South Africa,England,womens_odi,40,202,5,237,219,255,319,-82,82,False,36
+1490435,2025-10-22,"Holkar Cricket Stadium, Indore",England,Australia,womens_odi,10,55,1,268,228,308,244,24,24,True,80
+1490435,2025-10-22,"Holkar Cricket Stadium, Indore",England,Australia,womens_odi,20,98,2,207,191,223,244,-37,37,False,32
+1490435,2025-10-22,"Holkar Cricket Stadium, Indore",England,Australia,womens_odi,30,124,3,194,179,209,244,-50,50,False,30
+1490435,2025-10-22,"Holkar Cricket Stadium, Indore",England,Australia,womens_odi,40,168,6,194,179,209,244,-50,50,False,30
+1490433,2025-10-20,"Dr DY Patil Sports Academy, Navi Mumbai",Sri Lanka,Bangladesh,womens_odi,10,64,1,383,326,440,202,181,181,False,114
+1490433,2025-10-20,"Dr DY Patil Sports Academy, Navi Mumbai",Sri Lanka,Bangladesh,womens_odi,20,101,4,208,192,224,202,6,6,True,32
+1490433,2025-10-20,"Dr DY Patil Sports Academy, Navi Mumbai",Sri Lanka,Bangladesh,womens_odi,30,159,4,259,239,279,202,57,57,False,40
+1490433,2025-10-20,"Dr DY Patil Sports Academy, Navi Mumbai",Sri Lanka,Bangladesh,womens_odi,40,186,8,203,187,219,202,1,1,True,32
+1506453,2025-10-19,"Amini Park, Port Moresby",Papua New Guinea,United Arab Emirates,womens_odi,10,18,0,158,135,181,210,-52,52,False,46
+1506453,2025-10-19,"Amini Park, Port Moresby",Papua New Guinea,United Arab Emirates,womens_odi,20,46,3,151,139,163,210,-59,59,False,24
+1506453,2025-10-19,"Amini Park, Port Moresby",Papua New Guinea,United Arab Emirates,womens_odi,30,95,5,165,152,178,210,-45,45,False,26
+1506453,2025-10-19,"Amini Park, Port Moresby",Papua New Guinea,United Arab Emirates,womens_odi,40,163,5,198,183,213,210,-12,12,True,30
+1490432,2025-10-19,"Holkar Cricket Stadium, Indore",England,India,womens_odi,10,44,0,207,176,238,288,-81,81,False,62
+1490432,2025-10-19,"Holkar Cricket Stadium, Indore",England,India,womens_odi,20,92,1,230,212,248,288,-58,58,False,36
+1490432,2025-10-19,"Holkar Cricket Stadium, Indore",England,India,womens_odi,30,137,2,224,207,241,288,-64,64,False,34
+1490432,2025-10-19,"Holkar Cricket Stadium, Indore",England,India,womens_odi,40,214,3,256,236,276,288,-32,32,False,40
+1506452,2025-10-17,"Amini Park, Port Moresby",United Arab Emirates,Papua New Guinea,womens_odi,10,43,1,251,214,288,193,58,58,False,74
+1506452,2025-10-17,"Amini Park, Port Moresby",United Arab Emirates,Papua New Guinea,womens_odi,20,61,2,172,159,185,193,-21,21,False,26
+1506452,2025-10-17,"Amini Park, Port Moresby",United Arab Emirates,Papua New Guinea,womens_odi,30,102,5,172,159,185,193,-21,21,False,26
+1506452,2025-10-17,"Amini Park, Port Moresby",United Arab Emirates,Papua New Guinea,womens_odi,40,142,5,177,163,191,193,-16,16,False,28
+1490429,2025-10-16,"Dr. Y.S. Rajasekhara Reddy ACA-VDCA Cricket Stadium, Visakhapatnam",Bangladesh,Australia,womens_odi,10,37,1,253,216,290,198,55,55,False,74
+1490429,2025-10-16,"Dr. Y.S. Rajasekhara Reddy ACA-VDCA Cricket Stadium, Visakhapatnam",Bangladesh,Australia,womens_odi,20,76,2,181,167,195,198,-17,17,False,28
+1490429,2025-10-16,"Dr. Y.S. Rajasekhara Reddy ACA-VDCA Cricket Stadium, Visakhapatnam",Bangladesh,Australia,womens_odi,30,109,4,179,165,193,198,-19,19,False,28
+1490429,2025-10-16,"Dr. Y.S. Rajasekhara Reddy ACA-VDCA Cricket Stadium, Visakhapatnam",Bangladesh,Australia,womens_odi,40,150,6,176,162,190,198,-22,22,False,28
+1506451,2025-10-15,"Amini Park, Port Moresby",United Arab Emirates,Papua New Guinea,womens_odi,10,26,2,171,146,196,143,28,28,False,50
+1506451,2025-10-15,"Amini Park, Port Moresby",United Arab Emirates,Papua New Guinea,womens_odi,20,67,4,172,159,185,143,29,29,False,26
+1506451,2025-10-15,"Amini Park, Port Moresby",United Arab Emirates,Papua New Guinea,womens_odi,30,90,6,142,131,153,143,-1,1,True,22
+1506451,2025-10-15,"Amini Park, Port Moresby",United Arab Emirates,Papua New Guinea,womens_odi,40,133,8,150,138,162,143,7,7,True,24
+1490426,2025-10-13,"Dr. Y.S. Rajasekhara Reddy ACA-VDCA Cricket Stadium, Visakhapatnam",Bangladesh,South Africa,womens_odi,10,28,0,168,143,193,232,-64,64,False,50
+1490426,2025-10-13,"Dr. Y.S. Rajasekhara Reddy ACA-VDCA Cricket Stadium, Visakhapatnam",Bangladesh,South Africa,womens_odi,20,63,1,168,155,181,232,-64,64,False,26
+1490426,2025-10-13,"Dr. Y.S. Rajasekhara Reddy ACA-VDCA Cricket Stadium, Visakhapatnam",Bangladesh,South Africa,womens_odi,30,100,2,183,169,197,232,-49,49,False,28
+1490426,2025-10-13,"Dr. Y.S. Rajasekhara Reddy ACA-VDCA Cricket Stadium, Visakhapatnam",Bangladesh,South Africa,womens_odi,40,150,2,198,183,213,232,-34,34,False,30
+1490425,2025-10-12,"Dr. Y.S. Rajasekhara Reddy ACA-VDCA Cricket Stadium, Visakhapatnam",India,Australia,womens_odi,10,58,0,327,278,376,330,-3,3,True,98
+1490425,2025-10-12,"Dr. Y.S. Rajasekhara Reddy ACA-VDCA Cricket Stadium, Visakhapatnam",India,Australia,womens_odi,20,107,0,308,284,332,330,-22,22,True,48
+1490425,2025-10-12,"Dr. Y.S. Rajasekhara Reddy ACA-VDCA Cricket Stadium, Visakhapatnam",India,Australia,womens_odi,30,192,1,339,312,366,330,9,9,True,54
+1490425,2025-10-12,"Dr. Y.S. Rajasekhara Reddy ACA-VDCA Cricket Stadium, Visakhapatnam",India,Australia,womens_odi,40,261,4,327,301,353,330,-3,3,True,52
+1490424,2025-10-11,"R Premadasa Stadium, Colombo",England,Sri Lanka,womens_odi,10,50,2,222,189,255,253,-31,31,True,66
+1490424,2025-10-11,"R Premadasa Stadium, Colombo",England,Sri Lanka,womens_odi,20,103,2,266,245,287,253,13,13,True,42
+1490424,2025-10-11,"R Premadasa Stadium, Colombo",England,Sri Lanka,womens_odi,30,145,3,233,215,251,253,-20,20,False,36
+1490424,2025-10-11,"R Premadasa Stadium, Colombo",England,Sri Lanka,womens_odi,40,179,6,205,189,221,253,-48,48,False,32
+1490423,2025-10-10,"Barsapara Cricket Stadium, Guwahati",New Zealand,Bangladesh,womens_odi,10,35,2,191,163,219,227,-36,36,False,56
+1490423,2025-10-10,"Barsapara Cricket Stadium, Guwahati",New Zealand,Bangladesh,womens_odi,20,70,3,175,161,189,227,-52,52,False,28
+1490423,2025-10-10,"Barsapara Cricket Stadium, Guwahati",New Zealand,Bangladesh,womens_odi,30,104,3,176,162,190,227,-51,51,False,28
+1490423,2025-10-10,"Barsapara Cricket Stadium, Guwahati",New Zealand,Bangladesh,womens_odi,40,153,4,188,173,203,227,-39,39,False,30
+1490422,2025-10-09,"Dr. Y.S. Rajasekhara Reddy ACA-VDCA Cricket Stadium, Visakhapatnam",India,South Africa,womens_odi,10,55,0,280,238,322,251,29,29,True,84
+1490422,2025-10-09,"Dr. Y.S. Rajasekhara Reddy ACA-VDCA Cricket Stadium, Visakhapatnam",India,South Africa,womens_odi,20,91,3,196,181,211,251,-55,55,False,30
+1490422,2025-10-09,"Dr. Y.S. Rajasekhara Reddy ACA-VDCA Cricket Stadium, Visakhapatnam",India,South Africa,womens_odi,30,114,6,166,153,179,251,-85,85,False,26
+1490422,2025-10-09,"Dr. Y.S. Rajasekhara Reddy ACA-VDCA Cricket Stadium, Visakhapatnam",India,South Africa,womens_odi,40,153,7,179,165,193,251,-72,72,False,28
+1490421,2025-10-08,"R Premadasa Stadium, Colombo",Australia,Pakistan,womens_odi,10,40,2,210,179,241,221,-11,11,True,62
+1490421,2025-10-08,"R Premadasa Stadium, Colombo",Australia,Pakistan,womens_odi,20,74,5,171,158,184,221,-50,50,False,26
+1490421,2025-10-08,"R Premadasa Stadium, Colombo",Australia,Pakistan,womens_odi,30,94,7,137,127,147,221,-84,84,False,20
+1490421,2025-10-08,"R Premadasa Stadium, Colombo",Australia,Pakistan,womens_odi,40,140,8,157,145,169,221,-64,64,False,24
+1490420,2025-10-07,"Barsapara Cricket Stadium, Guwahati",Bangladesh,England,womens_odi,10,31,2,171,146,196,178,-7,7,True,50
+1490420,2025-10-07,"Barsapara Cricket Stadium, Guwahati",Bangladesh,England,womens_odi,20,76,3,181,167,195,178,3,3,True,28
+1490420,2025-10-07,"Barsapara Cricket Stadium, Guwahati",Bangladesh,England,womens_odi,30,92,4,162,150,174,178,-16,16,False,24
+1490420,2025-10-07,"Barsapara Cricket Stadium, Guwahati",Bangladesh,England,womens_odi,40,121,5,156,144,168,178,-22,22,False,24
+1490419,2025-10-06,"Holkar Cricket Stadium, Indore",New Zealand,South Africa,womens_odi,10,38,1,182,155,209,231,-49,49,False,54
+1490419,2025-10-06,"Holkar Cricket Stadium, Indore",New Zealand,South Africa,womens_odi,20,83,2,198,183,213,231,-33,33,False,30
+1490419,2025-10-06,"Holkar Cricket Stadium, Indore",New Zealand,South Africa,womens_odi,30,131,3,225,207,243,231,-6,6,True,36
+1490419,2025-10-06,"Holkar Cricket Stadium, Indore",New Zealand,South Africa,womens_odi,40,195,4,234,216,252,231,3,3,True,36
+1490418,2025-10-05,"R Premadasa Stadium, Colombo",India,Pakistan,womens_odi,10,54,1,336,286,386,247,89,89,False,100
+1490418,2025-10-05,"R Premadasa Stadium, Colombo",India,Pakistan,womens_odi,20,86,2,218,201,235,247,-29,29,False,34
+1490418,2025-10-05,"R Premadasa Stadium, Colombo",India,Pakistan,womens_odi,30,136,3,223,206,240,247,-24,24,False,34
+1490418,2025-10-05,"R Premadasa Stadium, Colombo",India,Pakistan,womens_odi,40,172,5,207,191,223,247,-40,40,False,32
+1503564,2025-10-02,"Queens Sports Club, Bulawayo",United Arab Emirates,Zimbabwe,womens_odi,10,56,0,319,272,366,274,45,45,True,94
+1503564,2025-10-02,"Queens Sports Club, Bulawayo",United Arab Emirates,Zimbabwe,womens_odi,20,99,0,296,273,319,274,22,22,True,46
+1503564,2025-10-02,"Queens Sports Club, Bulawayo",United Arab Emirates,Zimbabwe,womens_odi,30,165,0,333,307,359,274,59,59,False,52
+1503564,2025-10-02,"Queens Sports Club, Bulawayo",United Arab Emirates,Zimbabwe,womens_odi,40,213,2,276,254,298,274,2,2,True,44
+1490414,2025-10-01,"Holkar Cricket Stadium, Indore",Australia,New Zealand,womens_odi,10,81,1,410,349,471,326,84,84,False,122
+1490414,2025-10-01,"Holkar Cricket Stadium, Indore",Australia,New Zealand,womens_odi,20,120,4,225,207,243,326,-101,101,False,36
+1490414,2025-10-01,"Holkar Cricket Stadium, Indore",Australia,New Zealand,womens_odi,30,185,5,255,235,275,326,-71,71,False,40
+1490414,2025-10-01,"Holkar Cricket Stadium, Indore",Australia,New Zealand,womens_odi,40,252,7,278,256,300,326,-48,48,False,44
+1503563,2025-09-30,"Queens Sports Club, Bulawayo",Zimbabwe,United Arab Emirates,womens_odi,10,34,1,188,160,216,203,-15,15,True,56
+1503563,2025-09-30,"Queens Sports Club, Bulawayo",Zimbabwe,United Arab Emirates,womens_odi,20,58,4,163,150,176,203,-40,40,False,26
+1503563,2025-09-30,"Queens Sports Club, Bulawayo",Zimbabwe,United Arab Emirates,womens_odi,30,101,4,171,158,184,203,-32,32,False,26
+1503563,2025-09-30,"Queens Sports Club, Bulawayo",Zimbabwe,United Arab Emirates,womens_odi,40,146,4,182,168,196,203,-21,21,False,28
+1503562,2025-09-28,"Queens Sports Club, Bulawayo",United Arab Emirates,Zimbabwe,womens_odi,10,40,2,191,163,219,160,31,31,False,56
+1503562,2025-09-28,"Queens Sports Club, Bulawayo",United Arab Emirates,Zimbabwe,womens_odi,20,70,2,183,169,197,160,23,23,False,28
+1503562,2025-09-28,"Queens Sports Club, Bulawayo",United Arab Emirates,Zimbabwe,womens_odi,30,116,5,186,172,200,160,26,26,False,28
+1503562,2025-09-28,"Queens Sports Club, Bulawayo",United Arab Emirates,Zimbabwe,womens_odi,40,158,9,170,157,183,160,10,10,True,26
+1503561,2025-09-26,"Queens Sports Club, Bulawayo",United Arab Emirates,Zimbabwe,womens_odi,10,32,1,182,155,209,222,-40,40,False,54
+1503561,2025-09-26,"Queens Sports Club, Bulawayo",United Arab Emirates,Zimbabwe,womens_odi,20,67,1,195,180,210,222,-27,27,False,30
+1503561,2025-09-26,"Queens Sports Club, Bulawayo",United Arab Emirates,Zimbabwe,womens_odi,30,104,3,187,173,201,222,-35,35,False,28
+1503561,2025-09-26,"Queens Sports Club, Bulawayo",United Arab Emirates,Zimbabwe,womens_odi,40,143,5,178,164,192,222,-44,44,False,28
+1488250,2025-09-20,"Arun Jaitley Stadium, Delhi",Australia,India,womens_odi,10,77,1,339,289,389,412,-73,73,False,100
+1488250,2025-09-20,"Arun Jaitley Stadium, Delhi",Australia,India,womens_odi,20,147,1,405,373,437,412,-7,7,True,64
+1488250,2025-09-20,"Arun Jaitley Stadium, Delhi",Australia,India,womens_odi,30,222,2,412,380,444,412,0,0,True,64
+1488250,2025-09-20,"Arun Jaitley Stadium, Delhi",Australia,India,womens_odi,40,334,3,428,394,462,412,16,16,True,68
+1488249,2025-09-17,"Maharaja Yadavindra Singh International Cricket Stadium, New Chandigarh",India,Australia,womens_odi,10,64,0,330,281,379,292,38,38,True,98
+1488249,2025-09-17,"Maharaja Yadavindra Singh International Cricket Stadium, New Chandigarh",India,Australia,womens_odi,20,121,2,279,257,301,292,-13,13,True,44
+1488249,2025-09-17,"Maharaja Yadavindra Singh International Cricket Stadium, New Chandigarh",India,Australia,womens_odi,30,180,3,289,266,312,292,-3,3,True,46
+1488249,2025-09-17,"Maharaja Yadavindra Singh International Cricket Stadium, New Chandigarh",India,Australia,womens_odi,40,235,4,282,260,304,292,-10,10,True,44
+1500387,2025-09-16,"Gaddafi Stadium, Lahore",Pakistan,South Africa,womens_odi,10,39,1,198,169,227,255,-57,57,False,58
+1500387,2025-09-16,"Gaddafi Stadium, Lahore",Pakistan,South Africa,womens_odi,20,91,1,240,221,259,255,-15,15,True,38
+1500387,2025-09-16,"Gaddafi Stadium, Lahore",Pakistan,South Africa,womens_odi,30,148,1,270,249,291,255,15,15,True,42
+1500387,2025-09-16,"Gaddafi Stadium, Lahore",Pakistan,South Africa,womens_odi,40,203,2,264,243,285,255,9,9,True,42
+1488248,2025-09-14,"Maharaja Yadavindra Singh International Cricket Stadium, New Chandigarh",India,Australia,womens_odi,10,55,0,282,240,324,281,1,1,True,84
+1488248,2025-09-14,"Maharaja Yadavindra Singh International Cricket Stadium, New Chandigarh",India,Australia,womens_odi,20,106,0,297,274,320,281,16,16,True,46
+1488248,2025-09-14,"Maharaja Yadavindra Singh International Cricket Stadium, New Chandigarh",India,Australia,womens_odi,30,142,1,237,219,255,281,-44,44,False,36
+1488248,2025-09-14,"Maharaja Yadavindra Singh International Cricket Stadium, New Chandigarh",India,Australia,womens_odi,40,207,3,253,233,273,281,-28,28,False,40
+1476991,2025-07-28,"Civil Service Cricket Club, Stormont, Belfast",Zimbabwe,Ireland,womens_odi,10,22,2,162,138,186,178,-16,16,True,48
+1476991,2025-07-28,"Civil Service Cricket Club, Stormont, Belfast",Zimbabwe,Ireland,womens_odi,20,64,4,169,156,182,178,-9,9,True,26
+1476991,2025-07-28,"Civil Service Cricket Club, Stormont, Belfast",Zimbabwe,Ireland,womens_odi,30,99,4,169,156,182,178,-9,9,True,26
+1476991,2025-07-28,"Civil Service Cricket Club, Stormont, Belfast",Zimbabwe,Ireland,womens_odi,40,146,4,183,169,197,178,5,5,True,28
+1476990,2025-07-26,"Civil Service Cricket Club, Stormont, Belfast",Ireland,Zimbabwe,womens_odi,10,55,0,316,269,363,288,28,28,True,94
+1476990,2025-07-26,"Civil Service Cricket Club, Stormont, Belfast",Ireland,Zimbabwe,womens_odi,20,102,0,318,293,343,288,30,30,False,50
+1476990,2025-07-26,"Civil Service Cricket Club, Stormont, Belfast",Ireland,Zimbabwe,womens_odi,30,176,2,358,330,386,288,70,70,False,56
+1476990,2025-07-26,"Civil Service Cricket Club, Stormont, Belfast",Ireland,Zimbabwe,womens_odi,40,245,3,326,300,352,288,38,38,False,52
+1448404,2025-07-22,"Riverside Ground, Chester-le-Street",India,England,womens_odi,10,52,0,275,234,316,318,-43,43,False,82
+1448404,2025-07-22,"Riverside Ground, Chester-le-Street",India,England,womens_odi,20,87,2,192,177,207,318,-126,126,False,30
+1448404,2025-07-22,"Riverside Ground, Chester-le-Street",India,England,womens_odi,30,147,2,250,230,270,318,-68,68,False,40
+1448404,2025-07-22,"Riverside Ground, Chester-le-Street",India,England,womens_odi,40,198,3,242,223,261,318,-76,76,False,38
+1448402,2025-07-16,"The Rose Bowl, Southampton",England,India,womens_odi,10,55,2,256,218,294,258,-2,2,True,76
+1448402,2025-07-16,"The Rose Bowl, Southampton",England,India,womens_odi,20,97,3,202,186,218,258,-56,56,False,32
+1448402,2025-07-16,"The Rose Bowl, Southampton",England,India,womens_odi,30,136,4,206,190,222,258,-52,52,False,32
+1448402,2025-07-16,"The Rose Bowl, Southampton",England,India,womens_odi,40,182,4,218,201,235,258,-40,40,False,34
+1472535,2025-06-14,"Three Ws Oval, Cave Hill, Barbados",South Africa,West Indies,womens_odi,10,38,0,217,185,249,309,-92,92,False,64
+1472535,2025-06-14,"Three Ws Oval, Cave Hill, Barbados",South Africa,West Indies,womens_odi,20,65,2,184,170,198,309,-125,125,False,28
+1472535,2025-06-14,"Three Ws Oval, Cave Hill, Barbados",South Africa,West Indies,womens_odi,30,144,3,221,204,238,309,-88,88,False,34
+1472535,2025-06-14,"Three Ws Oval, Cave Hill, Barbados",South Africa,West Indies,womens_odi,40,203,5,238,219,257,309,-71,71,False,38
+1448395,2025-06-04,"Grace Road, Leicester",England,West Indies,womens_odi,10,77,0,470,400,540,366,104,104,False,140
+1448395,2025-06-04,"Grace Road, Leicester",England,West Indies,womens_odi,20,140,0,448,413,483,366,82,82,False,70
+1448395,2025-06-04,"Grace Road, Leicester",England,West Indies,womens_odi,30,204,1,332,306,358,366,-34,34,False,52
+1448395,2025-06-04,"Grace Road, Leicester",England,West Indies,womens_odi,40,277,2,358,330,386,366,-8,8,True,56
+1448394,2025-05-30,"County Ground, Derby",England,West Indies,womens_odi,10,45,0,241,205,277,345,-104,104,False,72
+1448394,2025-05-30,"County Ground, Derby",England,West Indies,womens_odi,20,96,0,280,258,302,345,-65,65,False,44
+1448394,2025-05-30,"County Ground, Derby",England,West Indies,womens_odi,30,162,0,324,299,349,345,-21,21,True,50
+1448394,2025-05-30,"County Ground, Derby",England,West Indies,womens_odi,40,253,3,305,281,329,345,-40,40,False,48
+1476986,2025-05-11,"R Premadasa Stadium, Colombo",India,Sri Lanka,womens_odi,10,45,0,251,214,288,342,-91,91,False,74
+1476986,2025-05-11,"R Premadasa Stadium, Colombo",India,Sri Lanka,womens_odi,20,90,1,230,212,248,342,-112,112,False,36
+1476986,2025-05-11,"R Premadasa Stadium, Colombo",India,Sri Lanka,womens_odi,30,156,1,310,286,334,342,-32,32,False,48
+1476986,2025-05-11,"R Premadasa Stadium, Colombo",India,Sri Lanka,womens_odi,40,252,3,338,311,365,342,-4,4,True,54
+1476985,2025-05-09,"R Premadasa Stadium, Colombo",South Africa,Sri Lanka,womens_odi,10,53,0,322,274,370,315,7,7,True,96
+1476985,2025-05-09,"R Premadasa Stadium, Colombo",South Africa,Sri Lanka,womens_odi,20,89,5,186,172,200,315,-129,129,False,28
+1476985,2025-05-09,"R Premadasa Stadium, Colombo",South Africa,Sri Lanka,womens_odi,30,130,6,182,168,196,315,-133,133,False,28
+1476985,2025-05-09,"R Premadasa Stadium, Colombo",South Africa,Sri Lanka,womens_odi,40,201,6,228,210,246,315,-87,87,False,36
+1476984,2025-05-07,"R Premadasa Stadium, Colombo",India,South Africa,womens_odi,10,56,3,196,167,225,337,-141,141,False,58
+1476984,2025-05-07,"R Premadasa Stadium, Colombo",India,South Africa,womens_odi,20,120,3,273,252,294,337,-64,64,False,42
+1476984,2025-05-07,"R Premadasa Stadium, Colombo",India,South Africa,womens_odi,30,169,4,255,235,275,337,-82,82,False,40
+1476984,2025-05-07,"R Premadasa Stadium, Colombo",India,South Africa,womens_odi,40,237,4,294,271,317,337,-43,43,False,46
+1476983,2025-05-04,"R Premadasa Stadium, Colombo",India,Sri Lanka,womens_odi,10,54,1,288,245,331,275,13,13,True,86
+1476983,2025-05-04,"R Premadasa Stadium, Colombo",India,Sri Lanka,womens_odi,20,99,2,249,230,268,275,-26,26,False,38
+1476983,2025-05-04,"R Premadasa Stadium, Colombo",India,Sri Lanka,womens_odi,30,150,4,232,214,250,275,-43,43,False,36
+1476983,2025-05-04,"R Premadasa Stadium, Colombo",India,Sri Lanka,womens_odi,40,205,5,240,221,259,275,-35,35,False,38
+1481713,2025-05-03,"Grand Prairie Stadium, Dallas",Zimbabwe,United States of America,womens_odi,10,59,1,351,299,403,270,81,81,False,104
+1481713,2025-05-03,"Grand Prairie Stadium, Dallas",Zimbabwe,United States of America,womens_odi,20,103,1,302,278,326,270,32,32,False,48
+1481713,2025-05-03,"Grand Prairie Stadium, Dallas",Zimbabwe,United States of America,womens_odi,30,144,2,262,242,282,270,-8,8,True,40
+1481713,2025-05-03,"Grand Prairie Stadium, Dallas",Zimbabwe,United States of America,womens_odi,40,199,2,270,249,291,270,0,0,True,42
+1476982,2025-05-02,"R Premadasa Stadium, Colombo",South Africa,Sri Lanka,womens_odi,10,40,2,190,162,218,235,-45,45,False,56
+1476982,2025-05-02,"R Premadasa Stadium, Colombo",South Africa,Sri Lanka,womens_odi,20,78,3,183,169,197,235,-52,52,False,28
+1476982,2025-05-02,"R Premadasa Stadium, Colombo",South Africa,Sri Lanka,womens_odi,30,130,5,200,184,216,235,-35,35,False,32
+1476982,2025-05-02,"R Premadasa Stadium, Colombo",South Africa,Sri Lanka,womens_odi,40,182,6,208,192,224,235,-27,27,False,32
+1476981,2025-04-29,"R Premadasa Stadium, Colombo",India,South Africa,womens_odi,10,43,0,226,193,259,276,-50,50,False,66
+1476981,2025-04-29,"R Premadasa Stadium, Colombo",India,South Africa,womens_odi,20,97,1,221,204,238,276,-55,55,False,34
+1476981,2025-04-29,"R Premadasa Stadium, Colombo",India,South Africa,womens_odi,30,148,1,270,249,291,276,-6,6,True,42
+1476981,2025-04-29,"R Premadasa Stadium, Colombo",India,South Africa,womens_odi,40,195,3,238,219,257,276,-38,38,False,38
+1477023,2025-04-19,"Gaddafi Stadium, Lahore",Thailand,West Indies,womens_odi,10,42,1,189,161,217,166,23,23,True,56
+1477023,2025-04-19,"Gaddafi Stadium, Lahore",Thailand,West Indies,womens_odi,20,69,3,174,161,187,166,8,8,True,26
+1477023,2025-04-19,"Gaddafi Stadium, Lahore",Thailand,West Indies,womens_odi,30,99,6,151,139,163,166,-15,15,False,24
+1477023,2025-04-19,"Gaddafi Stadium, Lahore",Thailand,West Indies,womens_odi,40,146,8,163,150,176,166,-3,3,True,26
+1477022,2025-04-19,Lahore City Cricket Association Ground,Bangladesh,Pakistan,womens_odi,10,32,3,172,147,197,178,-6,6,True,50
+1477022,2025-04-19,Lahore City Cricket Association Ground,Bangladesh,Pakistan,womens_odi,20,70,4,175,161,189,178,-3,3,True,28
+1477022,2025-04-19,Lahore City Cricket Association Ground,Bangladesh,Pakistan,womens_odi,30,104,4,174,161,187,178,-4,4,True,26
+1477022,2025-04-19,Lahore City Cricket Association Ground,Bangladesh,Pakistan,womens_odi,40,141,7,167,154,180,178,-11,11,True,26
+1477021,2025-04-18,"Gaddafi Stadium, Lahore",Scotland,Ireland,womens_odi,10,19,3,159,136,182,268,-109,109,False,46
+1477021,2025-04-18,"Gaddafi Stadium, Lahore",Scotland,Ireland,womens_odi,20,82,4,190,175,205,268,-78,78,False,30
+1477021,2025-04-18,"Gaddafi Stadium, Lahore",Scotland,Ireland,womens_odi,30,134,5,204,188,220,268,-64,64,False,32
+1477021,2025-04-18,"Gaddafi Stadium, Lahore",Scotland,Ireland,womens_odi,40,186,6,212,196,228,268,-56,56,False,32
+1477020,2025-04-17,"Gaddafi Stadium, Lahore",Pakistan,Thailand,womens_odi,10,26,1,166,142,190,205,-39,39,False,48
+1477020,2025-04-17,"Gaddafi Stadium, Lahore",Pakistan,Thailand,womens_odi,20,49,3,154,142,166,205,-51,51,False,24
+1477020,2025-04-17,"Gaddafi Stadium, Lahore",Pakistan,Thailand,womens_odi,30,80,3,150,138,162,205,-55,55,False,24
+1477020,2025-04-17,"Gaddafi Stadium, Lahore",Pakistan,Thailand,womens_odi,40,119,4,155,143,167,205,-50,50,False,24
+1477019,2025-04-17,Lahore City Cricket Association Ground,Bangladesh,West Indies,womens_odi,10,44,1,234,199,269,227,7,7,True,70
+1477019,2025-04-17,Lahore City Cricket Association Ground,Bangladesh,West Indies,womens_odi,20,95,1,252,232,272,227,25,25,False,40
+1477019,2025-04-17,Lahore City Cricket Association Ground,Bangladesh,West Indies,womens_odi,30,139,3,209,193,225,227,-18,18,False,32
+1477019,2025-04-17,Lahore City Cricket Association Ground,Bangladesh,West Indies,womens_odi,40,177,7,203,187,219,227,-24,24,False,32
+1477018,2025-04-15,"Gaddafi Stadium, Lahore",Bangladesh,Scotland,womens_odi,10,43,1,240,204,276,276,-36,36,True,72
+1477018,2025-04-15,"Gaddafi Stadium, Lahore",Bangladesh,Scotland,womens_odi,20,79,1,225,207,243,276,-51,51,False,36
+1477018,2025-04-15,"Gaddafi Stadium, Lahore",Bangladesh,Scotland,womens_odi,30,138,2,219,202,236,276,-57,57,False,34
+1477018,2025-04-15,"Gaddafi Stadium, Lahore",Bangladesh,Scotland,womens_odi,40,192,4,251,231,271,276,-25,25,False,40
+1477017,2025-04-15,Lahore City Cricket Association Ground,Ireland,Thailand,womens_odi,10,44,0,237,202,272,305,-68,68,False,70
+1477017,2025-04-15,Lahore City Cricket Association Ground,Ireland,Thailand,womens_odi,20,110,1,307,283,331,305,2,2,True,48
+1477017,2025-04-15,Lahore City Cricket Association Ground,Ireland,Thailand,womens_odi,30,161,2,281,259,303,305,-24,24,False,44
+1477017,2025-04-15,Lahore City Cricket Association Ground,Ireland,Thailand,womens_odi,40,219,4,254,234,274,305,-51,51,False,40
+1477016,2025-04-14,"Gaddafi Stadium, Lahore",Pakistan,West Indies,womens_odi,10,27,1,167,142,192,191,-24,24,True,50
+1477016,2025-04-14,"Gaddafi Stadium, Lahore",Pakistan,West Indies,womens_odi,20,71,2,187,173,201,191,-4,4,True,28
+1477016,2025-04-14,"Gaddafi Stadium, Lahore",Pakistan,West Indies,womens_odi,30,98,3,168,155,181,191,-23,23,False,26
+1477016,2025-04-14,"Gaddafi Stadium, Lahore",Pakistan,West Indies,womens_odi,40,140,5,175,161,189,191,-16,16,False,28
+1477015,2025-04-13,"Gaddafi Stadium, Lahore",Ireland,Bangladesh,womens_odi,10,40,1,230,196,264,235,-5,5,True,68
+1477015,2025-04-13,"Gaddafi Stadium, Lahore",Ireland,Bangladesh,womens_odi,20,84,3,199,184,214,235,-36,36,False,30
+1477015,2025-04-13,"Gaddafi Stadium, Lahore",Ireland,Bangladesh,womens_odi,30,125,3,204,188,220,235,-31,31,False,32
+1477015,2025-04-13,"Gaddafi Stadium, Lahore",Ireland,Bangladesh,womens_odi,40,175,4,215,198,232,235,-20,20,False,34
+1477014,2025-04-13,Lahore City Cricket Association Ground,Scotland,Thailand,womens_odi,10,47,2,251,214,288,206,45,45,False,74
+1477014,2025-04-13,Lahore City Cricket Association Ground,Scotland,Thailand,womens_odi,20,113,3,290,267,313,206,84,84,False,46
+1477014,2025-04-13,Lahore City Cricket Association Ground,Scotland,Thailand,womens_odi,30,152,6,204,188,220,206,-2,2,True,32
+1477014,2025-04-13,Lahore City Cricket Association Ground,Scotland,Thailand,womens_odi,40,201,9,213,196,230,206,7,7,True,34
+1477011,2025-04-10,Lahore City Cricket Association Ground,Bangladesh,Thailand,womens_odi,10,48,1,240,204,276,271,-31,31,True,72
+1477011,2025-04-10,Lahore City Cricket Association Ground,Bangladesh,Thailand,womens_odi,20,89,1,244,225,263,271,-27,27,False,38
+1477011,2025-04-10,Lahore City Cricket Association Ground,Bangladesh,Thailand,womens_odi,30,137,2,258,238,278,271,-13,13,True,40
+1477011,2025-04-10,Lahore City Cricket Association Ground,Bangladesh,Thailand,womens_odi,40,194,2,263,242,284,271,-8,8,True,42
+1477010,2025-04-09,Lahore City Cricket Association Ground,Scotland,West Indies,womens_odi,10,41,0,195,166,224,244,-49,49,False,58
+1477010,2025-04-09,Lahore City Cricket Association Ground,Scotland,West Indies,womens_odi,20,89,3,197,182,212,244,-47,47,False,30
+1477010,2025-04-09,Lahore City Cricket Association Ground,Scotland,West Indies,womens_odi,30,164,4,269,248,290,244,25,25,False,42
+1477010,2025-04-09,Lahore City Cricket Association Ground,Scotland,West Indies,womens_odi,40,216,7,242,223,261,244,-2,2,True,38
+1477009,2025-04-09,"Gaddafi Stadium, Lahore",Pakistan,Ireland,womens_odi,10,32,1,189,161,217,217,-28,28,True,56
+1477009,2025-04-09,"Gaddafi Stadium, Lahore",Pakistan,Ireland,womens_odi,20,79,1,217,200,234,217,0,0,True,34
+1477009,2025-04-09,"Gaddafi Stadium, Lahore",Pakistan,Ireland,womens_odi,30,115,2,207,191,223,217,-10,10,True,32
+1477009,2025-04-09,"Gaddafi Stadium, Lahore",Pakistan,Ireland,womens_odi,40,166,3,209,193,225,217,-8,8,True,32
+1443570,2025-03-09,"Saxton Oval, Nelson",New Zealand,Sri Lanka,womens_odi,10,45,0,260,221,299,280,-20,20,True,78
+1443570,2025-03-09,"Saxton Oval, Nelson",New Zealand,Sri Lanka,womens_odi,20,96,0,295,272,318,280,15,15,True,46
+1443570,2025-03-09,"Saxton Oval, Nelson",New Zealand,Sri Lanka,womens_odi,30,126,2,210,194,226,280,-70,70,False,32
+1443570,2025-03-09,"Saxton Oval, Nelson",New Zealand,Sri Lanka,womens_odi,40,191,3,257,237,277,280,-23,23,False,40
+1443569,2025-03-07,"Saxton Oval, Nelson",New Zealand,Sri Lanka,womens_odi,10,43,2,210,179,241,245,-35,35,False,62
+1443569,2025-03-07,"Saxton Oval, Nelson",New Zealand,Sri Lanka,womens_odi,20,63,4,168,155,181,245,-77,77,False,26
+1443569,2025-03-07,"Saxton Oval, Nelson",New Zealand,Sri Lanka,womens_odi,30,113,5,183,169,197,245,-62,62,False,28
+1443569,2025-03-07,"Saxton Oval, Nelson",New Zealand,Sri Lanka,womens_odi,40,161,5,196,181,211,245,-49,49,False,30
+1468401,2025-01-24,"Warner Park, Basseterre, St Kitts",Bangladesh,West Indies,womens_odi,10,49,1,257,219,295,118,139,139,False,76
+1468401,2025-01-24,"Warner Park, Basseterre, St Kitts",Bangladesh,West Indies,womens_odi,20,69,2,186,172,200,118,68,68,False,28
+1468401,2025-01-24,"Warner Park, Basseterre, St Kitts",Bangladesh,West Indies,womens_odi,30,91,3,161,149,173,118,43,43,False,24
+1468401,2025-01-24,"Warner Park, Basseterre, St Kitts",Bangladesh,West Indies,womens_odi,40,113,8,130,120,140,118,12,12,False,20
+1468400,2025-01-21,"Warner Park, Basseterre, St Kitts",Bangladesh,West Indies,womens_odi,10,34,1,174,148,200,184,-10,10,True,52
+1468400,2025-01-21,"Warner Park, Basseterre, St Kitts",Bangladesh,West Indies,womens_odi,20,70,3,175,161,189,184,-9,9,True,28
+1468400,2025-01-21,"Warner Park, Basseterre, St Kitts",Bangladesh,West Indies,womens_odi,30,114,4,184,170,198,184,0,0,True,28
+1468400,2025-01-21,"Warner Park, Basseterre, St Kitts",Bangladesh,West Indies,womens_odi,40,156,5,191,176,206,184,7,7,True,30
+1468399,2025-01-19,"Warner Park, Basseterre, St Kitts",Bangladesh,West Indies,womens_odi,10,34,1,178,152,204,198,-20,20,True,52
+1468399,2025-01-19,"Warner Park, Basseterre, St Kitts",Bangladesh,West Indies,womens_odi,20,81,2,196,181,211,198,-2,2,True,30
+1468399,2025-01-19,"Warner Park, Basseterre, St Kitts",Bangladesh,West Indies,womens_odi,30,113,2,194,179,209,198,-4,4,True,30
+1468399,2025-01-19,"Warner Park, Basseterre, St Kitts",Bangladesh,West Indies,womens_odi,40,150,4,186,172,200,198,-12,12,True,28

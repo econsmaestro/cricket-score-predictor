@@ -1,0 +1,501 @@
+match_id,date,venue,batting_team,fielding_team,match_format,checkpoint,score_at_cp,wickets_at_cp,predicted,pred_low,pred_high,actual,error,abs_error,in_range,range_width
+1554582,2026-10-14,"YSD-UKM Cricket Oval, Bangi",Saudi Arabia,Maldives,mens_t20,6,38,1,141,120,162,194,-53,53,False,42
+1554582,2026-10-14,"YSD-UKM Cricket Oval, Bangi",Saudi Arabia,Maldives,mens_t20,10,86,1,216,184,248,194,22,22,True,64
+1554582,2026-10-14,"YSD-UKM Cricket Oval, Bangi",Saudi Arabia,Maldives,mens_t20,11,91,1,207,183,231,194,13,13,True,48
+1554582,2026-10-14,"YSD-UKM Cricket Oval, Bangi",Saudi Arabia,Maldives,mens_t20,15,130,2,194,171,217,194,0,0,True,46
+1554582,2026-10-14,"YSD-UKM Cricket Oval, Bangi",Saudi Arabia,Maldives,mens_t20,16,137,3,182,168,196,194,-12,12,True,28
+1554581,2026-10-14,"Bayuemas Oval, Kuala Lumpur",Hong Kong,Singapore,mens_t20,6,52,1,193,165,221,172,21,21,True,56
+1554581,2026-10-14,"Bayuemas Oval, Kuala Lumpur",Hong Kong,Singapore,mens_t20,10,86,3,165,141,189,172,-7,7,True,48
+1554581,2026-10-14,"Bayuemas Oval, Kuala Lumpur",Hong Kong,Singapore,mens_t20,11,98,3,180,159,201,172,8,8,True,42
+1554581,2026-10-14,"Bayuemas Oval, Kuala Lumpur",Hong Kong,Singapore,mens_t20,15,120,4,157,139,175,172,-15,15,True,36
+1554581,2026-10-14,"Bayuemas Oval, Kuala Lumpur",Hong Kong,Singapore,mens_t20,16,126,4,156,144,168,172,-16,16,False,24
+1554580,2026-10-14,"Bayuemas Oval, Kuala Lumpur",China,Malaysia,mens_t20,6,17,4,73,63,83,60,13,13,False,20
+1554580,2026-10-14,"Bayuemas Oval, Kuala Lumpur",China,Malaysia,mens_t20,10,27,4,67,57,77,60,7,7,True,20
+1554580,2026-10-14,"Bayuemas Oval, Kuala Lumpur",China,Malaysia,mens_t20,11,28,5,64,57,71,60,4,4,True,14
+1554580,2026-10-14,"Bayuemas Oval, Kuala Lumpur",China,Malaysia,mens_t20,15,48,6,63,56,70,60,3,3,True,14
+1554580,2026-10-14,"Bayuemas Oval, Kuala Lumpur",China,Malaysia,mens_t20,16,49,7,61,57,65,60,1,1,True,8
+1554553,2026-10-14,"Selangor Turf Club, Kuala Lumpur",Thailand,Bhutan,mens_t20,6,29,3,89,76,102,134,-45,45,False,26
+1554553,2026-10-14,"Selangor Turf Club, Kuala Lumpur",Thailand,Bhutan,mens_t20,10,48,3,96,82,110,134,-38,38,False,28
+1554553,2026-10-14,"Selangor Turf Club, Kuala Lumpur",Thailand,Bhutan,mens_t20,11,57,3,104,92,116,134,-30,30,False,24
+1554553,2026-10-14,"Selangor Turf Club, Kuala Lumpur",Thailand,Bhutan,mens_t20,15,83,5,103,91,115,134,-31,31,False,24
+1554553,2026-10-14,"Selangor Turf Club, Kuala Lumpur",Thailand,Bhutan,mens_t20,16,99,5,118,109,127,134,-16,16,False,18
+1554552,2026-10-14,"Selangor Turf Club, Kuala Lumpur",Bahrain,Qatar,mens_t20,6,43,1,152,130,174,119,33,33,False,44
+1554552,2026-10-14,"Selangor Turf Club, Kuala Lumpur",Bahrain,Qatar,mens_t20,10,54,4,99,85,113,119,-20,20,False,28
+1554552,2026-10-14,"Selangor Turf Club, Kuala Lumpur",Bahrain,Qatar,mens_t20,11,56,4,92,81,103,119,-27,27,False,22
+1554552,2026-10-14,"Selangor Turf Club, Kuala Lumpur",Bahrain,Qatar,mens_t20,15,80,5,100,88,112,119,-19,19,False,24
+1554552,2026-10-14,"Selangor Turf Club, Kuala Lumpur",Bahrain,Qatar,mens_t20,16,88,5,105,97,113,119,-14,14,False,16
+1554551,2026-10-14,"YSD-UKM Cricket Oval, Bangi",Mongolia,Myanmar,mens_t20,6,8,3,64,55,73,56,8,8,True,18
+1554551,2026-10-14,"YSD-UKM Cricket Oval, Bangi",Mongolia,Myanmar,mens_t20,10,18,5,58,50,66,56,2,2,True,16
+1554551,2026-10-14,"YSD-UKM Cricket Oval, Bangi",Mongolia,Myanmar,mens_t20,11,24,5,60,53,67,56,4,4,True,14
+1554551,2026-10-14,"YSD-UKM Cricket Oval, Bangi",Mongolia,Myanmar,mens_t20,15,43,7,58,52,64,56,2,2,True,12
+1554551,2026-10-14,"YSD-UKM Cricket Oval, Bangi",Mongolia,Myanmar,mens_t20,16,48,9,56,52,60,56,0,0,True,8
+1550710,2026-10-13,Rawalpindi Cricket Stadium,Pakistan,Sri Lanka,mens_t20,6,57,2,194,165,223,168,26,26,True,58
+1550710,2026-10-13,Rawalpindi Cricket Stadium,Pakistan,Sri Lanka,mens_t20,10,75,4,138,118,158,168,-30,30,False,40
+1550710,2026-10-13,Rawalpindi Cricket Stadium,Pakistan,Sri Lanka,mens_t20,11,82,4,139,123,155,168,-29,29,False,32
+1550710,2026-10-13,Rawalpindi Cricket Stadium,Pakistan,Sri Lanka,mens_t20,15,109,6,125,110,140,168,-43,43,False,30
+1550710,2026-10-13,Rawalpindi Cricket Stadium,Pakistan,Sri Lanka,mens_t20,16,115,6,128,118,138,168,-40,40,False,20
+1554577,2026-10-12,"Bayuemas Oval, Kuala Lumpur",Malaysia,Singapore,mens_t20,6,57,3,147,125,169,149,-2,2,True,44
+1554577,2026-10-12,"Bayuemas Oval, Kuala Lumpur",Malaysia,Singapore,mens_t20,10,73,4,126,108,144,149,-23,23,False,36
+1554577,2026-10-12,"Bayuemas Oval, Kuala Lumpur",Malaysia,Singapore,mens_t20,11,79,4,128,113,143,149,-21,21,False,30
+1554577,2026-10-12,"Bayuemas Oval, Kuala Lumpur",Malaysia,Singapore,mens_t20,15,104,4,136,120,152,149,-13,13,True,32
+1554577,2026-10-12,"Bayuemas Oval, Kuala Lumpur",Malaysia,Singapore,mens_t20,16,109,4,135,125,145,149,-14,14,False,20
+1554550,2026-10-12,"Selangor Turf Club, Kuala Lumpur",Bhutan,Kuwait,mens_t20,6,18,2,83,71,95,74,9,9,True,24
+1554550,2026-10-12,"Selangor Turf Club, Kuala Lumpur",Bhutan,Kuwait,mens_t20,10,38,2,103,88,118,74,29,29,False,30
+1554550,2026-10-12,"Selangor Turf Club, Kuala Lumpur",Bhutan,Kuwait,mens_t20,11,40,3,83,74,92,74,9,9,True,18
+1554550,2026-10-12,"Selangor Turf Club, Kuala Lumpur",Bhutan,Kuwait,mens_t20,15,53,4,77,68,86,74,3,3,True,18
+1554550,2026-10-12,"Selangor Turf Club, Kuala Lumpur",Bhutan,Kuwait,mens_t20,16,55,5,71,66,76,74,-3,3,True,10
+1554576,2026-10-11,"Selangor Turf Club, Kuala Lumpur",Singapore,China,mens_t20,6,49,2,165,141,189,139,26,26,False,48
+1554576,2026-10-11,"Selangor Turf Club, Kuala Lumpur",Singapore,China,mens_t20,10,77,4,127,108,146,139,-12,12,True,38
+1554576,2026-10-11,"Selangor Turf Club, Kuala Lumpur",Singapore,China,mens_t20,11,80,4,125,110,140,139,-14,14,True,30
+1554576,2026-10-11,"Selangor Turf Club, Kuala Lumpur",Singapore,China,mens_t20,15,103,4,130,115,145,139,-9,9,True,30
+1554576,2026-10-11,"Selangor Turf Club, Kuala Lumpur",Singapore,China,mens_t20,16,107,5,124,115,133,139,-15,15,False,18
+1554575,2026-10-11,"YSD-UKM Cricket Oval, Bangi",Maldives,Malaysia,mens_t20,6,40,3,110,94,126,125,-15,15,True,32
+1554575,2026-10-11,"YSD-UKM Cricket Oval, Bangi",Maldives,Malaysia,mens_t20,10,54,4,95,81,109,125,-30,30,False,28
+1554575,2026-10-11,"YSD-UKM Cricket Oval, Bangi",Maldives,Malaysia,mens_t20,11,59,4,98,87,109,125,-27,27,False,22
+1554575,2026-10-11,"YSD-UKM Cricket Oval, Bangi",Maldives,Malaysia,mens_t20,15,94,4,123,109,137,125,-2,2,True,28
+1554575,2026-10-11,"YSD-UKM Cricket Oval, Bangi",Maldives,Malaysia,mens_t20,16,99,5,117,108,126,125,-8,8,True,18
+1554574,2026-10-11,"Bayuemas Oval, Kuala Lumpur",Saudi Arabia,Hong Kong,mens_t20,6,60,2,209,178,240,168,41,41,False,62
+1554574,2026-10-11,"Bayuemas Oval, Kuala Lumpur",Saudi Arabia,Hong Kong,mens_t20,10,91,2,220,187,253,168,52,52,False,66
+1554574,2026-10-11,"Bayuemas Oval, Kuala Lumpur",Saudi Arabia,Hong Kong,mens_t20,11,97,2,208,184,232,168,40,40,False,48
+1554574,2026-10-11,"Bayuemas Oval, Kuala Lumpur",Saudi Arabia,Hong Kong,mens_t20,15,117,4,152,134,170,168,-16,16,True,36
+1554574,2026-10-11,"Bayuemas Oval, Kuala Lumpur",Saudi Arabia,Hong Kong,mens_t20,16,125,4,154,142,166,168,-14,14,False,24
+1550709,2026-10-11,Rawalpindi Cricket Stadium,Pakistan,Sri Lanka,mens_t20,6,46,0,185,158,212,215,-30,30,False,54
+1550709,2026-10-11,Rawalpindi Cricket Stadium,Pakistan,Sri Lanka,mens_t20,10,90,1,228,194,262,215,13,13,True,68
+1550709,2026-10-11,Rawalpindi Cricket Stadium,Pakistan,Sri Lanka,mens_t20,11,102,1,245,216,274,215,30,30,False,58
+1550709,2026-10-11,Rawalpindi Cricket Stadium,Pakistan,Sri Lanka,mens_t20,15,145,2,219,193,245,215,4,4,True,52
+1550709,2026-10-11,Rawalpindi Cricket Stadium,Pakistan,Sri Lanka,mens_t20,16,167,2,234,216,252,215,19,19,False,36
+1529232,2026-10-11,"Holkar Cricket Stadium, Indore",India,West Indies,mens_t20,6,87,1,298,254,342,223,75,75,False,88
+1529232,2026-10-11,"Holkar Cricket Stadium, Indore",India,West Indies,mens_t20,10,125,4,214,182,246,223,-9,9,True,64
+1529232,2026-10-11,"Holkar Cricket Stadium, Indore",India,West Indies,mens_t20,11,136,5,193,170,216,223,-30,30,False,46
+1529232,2026-10-11,"Holkar Cricket Stadium, Indore",India,West Indies,mens_t20,15,174,6,199,176,222,223,-24,24,False,46
+1529232,2026-10-11,"Holkar Cricket Stadium, Indore",India,West Indies,mens_t20,16,187,6,210,194,226,223,-13,13,True,32
+1554573,2026-10-09,"Selangor Turf Club, Kuala Lumpur",Singapore,Maldives,mens_t20,6,61,1,205,175,235,188,17,17,True,60
+1554573,2026-10-09,"Selangor Turf Club, Kuala Lumpur",Singapore,Maldives,mens_t20,10,103,2,242,206,278,188,54,54,False,72
+1554573,2026-10-09,"Selangor Turf Club, Kuala Lumpur",Singapore,Maldives,mens_t20,11,108,2,232,205,259,188,44,44,False,54
+1554573,2026-10-09,"Selangor Turf Club, Kuala Lumpur",Singapore,Maldives,mens_t20,15,138,2,208,184,232,188,20,20,True,48
+1554573,2026-10-09,"Selangor Turf Club, Kuala Lumpur",Singapore,Maldives,mens_t20,16,149,2,208,192,224,188,20,20,False,32
+1554571,2026-10-09,"Bayuemas Oval, Kuala Lumpur",Malaysia,Saudi Arabia,mens_t20,6,27,2,107,91,123,137,-30,30,False,32
+1554571,2026-10-09,"Bayuemas Oval, Kuala Lumpur",Malaysia,Saudi Arabia,mens_t20,10,47,2,114,97,131,137,-23,23,False,34
+1554571,2026-10-09,"Bayuemas Oval, Kuala Lumpur",Malaysia,Saudi Arabia,mens_t20,11,62,2,130,115,145,137,-7,7,True,30
+1554571,2026-10-09,"Bayuemas Oval, Kuala Lumpur",Malaysia,Saudi Arabia,mens_t20,15,90,2,131,116,146,137,-6,6,True,30
+1554571,2026-10-09,"Bayuemas Oval, Kuala Lumpur",Malaysia,Saudi Arabia,mens_t20,16,98,2,133,123,143,137,-4,4,True,20
+1554544,2026-10-09,"Selangor Turf Club, Kuala Lumpur",Myanmar,Qatar,mens_t20,6,19,1,98,84,112,55,43,43,False,28
+1554544,2026-10-09,"Selangor Turf Club, Kuala Lumpur",Myanmar,Qatar,mens_t20,10,23,2,79,68,90,55,24,24,False,22
+1554544,2026-10-09,"Selangor Turf Club, Kuala Lumpur",Myanmar,Qatar,mens_t20,11,23,4,63,56,70,55,8,8,False,14
+1554544,2026-10-09,"Selangor Turf Club, Kuala Lumpur",Myanmar,Qatar,mens_t20,15,35,7,50,44,56,55,-5,5,True,12
+1554544,2026-10-09,"Selangor Turf Club, Kuala Lumpur",Myanmar,Qatar,mens_t20,16,39,7,51,47,55,55,-4,4,True,8
+1554543,2026-10-09,"YSD-UKM Cricket Oval, Bangi",Kuwait,Bahrain,mens_t20,6,35,2,131,112,150,188,-57,57,False,38
+1554543,2026-10-09,"YSD-UKM Cricket Oval, Bangi",Kuwait,Bahrain,mens_t20,10,77,3,159,136,182,188,-29,29,False,46
+1554543,2026-10-09,"YSD-UKM Cricket Oval, Bangi",Kuwait,Bahrain,mens_t20,11,84,3,155,137,173,188,-33,33,False,36
+1554543,2026-10-09,"YSD-UKM Cricket Oval, Bangi",Kuwait,Bahrain,mens_t20,15,135,3,193,170,216,188,5,5,True,46
+1554543,2026-10-09,"YSD-UKM Cricket Oval, Bangi",Kuwait,Bahrain,mens_t20,16,142,3,189,174,204,188,1,1,True,30
+1554542,2026-10-09,"Bayuemas Oval, Kuala Lumpur",Thailand,Mongolia,mens_t20,6,42,1,156,133,179,196,-40,40,False,46
+1554542,2026-10-09,"Bayuemas Oval, Kuala Lumpur",Thailand,Mongolia,mens_t20,10,83,1,194,165,223,196,-2,2,True,58
+1554542,2026-10-09,"Bayuemas Oval, Kuala Lumpur",Thailand,Mongolia,mens_t20,11,92,1,196,173,219,196,0,0,True,46
+1554542,2026-10-09,"Bayuemas Oval, Kuala Lumpur",Thailand,Mongolia,mens_t20,15,128,2,178,157,199,196,-18,18,True,42
+1554542,2026-10-09,"Bayuemas Oval, Kuala Lumpur",Thailand,Mongolia,mens_t20,16,143,2,193,178,208,196,-3,3,True,30
+1550708,2026-10-09,Rawalpindi Cricket Stadium,Sri Lanka,Pakistan,mens_t20,6,45,2,167,142,192,182,-15,15,True,50
+1550708,2026-10-09,Rawalpindi Cricket Stadium,Sri Lanka,Pakistan,mens_t20,10,83,3,166,142,190,182,-16,16,True,48
+1550708,2026-10-09,Rawalpindi Cricket Stadium,Sri Lanka,Pakistan,mens_t20,11,87,4,144,127,161,182,-38,38,False,34
+1550708,2026-10-09,Rawalpindi Cricket Stadium,Sri Lanka,Pakistan,mens_t20,15,132,4,178,157,199,182,-4,4,True,42
+1550708,2026-10-09,Rawalpindi Cricket Stadium,Sri Lanka,Pakistan,mens_t20,16,141,5,168,155,181,182,-14,14,False,26
+1529231,2026-10-09,"JSCA International Stadium Complex, Ranchi",India,West Indies,mens_t20,6,79,1,249,212,286,249,0,0,True,74
+1529231,2026-10-09,"JSCA International Stadium Complex, Ranchi",India,West Indies,mens_t20,10,127,1,307,261,353,249,58,58,False,92
+1529231,2026-10-09,"JSCA International Stadium Complex, Ranchi",India,West Indies,mens_t20,11,139,1,301,265,337,249,52,52,False,72
+1529231,2026-10-09,"JSCA International Stadium Complex, Ranchi",India,West Indies,mens_t20,15,169,4,224,198,250,249,-25,25,True,52
+1529231,2026-10-09,"JSCA International Stadium Complex, Ranchi",India,West Indies,mens_t20,16,178,4,224,207,241,249,-25,25,False,34
+1554569,2026-10-08,"YSD-UKM Cricket Oval, Bangi",Saudi Arabia,Singapore,mens_t20,6,56,2,169,144,194,174,-5,5,True,50
+1554569,2026-10-08,"YSD-UKM Cricket Oval, Bangi",Saudi Arabia,Singapore,mens_t20,10,89,2,199,170,228,174,25,25,True,58
+1554569,2026-10-08,"YSD-UKM Cricket Oval, Bangi",Saudi Arabia,Singapore,mens_t20,11,95,3,156,138,174,174,-18,18,True,36
+1554569,2026-10-08,"YSD-UKM Cricket Oval, Bangi",Saudi Arabia,Singapore,mens_t20,15,132,3,178,157,199,174,4,4,True,42
+1554569,2026-10-08,"YSD-UKM Cricket Oval, Bangi",Saudi Arabia,Singapore,mens_t20,16,134,4,163,150,176,174,-11,11,True,26
+1554568,2026-10-08,"Bayuemas Oval, Kuala Lumpur",China,Maldives,mens_t20,6,30,2,122,104,140,96,26,26,False,36
+1554568,2026-10-08,"Bayuemas Oval, Kuala Lumpur",China,Maldives,mens_t20,10,53,4,101,86,116,96,5,5,True,30
+1554568,2026-10-08,"Bayuemas Oval, Kuala Lumpur",China,Maldives,mens_t20,11,61,5,97,86,108,96,1,1,True,22
+1554568,2026-10-08,"Bayuemas Oval, Kuala Lumpur",China,Maldives,mens_t20,15,88,6,103,91,115,96,7,7,True,24
+1554568,2026-10-08,"Bayuemas Oval, Kuala Lumpur",China,Maldives,mens_t20,16,94,8,102,94,110,96,6,6,True,16
+1554541,2026-10-08,"Selangor Turf Club, Kuala Lumpur",Myanmar,Bahrain,mens_t20,6,25,3,86,74,98,70,16,16,False,24
+1554541,2026-10-08,"Selangor Turf Club, Kuala Lumpur",Myanmar,Bahrain,mens_t20,10,43,3,88,75,101,70,18,18,False,26
+1554541,2026-10-08,"Selangor Turf Club, Kuala Lumpur",Myanmar,Bahrain,mens_t20,11,46,3,87,77,97,70,17,17,False,20
+1554541,2026-10-08,"Selangor Turf Club, Kuala Lumpur",Myanmar,Bahrain,mens_t20,15,55,3,78,69,87,70,8,8,True,18
+1554541,2026-10-08,"Selangor Turf Club, Kuala Lumpur",Myanmar,Bahrain,mens_t20,16,62,4,82,76,88,70,12,12,False,12
+1554540,2026-10-08,"YSD-UKM Cricket Oval, Bangi",Bhutan,Mongolia,mens_t20,6,72,1,275,234,316,203,72,72,False,82
+1554540,2026-10-08,"YSD-UKM Cricket Oval, Bangi",Bhutan,Mongolia,mens_t20,10,97,1,256,218,294,203,53,53,False,76
+1554540,2026-10-08,"YSD-UKM Cricket Oval, Bangi",Bhutan,Mongolia,mens_t20,11,111,1,273,241,305,203,70,70,False,64
+1554540,2026-10-08,"YSD-UKM Cricket Oval, Bangi",Bhutan,Mongolia,mens_t20,15,151,2,213,188,238,203,10,10,True,50
+1554540,2026-10-08,"YSD-UKM Cricket Oval, Bangi",Bhutan,Mongolia,mens_t20,16,155,2,205,189,221,203,2,2,True,32
+1554539,2026-10-08,"Bayuemas Oval, Kuala Lumpur",Thailand,Kuwait,mens_t20,6,30,1,116,99,133,60,56,56,False,34
+1554539,2026-10-08,"Bayuemas Oval, Kuala Lumpur",Thailand,Kuwait,mens_t20,10,38,2,102,87,117,60,42,42,False,30
+1554539,2026-10-08,"Bayuemas Oval, Kuala Lumpur",Thailand,Kuwait,mens_t20,11,42,2,100,88,112,60,40,40,False,24
+1554539,2026-10-08,"Bayuemas Oval, Kuala Lumpur",Thailand,Kuwait,mens_t20,15,50,4,77,68,86,60,17,17,False,18
+1554539,2026-10-08,"Bayuemas Oval, Kuala Lumpur",Thailand,Kuwait,mens_t20,16,52,5,68,63,73,60,8,8,False,10
+1554537,2026-10-06,"Bayuemas Oval, Kuala Lumpur",Bahrain,Bhutan,mens_t20,6,39,2,126,108,144,139,-13,13,True,36
+1554537,2026-10-06,"Bayuemas Oval, Kuala Lumpur",Bahrain,Bhutan,mens_t20,10,64,2,140,119,161,139,1,1,True,42
+1554537,2026-10-06,"Bayuemas Oval, Kuala Lumpur",Bahrain,Bhutan,mens_t20,11,68,2,134,118,150,139,-5,5,True,32
+1554537,2026-10-06,"Bayuemas Oval, Kuala Lumpur",Bahrain,Bhutan,mens_t20,15,101,2,147,130,164,139,8,8,True,34
+1554537,2026-10-06,"Bayuemas Oval, Kuala Lumpur",Bahrain,Bhutan,mens_t20,16,108,3,138,127,149,139,-1,1,True,22
+1554536,2026-10-06,"Bayuemas Oval, Kuala Lumpur",Thailand,Qatar,mens_t20,6,28,3,84,72,96,76,8,8,True,24
+1554536,2026-10-06,"Bayuemas Oval, Kuala Lumpur",Thailand,Qatar,mens_t20,10,42,4,84,72,96,76,8,8,True,24
+1554536,2026-10-06,"Bayuemas Oval, Kuala Lumpur",Thailand,Qatar,mens_t20,11,49,5,85,75,95,76,9,9,True,20
+1554536,2026-10-06,"Bayuemas Oval, Kuala Lumpur",Thailand,Qatar,mens_t20,15,57,7,72,64,80,76,-4,4,True,16
+1554536,2026-10-06,"Bayuemas Oval, Kuala Lumpur",Thailand,Qatar,mens_t20,16,58,8,66,61,71,76,-10,10,False,10
+1529230,2026-10-06,"Bharat Ratna Shri Atal Bihari Vajpayee Ekana Cricket Stadium, Lucknow",West Indies,India,mens_t20,6,44,3,108,92,124,171,-63,63,False,32
+1529230,2026-10-06,"Bharat Ratna Shri Atal Bihari Vajpayee Ekana Cricket Stadium, Lucknow",West Indies,India,mens_t20,10,82,3,152,130,174,171,-19,19,True,44
+1529230,2026-10-06,"Bharat Ratna Shri Atal Bihari Vajpayee Ekana Cricket Stadium, Lucknow",West Indies,India,mens_t20,11,100,3,182,161,203,171,11,11,True,42
+1529230,2026-10-06,"Bharat Ratna Shri Atal Bihari Vajpayee Ekana Cricket Stadium, Lucknow",West Indies,India,mens_t20,15,127,7,142,125,159,171,-29,29,False,34
+1529230,2026-10-06,"Bharat Ratna Shri Atal Bihari Vajpayee Ekana Cricket Stadium, Lucknow",West Indies,India,mens_t20,16,135,8,143,132,154,171,-28,28,False,22
+1555138,2026-10-05,"Yeonhui Cricket Ground, Incheon",South Korea,Indonesia,mens_t20,6,39,1,140,119,161,172,-32,32,False,42
+1555138,2026-10-05,"Yeonhui Cricket Ground, Incheon",South Korea,Indonesia,mens_t20,10,76,3,168,143,193,172,-4,4,True,50
+1555138,2026-10-05,"Yeonhui Cricket Ground, Incheon",South Korea,Indonesia,mens_t20,11,88,3,159,140,178,172,-13,13,True,38
+1555138,2026-10-05,"Yeonhui Cricket Ground, Incheon",South Korea,Indonesia,mens_t20,15,116,5,141,125,157,172,-31,31,False,32
+1555138,2026-10-05,"Yeonhui Cricket Ground, Incheon",South Korea,Indonesia,mens_t20,16,120,6,133,123,143,172,-39,39,False,20
+1555137,2026-10-05,"Yeonhui Cricket Ground, Incheon",Indonesia,South Korea,mens_t20,6,27,2,105,90,120,99,6,6,True,30
+1555137,2026-10-05,"Yeonhui Cricket Ground, Incheon",Indonesia,South Korea,mens_t20,10,45,5,85,73,97,99,-14,14,False,24
+1555137,2026-10-05,"Yeonhui Cricket Ground, Incheon",Indonesia,South Korea,mens_t20,11,51,5,87,77,97,99,-12,12,False,20
+1555137,2026-10-05,"Yeonhui Cricket Ground, Incheon",Indonesia,South Korea,mens_t20,15,66,7,81,72,90,99,-18,18,False,18
+1555137,2026-10-05,"Yeonhui Cricket Ground, Incheon",Indonesia,South Korea,mens_t20,16,73,8,81,75,87,99,-18,18,False,12
+1554535,2026-10-05,"Bayuemas Oval, Kuala Lumpur",Kuwait,Qatar,mens_t20,6,53,1,168,143,193,199,-31,31,False,50
+1554535,2026-10-05,"Bayuemas Oval, Kuala Lumpur",Kuwait,Qatar,mens_t20,10,89,2,170,145,195,199,-29,29,False,50
+1554535,2026-10-05,"Bayuemas Oval, Kuala Lumpur",Kuwait,Qatar,mens_t20,11,99,3,166,147,185,199,-33,33,False,38
+1554535,2026-10-05,"Bayuemas Oval, Kuala Lumpur",Kuwait,Qatar,mens_t20,15,138,5,167,147,187,199,-32,32,False,40
+1554535,2026-10-05,"Bayuemas Oval, Kuala Lumpur",Kuwait,Qatar,mens_t20,16,151,6,166,153,179,199,-33,33,False,26
+1554534,2026-10-05,"YSD-UKM Cricket Oval, Bangi",Bahrain,Thailand,mens_t20,6,30,0,121,103,139,104,17,17,True,36
+1554534,2026-10-05,"YSD-UKM Cricket Oval, Bangi",Bahrain,Thailand,mens_t20,10,40,2,108,92,124,104,4,4,True,32
+1554534,2026-10-05,"YSD-UKM Cricket Oval, Bangi",Bahrain,Thailand,mens_t20,11,45,3,97,86,108,104,-7,7,True,22
+1554534,2026-10-05,"YSD-UKM Cricket Oval, Bangi",Bahrain,Thailand,mens_t20,15,65,4,91,81,101,104,-13,13,False,20
+1554534,2026-10-05,"YSD-UKM Cricket Oval, Bangi",Bahrain,Thailand,mens_t20,16,69,5,85,79,91,104,-19,19,False,12
+1554533,2026-10-05,"Bayuemas Oval, Kuala Lumpur",Bhutan,Myanmar,mens_t20,6,17,1,95,81,109,119,-24,24,False,28
+1554533,2026-10-05,"Bayuemas Oval, Kuala Lumpur",Bhutan,Myanmar,mens_t20,10,35,3,82,70,94,119,-37,37,False,24
+1554533,2026-10-05,"Bayuemas Oval, Kuala Lumpur",Bhutan,Myanmar,mens_t20,11,46,3,92,81,103,119,-27,27,False,22
+1554533,2026-10-05,"Bayuemas Oval, Kuala Lumpur",Bhutan,Myanmar,mens_t20,15,80,4,107,95,119,119,-12,12,True,24
+1554533,2026-10-05,"Bayuemas Oval, Kuala Lumpur",Bhutan,Myanmar,mens_t20,16,88,5,104,96,112,119,-15,15,False,16
+1555136,2026-10-04,"Yeonhui Cricket Ground, Incheon",Indonesia,South Korea,mens_t20,6,43,0,142,121,163,105,37,37,False,42
+1555136,2026-10-04,"Yeonhui Cricket Ground, Incheon",Indonesia,South Korea,mens_t20,10,60,2,122,104,140,105,17,17,True,36
+1555136,2026-10-04,"Yeonhui Cricket Ground, Incheon",Indonesia,South Korea,mens_t20,11,68,3,113,100,126,105,8,8,True,26
+1555136,2026-10-04,"Yeonhui Cricket Ground, Incheon",Indonesia,South Korea,mens_t20,15,88,5,108,96,120,105,3,3,True,24
+1555136,2026-10-04,"Yeonhui Cricket Ground, Incheon",Indonesia,South Korea,mens_t20,16,92,5,108,100,116,105,3,3,True,16
+1555135,2026-10-03,"Yeonhui Cricket Ground, Incheon",Indonesia,South Korea,mens_t20,6,50,1,163,139,187,122,41,41,False,48
+1555135,2026-10-03,"Yeonhui Cricket Ground, Incheon",Indonesia,South Korea,mens_t20,10,67,2,131,112,150,122,9,9,True,38
+1555135,2026-10-03,"Yeonhui Cricket Ground, Incheon",Indonesia,South Korea,mens_t20,11,74,2,131,116,146,122,9,9,True,30
+1555135,2026-10-03,"Yeonhui Cricket Ground, Incheon",Indonesia,South Korea,mens_t20,15,98,4,124,110,138,122,2,2,True,28
+1555135,2026-10-03,"Yeonhui Cricket Ground, Incheon",Indonesia,South Korea,mens_t20,16,103,5,119,110,128,122,-3,3,True,18
+1552779,2026-10-03,Korogi Sports Park,India,Pakistan,mens_t20,6,81,2,261,222,300,211,50,50,False,78
+1552779,2026-10-03,Korogi Sports Park,India,Pakistan,mens_t20,10,114,3,212,181,243,211,1,1,True,62
+1552779,2026-10-03,Korogi Sports Park,India,Pakistan,mens_t20,11,120,3,207,183,231,211,-4,4,True,48
+1552779,2026-10-03,Korogi Sports Park,India,Pakistan,mens_t20,15,137,5,167,147,187,211,-44,44,False,40
+1552779,2026-10-03,Korogi Sports Park,India,Pakistan,mens_t20,16,142,5,165,152,178,211,-46,46,False,26
+1552778,2026-10-03,Korogi Sports Park,Sri Lanka,Bangladesh,mens_t20,6,29,4,88,75,101,165,-77,77,False,26
+1552778,2026-10-03,Korogi Sports Park,Sri Lanka,Bangladesh,mens_t20,10,51,4,100,85,115,165,-65,65,False,30
+1552778,2026-10-03,Korogi Sports Park,Sri Lanka,Bangladesh,mens_t20,11,54,5,90,80,100,165,-75,75,False,20
+1552778,2026-10-03,Korogi Sports Park,Sri Lanka,Bangladesh,mens_t20,15,104,5,132,117,147,165,-33,33,False,30
+1552778,2026-10-03,Korogi Sports Park,Sri Lanka,Bangladesh,mens_t20,16,115,5,139,128,150,165,-26,26,False,22
+1552777,2026-10-01,Korogi Sports Park,India,Sri Lanka,mens_t20,6,58,2,191,163,219,169,22,22,True,56
+1552777,2026-10-01,Korogi Sports Park,India,Sri Lanka,mens_t20,10,88,4,152,130,174,169,-17,17,True,44
+1552777,2026-10-01,Korogi Sports Park,India,Sri Lanka,mens_t20,11,92,4,147,130,164,169,-22,22,False,34
+1552777,2026-10-01,Korogi Sports Park,India,Sri Lanka,mens_t20,15,125,6,145,128,162,169,-24,24,False,34
+1552777,2026-10-01,Korogi Sports Park,India,Sri Lanka,mens_t20,16,128,6,142,131,153,169,-27,27,False,22
+1554594,2026-09-27,"Tafawa Balewa Square Cricket Oval, Lagos",Nigeria,Sierra Leone,mens_t20,6,48,2,155,132,178,136,19,19,True,46
+1554594,2026-09-27,"Tafawa Balewa Square Cricket Oval, Lagos",Nigeria,Sierra Leone,mens_t20,10,69,3,127,108,146,136,-9,9,True,38
+1554594,2026-09-27,"Tafawa Balewa Square Cricket Oval, Lagos",Nigeria,Sierra Leone,mens_t20,11,77,3,133,118,148,136,-3,3,True,30
+1554594,2026-09-27,"Tafawa Balewa Square Cricket Oval, Lagos",Nigeria,Sierra Leone,mens_t20,15,99,6,114,101,127,136,-22,22,False,26
+1554594,2026-09-27,"Tafawa Balewa Square Cricket Oval, Lagos",Nigeria,Sierra Leone,mens_t20,16,105,6,117,108,126,136,-19,19,False,18
+1554592,2026-09-26,"Tafawa Balewa Square Cricket Oval, Lagos",Nigeria,Ghana,mens_t20,6,41,1,154,131,177,146,8,8,True,46
+1554592,2026-09-26,"Tafawa Balewa Square Cricket Oval, Lagos",Nigeria,Ghana,mens_t20,10,65,2,146,125,167,146,0,0,True,42
+1554592,2026-09-26,"Tafawa Balewa Square Cricket Oval, Lagos",Nigeria,Ghana,mens_t20,11,75,2,162,143,181,146,16,16,True,38
+1554592,2026-09-26,"Tafawa Balewa Square Cricket Oval, Lagos",Nigeria,Ghana,mens_t20,15,99,3,130,115,145,146,-16,16,False,30
+1554592,2026-09-26,"Tafawa Balewa Square Cricket Oval, Lagos",Nigeria,Ghana,mens_t20,16,114,3,149,138,160,146,3,3,True,22
+1552800,2026-09-26,"Jimmy Powell Oval, Cayman Islands",Bahamas,Bermuda,mens_t20,6,16,1,86,74,98,82,4,4,True,24
+1552800,2026-09-26,"Jimmy Powell Oval, Cayman Islands",Bahamas,Bermuda,mens_t20,10,31,2,96,82,110,82,14,14,True,28
+1552800,2026-09-26,"Jimmy Powell Oval, Cayman Islands",Bahamas,Bermuda,mens_t20,11,34,3,75,66,84,82,-7,7,True,18
+1552800,2026-09-26,"Jimmy Powell Oval, Cayman Islands",Bahamas,Bermuda,mens_t20,15,69,6,84,74,94,82,2,2,True,20
+1552800,2026-09-26,"Jimmy Powell Oval, Cayman Islands",Bahamas,Bermuda,mens_t20,16,76,6,88,81,95,82,6,6,True,14
+1552768,2026-09-25,Korogi Sports Park,Hong Kong,Oman,mens_t20,6,34,2,132,113,151,121,11,11,True,38
+1552768,2026-09-25,Korogi Sports Park,Hong Kong,Oman,mens_t20,10,62,2,151,129,173,121,30,30,False,44
+1552768,2026-09-25,Korogi Sports Park,Hong Kong,Oman,mens_t20,11,65,3,122,108,136,121,1,1,True,28
+1552768,2026-09-25,Korogi Sports Park,Hong Kong,Oman,mens_t20,15,85,6,101,89,113,121,-20,20,False,24
+1552768,2026-09-25,Korogi Sports Park,Hong Kong,Oman,mens_t20,16,88,6,100,92,108,121,-21,21,False,16
+1552795,2026-09-24,"Jimmy Powell Oval, Cayman Islands",Cayman Islands,Bahamas,mens_t20,6,65,1,232,198,266,215,17,17,True,68
+1552795,2026-09-24,"Jimmy Powell Oval, Cayman Islands",Cayman Islands,Bahamas,mens_t20,10,102,1,265,226,304,215,50,50,False,78
+1552795,2026-09-24,"Jimmy Powell Oval, Cayman Islands",Cayman Islands,Bahamas,mens_t20,11,114,1,270,238,302,215,55,55,False,64
+1552795,2026-09-24,"Jimmy Powell Oval, Cayman Islands",Cayman Islands,Bahamas,mens_t20,15,160,1,250,220,280,215,35,35,False,60
+1552795,2026-09-24,"Jimmy Powell Oval, Cayman Islands",Cayman Islands,Bahamas,mens_t20,16,180,1,252,232,272,215,37,37,False,40
+1552767,2026-09-24,Korogi Sports Park,Hong Kong,Malaysia,mens_t20,6,31,5,87,74,100,81,6,6,True,26
+1552767,2026-09-24,Korogi Sports Park,Hong Kong,Malaysia,mens_t20,10,47,5,87,74,100,81,6,6,True,26
+1552767,2026-09-24,Korogi Sports Park,Hong Kong,Malaysia,mens_t20,11,49,5,85,75,95,81,4,4,True,20
+1552767,2026-09-24,Korogi Sports Park,Hong Kong,Malaysia,mens_t20,15,55,7,70,62,78,81,-11,11,False,16
+1552767,2026-09-24,Korogi Sports Park,Hong Kong,Malaysia,mens_t20,16,58,8,66,61,71,81,-15,15,False,10
+1555386,2026-09-23,"Jimmy Powell Oval, Cayman Islands",Bermuda,Cayman Islands,mens_t20,6,34,3,114,97,131,113,1,1,True,34
+1555386,2026-09-23,"Jimmy Powell Oval, Cayman Islands",Bermuda,Cayman Islands,mens_t20,10,59,3,118,101,135,113,5,5,True,34
+1555386,2026-09-23,"Jimmy Powell Oval, Cayman Islands",Bermuda,Cayman Islands,mens_t20,11,68,3,126,111,141,113,13,13,True,30
+1555386,2026-09-23,"Jimmy Powell Oval, Cayman Islands",Bermuda,Cayman Islands,mens_t20,15,85,5,105,93,117,113,-8,8,True,24
+1555386,2026-09-23,"Jimmy Powell Oval, Cayman Islands",Bermuda,Cayman Islands,mens_t20,16,88,6,100,92,108,113,-13,13,False,16
+1552797,2026-09-23,"Jimmy Powell Oval, Cayman Islands",Cayman Islands,Bermuda,mens_t20,6,42,2,150,128,172,143,7,7,True,44
+1552797,2026-09-23,"Jimmy Powell Oval, Cayman Islands",Cayman Islands,Bermuda,mens_t20,10,64,4,110,94,126,143,-33,33,False,32
+1552797,2026-09-23,"Jimmy Powell Oval, Cayman Islands",Cayman Islands,Bermuda,mens_t20,11,69,4,113,100,126,143,-30,30,False,26
+1552797,2026-09-23,"Jimmy Powell Oval, Cayman Islands",Cayman Islands,Bermuda,mens_t20,15,99,4,131,116,146,143,-12,12,True,30
+1552797,2026-09-23,"Jimmy Powell Oval, Cayman Islands",Cayman Islands,Bermuda,mens_t20,16,104,4,130,120,140,143,-13,13,False,20
+1554585,2026-09-22,"Tafawa Balewa Square Cricket Oval, Lagos",Ghana,Sierra Leone,mens_t20,6,12,1,84,72,96,85,-1,1,True,24
+1554585,2026-09-22,"Tafawa Balewa Square Cricket Oval, Lagos",Ghana,Sierra Leone,mens_t20,10,38,1,104,89,119,85,19,19,False,30
+1554585,2026-09-22,"Tafawa Balewa Square Cricket Oval, Lagos",Ghana,Sierra Leone,mens_t20,11,38,2,87,77,97,85,2,2,True,20
+1554585,2026-09-22,"Tafawa Balewa Square Cricket Oval, Lagos",Ghana,Sierra Leone,mens_t20,15,63,4,89,79,99,85,4,4,True,20
+1554585,2026-09-22,"Tafawa Balewa Square Cricket Oval, Lagos",Ghana,Sierra Leone,mens_t20,16,69,5,86,80,92,85,1,1,True,12
+1554583,2026-09-21,"Tafawa Balewa Square Cricket Oval, Lagos",Ghana,Nigeria,mens_t20,6,19,1,92,79,105,91,1,1,True,26
+1554583,2026-09-21,"Tafawa Balewa Square Cricket Oval, Lagos",Ghana,Nigeria,mens_t20,10,42,1,109,93,125,91,18,18,False,32
+1554583,2026-09-21,"Tafawa Balewa Square Cricket Oval, Lagos",Ghana,Nigeria,mens_t20,11,44,3,91,81,101,91,0,0,True,20
+1554583,2026-09-21,"Tafawa Balewa Square Cricket Oval, Lagos",Ghana,Nigeria,mens_t20,15,61,4,86,76,96,91,-5,5,True,20
+1554583,2026-09-21,"Tafawa Balewa Square Cricket Oval, Lagos",Ghana,Nigeria,mens_t20,16,64,5,80,74,86,91,-11,11,False,12
+1552926,2026-09-19,Gahanga International Cricket Stadium,Kenya,Uganda,mens_t20,6,38,3,120,102,138,170,-50,50,False,36
+1552926,2026-09-19,Gahanga International Cricket Stadium,Kenya,Uganda,mens_t20,10,71,4,130,111,149,170,-40,40,False,38
+1552926,2026-09-19,Gahanga International Cricket Stadium,Kenya,Uganda,mens_t20,11,76,4,130,115,145,170,-40,40,False,30
+1552926,2026-09-19,Gahanga International Cricket Stadium,Kenya,Uganda,mens_t20,15,104,6,125,110,140,170,-45,45,False,30
+1552926,2026-09-19,Gahanga International Cricket Stadium,Kenya,Uganda,mens_t20,16,108,6,124,115,133,170,-46,46,False,18
+1552306,2026-09-19,Sano International Cricket Ground,Japan,Hong Kong,mens_t20,6,27,2,112,96,128,95,17,17,False,32
+1552306,2026-09-19,Sano International Cricket Ground,Japan,Hong Kong,mens_t20,10,48,2,122,104,140,95,27,27,False,36
+1552306,2026-09-19,Sano International Cricket Ground,Japan,Hong Kong,mens_t20,11,50,2,117,103,131,95,22,22,False,28
+1552306,2026-09-19,Sano International Cricket Ground,Japan,Hong Kong,mens_t20,15,70,4,94,83,105,95,-1,1,True,22
+1552306,2026-09-19,Sano International Cricket Ground,Japan,Hong Kong,mens_t20,16,76,4,97,90,104,95,2,2,True,14
+1496587,2026-09-19,Old Trafford,Sri Lanka,England,mens_t20,6,47,2,140,119,161,124,16,16,True,42
+1496587,2026-09-19,Old Trafford,Sri Lanka,England,mens_t20,10,74,3,129,110,148,124,5,5,True,38
+1496587,2026-09-19,Old Trafford,Sri Lanka,England,mens_t20,11,86,4,135,119,151,124,11,11,True,32
+1496587,2026-09-19,Old Trafford,Sri Lanka,England,mens_t20,15,114,5,137,121,153,124,13,13,True,32
+1496587,2026-09-19,Old Trafford,Sri Lanka,England,mens_t20,16,117,6,129,119,139,124,5,5,True,20
+1552925,2026-09-18,Gahanga International Cricket Stadium,Botswana,Sierra Leone,mens_t20,6,29,1,109,93,125,121,-12,12,True,32
+1552925,2026-09-18,Gahanga International Cricket Stadium,Botswana,Sierra Leone,mens_t20,10,56,2,116,99,133,121,-5,5,True,34
+1552925,2026-09-18,Gahanga International Cricket Stadium,Botswana,Sierra Leone,mens_t20,11,70,2,131,116,146,121,10,10,True,30
+1552925,2026-09-18,Gahanga International Cricket Stadium,Botswana,Sierra Leone,mens_t20,15,99,3,126,111,141,121,5,5,True,30
+1552925,2026-09-18,Gahanga International Cricket Stadium,Botswana,Sierra Leone,mens_t20,16,100,4,119,110,128,121,-2,2,True,18
+1552924,2026-09-18,Gahanga International Cricket Stadium,Uganda,Kenya,mens_t20,6,41,2,160,136,184,197,-37,37,False,48
+1552924,2026-09-18,Gahanga International Cricket Stadium,Uganda,Kenya,mens_t20,10,70,3,149,127,171,197,-48,48,False,44
+1552924,2026-09-18,Gahanga International Cricket Stadium,Uganda,Kenya,mens_t20,11,81,3,165,146,184,197,-32,32,False,38
+1552924,2026-09-18,Gahanga International Cricket Stadium,Uganda,Kenya,mens_t20,15,120,3,174,154,194,197,-23,23,False,40
+1552924,2026-09-18,Gahanga International Cricket Stadium,Uganda,Kenya,mens_t20,16,137,3,190,175,205,197,-7,7,True,30
+1552923,2026-09-17,"Gahanga International Cricket Stadium, Rwanda",Kenya,Botswana,mens_t20,6,63,1,197,168,226,216,-19,19,True,58
+1552923,2026-09-17,"Gahanga International Cricket Stadium, Rwanda",Kenya,Botswana,mens_t20,10,102,2,243,207,279,216,27,27,True,72
+1552923,2026-09-17,"Gahanga International Cricket Stadium, Rwanda",Kenya,Botswana,mens_t20,11,113,2,247,218,276,216,31,31,False,58
+1552923,2026-09-17,"Gahanga International Cricket Stadium, Rwanda",Kenya,Botswana,mens_t20,15,163,3,224,198,250,216,8,8,True,52
+1552923,2026-09-17,"Gahanga International Cricket Stadium, Rwanda",Kenya,Botswana,mens_t20,16,174,3,228,210,246,216,12,12,True,36
+1552922,2026-09-17,"Gahanga International Cricket Stadium, Rwanda",Uganda,Rwanda,mens_t20,6,63,0,233,199,267,188,45,45,False,68
+1552922,2026-09-17,"Gahanga International Cricket Stadium, Rwanda",Uganda,Rwanda,mens_t20,10,93,1,214,182,246,188,26,26,True,64
+1552922,2026-09-17,"Gahanga International Cricket Stadium, Rwanda",Uganda,Rwanda,mens_t20,11,100,1,209,184,234,188,21,21,True,50
+1552922,2026-09-17,"Gahanga International Cricket Stadium, Rwanda",Uganda,Rwanda,mens_t20,15,139,2,229,202,256,188,41,41,False,54
+1552922,2026-09-17,"Gahanga International Cricket Stadium, Rwanda",Uganda,Rwanda,mens_t20,16,141,2,202,186,218,188,14,14,True,32
+1496586,2026-09-17,"Sophia Gardens, Cardiff",Sri Lanka,England,mens_t20,6,56,2,169,144,194,145,24,24,True,50
+1496586,2026-09-17,"Sophia Gardens, Cardiff",Sri Lanka,England,mens_t20,10,84,3,152,130,174,145,7,7,True,44
+1496586,2026-09-17,"Sophia Gardens, Cardiff",Sri Lanka,England,mens_t20,11,91,4,137,121,153,145,-8,8,True,32
+1496586,2026-09-17,"Sophia Gardens, Cardiff",Sri Lanka,England,mens_t20,15,115,5,135,119,151,145,-10,10,True,32
+1496586,2026-09-17,"Sophia Gardens, Cardiff",Sri Lanka,England,mens_t20,16,133,5,154,142,166,145,9,9,True,24
+1552921,2026-09-16,"Gahanga International Cricket Stadium, Rwanda",Sierra Leone,Rwanda,mens_t20,6,23,3,79,68,90,87,-8,8,True,22
+1552921,2026-09-16,"Gahanga International Cricket Stadium, Rwanda",Sierra Leone,Rwanda,mens_t20,10,36,4,76,65,87,87,-11,11,True,22
+1552921,2026-09-16,"Gahanga International Cricket Stadium, Rwanda",Sierra Leone,Rwanda,mens_t20,11,49,4,92,81,103,87,5,5,True,22
+1552921,2026-09-16,"Gahanga International Cricket Stadium, Rwanda",Sierra Leone,Rwanda,mens_t20,15,65,7,80,71,89,87,-7,7,True,18
+1552921,2026-09-16,"Gahanga International Cricket Stadium, Rwanda",Sierra Leone,Rwanda,mens_t20,16,66,8,74,69,79,87,-13,13,False,10
+1552920,2026-09-16,"Gahanga International Cricket Stadium, Rwanda",Botswana,Uganda,mens_t20,6,41,3,141,120,162,119,22,22,False,42
+1552920,2026-09-16,"Gahanga International Cricket Stadium, Rwanda",Botswana,Uganda,mens_t20,10,65,3,140,119,161,119,21,21,True,42
+1552920,2026-09-16,"Gahanga International Cricket Stadium, Rwanda",Botswana,Uganda,mens_t20,11,68,4,117,103,131,119,-2,2,True,28
+1552920,2026-09-16,"Gahanga International Cricket Stadium, Rwanda",Botswana,Uganda,mens_t20,15,89,6,104,92,116,119,-15,15,False,24
+1552920,2026-09-16,"Gahanga International Cricket Stadium, Rwanda",Botswana,Uganda,mens_t20,16,96,6,109,101,117,119,-10,10,False,16
+1552919,2026-09-15,"Gahanga International Cricket Stadium, Rwanda",Kenya,Rwanda,mens_t20,6,63,2,176,150,202,189,-13,13,True,52
+1552919,2026-09-15,"Gahanga International Cricket Stadium, Rwanda",Kenya,Rwanda,mens_t20,10,92,2,197,168,226,189,8,8,True,58
+1552919,2026-09-15,"Gahanga International Cricket Stadium, Rwanda",Kenya,Rwanda,mens_t20,11,97,2,187,165,209,189,-2,2,True,44
+1552919,2026-09-15,"Gahanga International Cricket Stadium, Rwanda",Kenya,Rwanda,mens_t20,15,119,3,157,139,175,189,-32,32,False,36
+1552919,2026-09-15,"Gahanga International Cricket Stadium, Rwanda",Kenya,Rwanda,mens_t20,16,126,3,158,146,170,189,-31,31,False,24
+1552918,2026-09-15,"Gahanga International Cricket Stadium, Rwanda",Sierra Leone,Uganda,mens_t20,6,18,2,100,85,115,55,45,45,False,30
+1552918,2026-09-15,"Gahanga International Cricket Stadium, Rwanda",Sierra Leone,Uganda,mens_t20,10,41,7,71,61,81,55,16,16,False,20
+1552918,2026-09-15,"Gahanga International Cricket Stadium, Rwanda",Sierra Leone,Uganda,mens_t20,11,48,7,75,66,84,55,20,20,False,18
+1552918,2026-09-15,"Gahanga International Cricket Stadium, Rwanda",Sierra Leone,Uganda,mens_t20,15,51,8,61,54,68,55,6,6,True,14
+1552918,2026-09-15,"Gahanga International Cricket Stadium, Rwanda",Sierra Leone,Uganda,mens_t20,16,52,9,60,56,64,55,5,5,False,8
+1496585,2026-09-15,"The Rose Bowl, Southampton",England,Sri Lanka,mens_t20,6,90,1,303,258,348,254,49,49,False,90
+1496585,2026-09-15,"The Rose Bowl, Southampton",England,Sri Lanka,mens_t20,10,134,1,314,267,361,254,60,60,False,94
+1496585,2026-09-15,"The Rose Bowl, Southampton",England,Sri Lanka,mens_t20,11,145,1,307,271,343,254,53,53,False,72
+1496585,2026-09-15,"The Rose Bowl, Southampton",England,Sri Lanka,mens_t20,15,191,2,265,234,296,254,11,11,True,62
+1496585,2026-09-15,"The Rose Bowl, Southampton",England,Sri Lanka,mens_t20,16,197,3,242,223,261,254,-12,12,True,38
+1552916,2026-09-13,"Gahanga B Ground, Rwanda",Sierra Leone,Kenya,mens_t20,6,27,1,116,99,133,112,4,4,True,34
+1552916,2026-09-13,"Gahanga B Ground, Rwanda",Sierra Leone,Kenya,mens_t20,10,43,1,121,103,139,112,9,9,True,36
+1552916,2026-09-13,"Gahanga B Ground, Rwanda",Sierra Leone,Kenya,mens_t20,11,49,2,115,102,128,112,3,3,True,26
+1552916,2026-09-13,"Gahanga B Ground, Rwanda",Sierra Leone,Kenya,mens_t20,15,74,5,95,84,106,112,-17,17,False,22
+1552916,2026-09-13,"Gahanga B Ground, Rwanda",Sierra Leone,Kenya,mens_t20,16,80,5,96,89,103,112,-16,16,False,14
+1552915,2026-09-12,"Gahanga B Ground, Rwanda",Botswana,Sierra Leone,mens_t20,6,58,0,216,184,248,165,51,51,False,64
+1552915,2026-09-12,"Gahanga B Ground, Rwanda",Botswana,Sierra Leone,mens_t20,10,86,2,163,139,187,165,-2,2,True,48
+1552915,2026-09-12,"Gahanga B Ground, Rwanda",Botswana,Sierra Leone,mens_t20,11,90,2,159,140,178,165,-6,6,True,38
+1552915,2026-09-12,"Gahanga B Ground, Rwanda",Botswana,Sierra Leone,mens_t20,15,120,2,165,146,184,165,0,0,True,38
+1552915,2026-09-12,"Gahanga B Ground, Rwanda",Botswana,Sierra Leone,mens_t20,16,139,2,184,170,198,165,19,19,False,28
+1552914,2026-09-12,"Gahanga B Ground, Rwanda",Uganda,Kenya,mens_t20,6,43,2,165,141,189,189,-24,24,True,48
+1552914,2026-09-12,"Gahanga B Ground, Rwanda",Uganda,Kenya,mens_t20,10,81,3,167,142,192,189,-22,22,True,50
+1552914,2026-09-12,"Gahanga B Ground, Rwanda",Uganda,Kenya,mens_t20,11,90,3,168,148,188,189,-21,21,False,40
+1552914,2026-09-12,"Gahanga B Ground, Rwanda",Uganda,Kenya,mens_t20,15,129,4,173,153,193,189,-16,16,True,40
+1552914,2026-09-12,"Gahanga B Ground, Rwanda",Uganda,Kenya,mens_t20,16,133,4,167,154,180,189,-22,22,False,26
+1552913,2026-09-11,"Gahanga B Ground, Rwanda",Botswana,Kenya,mens_t20,6,47,2,154,131,177,108,46,46,False,46
+1552913,2026-09-11,"Gahanga B Ground, Rwanda",Botswana,Kenya,mens_t20,10,67,3,121,103,139,108,13,13,True,36
+1552913,2026-09-11,"Gahanga B Ground, Rwanda",Botswana,Kenya,mens_t20,11,75,4,128,113,143,108,20,20,False,30
+1552913,2026-09-11,"Gahanga B Ground, Rwanda",Botswana,Kenya,mens_t20,15,90,5,110,97,123,108,2,2,True,26
+1552913,2026-09-11,"Gahanga B Ground, Rwanda",Botswana,Kenya,mens_t20,16,92,6,104,96,112,108,-4,4,True,16
+1552912,2026-09-11,"Gahanga B Ground, Rwanda",Uganda,Rwanda,mens_t20,6,64,2,200,170,230,198,2,2,True,60
+1552912,2026-09-11,"Gahanga B Ground, Rwanda",Uganda,Rwanda,mens_t20,10,95,2,226,193,259,198,28,28,True,66
+1552912,2026-09-11,"Gahanga B Ground, Rwanda",Uganda,Rwanda,mens_t20,11,111,2,246,217,275,198,48,48,False,58
+1552912,2026-09-11,"Gahanga B Ground, Rwanda",Uganda,Rwanda,mens_t20,15,153,3,211,186,236,198,13,13,True,50
+1552912,2026-09-11,"Gahanga B Ground, Rwanda",Uganda,Rwanda,mens_t20,16,157,3,201,185,217,198,3,3,True,32
+1552911,2026-09-10,"Gahanga B Ground, Rwanda",Rwanda,Sierra Leone,mens_t20,6,74,0,284,242,326,191,93,93,False,84
+1552911,2026-09-10,"Gahanga B Ground, Rwanda",Rwanda,Sierra Leone,mens_t20,10,105,2,225,192,258,191,34,34,False,66
+1552911,2026-09-10,"Gahanga B Ground, Rwanda",Rwanda,Sierra Leone,mens_t20,11,117,2,232,205,259,191,41,41,False,54
+1552911,2026-09-10,"Gahanga B Ground, Rwanda",Rwanda,Sierra Leone,mens_t20,15,150,2,218,192,244,191,27,27,False,52
+1552911,2026-09-10,"Gahanga B Ground, Rwanda",Rwanda,Sierra Leone,mens_t20,16,152,2,204,188,220,191,13,13,True,32
+1552910,2026-09-10,"Gahanga B Ground, Rwanda",Botswana,Uganda,mens_t20,6,29,1,127,108,146,101,26,26,False,38
+1552910,2026-09-10,"Gahanga B Ground, Rwanda",Botswana,Uganda,mens_t20,10,52,3,107,91,123,101,6,6,True,32
+1552910,2026-09-10,"Gahanga B Ground, Rwanda",Botswana,Uganda,mens_t20,11,57,3,108,96,120,101,7,7,True,24
+1552910,2026-09-10,"Gahanga B Ground, Rwanda",Botswana,Uganda,mens_t20,15,77,5,99,88,110,101,-2,2,True,22
+1552910,2026-09-10,"Gahanga B Ground, Rwanda",Botswana,Uganda,mens_t20,16,81,5,98,91,105,101,-3,3,True,14
+1552909,2026-09-09,"Gahanga B Ground, Rwanda",Rwanda,Kenya,mens_t20,6,33,3,114,97,131,139,-25,25,False,34
+1552909,2026-09-09,"Gahanga B Ground, Rwanda",Rwanda,Kenya,mens_t20,10,60,4,118,101,135,139,-21,21,False,34
+1552909,2026-09-09,"Gahanga B Ground, Rwanda",Rwanda,Kenya,mens_t20,11,63,4,111,98,124,139,-28,28,False,26
+1552909,2026-09-09,"Gahanga B Ground, Rwanda",Rwanda,Kenya,mens_t20,15,94,6,109,96,122,139,-30,30,False,26
+1552909,2026-09-09,"Gahanga B Ground, Rwanda",Rwanda,Kenya,mens_t20,16,102,6,115,106,124,139,-24,24,False,18
+1552908,2026-09-09,"Gahanga B Ground, Rwanda",Uganda,Sierra Leone,mens_t20,6,58,1,217,185,249,250,-33,33,False,64
+1552908,2026-09-09,"Gahanga B Ground, Rwanda",Uganda,Sierra Leone,mens_t20,10,95,2,210,179,241,250,-40,40,False,62
+1552908,2026-09-09,"Gahanga B Ground, Rwanda",Uganda,Sierra Leone,mens_t20,11,99,2,196,173,219,250,-54,54,False,46
+1552908,2026-09-09,"Gahanga B Ground, Rwanda",Uganda,Sierra Leone,mens_t20,15,151,2,230,203,257,250,-20,20,True,54
+1552908,2026-09-09,"Gahanga B Ground, Rwanda",Uganda,Sierra Leone,mens_t20,16,174,2,246,227,265,250,-4,4,True,38
+1552907,2026-09-08,"Gahanga B Ground, Rwanda",Kenya,Sierra Leone,mens_t20,6,55,2,173,148,198,204,-31,31,False,50
+1552907,2026-09-08,"Gahanga B Ground, Rwanda",Kenya,Sierra Leone,mens_t20,10,89,3,171,146,196,204,-33,33,False,50
+1552907,2026-09-08,"Gahanga B Ground, Rwanda",Kenya,Sierra Leone,mens_t20,11,102,3,190,168,212,204,-14,14,True,44
+1552907,2026-09-08,"Gahanga B Ground, Rwanda",Kenya,Sierra Leone,mens_t20,15,145,3,203,179,227,204,-1,1,True,48
+1552907,2026-09-08,"Gahanga B Ground, Rwanda",Kenya,Sierra Leone,mens_t20,16,152,5,174,161,187,204,-30,30,False,26
+1552906,2026-09-08,"Gahanga B Ground, Rwanda",Rwanda,Botswana,mens_t20,6,50,0,178,152,204,192,-14,14,True,52
+1552906,2026-09-08,"Gahanga B Ground, Rwanda",Rwanda,Botswana,mens_t20,10,90,0,231,197,265,192,39,39,False,68
+1552906,2026-09-08,"Gahanga B Ground, Rwanda",Rwanda,Botswana,mens_t20,11,100,0,240,212,268,192,48,48,False,56
+1552906,2026-09-08,"Gahanga B Ground, Rwanda",Rwanda,Botswana,mens_t20,15,137,1,210,185,235,192,18,18,True,50
+1552906,2026-09-08,"Gahanga B Ground, Rwanda",Rwanda,Botswana,mens_t20,16,141,1,191,176,206,192,-1,1,True,30
+1549530,2026-09-06,"Namibia Cricket Ground, Windhoek",South Africa,Zimbabwe,mens_t20,6,67,0,293,250,336,205,88,88,False,86
+1549530,2026-09-06,"Namibia Cricket Ground, Windhoek",South Africa,Zimbabwe,mens_t20,10,94,2,206,176,236,205,1,1,True,60
+1549530,2026-09-06,"Namibia Cricket Ground, Windhoek",South Africa,Zimbabwe,mens_t20,11,107,2,231,204,258,205,26,26,True,54
+1549530,2026-09-06,"Namibia Cricket Ground, Windhoek",South Africa,Zimbabwe,mens_t20,15,150,3,207,183,231,205,2,2,True,48
+1549530,2026-09-06,"Namibia Cricket Ground, Windhoek",South Africa,Zimbabwe,mens_t20,16,163,3,216,199,233,205,11,11,True,34
+1549529,2026-09-04,"Namibia Cricket Ground, Windhoek",South Africa,Namibia,mens_t20,6,70,0,294,250,338,228,66,66,False,88
+1549529,2026-09-04,"Namibia Cricket Ground, Windhoek",South Africa,Namibia,mens_t20,10,127,0,307,261,353,228,79,79,False,92
+1549529,2026-09-04,"Namibia Cricket Ground, Windhoek",South Africa,Namibia,mens_t20,11,150,0,312,275,349,228,84,84,False,74
+1549529,2026-09-04,"Namibia Cricket Ground, Windhoek",South Africa,Namibia,mens_t20,15,187,2,275,242,308,228,47,47,False,66
+1549529,2026-09-04,"Namibia Cricket Ground, Windhoek",South Africa,Namibia,mens_t20,16,197,2,269,248,290,228,41,41,False,42
+1549528,2026-09-03,"Namibia Cricket Ground, Windhoek",Namibia,Zimbabwe,mens_t20,6,26,3,97,83,111,156,-59,59,False,28
+1549528,2026-09-03,"Namibia Cricket Ground, Windhoek",Namibia,Zimbabwe,mens_t20,10,50,3,107,91,123,156,-49,49,False,32
+1549528,2026-09-03,"Namibia Cricket Ground, Windhoek",Namibia,Zimbabwe,mens_t20,11,59,3,116,103,129,156,-40,40,False,26
+1549528,2026-09-03,"Namibia Cricket Ground, Windhoek",Namibia,Zimbabwe,mens_t20,15,102,3,148,131,165,156,-8,8,True,34
+1549528,2026-09-03,"Namibia Cricket Ground, Windhoek",Namibia,Zimbabwe,mens_t20,16,109,4,144,133,155,156,-12,12,False,22
+1549527,2026-09-01,"Namibia Cricket Ground, Windhoek",South Africa,Zimbabwe,mens_t20,6,59,0,252,215,289,185,67,67,False,74
+1549527,2026-09-01,"Namibia Cricket Ground, Windhoek",South Africa,Zimbabwe,mens_t20,10,88,1,224,191,257,185,39,39,False,66
+1549527,2026-09-01,"Namibia Cricket Ground, Windhoek",South Africa,Zimbabwe,mens_t20,11,100,1,231,204,258,185,46,46,False,54
+1549527,2026-09-01,"Namibia Cricket Ground, Windhoek",South Africa,Zimbabwe,mens_t20,15,148,1,238,210,266,185,53,53,False,56
+1549527,2026-09-01,"Namibia Cricket Ground, Windhoek",South Africa,Zimbabwe,mens_t20,16,161,2,226,208,244,185,41,41,False,36
+1549526,2026-08-31,"Namibia Cricket Ground, Windhoek",Zimbabwe,Namibia,mens_t20,6,64,1,265,226,304,195,70,70,False,78
+1549526,2026-08-31,"Namibia Cricket Ground, Windhoek",Zimbabwe,Namibia,mens_t20,10,83,5,128,109,147,195,-67,67,False,38
+1549526,2026-08-31,"Namibia Cricket Ground, Windhoek",Zimbabwe,Namibia,mens_t20,11,87,5,124,110,138,195,-71,71,False,28
+1549526,2026-08-31,"Namibia Cricket Ground, Windhoek",Zimbabwe,Namibia,mens_t20,15,133,6,157,139,175,195,-38,38,False,36
+1549526,2026-08-31,"Namibia Cricket Ground, Windhoek",Zimbabwe,Namibia,mens_t20,16,142,6,163,150,176,195,-32,32,False,26
+1549525,2026-08-29,"Namibia Cricket Ground, Windhoek",Zimbabwe,South Africa,mens_t20,6,54,1,170,145,195,144,26,26,False,50
+1549525,2026-08-29,"Namibia Cricket Ground, Windhoek",Zimbabwe,South Africa,mens_t20,10,76,1,164,140,188,144,20,20,True,48
+1549525,2026-08-29,"Namibia Cricket Ground, Windhoek",Zimbabwe,South Africa,mens_t20,11,79,2,141,125,157,144,-3,3,True,32
+1549525,2026-08-29,"Namibia Cricket Ground, Windhoek",Zimbabwe,South Africa,mens_t20,15,94,4,118,104,132,144,-26,26,False,28
+1549525,2026-08-29,"Namibia Cricket Ground, Windhoek",Zimbabwe,South Africa,mens_t20,16,106,5,126,116,136,144,-18,18,False,20
+1549524,2026-08-28,"Namibia Cricket Ground, Windhoek",Namibia,South Africa,mens_t20,6,57,0,206,176,236,163,43,43,False,60
+1549524,2026-08-28,"Namibia Cricket Ground, Windhoek",Namibia,South Africa,mens_t20,10,85,1,175,149,201,163,12,12,True,52
+1549524,2026-08-28,"Namibia Cricket Ground, Windhoek",Namibia,South Africa,mens_t20,11,92,1,183,162,204,163,20,20,True,42
+1549524,2026-08-28,"Namibia Cricket Ground, Windhoek",Namibia,South Africa,mens_t20,15,133,3,173,153,193,163,10,10,True,40
+1549524,2026-08-28,"Namibia Cricket Ground, Windhoek",Namibia,South Africa,mens_t20,16,133,4,157,145,169,163,-6,6,True,24
+1545683,2026-08-21,Kerava National Cricket Ground,Portugal,Spain,mens_t20,6,56,1,194,165,223,160,34,34,False,58
+1545683,2026-08-21,Kerava National Cricket Ground,Portugal,Spain,mens_t20,10,76,1,170,145,195,160,10,10,True,50
+1545683,2026-08-21,Kerava National Cricket Ground,Portugal,Spain,mens_t20,11,85,1,175,154,196,160,15,15,True,42
+1545683,2026-08-21,Kerava National Cricket Ground,Portugal,Spain,mens_t20,15,107,3,141,125,157,160,-19,19,False,32
+1545683,2026-08-21,Kerava National Cricket Ground,Portugal,Spain,mens_t20,16,116,3,146,135,157,160,-14,14,False,22
+1545682,2026-08-21,Tikkurila Cricket Ground,Israel,Isle of Man,mens_t20,6,28,2,101,86,116,88,13,13,True,30
+1545682,2026-08-21,Tikkurila Cricket Ground,Israel,Isle of Man,mens_t20,10,52,3,105,90,120,88,17,17,False,30
+1545682,2026-08-21,Tikkurila Cricket Ground,Israel,Isle of Man,mens_t20,11,62,3,113,100,126,88,25,25,False,26
+1545682,2026-08-21,Tikkurila Cricket Ground,Israel,Isle of Man,mens_t20,15,78,5,98,87,109,88,10,10,True,22
+1545682,2026-08-21,Tikkurila Cricket Ground,Israel,Isle of Man,mens_t20,16,81,7,93,86,100,88,5,5,True,14
+1545681,2026-08-21,Tikkurila Cricket Ground,Bulgaria,Czech Republic,mens_t20,6,52,2,159,136,182,158,1,1,True,46
+1545681,2026-08-21,Tikkurila Cricket Ground,Bulgaria,Czech Republic,mens_t20,10,71,3,126,108,144,158,-32,32,False,36
+1545681,2026-08-21,Tikkurila Cricket Ground,Bulgaria,Czech Republic,mens_t20,11,82,3,137,121,153,158,-21,21,False,32
+1545681,2026-08-21,Tikkurila Cricket Ground,Bulgaria,Czech Republic,mens_t20,15,102,5,122,108,136,158,-36,36,False,28
+1545681,2026-08-21,Tikkurila Cricket Ground,Bulgaria,Czech Republic,mens_t20,16,115,5,133,123,143,158,-25,25,False,20
+1545680,2026-08-21,Kerava National Cricket Ground,Germany,Finland,mens_t20,6,48,1,172,147,197,144,28,28,False,50
+1545680,2026-08-21,Kerava National Cricket Ground,Germany,Finland,mens_t20,10,68,4,119,102,136,144,-25,25,False,34
+1545680,2026-08-21,Kerava National Cricket Ground,Germany,Finland,mens_t20,11,77,4,132,117,147,144,-12,12,True,30
+1545680,2026-08-21,Kerava National Cricket Ground,Germany,Finland,mens_t20,15,108,6,125,110,140,144,-19,19,False,30
+1545680,2026-08-21,Kerava National Cricket Ground,Germany,Finland,mens_t20,16,112,6,124,115,133,144,-20,20,False,18
+1545674,2026-08-18,Kerava National Cricket Ground,Czech Republic,Israel,mens_t20,6,38,2,122,104,140,154,-32,32,False,36
+1545674,2026-08-18,Kerava National Cricket Ground,Czech Republic,Israel,mens_t20,10,68,3,122,104,140,154,-32,32,False,36
+1545674,2026-08-18,Kerava National Cricket Ground,Czech Republic,Israel,mens_t20,11,73,3,122,108,136,154,-32,32,False,28
+1545674,2026-08-18,Kerava National Cricket Ground,Czech Republic,Israel,mens_t20,15,94,4,118,104,132,154,-36,36,False,28
+1545674,2026-08-18,Kerava National Cricket Ground,Czech Republic,Israel,mens_t20,16,102,5,118,109,127,154,-36,36,False,18
+1545673,2026-08-18,Tikkurila Cricket Ground,Finland,Luxembourg,mens_t20,6,41,1,129,110,148,168,-39,39,False,38
+1545673,2026-08-18,Tikkurila Cricket Ground,Finland,Luxembourg,mens_t20,10,82,2,181,154,208,168,13,13,True,54
+1545673,2026-08-18,Tikkurila Cricket Ground,Finland,Luxembourg,mens_t20,11,92,3,155,137,173,168,-13,13,True,36
+1545673,2026-08-18,Tikkurila Cricket Ground,Finland,Luxembourg,mens_t20,15,123,4,155,137,173,168,-13,13,True,36
+1545673,2026-08-18,Tikkurila Cricket Ground,Finland,Luxembourg,mens_t20,16,131,5,152,140,164,168,-16,16,False,24
+1545672,2026-08-18,Kerava National Cricket Ground,Greece,Germany,mens_t20,6,36,1,139,119,159,96,43,43,False,40
+1545672,2026-08-18,Kerava National Cricket Ground,Greece,Germany,mens_t20,10,56,2,121,103,139,96,25,25,False,36
+1545672,2026-08-18,Kerava National Cricket Ground,Greece,Germany,mens_t20,11,61,2,122,108,136,96,26,26,False,28
+1545672,2026-08-18,Kerava National Cricket Ground,Greece,Germany,mens_t20,15,86,6,101,89,113,96,5,5,True,24
+1545672,2026-08-18,Kerava National Cricket Ground,Greece,Germany,mens_t20,16,86,9,94,87,101,96,-2,2,True,14
+1545671,2026-08-17,Tikkurila Cricket Ground,Spain,Luxembourg,mens_t20,6,37,2,123,105,141,206,-83,83,False,36
+1545671,2026-08-17,Tikkurila Cricket Ground,Spain,Luxembourg,mens_t20,10,76,2,171,146,196,206,-35,35,False,50
+1545671,2026-08-17,Tikkurila Cricket Ground,Spain,Luxembourg,mens_t20,11,84,3,140,124,156,206,-66,66,False,32
+1545671,2026-08-17,Tikkurila Cricket Ground,Spain,Luxembourg,mens_t20,15,128,3,175,154,196,206,-31,31,False,42
+1545671,2026-08-17,Tikkurila Cricket Ground,Spain,Luxembourg,mens_t20,16,143,3,187,173,201,206,-19,19,False,28
+1545670,2026-08-17,Kerava National Cricket Ground,Greece,Portugal,mens_t20,6,55,4,132,113,151,121,11,11,True,38
+1545670,2026-08-17,Kerava National Cricket Ground,Greece,Portugal,mens_t20,10,77,4,121,103,139,121,0,0,True,36
+1545670,2026-08-17,Kerava National Cricket Ground,Greece,Portugal,mens_t20,11,85,4,127,112,142,121,6,6,True,30
+1545670,2026-08-17,Kerava National Cricket Ground,Greece,Portugal,mens_t20,15,107,4,133,118,148,121,12,12,True,30
+1545670,2026-08-17,Kerava National Cricket Ground,Greece,Portugal,mens_t20,16,108,6,120,111,129,121,-1,1,True,18
+1545669,2026-08-17,Tikkurila Cricket Ground,Isle of Man,Bulgaria,mens_t20,6,48,1,181,154,208,177,4,4,True,54
+1545669,2026-08-17,Tikkurila Cricket Ground,Isle of Man,Bulgaria,mens_t20,10,80,3,148,126,170,177,-29,29,False,44
+1545669,2026-08-17,Tikkurila Cricket Ground,Isle of Man,Bulgaria,mens_t20,11,89,3,150,132,168,177,-27,27,False,36
+1545669,2026-08-17,Tikkurila Cricket Ground,Isle of Man,Bulgaria,mens_t20,15,124,4,165,146,184,177,-12,12,True,38
+1545669,2026-08-17,Tikkurila Cricket Ground,Isle of Man,Bulgaria,mens_t20,16,137,5,163,150,176,177,-14,14,False,26
+1545668,2026-08-17,Kerava National Cricket Ground,Israel,Germany,mens_t20,6,35,2,131,112,150,94,37,37,False,38
+1545668,2026-08-17,Kerava National Cricket Ground,Israel,Germany,mens_t20,10,53,6,83,71,95,94,-11,11,True,24
+1545668,2026-08-17,Kerava National Cricket Ground,Israel,Germany,mens_t20,11,55,6,82,73,91,94,-12,12,False,18
+1545668,2026-08-17,Kerava National Cricket Ground,Israel,Germany,mens_t20,15,71,6,86,76,96,94,-8,8,True,20
+1545668,2026-08-17,Kerava National Cricket Ground,Israel,Germany,mens_t20,16,73,8,81,75,87,94,-13,13,False,12
+1547097,2026-08-16,"TCA Oval, Blantyre",Malawi,Rwanda,mens_t20,6,28,4,86,74,98,101,-15,15,False,24
+1547097,2026-08-16,"TCA Oval, Blantyre",Malawi,Rwanda,mens_t20,10,46,5,86,74,98,101,-15,15,False,24
+1547097,2026-08-16,"TCA Oval, Blantyre",Malawi,Rwanda,mens_t20,11,52,5,88,78,98,101,-13,13,False,20
+1547097,2026-08-16,"TCA Oval, Blantyre",Malawi,Rwanda,mens_t20,15,70,6,85,75,95,101,-16,16,False,20
+1547097,2026-08-16,"TCA Oval, Blantyre",Malawi,Rwanda,mens_t20,16,70,6,82,76,88,101,-19,19,False,12
+1547096,2026-08-15,"TCA Oval, Blantyre",Zambia,Malawi,mens_t20,6,60,2,183,156,210,180,3,3,True,54
+1547096,2026-08-15,"TCA Oval, Blantyre",Zambia,Malawi,mens_t20,10,88,3,151,129,173,180,-29,29,False,44
+1547096,2026-08-15,"TCA Oval, Blantyre",Zambia,Malawi,mens_t20,11,97,3,156,138,174,180,-24,24,False,36
+1547096,2026-08-15,"TCA Oval, Blantyre",Zambia,Malawi,mens_t20,15,143,3,192,169,215,180,12,12,True,46
+1547096,2026-08-15,"TCA Oval, Blantyre",Zambia,Malawi,mens_t20,16,145,5,163,150,176,180,-17,17,False,26
+1547095,2026-08-15,"TCA Oval, Blantyre",Rwanda,Zambia,mens_t20,6,30,0,112,96,128,130,-18,18,False,32
+1547095,2026-08-15,"TCA Oval, Blantyre",Rwanda,Zambia,mens_t20,10,52,0,128,109,147,130,-2,2,True,38
+1547095,2026-08-15,"TCA Oval, Blantyre",Rwanda,Zambia,mens_t20,11,57,0,128,113,143,130,-2,2,True,30
+1547095,2026-08-15,"TCA Oval, Blantyre",Rwanda,Zambia,mens_t20,15,91,2,131,116,146,130,1,1,True,30
+1547095,2026-08-15,"TCA Oval, Blantyre",Rwanda,Zambia,mens_t20,16,98,2,129,119,139,130,-1,1,True,20
+1545667,2026-08-15,Tikkurila Cricket Ground,Finland,Bulgaria,mens_t20,6,65,3,168,143,193,232,-64,64,False,50
+1545667,2026-08-15,Tikkurila Cricket Ground,Finland,Bulgaria,mens_t20,10,112,4,210,179,241,232,-22,22,True,62
+1545667,2026-08-15,Tikkurila Cricket Ground,Finland,Bulgaria,mens_t20,11,130,4,223,197,249,232,-9,9,True,52
+1545667,2026-08-15,Tikkurila Cricket Ground,Finland,Bulgaria,mens_t20,15,162,7,177,156,198,232,-55,55,False,42
+1545667,2026-08-15,Tikkurila Cricket Ground,Finland,Bulgaria,mens_t20,16,169,7,181,167,195,232,-51,51,False,28
+1545666,2026-08-15,Kerava National Cricket Ground,Germany,Portugal,mens_t20,6,38,2,139,119,159,140,-1,1,True,40
+1545666,2026-08-15,Kerava National Cricket Ground,Germany,Portugal,mens_t20,10,62,3,127,108,146,140,-13,13,True,38
+1545666,2026-08-15,Kerava National Cricket Ground,Germany,Portugal,mens_t20,11,72,3,136,120,152,140,-4,4,True,32
+1545666,2026-08-15,Kerava National Cricket Ground,Germany,Portugal,mens_t20,15,110,5,137,121,153,140,-3,3,True,32
+1545666,2026-08-15,Kerava National Cricket Ground,Germany,Portugal,mens_t20,16,116,6,132,122,142,140,-8,8,True,20
+1545665,2026-08-15,Tikkurila Cricket Ground,Isle of Man,Spain,mens_t20,6,40,2,115,98,132,108,7,7,True,34
+1545665,2026-08-15,Tikkurila Cricket Ground,Isle of Man,Spain,mens_t20,10,61,3,113,97,129,108,5,5,True,32
+1545665,2026-08-15,Tikkurila Cricket Ground,Isle of Man,Spain,mens_t20,11,64,3,105,93,117,108,-3,3,True,24
+1545665,2026-08-15,Tikkurila Cricket Ground,Isle of Man,Spain,mens_t20,15,82,5,102,90,114,108,-6,6,True,24
+1545665,2026-08-15,Tikkurila Cricket Ground,Isle of Man,Spain,mens_t20,16,87,5,103,95,111,108,-5,5,True,16
+1545664,2026-08-15,Kerava National Cricket Ground,Greece,Czech Republic,mens_t20,6,54,2,191,163,219,147,44,44,False,56
+1545664,2026-08-15,Kerava National Cricket Ground,Greece,Czech Republic,mens_t20,10,81,4,136,116,156,147,-11,11,True,40
+1545664,2026-08-15,Kerava National Cricket Ground,Greece,Czech Republic,mens_t20,11,85,4,133,118,148,147,-14,14,True,30
+1545664,2026-08-15,Kerava National Cricket Ground,Greece,Czech Republic,mens_t20,15,108,4,138,122,154,147,-9,9,True,32
+1545664,2026-08-15,Kerava National Cricket Ground,Greece,Czech Republic,mens_t20,16,115,4,141,130,152,147,-6,6,True,22
+1545663,2026-08-14,Tikkurila Cricket Ground,Germany,Czech Republic,mens_t20,6,66,2,219,187,251,221,-2,2,True,64
+1545663,2026-08-14,Tikkurila Cricket Ground,Germany,Czech Republic,mens_t20,10,98,3,185,158,212,221,-36,36,False,54
+1545663,2026-08-14,Tikkurila Cricket Ground,Germany,Czech Republic,mens_t20,11,101,3,174,154,194,221,-47,47,False,40
+1545663,2026-08-14,Tikkurila Cricket Ground,Germany,Czech Republic,mens_t20,15,156,3,213,188,238,221,-8,8,True,50
+1545663,2026-08-14,Tikkurila Cricket Ground,Germany,Czech Republic,mens_t20,16,171,3,222,205,239,221,1,1,True,34
+1545662,2026-08-14,Kerava National Cricket Ground,Luxembourg,Isle of Man,mens_t20,6,39,2,157,134,180,116,41,41,False,46
+1545662,2026-08-14,Kerava National Cricket Ground,Luxembourg,Isle of Man,mens_t20,10,76,2,186,159,213,116,70,70,False,54
+1545662,2026-08-14,Kerava National Cricket Ground,Luxembourg,Isle of Man,mens_t20,11,86,3,155,137,173,116,39,39,False,36
+1545662,2026-08-14,Kerava National Cricket Ground,Luxembourg,Isle of Man,mens_t20,15,101,7,116,103,129,116,0,0,True,26
+1545662,2026-08-14,Kerava National Cricket Ground,Luxembourg,Isle of Man,mens_t20,16,102,9,110,102,118,116,-6,6,True,16
