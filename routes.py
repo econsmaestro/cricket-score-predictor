@@ -2344,7 +2344,7 @@ def _track_event(event_type: str, metadata: dict = None):
             event_type=event_type,
             user_id=user_id,
             session_id=session.get("chat_session_id") or session.get("_id", ""),
-            metadata=_json.dumps(metadata or {}),
+            event_metadata=_json.dumps(metadata or {}),
         )
         db.session.add(ev)
         db.session.commit()
@@ -2631,9 +2631,6 @@ def api_funnel():
 # Backtest routes
 # ---------------------------------------------------------------------------
 
-_backtest_cache = {}
-
-
 @app.route("/backtest")
 def backtest_page():
     return render_template("backtest.html")
@@ -2641,46 +2638,43 @@ def backtest_page():
 
 @app.route("/backtest/status")
 def backtest_status():
-    from backtest_data import get_data_info
-    return jsonify(get_data_info())
+    from backtest_reports import report_status
+    return jsonify(report_status())
+
+
+@app.route("/backtest/report/<match_format>")
+def backtest_report(match_format):
+    from backtest_reports import load_report
+    try:
+        return jsonify(load_report(match_format))
+    except ValueError as exc:
+        return jsonify(success=False, error=str(exc)), 400
+    except FileNotFoundError as exc:
+        return jsonify(success=False, error=str(exc)), 404
 
 
 @app.route("/backtest/run", methods=["POST"])
 def backtest_run():
-    from backtest import run_backtest, compute_metrics, generate_summary
-    from backtest_data import FORMATS
     data = request.get_json(silent=True) or {}
-    max_matches = min(int(data.get("max_matches", 100)), 2000)
-    try:
-        all_results = {}
-        all_metrics = {}
-        all_summaries = {}
-        for fmt in FORMATS:
-            results = run_backtest(fmt=fmt, max_matches=max_matches)
-            metrics = compute_metrics(results, fmt=fmt)
-            summary = generate_summary(metrics, fmt=fmt)
-            all_results[fmt] = results
-            all_metrics[fmt] = metrics
-            all_summaries[fmt] = summary
-        _backtest_cache["last"] = all_results
-        return jsonify({"results": all_results, "metrics": all_metrics, "summaries": all_summaries})
-    except Exception as e:
-        import traceback
-        traceback.print_exc()
-        return jsonify({"error": str(e)}), 500
+    # Compatibility endpoint: serve a completed report instead of blocking a
+    # Gunicorn worker on archive downloads and thousands of predictions.
+    return backtest_report(data.get("format", "mens_t20"))
 
 
 @app.route("/backtest/export.csv")
 def backtest_export():
     import csv
-    fmt = request.args.get("fmt", "mens_t20")
-    all_results = _backtest_cache.get("last", {})
-    results = all_results.get(fmt, []) if isinstance(all_results, dict) else all_results
-    if not results:
-        return "No backtest results cached. Run a backtest first.", 404
+    from backtest_reports import load_report
+    match_format = request.args.get("format", "mens_t20")
+    try:
+        results = load_report(match_format)["results"]
+    except ValueError as exc:
+        return jsonify(success=False, error=str(exc)), 400
+    except FileNotFoundError as exc:
+        return jsonify(success=False, error=str(exc)), 404
     output = io.StringIO()
     fields = [
-        "match_id", "date", "venue", "batting_team", "format", "checkpoint",
+        "match_id", "date", "venue", "batting_team", "fielding_team", "match_format", "checkpoint",
         "score_at_cp", "wickets_at_cp", "predicted", "pred_low", "pred_high",
         "actual", "error", "abs_error", "in_range", "range_width",
     ]
@@ -2692,5 +2686,5 @@ def backtest_export():
         io.BytesIO(output.read().encode()),
         mimetype="text/csv",
         as_attachment=True,
-        download_name=f"backtest_{fmt}.csv",
+        download_name=f"backtest_{match_format}_100_matches.csv",
     )
