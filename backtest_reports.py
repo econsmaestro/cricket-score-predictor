@@ -70,6 +70,9 @@ def generate_report(match_format):
             "Historical replay of the current model, not an out-of-time training holdout. "
             "Existing model priors and learned adjustments may incorporate historical information. "
             "Eligibility favours longer innings; this is not a random sample of all matches."
+            + (" ODI model revisions were evaluated against this same cohort; these are "
+               "calibration results, not a held-out evaluation."
+               if match_format.endswith("odi") else "")
         ),
         "metrics": metrics, "summary": generate_summary(metrics), "results": results,
     }
