@@ -325,9 +325,18 @@ FORMAT_CONFIG = {
 ODI_PHASE_RUN_RATES = {
     "powerplay_1": {"overs": (0, 10), "avg_runs_per_over": 5.8, "strike_rate": 95, "risk_factor": 1.15, "wicket_per_over": 0.12, "boundary_rate": 0.18, "dot_ball_rate": 0.35},
     "middle_1": {"overs": (10, 30), "avg_runs_per_over": 5.2, "strike_rate": 88, "risk_factor": 1.0, "wicket_per_over": 0.10, "boundary_rate": 0.12, "dot_ball_rate": 0.42},
-    "middle_2": {"overs": (30, 40), "avg_runs_per_over": 5.6, "strike_rate": 95, "risk_factor": 1.05, "wicket_per_over": 0.11, "boundary_rate": 0.15, "dot_ball_rate": 0.38},
-    "death": {"overs": (40, 50), "avg_runs_per_over": 7.5, "strike_rate": 120, "risk_factor": 1.35, "wicket_per_over": 0.18, "boundary_rate": 0.25, "dot_ball_rate": 0.28}
+    "middle_2": {"overs": (30, 40), "avg_runs_per_over": 6.2, "strike_rate": 95, "risk_factor": 1.05, "wicket_per_over": 0.11, "boundary_rate": 0.15, "dot_ball_rate": 0.38},
+    "death": {"overs": (40, 50), "avg_runs_per_over": 10.0, "strike_rate": 120, "risk_factor": 1.35, "wicket_per_over": 0.18, "boundary_rate": 0.25, "dot_ball_rate": 0.28}
 }
+
+def _odi_acceleration_boost(wickets_in_hand: int, run_rate: float) -> float:
+    """Resource-based late-innings intent, also used for future ODI phases."""
+    if wickets_in_hand < 5:
+        return 1.0
+    boost = 1.0 + 0.025 * (wickets_in_hand - 4)
+    if run_rate > 6.0:
+        boost += min(0.10, (run_rate - 6.0) * 0.05)
+    return min(boost, 1.25)
 
 def get_format_config(match_format: str) -> dict:
     """Look up format configuration by match format key.
@@ -833,7 +842,12 @@ def predict_score(match_state: MatchState) -> PredictionResult:
     innings_progress = match_state.overs_completed / max_overs
     middle_phase = (0.35 <= innings_progress <= 0.65) if not is_odi else (0.20 <= innings_progress <= 0.60)
     acceleration_boost = 1.0
-    if middle_phase and wickets_fallen <= 3:
+    if is_odi:
+        # Reserve wickets support acceleration from over 30 onwards, including
+        # when those phases are being forecast at an early checkpoint. Do not
+        # switch this off after 30 overs, just as the final assault approaches.
+        acceleration_boost = _odi_acceleration_boost(wickets_remaining, current_run_rate)
+    elif middle_phase and wickets_fallen <= 3:
         if wickets_fallen <= 1:
             acceleration_boost = 1.20
         elif wickets_fallen <= 2:
@@ -863,7 +877,31 @@ def predict_score(match_state: MatchState) -> PredictionResult:
             
             adjusted_rpo = phase_base_rpo * wicket_factor * batsman_sr_factor * momentum_factor * set_batsmen_boost
             
-            if phase_name in ["powerplay", "powerplay_1"]:
+            if is_odi:
+                # Phase RPO already represents that phase's attacking intent.
+                # Dividing by the death-phase SR suppresses that acceleration;
+                # compare batsman form with the ODI baseline instead. Risk
+                # remains a wicket/outcome input, not a second scoring boost.
+                # At 10 overs, the current pair's strike rates are a noisy
+                # proxy for the next 40 overs. Increase their influence as the
+                # innings progresses rather than extrapolating a fast cameo
+                # (or a newly arrived batter's dots) across the whole innings.
+                form_weight = min(1.0, 0.35 + innings_progress)
+                batsman_sr_factor = 1.0 + (avg_batsman_sr / base_sr - 1.0) * form_weight
+                adjusted_rpo = phase_base_rpo * wicket_factor * batsman_sr_factor * momentum_factor * set_batsmen_boost
+                if phase_name == "middle_2":
+                    adjusted_rpo *= 1.0 + (acceleration_boost - 1.0) * 0.5
+                elif phase_name == "death":
+                    adjusted_rpo *= acceleration_boost
+                elif phase_name == "powerplay_1":
+                    adjusted_rpo *= 1.05
+                if (match_state.overs_completed >= 30 and wickets_remaining >= 5
+                        and current_run_rate >= 6.0 and phase_name in ("middle_2", "death")):
+                    # Preserve sustained 300+ pace instead of pulling a well-
+                    # resourced innings back to a historical average.
+                    pace_multiplier = 1.10 if phase_name == "middle_2" else 1.30
+                    adjusted_rpo = max(adjusted_rpo, current_run_rate * pace_multiplier)
+            elif phase_name in ["powerplay", "powerplay_1"]:
                 adjusted_rpo *= 1.05
             elif phase_name in ["acceleration", "finish", "death"]:
                 adjusted_rpo *= phase_risk
@@ -891,6 +929,8 @@ def predict_score(match_state: MatchState) -> PredictionResult:
 
     min_rpo = 3.5 if is_odi else 4
     max_rpo = 12 if is_odi else 18
+    if is_odi and match_state.overs_completed >= 30 and wickets_remaining >= 5:
+        max_rpo = 15
     predicted_final_score = max(predicted_final_score, match_state.current_score + int(effective_overs_remaining * min_rpo))
     predicted_final_score = min(predicted_final_score, match_state.current_score + int(effective_overs_remaining * max_rpo))
     
@@ -1021,10 +1061,18 @@ def predict_score(match_state: MatchState) -> PredictionResult:
         predicted_next_over_runs = max(2, min(predicted_next_over_runs, max_next_over))
     
     variance_factor = 0.15
-    if match_state.overs_completed > 10:
-        variance_factor = 0.12
-    if match_state.overs_completed > 15:
-        variance_factor = 0.08
+    if is_odi:
+        # The old 10/15-over cutoffs were T20-specific: in an ODI they made
+        # the range narrow with most of the innings still to come.
+        if innings_progress > 0.50:
+            variance_factor = 0.12
+        if innings_progress > 0.75:
+            variance_factor = 0.08
+    else:
+        if match_state.overs_completed > 10:
+            variance_factor = 0.12
+        if match_state.overs_completed > 15:
+            variance_factor = 0.08
     
     variance = int(predicted_final_score * variance_factor)
     score_range = (predicted_final_score - variance, predicted_final_score + variance)
