@@ -19,6 +19,13 @@ try:
         next_run_time=__import__('datetime').datetime.utcnow(),  # run at startup
         replace_existing=True,
     )
+    from referrals import settle_pending_rewards
+    scheduler.add_job(
+        settle_pending_rewards, trigger=IntervalTrigger(hours=1),
+        id='referral_reward_settlement',
+        next_run_time=__import__('datetime').datetime.utcnow(),
+        replace_existing=True,
+    )
     scheduler.start()
     import logging
     logging.getLogger(__name__).info("APScheduler started — daily match scrape scheduled.")

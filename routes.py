@@ -3,9 +3,11 @@ from app import app, db
 from models import (Prediction, DiscoveredPlayer, PredictionFeedback, PageView, User, BugReport,
                    SupportChat, UserPreference, ConversionEvent, SavedPrediction, MatchAlert)
 from flask_login import current_user
-from replit_auth import make_replit_blueprint
+from replit_auth import make_replit_blueprint, require_login
+from referrals import init_referrals
 
 app.register_blueprint(make_replit_blueprint(), url_prefix="/auth")
+init_referrals(app, require_login)
 
 @app.before_request
 def make_session_permanent():
@@ -694,7 +696,13 @@ def api_match_details(match_id):
 
 @app.route("/predict", methods=["POST"])
 def predict():
-    """Handle prediction form submission: validate inputs, run engine, render results."""
+    """Validate a prediction, persist its result, then qualify any eligible referral."""
+    if current_user.is_authenticated:
+        import secrets
+        expected = session.get("prediction_csrf", "")
+        supplied = request.form.get("prediction_csrf", "")
+        if not expected or not secrets.compare_digest(expected, supplied):
+            abort(400, description="Prediction form expired. Reload the page and try again.")
     try:
         session['form_data'] = dict(request.form)
         
@@ -947,6 +955,7 @@ def predict():
         
         live_match_id = request.form.get("live_match_id", "").strip() or None
         prediction = Prediction(
+            user_id=current_user.id if current_user.is_authenticated else None,
             venue=venue,
             match_id=live_match_id,
             match_format=match_format,
@@ -970,7 +979,7 @@ def predict():
         bowler_stats = get_bowler_stats(next_over_bowler) if next_over_bowler else None
         
         stats_label = "Career"
-        return render_template(
+        rendered = render_template(
             "results.html",
             result=result,
             match_state=match_state,
@@ -980,6 +989,14 @@ def predict():
             stats_label=stats_label,
             is_live_data=(input_mode == "live")
         )
+        if current_user.is_authenticated:
+            from referrals import complete_prediction
+            try:
+                complete_prediction(current_user.id, prediction.id)
+            except Exception:
+                app.logger.exception("Referral qualification failed; prediction was saved")
+                flash("Your prediction succeeded, but referral processing failed. Please retry your prediction.", "warning")
+        return rendered
         
     except Exception as e:
         app.logger.error(f"Prediction error: {str(e)}")
@@ -2330,7 +2347,7 @@ def require_pro(f):
         if not current_user.is_authenticated:
             session["next_url"] = request.url
             return redirect(url_for('replit_auth.login'))
-        if not current_user.is_pro:
+        if not current_user.has_pro:
             flash("This feature is part of Matchday Pro. Upgrade to unlock it.", "warning")
             _track_event("upgrade_clicked", {"source": request.path})
             return redirect(url_for('pricing'))

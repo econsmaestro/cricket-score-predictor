@@ -1,7 +1,7 @@
 import jwt
 import os
 import uuid
-from functools import wraps
+from functools import wraps, lru_cache
 from urllib.parse import urlencode
 
 from flask import g, session, redirect, request, render_template, url_for
@@ -15,6 +15,7 @@ from flask_login import LoginManager, login_user, logout_user, current_user
 from oauthlib.oauth2.rfc6749.errors import InvalidGrantError
 from sqlalchemy.exc import NoResultFound
 from werkzeug.local import LocalProxy
+import requests
 
 from app import app, db
 from models import OAuth, User
@@ -127,6 +128,8 @@ def make_replit_blueprint():
 
 
 def save_user(user_claims):
+    from referrals import register_identity
+    is_new = db.session.get(User, user_claims['sub']) is None
     user = User()
     user.id = user_claims['sub']
     user.email = user_claims.get('email')
@@ -134,20 +137,69 @@ def save_user(user_claims):
     user.last_name = user_claims.get('last_name')
     user.profile_image_url = user_claims.get('profile_image_url')
     merged_user = db.session.merge(user)
+    db.session.flush()
+    register_identity(
+        db.session, merged_user, user_claims, is_new,
+        session.get("referral_attribution"),
+        known_account=bool(session.get("referral_known_account")),
+    )
     db.session.commit()
+    session.pop("referral_attribution", None)
+    session["referral_known_account"] = True
     return merged_user
 
 
 @oauth_authorized.connect
 def logged_in(blueprint, token):
-    user_claims = jwt.decode(token['id_token'],
-                             options={"verify_signature": False})
+    try:
+        user_claims = authenticated_user_claims(token)
+    except (requests.RequestException, ValueError, KeyError, jwt.PyJWTError):
+        app.logger.warning("Authentication provider identity validation failed")
+        return redirect(url_for('replit_auth.error'))
     user = save_user(user_claims)
     login_user(user)
     blueprint.token = token
     next_url = session.pop("next_url", None)
     if next_url is not None:
         return redirect(next_url)
+
+
+@lru_cache(maxsize=4)
+def oidc_userinfo_endpoint(issuer):
+    response = requests.get(issuer.rstrip("/") + "/.well-known/openid-configuration", timeout=10)
+    response.raise_for_status()
+    metadata = response.json()
+    if metadata.get("issuer") != issuer or not metadata.get("userinfo_endpoint", "").startswith("https://"):
+        raise ValueError("Invalid authentication provider configuration")
+    return metadata["userinfo_endpoint"]
+
+
+def authenticated_user_claims(token):
+    """Use the provider's authenticated UserInfo response, not client-supplied claims.
+
+    This also confirms email verification for referral eligibility without adding
+    a new identity provider or JWT cryptography dependency.
+    """
+    issuer = os.environ.get('ISSUER_URL', "https://replit.com/oidc")
+    endpoint = oidc_userinfo_endpoint(issuer)
+    response = requests.get(endpoint, headers={
+        "Authorization": "Bearer " + token["access_token"],
+    }, timeout=10)
+    response.raise_for_status()
+    claims = response.json()
+    id_claims = jwt.decode(token["id_token"], options={"verify_signature": False})
+    if not claims.get("sub") or claims["sub"] != id_claims.get("sub"):
+        raise ValueError("UserInfo subject mismatch")
+    # The ID token supplies presentation details only. Identity, email and
+    # verified status must come from the authenticated provider response.
+    return {
+        "sub": claims["sub"],
+        "email": claims.get("email"),
+        "email_verified": claims.get("email_verified") is True,
+        "first_name": claims.get("first_name", id_claims.get("first_name")),
+        "last_name": claims.get("last_name", id_claims.get("last_name")),
+        "profile_image_url": claims.get("profile_image_url", id_claims.get("profile_image_url")),
+    }
 
 
 @oauth_error.connect

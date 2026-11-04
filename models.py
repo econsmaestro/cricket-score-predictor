@@ -37,6 +37,76 @@ class User(UserMixin, db.Model):
         """True when the user has a live Pro subscription."""
         return self.subscription_status in ('active', 'trialing')
 
+    @property
+    def pro_expires_at(self):
+        """Latest paid or earned entitlement expiry (timestamps stored in UTC)."""
+        from sqlalchemy.orm import object_session
+        session = object_session(self)
+        earned = session.query(db.func.max(ReferralReward.expires_at)).filter_by(
+            referrer_id=self.id).scalar() if session else None
+        paid = self.subscription_period_end if self.subscription_active else None
+        return max(filter(None, (paid, earned)), default=None)
+
+    @property
+    def has_pro(self):
+        """Single access check shared by paid subscriptions and referral rewards."""
+        now = datetime.utcnow()
+        paid = self.subscription_active and (
+            self.subscription_period_end is None or self.subscription_period_end > now)
+        # Preserve legacy manually granted Pro, but never revive a failed/canceled plan.
+        legacy = self.is_pro and not self.subscription_status
+        expiry = self.pro_expires_at
+        return bool(paid or legacy or (expiry is not None and expiry > now))
+
+
+class ReferralProfile(db.Model):
+    __tablename__ = 'referral_profile'
+    user_id = db.Column(db.String, db.ForeignKey('users.id'), primary_key=True)
+    code = db.Column(db.String(48), unique=True, nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
+
+
+class ReferralIdentity(db.Model):
+    """Retained canonical identity ownership; not based on IP addresses."""
+    __tablename__ = 'referral_identity'
+    fingerprint = db.Column(db.String(64), primary_key=True)
+    user_id = db.Column(db.String, db.ForeignKey('users.id'), nullable=False, index=True)
+
+
+class Referral(db.Model):
+    __tablename__ = 'referral'
+    id = db.Column(db.Integer, primary_key=True)
+    referrer_id = db.Column(db.String, db.ForeignKey('users.id'), nullable=False, index=True)
+    referred_id = db.Column(db.String, db.ForeignKey('users.id'), nullable=False, unique=True)
+    status = db.Column(db.String(20), nullable=False, default='pending')
+    rejection_reason = db.Column(db.String(80))
+    created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    qualification_at = db.Column(db.DateTime)
+    prediction_id = db.Column(db.Integer, db.ForeignKey('prediction.id'), unique=True)
+    __table_args__ = (
+        db.CheckConstraint('referrer_id <> referred_id', name='referral_no_self'),
+        db.CheckConstraint("status IN ('pending','qualified','rewarded','rejected')",
+                           name='referral_valid_status'),
+    )
+
+
+class ReferralReward(db.Model):
+    __tablename__ = 'referral_reward'
+    id = db.Column(db.Integer, primary_key=True)
+    referral_id = db.Column(db.Integer, db.ForeignKey('referral.id'), unique=True, nullable=False)
+    referrer_id = db.Column(db.String, db.ForeignKey('users.id'), nullable=False, index=True)
+    reward_month = db.Column(db.String(7), nullable=False)  # YYYY-MM in Asia/Singapore
+    month_slot = db.Column(db.Integer, nullable=False)
+    awarded_at = db.Column(db.DateTime, nullable=False)
+    starts_at = db.Column(db.DateTime, nullable=False)
+    expires_at = db.Column(db.DateTime, nullable=False)
+    __table_args__ = (
+        UniqueConstraint('referrer_id', 'reward_month', 'month_slot',
+                         name='referral_monthly_slot'),
+        db.CheckConstraint('month_slot BETWEEN 1 AND 5', name='referral_slot_limit'),
+        db.CheckConstraint('expires_at > starts_at', name='referral_positive_period'),
+    )
+
 
 class OAuth(OAuthConsumerMixin, db.Model):
     """OAuth tokens for Replit Auth"""
@@ -55,6 +125,7 @@ class OAuth(OAuthConsumerMixin, db.Model):
 class Prediction(db.Model):
     """Stores a single score prediction made by the engine for historical tracking."""
     id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.String, db.ForeignKey('users.id'), nullable=True, index=True)
     venue = db.Column(db.String(100), nullable=False)
     match_id = db.Column(db.String(100), nullable=True, index=True)  # scraper match ID, links to MatchOutcome
     match_format = db.Column(db.String(30), nullable=True)            # e.g. 'mens_t20', 'mens_odi'

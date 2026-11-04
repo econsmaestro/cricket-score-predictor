@@ -247,6 +247,7 @@
     </div>
     
     <form action="{{ url_for('predict') }}" method="POST" id="predictionForm">
+        <input type="hidden" name="prediction_csrf" value="{{ session.get('prediction_csrf', '') }}">
         <input type="hidden" name="match_format" id="match_format_hidden" value="{{ form_data.get('match_format', 'mens_t20') }}">
         <input type="hidden" name="input_mode" id="input_mode_hidden" value="{{ form_data.get('input_mode', 'manual') }}">
         <input type="hidden" name="bowling_team_11" id="bowling_team_11" value="{{ form_data.get('bowling_team_11', '') }}">
