@@ -1137,7 +1137,7 @@ def get_cricbuzz_match_details(match_id: str) -> Optional[Dict]:
                    '- odi', 'vijay hazare', 'list a one']
         if any(k in _title_lower for k in _t20_kw):
             is_odi = False
-        elif any(k in _title_lower for k in _odi_kw):
+        elif re.search(r'\bodi\b|\bwodi\b', _title_lower) or any(k in _title_lower for k in _odi_kw):
             is_odi = True
         else:
             # Only use page_text for explicit ODI phrases that won't appear in nav links
