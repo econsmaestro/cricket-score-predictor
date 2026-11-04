@@ -819,10 +819,28 @@ def extract_batsmen(soup: BeautifulSoup) -> List[Dict]:
     return batsmen
 
 
+def _without_player_action_menus(soup: BeautifulSoup) -> BeautifulSoup:
+    """Keep player labels, but exclude hidden profile/performance action text.
+
+    Cricbuzz renders player names beside hidden menus. BeautifulSoup includes
+    those menus in get_text(), unlike what the user sees on the scorecard.
+    """
+    cleaned = BeautifulSoup(str(soup), 'html.parser')
+    for menu in cleaned.select('[role="menu"]'):
+        if menu.find('a', href=re.compile(r'/(?:profiles|player-match-performance)/')):
+            menu.decompose()
+    # Also handle action links on older layouts without an enclosing menu.
+    for link in cleaned.find_all('a', href=re.compile(r'/(?:profiles|player-match-performance)/')):
+        if re.fullmatch(r'view\s+(?:match\s+performance|profile)', link.get_text(' ', strip=True), re.I):
+            link.decompose()
+    return cleaned
+
+
 def extract_bowlers(soup: BeautifulSoup, max_overs_per_bowler: float = 4.0) -> List[Dict]:
     """Extract bowling figures for all bowlers who have bowled"""
     bowlers = []
     seen_names = set()
+    soup = _without_player_action_menus(soup)
     
     try:
         bowling_tables = soup.find_all('table')
@@ -959,9 +977,9 @@ def get_cricbuzz_match_details(match_id: str) -> Optional[Dict]:
             match_data['partial'] = True
             return match_data
         
-        soup = BeautifulSoup(response.text, 'html.parser')
+        soup = _without_player_action_menus(BeautifulSoup(response.text, 'html.parser'))
         page_text = soup.get_text(separator=' ', strip=True)
-        raw_html = response.text
+        raw_html = str(soup)
         
         teams = []
         title_tag = soup.find('title')
@@ -1241,8 +1259,8 @@ def get_cricbuzz_match_details(match_id: str) -> Optional[Dict]:
             scorecard_url = f"https://www.cricbuzz.com/live-cricket-scorecard/{match_id}?_cb={cache_bust}"
             sc_response = requests.get(scorecard_url, headers=HEADERS, timeout=10)
             if sc_response.status_code == 200:
-                sc_html = sc_response.text
-                sc_soup = BeautifulSoup(sc_html, 'html.parser')
+                sc_soup = _without_player_action_menus(BeautifulSoup(sc_response.text, 'html.parser'))
+                sc_html = str(sc_soup)
                 
                 current_innings = match_data.get('innings', 1)
                 innings_markers = re.findall(r'([\w\s]+)\s+Innings', sc_html)
