@@ -836,6 +836,51 @@ def _without_player_action_menus(soup: BeautifulSoup) -> BeautifulSoup:
     return cleaned
 
 
+def extract_cricbuzz_innings_state(soup: BeautifulSoup, max_overs: int) -> Dict:
+    """Read innings/target only from the match's scoreboard, never commentary.
+
+    Commentary, sidebars and past-match summaries can mention other targets or
+    second innings. None of those establish that this match is a chase.
+    """
+    header = soup.find(id='miniscore-branding-container')
+    if header:
+        text = header.get_text(' ', strip=True)
+    else:
+        # Legacy Cricbuzz layouts expose these dedicated scoreboard elements.
+        nodes = soup.select('.cb-min-bat-rw, .cb-min-bat-rw2, .cb-min-stts')
+        text = ' '.join(node.get_text(' ', strip=True) for node in nodes)
+    state = {'innings': 1, 'target': 0}
+    if not text:
+        return state
+    scores = []
+    seen = set()
+    pattern = r'\b([A-Z][A-Z0-9]{1,5}(?:\s+W)?)\s+(\d+)(?:\s*[/\-]\s*(\d+))?\s*\(\s*(\d+(?:\.\d+)?)\s*(?:ov(?:ers?)?\.?)?\s*\)'
+    for match in re.finditer(pattern, text):
+        team, score, wickets, overs = match.groups()
+        entry = (team, int(score), int(wickets) if wickets is not None else 10, float(overs))
+        if entry in seen or entry[2] > 10 or entry[3] > max_overs:
+            continue
+        seen.add(entry)
+        scores.append(entry)
+    if scores:
+        current = scores[0]
+        # Desktop/mobile duplicates of the same team's score are not two innings.
+        other = next((s for s in scores[1:] if s[0] != current[0]), None)
+        if other and (current[2] == 10 or current[3] >= max_overs):
+            state.update(innings=2, target=current[1] + 1)
+            current = other
+        state.update(current_score=current[1], wickets=current[2], overs=current[3])
+    # An explicit official target (including DLS revisions) overrides a calculated one.
+    target = re.search(r'\btarget\s*(?:[:=]\s*)?(\d+)\b', text, re.I)
+    if target:
+        state.update(innings=2, target=int(target.group(1)))
+    elif state['target'] == 0:
+        needed = re.search(r'\b(?:need|require)\s+(\d+)\s+(?:more\s+)?runs?\b', text, re.I)
+        if needed and scores:
+            state.update(innings=2, target=state['current_score'] + int(needed.group(1)))
+    return state
+
+
 def extract_bowlers(soup: BeautifulSoup, max_overs_per_bowler: float = 4.0) -> List[Dict]:
     """Extract bowling figures for all bowlers who have bowled"""
     bowlers = []
@@ -1017,104 +1062,16 @@ def get_cricbuzz_match_details(match_id: str) -> Optional[Dict]:
                 match_data['overs'] = float(score_fallback.group(3))
                 match_data['loaded_fields'].extend(['current_score', 'wickets', 'overs'])
         
-        target_match = re.search(r'target[:\s]+(\d+)', page_text, re.I)
-        if target_match:
-            match_data['target'] = int(target_match.group(1))
-            match_data['innings'] = 2
+        # Classify innings using only this match's scoreboard. Previously the
+        # full page (including commentary and other matches) could invent a chase.
+        _is_odi_title = bool(re.search(r'\b(?:w?odi|one[- ]day international)\b', title_text, re.I))
+        innings_state = extract_cricbuzz_innings_state(soup, 50 if _is_odi_title else 20)
+        match_data.update(innings_state)
+        for field in ('current_score', 'wickets', 'overs'):
+            if field in innings_state and field not in match_data['loaded_fields']:
+                match_data['loaded_fields'].append(field)
+        if innings_state['target']:
             match_data['loaded_fields'].append('target')
-        
-        # Only use need_match as fallback when explicit target text was NOT found
-        if 'target' not in match_data['loaded_fields']:
-            need_match = re.search(r'need\s+(\d+)\s+(?:runs?|more)', page_text, re.I)
-            if need_match:
-                runs_needed = int(need_match.group(1))
-                match_data['target'] = match_data['current_score'] + runs_needed
-                match_data['innings'] = 2
-                match_data['loaded_fields'].append('target')
-        
-        if match_data['innings'] == 1 and 'target' not in match_data['loaded_fields']:
-            inn2_patterns = [
-                re.search(r'2nd\s+inn', page_text, re.I),
-                re.search(r'chasing\s+(\d+)', page_text, re.I),
-                re.search(r'trail\s+by\s+(\d+)', page_text, re.I),
-                re.search(r'require\s+(\d+)\s+runs', page_text, re.I),
-                re.search(r'CRR.*?REQ', page_text, re.I),
-            ]
-            for pat in inn2_patterns:
-                if pat:
-                    match_data['innings'] = 2
-                    chase_val = pat.groups()[0] if pat.groups() else None
-                    if chase_val and chase_val.isdigit():
-                        match_data['target'] = int(chase_val)
-                        match_data['loaded_fields'].append('target')
-                    break
-
-        def is_valid_team_score(score, wickets, overs):
-            """Check if parsed values look like a team innings score, not bowling figures."""
-            return score >= 20 and wickets <= 10 and 0.1 <= overs <= 50
-
-        all_score_patterns = list(re.finditer(r'([A-Z]{2,5})\s+(\d+)\s*/\s*(\d+)\s*\(\s*(\d+\.?\d*)\s*\)', page_text))
-
-        # Determine max overs for innings-complete check (T20=20, ODI=50)
-        _fmt = match_data.get('format', 't20').lower()
-        _max_ov = 50.0 if 'odi' in _fmt else 20.0
-
-        def _first_innings_complete(wickets, overs):
-            """True only when the 1st innings is clearly finished."""
-            return wickets >= 10 or overs >= (_max_ov - 1.0)
-
-        if match_data['innings'] == 1 and len(all_score_patterns) >= 2:
-            first_score = int(all_score_patterns[0].group(2))
-            first_wickets = int(all_score_patterns[0].group(3))
-            first_overs = float(all_score_patterns[0].group(4))
-            second_score = int(all_score_patterns[1].group(2))
-            second_wickets = int(all_score_patterns[1].group(3))
-            second_overs = float(all_score_patterns[1].group(4))
-            if (is_valid_team_score(first_score, first_wickets, first_overs)
-                    and is_valid_team_score(second_score, second_wickets, second_overs)
-                    and _first_innings_complete(first_wickets, first_overs)):
-                match_data['innings'] = 2
-                match_data['target'] = first_score + 1
-                match_data['current_score'] = second_score
-                match_data['wickets'] = second_wickets
-                match_data['overs'] = second_overs
-                if 'target' not in match_data['loaded_fields']:
-                    match_data['loaded_fields'].append('target')
-                logger.debug(f"Detected 2nd innings from dual scores: {first_score}+1 target, {second_score}/{second_wickets} ({second_overs})")
-
-        if match_data['innings'] == 1:
-            flexible_scores = list(re.finditer(
-                r'([A-Z]{2,5})\s+(\d+)(?:\s*/\s*(\d+))?\s*\(\s*(\d+\.?\d*)\s*\)',
-                page_text
-            ))
-            valid_flex = []
-            for m in flexible_scores:
-                sc = int(m.group(2))
-                wk = int(m.group(3)) if m.group(3) else 10
-                ov = float(m.group(4))
-                if is_valid_team_score(sc, wk, ov):
-                    valid_flex.append((m, sc, wk, ov))
-            if len(valid_flex) >= 2:
-                first_score = valid_flex[0][1]
-                first_wickets = valid_flex[0][2]
-                first_overs = valid_flex[0][3]
-                second_score = valid_flex[1][1]
-                second_wickets = valid_flex[1][2]
-                second_overs = valid_flex[1][3]
-                if _first_innings_complete(first_wickets, first_overs):
-                    match_data['innings'] = 2
-                    match_data['target'] = first_score + 1
-                    match_data['current_score'] = second_score
-                    match_data['wickets'] = second_wickets
-                    match_data['overs'] = second_overs
-                    if 'target' not in match_data['loaded_fields']:
-                        match_data['loaded_fields'].append('target')
-                    logger.debug(f"Detected 2nd innings from flexible dual scores: target={first_score+1}, {second_score}/{second_wickets} ({second_overs})")
-
-        won_by_match = re.search(r'(\w[\w\s]*?)\s+won\s+by\s+(\d+)\s+(runs?|wickets?)', page_text, re.I)
-        if won_by_match and match_data['innings'] == 1:
-            match_data['innings'] = 2
-            logger.debug(f"Detected completed match: {won_by_match.group(0)}")
         
         try:
             start_gmt = re.search(r'Match starts at\s+([A-Za-z]+\s+\d{1,2},?\s+\d{1,2}:\d{2})\s*GMT', page_text)

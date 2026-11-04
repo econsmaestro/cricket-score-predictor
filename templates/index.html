@@ -1023,6 +1023,7 @@ function toggleTargetField() {
         targetContainer.style.display = 'block';
     } else {
         targetContainer.style.display = 'none';
+        document.getElementById('target').value = '';
     }
 }
 
@@ -1467,10 +1468,10 @@ function populateFormFromMatch(match) {
         document.getElementById('innings').value = match.innings;
         toggleTargetField();
     }
-    if (match.target && match.target > 0) {
-        document.getElementById('innings').value = '2';
-        toggleTargetField();
+    if (Number(match.innings) === 2 && match.target > 0) {
         document.getElementById('target').value = match.target;
+    } else {
+        document.getElementById('target').value = '';
     }
     
     if (match.batsmen && match.batsmen.length > 0) {

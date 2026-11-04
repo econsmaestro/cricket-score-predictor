@@ -142,5 +142,9 @@ function click(s, id, format) {
     click(s, 'upcoming', 'mens_odi');
     await respond(s.pending[5], {success: true, match: {venue: 'Other Ground', status: 'Upcoming'}});
     assert.ok(s.get('liveMatchStatus').innerHTML.includes('has not started'));
+    // A stray target must not force a first-innings match into chase mode.
+    s.context.populateFormFromMatch({...sample('mens_odi'), innings: 1, target: 270});
+    assert.equal(s.get('innings').value, 1);
+    assert.equal(s.get('target').value, '');
     console.log('Match-card autofill: all four formats, fields, races, partial/error/upcoming cases passed.');
 })().catch(error => { console.error(error); process.exitCode = 1; });

@@ -706,7 +706,9 @@ def predict():
         next_over_bowler = request.form.get("next_over_bowler", "").strip()
         last_over_bowler = request.form.get("last_over_bowler", "")
         innings = int(request.form.get("innings", 1))
-        target = int(request.form.get("target", 0)) if request.form.get("target") else 0
+        target = int(request.form.get("target", 0)) if innings == 2 and request.form.get("target") else 0
+        if innings != 2:
+            session['form_data']['target'] = ''
         match_format = request.form.get("match_format", "mens_t20")
         fielding_team = request.form.get("fielding_team", "").strip()
         
