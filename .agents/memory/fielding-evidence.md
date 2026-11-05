@@ -20,3 +20,9 @@ Historical ratings must use only information available before prediction. Catchi
 **Why:** The user explicitly required these safeguards and said catches taken cannot directly measure catching ability without opportunities.
 
 **How to apply:** Preserve missing denominators as unavailable. Pressure analysis must control for match situation, wickets lost, over number and required run rate; association is not causation.
+
+Reducing run prediction error is the first priority. Wicket prediction error must also decrease, not merely avoid regression.
+
+**Why:** The user clarified, "It must also reduce run error also and first."
+
+**How to apply:** Assess run MAE improvement first and require wicket MAE improvement as well on chronological held-out observations. Improved wickets alone, or unchanged run error, does not meet the objective.
