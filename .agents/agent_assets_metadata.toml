@@ -126,3 +126,31 @@ mtime_ms = 1793879865829
 storage_uri = "gcs://replit-rams-assets-sisko/rams/assets/repl:b407f9d4-a912-4514-9106-fd10bd03162e/4d79aa1a-7053-4a96-a3b9-9c9cf2cd470f/40ab3658-769b-4fec-aa35-de506b3e8b3c"
 storage_version_token = "1793879875932389"
 content_type = "text/csv"
+
+[[outputs]]
+id = "CTjSaER760mekHdjJ_IGI"
+uri = "file://generated-artifacts/linkedin-script/CricPredict_LinkedIn_Revised.pdf"
+type = "pdf"
+title = "Revised LinkedIn Video Script & Post"
+description = "Recording-ready narration, revised LinkedIn caption, screenshot timings and factual corrections. Searchable four-page PDF."
+logical_id = "d18105a2-8ea0-4d2e-95f0-606305438be1"
+content_hash = "sha256:fe89aee9921683fb584918d7a53d84a30ce1e6224e08db5458484a8b154bdbee"
+size = 15521
+mtime_ms = 1793888431792
+storage_uri = "gcs://replit-rams-assets-sisko/rams/assets/repl:b407f9d4-a912-4514-9106-fd10bd03162e/d18105a2-8ea0-4d2e-95f0-606305438be1/176d62a3-4668-4264-96c2-774e84109592"
+storage_version_token = "1793888493827597"
+content_type = "application/pdf"
+
+[[outputs]]
+id = "kEI40pweBA4_nS5pZhgef"
+uri = "file://generated-artifacts/linkedin-script/CricPredict_LinkedIn_Revised.docx"
+type = "word_document"
+title = "Editable LinkedIn Script"
+description = "Word version of the revised narration, post and editor notes for your own changes."
+logical_id = "58f2ae13-2c7a-41d1-b697-7c423d524f36"
+content_hash = "sha256:29e7e1f158a3229f19be92b1f1e6fa13364ba47281acf3bac4e9acaf85eaa5ac"
+size = 4619
+mtime_ms = 1793888431796
+storage_uri = "gcs://replit-rams-assets-sisko/rams/assets/repl:b407f9d4-a912-4514-9106-fd10bd03162e/58f2ae13-2c7a-41d1-b697-7c423d524f36/5aab503e-baa8-40ba-92ad-793f977d9b8e"
+storage_version_token = "1793888495228876"
+content_type = "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
