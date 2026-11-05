@@ -56,3 +56,59 @@ mtime_ms = 1793876446962
 storage_uri = "gcs://replit-rams-assets-sisko/rams/assets/repl:b407f9d4-a912-4514-9106-fd10bd03162e/c6dfd13a-a9ca-4efe-b78a-ef2b87ec6e47/a8bf58cd-78de-4a20-88d7-cf2330581e92"
 storage_version_token = "1793876596567313"
 content_type = "text/csv"
+
+[[outputs]]
+id = "AYpB6P_JuJmRa40X3UUBK"
+uri = "file://generated-artifacts/wicket-phase2/report.html"
+type = "html"
+title = "Wicket Calibration Phase 2 — Evidence and Limitations"
+description = "Full comparisons, phase/checkpoint diagnostics, early-all-out eligibility, conditional hazards, late-innings regressions and source-availability limits."
+logical_id = "7e0062ef-633a-44e1-922a-31359bb46f57"
+content_hash = "sha256:13bd450049c5c90a178096c6bfc077ad30364b0e6f94879fbf1ec79716ca6a03"
+size = 755776
+mtime_ms = 1793878793082
+storage_uri = "gcs://replit-rams-assets-sisko/rams/assets/repl:b407f9d4-a912-4514-9106-fd10bd03162e/7e0062ef-633a-44e1-922a-31359bb46f57/95499cdc-b021-430e-a76d-372f61d499dc"
+storage_version_token = "1793878794597089"
+content_type = "text/html"
+
+[[outputs]]
+id = "LkZ7FtYSkNbNygyS7MuZ-"
+uri = "file://generated-artifacts/wicket-phase2/comparison-metrics.csv"
+type = "table"
+title = "Phase 2 — All Model Comparison Metrics"
+description = "Nine experimental configurations across four formats: wicket and score errors, bias, exact accuracy and interval coverage."
+logical_id = "9b5495e2-1d55-470b-b725-0e4053f9d7bf"
+content_hash = "sha256:78a63dd78789a3a32c2694568135edb6cae1cda263e5cd393d341c63121a4c87"
+size = 7295
+mtime_ms = 1793878771691
+storage_uri = "gcs://replit-rams-assets-sisko/rams/assets/repl:b407f9d4-a912-4514-9106-fd10bd03162e/9b5495e2-1d55-470b-b725-0e4053f9d7bf/daa9143a-712f-4d3a-9892-7e75066b6c97"
+storage_version_token = "1793878796051774"
+content_type = "text/csv"
+
+[[outputs]]
+id = "bGOrrolLfaa15ourg8bDd"
+uri = "file://generated-artifacts/wicket-phase2/predictions.csv"
+type = "table"
+title = "Phase 2 — Paired Forecasts"
+description = "19,485 paired forecast records from 400 distinct historical first innings, with matching fixtures and checkpoints."
+logical_id = "c6b8f1db-70c4-4eec-a06c-353c7668611a"
+content_hash = "sha256:9724e7d65a2f8a798ec0747c6d1a4f98b39dd2e558684b3a5ec2bb870e226417"
+size = 3541854
+mtime_ms = 1793878014637
+storage_uri = "gcs://replit-rams-assets-sisko/rams/assets/repl:b407f9d4-a912-4514-9106-fd10bd03162e/c6b8f1db-70c4-4eec-a06c-353c7668611a/28604ef1-ccce-4266-85f3-6874273e70c4"
+storage_version_token = "1793878797436914"
+content_type = "text/csv"
+
+[[outputs]]
+id = "QDW36Q2QgMJrbbxAGT6nT"
+uri = "file://generated-artifacts/wicket-phase2/conditional-hazards.csv"
+type = "table"
+title = "Historical Conditional Dismissal Hazards"
+description = "Training-only exposures grouped by exact over, wickets remaining, run-rate bucket and recent dismissals."
+logical_id = "d97942f8-9f25-45b4-bc6e-4a88e8fe9739"
+content_hash = "sha256:15406abde76088c2028f16ccf096cea7eb678a785ec260d71d49b788430f2324"
+size = 189805
+mtime_ms = 1793878771621
+storage_uri = "gcs://replit-rams-assets-sisko/rams/assets/repl:b407f9d4-a912-4514-9106-fd10bd03162e/d97942f8-9f25-45b4-bc6e-4a88e8fe9739/340a9669-e1a2-46ab-9a80-1910a88ed65f"
+storage_version_token = "1793878798878197"
+content_type = "text/csv"

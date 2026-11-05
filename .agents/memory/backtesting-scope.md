@@ -26,3 +26,15 @@ Freeze and disclose the replay's empirical-input providers and learned-adjustmen
 **Why:** Diagnostic replay can match saved reports while using different effective historical priors or learned offsets from a live session. Unversioned aggregates cannot establish what was available at a past forecast timestamp.
 
 **How to apply:** Separate production-input sensitivity comparisons from training-only historical-input controls. Keep all fixtures/checkpoints paired, disclose unsupported historical provenance, and require untouched validation before activating corrections.
+
+Retain early all-out innings in experimental evaluation. Use an innings-start forecast and only checkpoints reached while active; never pad ended innings with perfect terminal predictions.
+
+**Why:** The user explicitly required early collapses and innings ending before configured checkpoints to remain in evaluation.
+
+**How to apply:** Report active-checkpoint counts, exclusions and configured-only metrics separately so changed sampling is not mistaken for model improvement.
+
+Never backdate source availability to a fixture's event date. Treat event-time reconstruction and verified source-availability validation as different evidence levels.
+
+**Why:** Downloaded historical archives do not prove when their corrected record versions were published; the user withheld approval because chronological splitting alone did not resolve leakage.
+
+**How to apply:** Preserve actual first-seen times and immutable prior/source versions. Keep approval blocked when historical revision availability or model tuning provenance cannot be established.
