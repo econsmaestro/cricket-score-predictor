@@ -79,7 +79,11 @@
                   </a>
                   <button class="btn btn-sm btn-outline-primary py-0 px-2"
                           style="font-size:11px; border-radius:6px;"
-                          onclick="loadMatchFromCard('{{ m.id }}')">
+                          data-match-id="{{ m.id }}"
+                          data-match-format="{{ ('womens_' if m.is_womens else 'mens_') ~ ('odi' if m.format == 'ODI' else 't20') }}"
+                          data-match-label="{{ m.display_text }}"
+                          data-match-status="{{ m.status }}"
+                          onclick="loadMatchFromCard(this)">
                     <i class="bi bi-calculator me-1"></i>Predict
                   </button>
                 </div>
@@ -243,7 +247,9 @@
     </div>
     
     <form action="{{ url_for('predict') }}" method="POST" id="predictionForm">
+        <input type="hidden" name="prediction_csrf" value="{{ session.get('prediction_csrf', '') }}">
         <input type="hidden" name="match_format" id="match_format_hidden" value="{{ form_data.get('match_format', 'mens_t20') }}">
+        <input type="hidden" name="input_mode" id="input_mode_hidden" value="{{ form_data.get('input_mode', 'manual') }}">
         <input type="hidden" name="bowling_team_11" id="bowling_team_11" value="{{ form_data.get('bowling_team_11', '') }}">
         <input type="hidden" name="live_match_id" id="live_match_id" value="">
         <div class="row g-4">
@@ -755,15 +761,34 @@
 
 {% block scripts %}
 <script>
-function loadMatchFromCard(matchId) {
-    // Populate the live match dropdown with this match and trigger load
+function loadMatchFromCard(card) {
+    // Cards work before the live dropdown has ever been opened or populated.
+    ++liveListRequest;
+    const matchId = card.dataset.matchId;
     const dropdown = document.getElementById('liveMatchSelect');
-    if (dropdown) {
-        dropdown.value = matchId;
-        dropdown.dispatchEvent(new Event('change'));
-        // Scroll down to the prediction form
-        document.querySelector('.form-card')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    if (!dropdown) return;
+    const format = card.dataset.matchFormat;
+    if (formatConfig[format]) {
+        document.getElementById('format_' + format).checked = true;
+        updateFormat(format, false);
     }
+    document.getElementById('mode_live').checked = true;
+    document.getElementById('mode_manual').checked = false;
+    document.getElementById('input_mode_hidden').value = 'live';
+    document.getElementById('liveMatchSection').style.display = 'block';
+    document.getElementById('liveMatchShimmer').style.display = 'none';
+    dropdown.style.display = 'block';
+    let option = Array.from(dropdown.options).find(opt => opt.value === matchId);
+    if (!option) {
+        option = new Option(card.dataset.matchLabel || matchId, matchId);
+        dropdown.add(option);
+    }
+    option.disabled = false;
+    option.dataset.format = format || '';
+    option.dataset.status = card.dataset.matchStatus || '';
+    dropdown.value = matchId;
+    loadMatchData();
+    document.getElementById('liveMatchSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
 function saveFavTeam() {
@@ -784,6 +809,8 @@ function saveFavTeam() {
 
 let currentFormat = 'mens_t20';
 let currentGender = 'men';
+let liveListRequest = 0;
+let matchDetailsRequest = 0;
 
 const formatConfig = {
     'mens_t20': { maxOvers: 20, maxBowlerOvers: 4, label: "Men's T20", gender: 'men' },
@@ -862,7 +889,7 @@ let bowlerOptions = menBowlerOptions;
 let batsmanOptions = menBatsmanOptions;
 let allPlayerOptions = menAllPlayerOptions;
 
-function updateFormat(format) {
+function updateFormat(format, refreshMatches = true) {
     currentFormat = format;
     const config = formatConfig[format];
     const prevGender = currentGender;
@@ -888,6 +915,9 @@ function updateFormat(format) {
     
     const oversInput = document.getElementById('overs_completed');
     oversInput.max = config.maxOvers - 0.5;
+    document.querySelectorAll('input[name="batsman1_balls"], input[name="batsman2_balls"]').forEach(input => {
+        input.max = config.maxOvers * 6;
+    });
     
     const oversHelp = document.getElementById('oversHelpText');
     oversHelp.textContent = `Format: X.0 to X.5 (max ${config.maxOvers} overs)`;
@@ -922,7 +952,7 @@ function updateFormat(format) {
     
     // If in live game mode, refresh live matches with new format
     const liveSection = document.getElementById('liveMatchSection');
-    if (liveSection && liveSection.style.display !== 'none') {
+    if (refreshMatches && liveSection && liveSection.style.display !== 'none') {
         fetchLiveMatches();
     }
 }
@@ -994,6 +1024,7 @@ function toggleTargetField() {
         targetContainer.style.display = 'block';
     } else {
         targetContainer.style.display = 'none';
+        document.getElementById('target').value = '';
     }
 }
 
@@ -1218,6 +1249,7 @@ function clampAllBowlerOvers() {
 }
 
 function toggleInputMode(mode) {
+    document.getElementById('input_mode_hidden').value = mode;
     const liveSection = document.getElementById('liveMatchSection');
     if (mode === 'live') {
         liveSection.style.display = 'block';
@@ -1228,6 +1260,7 @@ function toggleInputMode(mode) {
 }
 
 function fetchLiveMatches() {
+    const requestId = ++liveListRequest;
     const select = document.getElementById('liveMatchSelect');
     const statusDiv = document.getElementById('liveMatchStatus');
     const shimmer = document.getElementById('liveMatchShimmer');
@@ -1241,6 +1274,7 @@ function fetchLiveMatches() {
     fetch('/api/live-matches?format=' + currentFormat)
         .then(response => response.json())
         .then(data => {
+            if (requestId !== liveListRequest) return;
             if (shimmer) shimmer.style.display = 'none';
             select.style.display = 'block';
             if (data.success && data.matches.length > 0) {
@@ -1254,7 +1288,9 @@ function fetchLiveMatches() {
                     option.textContent = match.display_text.replace(/ \((Live|Upcoming|Completed)\)$/, '').replace(/ - (\w.* won)$/, ' - $1');
                     option.dataset.url = match.url;
                     option.dataset.status = match.status;
-                    if (match.format) option.dataset.format = match.format;
+                    option.dataset.format = formatConfig[match.format] ? match.format :
+                        (match.is_womens ? 'womens_' : 'mens_') +
+                        (match.format === 'ODI' ? 'odi' : 't20');
                     if (match.status === 'Completed') {
                         option.disabled = true;
                         option.style.color = '#999';
@@ -1279,6 +1315,7 @@ function fetchLiveMatches() {
             }
         })
         .catch(error => {
+            if (requestId !== liveListRequest) return;
             if (shimmer) shimmer.style.display = 'none';
             select.style.display = 'block';
             select.innerHTML = '<option value="">Error loading matches</option>';
@@ -1302,29 +1339,53 @@ function loadMatchData() {
     const statusDiv = document.getElementById('liveMatchStatus');
     
     if (!matchId) return;
+    const requestId = ++matchDetailsRequest;
+    // An older list refresh must not erase this explicit selection.
+    ++liveListRequest;
+    document.getElementById('liveMatchShimmer').style.display = 'none';
+    select.style.display = 'block';
 
     // Switch format immediately from the list-level detection (URL-based, most reliable)
     const selectedOpt = select.querySelector('option[value="' + matchId + '"]');
     const listFormat = selectedOpt && selectedOpt.dataset.format;
     if (listFormat && formatConfig[listFormat] && listFormat !== currentFormat) {
         const fmtRadio = document.getElementById('format_' + listFormat);
-        if (fmtRadio) { fmtRadio.checked = true; updateFormat(listFormat); }
+        if (fmtRadio) { fmtRadio.checked = true; updateFormat(listFormat, false); }
     }
     
     spinner.style.display = 'block';
+    // Clear the previous match, including chase targets and squad selections.
+    document.getElementById('live_match_id').value = '';
+    ['current_score', 'wickets_fallen', 'overs_completed', 'target', 'bowling_team_11'].forEach(id => {
+        document.getElementById(id).value = '';
+    });
+    document.getElementById('innings').value = '1';
+    toggleTargetField();
+    ['venue', 'fielding_team', 'batsman1_name', 'batsman2_name',
+     'last_over_bowler', 'next_over_bowler'].forEach(name => {
+        $('[name="' + name + '"]').val('').trigger('change');
+    });
+    ['batsman1_runs', 'batsman1_balls', 'batsman2_runs', 'batsman2_balls'].forEach(name => {
+        document.querySelector('[name="' + name + '"]').value = '';
+    });
+    document.getElementById('bowlerRows').innerHTML = '';
+    document.getElementById('batsmenToComeContainer').innerHTML = '';
+    window.bowlingTeam11 = [];
     statusDiv.innerHTML = '<small class="text-info"><i class="bi bi-download me-1"></i>Loading match details...</small>';
     
     fetch('/api/live-match/' + matchId + '?format=' + currentFormat)
         .then(response => response.json())
         .then(data => {
+            if (requestId !== matchDetailsRequest) return;
             spinner.style.display = 'none';
             if (data.success && data.match) {
-                // Auto-switch format if the scraper detected one
-                if (data.match.format && formatConfig[data.match.format]) {
-                    const detectedFmt = data.match.format;
+                // Preserve the selected fixture's format: sparse detail pages
+                // can default to T20, including U19 ODIs already past 20 overs.
+                const detectedFmt = formatConfig[listFormat] ? listFormat : data.match.format;
+                if (detectedFmt && formatConfig[detectedFmt]) {
                     if (detectedFmt !== currentFormat) {
                         const fmtRadio = document.getElementById('format_' + detectedFmt);
-                        if (fmtRadio) { fmtRadio.checked = true; updateFormat(detectedFmt); }
+                        if (fmtRadio) { fmtRadio.checked = true; updateFormat(detectedFmt, false); }
                     }
                 }
                 var matchOvers = parseFloat(data.match.overs || 0);
@@ -1340,7 +1401,9 @@ function loadMatchData() {
                 // Store the live match ID so the server can link prediction → outcome
                 document.getElementById('live_match_id').value = matchId || '';
                 populateFormFromMatch(data.match);
-                if (data.partial) {
+                if ((data.match.status || selectedOpt?.dataset.status) === 'Upcoming') {
+                    statusDiv.innerHTML = '<small class="text-info">Fixture details loaded. This match has not started; live scores and players will be available once play begins.</small>';
+                } else if (data.partial) {
                     var loaded = data.loaded_fields || [];
                     var missing = [];
                     if (loaded.indexOf('current_score') === -1) missing.push('score');
@@ -1355,7 +1418,7 @@ function loadMatchData() {
                     }
                     statusDiv.innerHTML = '<small class="text-warning"><i class="bi bi-exclamation-triangle me-1"></i>' + msg + '</small>';
                 } else {
-                    statusDiv.innerHTML = '<small class="text-success"><i class="bi bi-check-circle me-1"></i>Match data loaded! Review and adjust values as needed.</small>';
+                    statusDiv.innerHTML = '<small class="text-success"><i class="bi bi-check-circle me-1"></i>Match details filled in. Click Predict below.</small>';
                 }
             } else {
                 if (data.error && data.error.indexOf('exceeds') !== -1) {
@@ -1369,6 +1432,7 @@ function loadMatchData() {
             }
         })
         .catch(error => {
+            if (requestId !== matchDetailsRequest) return;
             spinner.style.display = 'none';
             statusDiv.innerHTML = '<small class="text-danger"><i class="bi bi-x-circle me-1"></i>Error loading match data. Please enter details manually.</small>';
         });
@@ -1406,10 +1470,10 @@ function populateFormFromMatch(match) {
         document.getElementById('innings').value = match.innings;
         toggleTargetField();
     }
-    if (match.target && match.target > 0) {
-        document.getElementById('innings').value = '2';
-        toggleTargetField();
+    if (Number(match.innings) === 2 && match.target > 0) {
         document.getElementById('target').value = match.target;
+    } else {
+        document.getElementById('target').value = '';
     }
     
     if (match.batsmen && match.batsmen.length > 0) {
@@ -1422,8 +1486,8 @@ function populateFormFromMatch(match) {
             }
             const batsmanInput = document.querySelector('input[name="batsman1_runs"]');
             const ballsInput = document.querySelector('input[name="batsman1_balls"]');
-            if (batsmanInput) batsmanInput.value = batsman1.runs || '';
-            if (ballsInput) ballsInput.value = batsman1.balls || '';
+            if (batsmanInput) batsmanInput.value = batsman1.runs ?? '';
+            if (ballsInput) ballsInput.value = batsman1.balls ?? '';
         }
         if (match.batsmen.length > 1) {
             const batsman2 = match.batsmen[1];
@@ -1434,8 +1498,8 @@ function populateFormFromMatch(match) {
             }
             const batsmanInput = document.querySelector('input[name="batsman2_runs"]');
             const ballsInput = document.querySelector('input[name="batsman2_balls"]');
-            if (batsmanInput) batsmanInput.value = batsman2.runs || '';
-            if (ballsInput) ballsInput.value = batsman2.balls || '';
+            if (batsmanInput) batsmanInput.value = batsman2.runs ?? '';
+            if (ballsInput) ballsInput.value = batsman2.balls ?? '';
         }
     }
     
@@ -1502,14 +1566,6 @@ function populateFormFromMatch(match) {
         }
     }
     
-    if (match.last_over_bowler) {
-        const lastBowlerSelect = $('select[name="last_over_bowler"]');
-        if (lastBowlerSelect.length) {
-            const option = new Option(match.last_over_bowler, match.last_over_bowler, true, true);
-            lastBowlerSelect.append(option).trigger('change');
-        }
-    }
-    
     if (match.venue) {
         const venueSelect = $('select[name="venue"]');
         if (venueSelect.length) {
@@ -1544,9 +1600,12 @@ function populateFormFromMatch(match) {
     }
     
     if (match.yet_to_bat && match.yet_to_bat.length > 0) {
+        const populationRequest = matchDetailsRequest;
         setTimeout(() => {
+            if (populationRequest !== matchDetailsRequest) return;
             updateBatsmenToCome();
             setTimeout(() => {
+                if (populationRequest !== matchDetailsRequest) return;
                 const creaseNames = new Set();
                 const striker = document.querySelector('[name="batsman1_name"]');
                 const nonStriker = document.querySelector('[name="batsman2_name"]');
@@ -1631,6 +1690,12 @@ function populateFormFromMatch(match) {
             });
             $(this).trigger('change');
         });
+    }
+    // Apply after rebuilding squad options; otherwise the rebuild clears it.
+    if (match.last_over_bowler) {
+        const lastBowlerSelect = $('select[name="last_over_bowler"]');
+        const option = new Option(match.last_over_bowler, match.last_over_bowler, true, true);
+        lastBowlerSelect.append(option).trigger('change');
     }
     
     let yetToBatInfo = '';

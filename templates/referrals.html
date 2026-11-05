@@ -1,0 +1,410 @@
+{% extends "base.html" %}
+
+{% block page_title %}Refer &amp; Earn Pro — CricPredict{% endblock %}
+{% block page_description %}Share your CricPredict referral link and earn Matchday Pro time when new fans make their first successful prediction.{% endblock %}
+
+{% block content %}
+<style>
+  .referrals-page {
+    --ref-ink: #183b39;
+    --ref-muted: #657a75;
+    --ref-line: #dce8df;
+    --ref-paper: #f5f8f2;
+    --ref-teal: #176c5a;
+    --ref-gold: #f0c45b;
+    color: var(--ref-ink);
+    padding: clamp(1.5rem, 4vw, 3rem) 0 4rem;
+  }
+  .referrals-page .ref-hero {
+    overflow: hidden;
+    position: relative;
+    color: #f6f7e8;
+    background: linear-gradient(120deg, #183c3a 0%, #205c51 68%, #277265 100%);
+    border-radius: 1.25rem;
+    padding: clamp(1.6rem, 5vw, 3.25rem);
+    box-shadow: 0 1rem 2.5rem rgba(29, 72, 63, .14);
+  }
+  .ref-hero::after {
+    content: "";
+    position: absolute;
+    width: 19rem;
+    height: 19rem;
+    border: 1px solid rgba(240, 196, 91, .28);
+    border-radius: 50%;
+    right: -5rem;
+    top: -8rem;
+    box-shadow: 0 0 0 2rem rgba(240, 196, 91, .06), 0 0 0 4rem rgba(240, 196, 91, .04);
+    pointer-events: none;
+  }
+  .ref-hero-content { position: relative; z-index: 1; max-width: 760px; }
+  .ref-eyebrow {
+    color: #f0c45b;
+    font-size: .75rem;
+    font-weight: 700;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+  }
+  .ref-hero h1 {
+    font-weight: 750;
+    letter-spacing: -.045em;
+    line-height: 1.03;
+    font-size: clamp(2.3rem, 6vw, 4.1rem);
+    margin: .8rem 0 1rem;
+  }
+  .ref-hero p { color: rgba(246, 247, 232, .78); font-size: 1.05rem; max-width: 590px; margin: 0; }
+  .ref-hero-mark {
+    position: absolute;
+    right: clamp(1.5rem, 6vw, 4rem);
+    bottom: 1.5rem;
+    color: rgba(240, 196, 91, .75);
+    font-size: clamp(3rem, 8vw, 6.5rem);
+    line-height: 1;
+  }
+  .ref-section { margin-top: 1.5rem; }
+  .ref-card {
+    height: 100%;
+    border: 1px solid var(--ref-line);
+    border-radius: 1rem;
+    background: #fff;
+    box-shadow: 0 .35rem 1.1rem rgba(34, 72, 63, .045);
+  }
+  .ref-card .card-body { padding: clamp(1.15rem, 3vw, 1.75rem); }
+  .ref-label {
+    color: var(--ref-muted);
+    font-size: .72rem;
+    font-weight: 700;
+    letter-spacing: .11em;
+    text-transform: uppercase;
+  }
+  .ref-stat {
+    color: var(--ref-ink);
+    font-size: clamp(2rem, 4vw, 2.8rem);
+    font-weight: 750;
+    letter-spacing: -.055em;
+    line-height: 1.1;
+    font-variant-numeric: tabular-nums;
+  }
+  .ref-stat-unit { color: var(--ref-muted); font-size: .95rem; font-weight: 500; letter-spacing: 0; }
+  .ref-icon {
+    display: inline-grid;
+    width: 2.4rem;
+    height: 2.4rem;
+    place-items: center;
+    border-radius: .75rem;
+    color: var(--ref-teal);
+    background: #e8f2eb;
+    font-size: 1.1rem;
+  }
+  .ref-link-box { background: var(--ref-paper); border: 1px solid var(--ref-line); border-radius: .85rem; padding: 1rem; }
+  .ref-link-input {
+    min-width: 0;
+    background: #fff;
+    border-color: #d4e1d8;
+    color: #264a43;
+    font-family: "Roboto Mono", monospace;
+    font-size: .875rem;
+  }
+  .ref-link-input:focus { border-color: var(--ref-teal); box-shadow: 0 0 0 .2rem rgba(23, 108, 90, .12); }
+  .ref-copy-btn { background: var(--ref-teal); border-color: var(--ref-teal); color: #fff; }
+  .ref-copy-btn:hover, .ref-copy-btn:focus { color: #fff; background: #125748; border-color: #125748; }
+  .ref-share-btn { color: var(--ref-teal); border-color: #afc9bb; background: #fff; }
+  .ref-share-btn:hover, .ref-share-btn:focus { color: #124d40; background: #eaf2ec; border-color: #9db9aa; }
+  .ref-feedback { min-height: 1.4rem; font-size: .875rem; }
+  .ref-progress-track { height: .6rem; border-radius: 99px; background: #e7eee8; overflow: hidden; }
+  .ref-progress-bar { height: 100%; border-radius: inherit; background: linear-gradient(90deg, #176c5a, #48a17b); transition: width .35s ease; }
+  .ref-rules { background: #f2f6ef; border: 1px solid var(--ref-line); border-radius: 1rem; }
+  .ref-rules li { padding-left: .25rem; margin-bottom: .75rem; color: #45615a; }
+  .ref-rules li:last-child { margin-bottom: 0; }
+  .ref-rule-icon { color: var(--ref-teal); }
+  .ref-status {
+    display: inline-flex;
+    align-items: center;
+    gap: .4rem;
+    padding: .32rem .62rem;
+    border-radius: 99px;
+    font-size: .75rem;
+    font-weight: 700;
+    text-transform: capitalize;
+    white-space: nowrap;
+  }
+  .ref-status::before { content: ""; width: .4rem; height: .4rem; background: currentColor; border-radius: 50%; }
+  .ref-status-pending { color: #8a6214; background: #fbf2d9; }
+  .ref-status-qualified { color: #28627a; background: #e5f1f5; }
+  .ref-status-rewarded { color: #176443; background: #e3f2e8; }
+  .ref-status-rejected { color: #8c4c43; background: #f7e9e5; }
+  .ref-table thead th {
+    color: var(--ref-muted);
+    background: #f6f8f4;
+    border-bottom-color: var(--ref-line);
+    font-size: .7rem;
+    letter-spacing: .09em;
+    text-transform: uppercase;
+  }
+  .ref-table td { color: #45615a; vertical-align: middle; }
+  .ref-table .ref-muted-cell { color: #82918a; font-size: .875rem; }
+  .ref-empty { border: 1px dashed #c8d8cc; border-radius: .8rem; background: #fbfcf9; }
+  .ref-until { color: #176443; background: #e3f2e8; border-radius: .65rem; padding: .7rem .85rem; }
+  @media (max-width: 575.98px) {
+    .referrals-page { padding-top: 1.25rem; }
+    .ref-hero-mark { opacity: .35; right: 1rem; bottom: 1rem; }
+    .ref-link-actions { display: grid !important; grid-template-columns: 1fr 1fr; }
+    .ref-link-actions .btn { padding-inline: .5rem; }
+  }
+</style>
+
+<div class="referrals-page">
+  <section class="ref-hero" aria-labelledby="referrals-title">
+    <div class="ref-hero-content">
+      <div class="ref-eyebrow">CricPredict · Fan-to-fan</div>
+      <h1 id="referrals-title">Bring a friend.<br>Watch the match closer.</h1>
+      <p>Share your personal link. When a new fan makes their first successful prediction, you both help make the next matchday better.</p>
+    </div>
+    <i class="bi bi-people ref-hero-mark" aria-hidden="true"></i>
+  </section>
+
+  <section class="ref-section" aria-label="Referral summary">
+    <div class="row g-3">
+      <div class="col-12 col-md-4">
+        <article class="card ref-card">
+          <div class="card-body d-flex flex-column justify-content-between">
+            <div class="d-flex align-items-start justify-content-between mb-3">
+              <span class="ref-label">This month</span>
+              <span class="ref-icon" aria-hidden="true"><i class="bi bi-bullseye"></i></span>
+            </div>
+            <div>
+              <div class="ref-stat">{{ successful_this_month|default(0, true) }}<span class="ref-stat-unit"> / 5</span></div>
+              <div class="text-muted small mt-1">Pro rewards earned</div>
+              <div class="ref-progress-track mt-3" role="progressbar" aria-label="Monthly referral rewards" aria-valuemin="0" aria-valuemax="5" aria-valuenow="{{ [successful_this_month|default(0, true)|int, 5]|min }}">
+                <div class="ref-progress-bar" style="width: {{ [((successful_this_month|default(0, true)|int) * 20), 100]|min }}%;"></div>
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
+      <div class="col-12 col-md-4">
+        <article class="card ref-card">
+          <div class="card-body d-flex flex-column justify-content-between">
+            <div class="d-flex align-items-start justify-content-between mb-3">
+              <span class="ref-label">In the queue</span>
+              <span class="ref-icon" aria-hidden="true"><i class="bi bi-hourglass-split"></i></span>
+            </div>
+            <div>
+              <div class="ref-stat">{{ pending_referrals|default(0, true) }}</div>
+              <div class="text-muted small mt-1">Pending referrals</div>
+              <div class="small text-muted mt-3">Qualified referrals beyond this month’s cap remain queued.</div>
+            </div>
+          </div>
+        </article>
+      </div>
+      <div class="col-12 col-md-4">
+        <article class="card ref-card">
+          <div class="card-body d-flex flex-column justify-content-between">
+            <div class="d-flex align-items-start justify-content-between mb-3">
+              <span class="ref-label">All time</span>
+              <span class="ref-icon" aria-hidden="true"><i class="bi bi-calendar2-check"></i></span>
+            </div>
+            <div>
+              <div class="ref-stat">{{ total_months_earned|default(0, true) }}<span class="ref-stat-unit"> mo</span></div>
+              <div class="text-muted small mt-1">Pro time earned</div>
+              {% if pro_until %}
+              <div class="ref-until small mt-3"><i class="bi bi-star-fill me-1" aria-hidden="true"></i>Pro active through <strong>{{ pro_until.strftime('%-d %b %Y') }}</strong></div>
+              {% else %}
+              <div class="small text-muted mt-3">Each eligible referral adds one calendar month of Pro.</div>
+              {% endif %}
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="ref-section" aria-labelledby="your-link-title">
+    <div class="card ref-card">
+      <div class="card-body">
+        <div class="row align-items-center g-4">
+          <div class="col-lg-5">
+            <div class="d-flex align-items-center gap-3 mb-2">
+              <span class="ref-icon" aria-hidden="true"><i class="bi bi-link-45deg"></i></span>
+              <h2 id="your-link-title" class="h5 fw-bold mb-0">Your referral link</h2>
+            </div>
+            <p class="text-muted mb-0">Send this link to a cricket fan. Your referral is only counted after their first successful prediction.</p>
+          </div>
+          <div class="col-lg-7">
+            <div class="ref-link-box">
+              <label for="referralLink" class="ref-label mb-2 d-block">Personal link</label>
+              <div class="input-group">
+                <input id="referralLink" class="form-control ref-link-input" type="text" value="{{ referral_link|default('', true) }}" readonly aria-describedby="referralFeedback">
+                <div class="ref-link-actions d-flex gap-2 ms-2">
+                  <button id="copyReferralLink" class="btn ref-copy-btn fw-semibold" type="button"><i class="bi bi-copy me-1" aria-hidden="true"></i>Copy</button>
+                  <button id="shareReferralLink" class="btn ref-share-btn fw-semibold" type="button"><i class="bi bi-share me-1" aria-hidden="true"></i>Share</button>
+                </div>
+              </div>
+              <div id="referralFeedback" class="ref-feedback mt-2 text-muted" role="status" aria-live="polite">If copy is unavailable, select the link and copy it manually.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="ref-section" aria-labelledby="how-it-works-title">
+    <div class="row g-3">
+      <div class="col-lg-5">
+        <div class="ref-rules h-100 p-4 p-lg-5">
+          <div class="ref-eyebrow mb-2" style="color:#176c5a;">The rules of the game</div>
+          <h2 id="how-it-works-title" class="h4 fw-bold mb-4">How rewards work</h2>
+          <ul class="list-unstyled mb-0">
+            <li class="d-flex gap-2"><i class="bi bi-check2-circle ref-rule-icon mt-1" aria-hidden="true"></i><span>A referral must be a genuinely new registered account that joined using your link.</span></li>
+            <li class="d-flex gap-2"><i class="bi bi-check2-circle ref-rule-icon mt-1" aria-hidden="true"></i><span>They must complete their first successful <strong>non-demo</strong> prediction to qualify.</span></li>
+            <li class="d-flex gap-2"><i class="bi bi-check2-circle ref-rule-icon mt-1" aria-hidden="true"></i><span>Each eligible referral earns <strong>one calendar month of Pro</strong>. Rewards extend an existing Pro expiry, or start from now.</span></li>
+            <li class="d-flex gap-2"><i class="bi bi-check2-circle ref-rule-icon mt-1" aria-hidden="true"></i><span>The new account must have a verified email. Referral rewards extend access; they do not cancel or change recurring Stripe billing.</span></li>
+            <li class="d-flex gap-2"><i class="bi bi-check2-circle ref-rule-icon mt-1" aria-hidden="true"></i><span>At most five rewards are applied per calendar month, using Singapore time (UTC+8). The final month is clipped at month-end.</span></li>
+            <li class="d-flex gap-2"><i class="bi bi-check2-circle ref-rule-icon mt-1" aria-hidden="true"></i><span>There is no lifetime limit. Qualified referrals over the monthly cap stay pending and are processed automatically in a later month.</span></li>
+            <li class="d-flex gap-2"><i class="bi bi-shield-check ref-rule-icon mt-1" aria-hidden="true"></i><span>No self-referrals or additional accounts. A shared IP address alone never disqualifies a referral.</span></li>
+          </ul>
+          <a href="/pricing" class="btn btn-outline-success mt-4"><i class="bi bi-star me-1" aria-hidden="true"></i>Explore Matchday Pro</a>
+        </div>
+      </div>
+      <div class="col-lg-7">
+        <div class="card ref-card h-100">
+          <div class="card-body">
+            <div class="d-flex align-items-start justify-content-between gap-3 mb-3">
+              <div>
+                <div class="ref-label mb-2">Your activity</div>
+                <h2 class="h5 fw-bold mb-0">Referral history</h2>
+              </div>
+              <span class="ref-icon" aria-hidden="true"><i class="bi bi-list-check"></i></span>
+            </div>
+            {% if history %}
+            <div class="table-responsive">
+              <table class="table ref-table mb-0">
+                <thead>
+                  <tr>
+                    <th scope="col">Joined</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Qualified</th>
+                    <th scope="col">Details</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for referral in history %}
+                  {% set status = referral.status|default('pending', true)|lower %}
+                  <tr>
+                    <td class="text-nowrap">{{ referral.created_at.strftime('%-d %b %Y') if referral.created_at else '—' }}</td>
+                    <td><span class="ref-status ref-status-{{ status }}">{{ status|replace('_', ' ') }}</span></td>
+                    <td class="text-nowrap ref-muted-cell">{{ referral.qualification_at.strftime('%-d %b %Y') if referral.qualification_at else '—' }}</td>
+                    <td class="ref-muted-cell">
+                      {% if status == 'rejected' and referral.rejection_reason %}
+                        {{ referral.rejection_reason|replace('_', ' ')|capitalize }}
+                      {% elif status == 'rewarded' %}
+                        Pro month awarded
+                      {% elif status == 'qualified' %}
+                        Waiting for reward slot
+                      {% elif status == 'pending' %}
+                        First prediction needed
+                      {% else %}
+                        —
+                      {% endif %}
+                    </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+            {% else %}
+            <div class="ref-empty text-center p-4 p-lg-5 mt-3">
+              <span class="ref-icon mb-3" aria-hidden="true"><i class="bi bi-person-plus"></i></span>
+              <h3 class="h6 fw-bold">Your first referral starts here</h3>
+              <p class="text-muted small mb-0">Share your link with a fan. We’ll show their progress here without displaying personal details.</p>
+            </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script>
+(() => {
+  const input = document.getElementById('referralLink');
+  const copyButton = document.getElementById('copyReferralLink');
+  const shareButton = document.getElementById('shareReferralLink');
+  const feedback = document.getElementById('referralFeedback');
+  if (!input || !copyButton || !shareButton || !feedback) return;
+
+  const announce = (message, tone) => {
+    feedback.textContent = message;
+    feedback.classList.remove('text-muted', 'text-success', 'text-danger');
+    feedback.classList.add(tone || 'text-muted');
+  };
+  const selectLink = () => {
+    try {
+      input.focus();
+      input.select();
+      input.setSelectionRange(0, input.value.length);
+    } catch (_) {
+      announce('Select the referral link above and copy it manually.', 'text-muted');
+    }
+  };
+  const copyLink = async () => {
+    const value = input.value;
+    if (!value) {
+      announce('Your referral link is not available right now. Refresh and try again.', 'text-danger');
+      return false;
+    }
+    try {
+      if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
+        await navigator.clipboard.writeText(value);
+        announce('Referral link copied. Ready to send.', 'text-success');
+        return true;
+      }
+    } catch (_) {
+      // Clipboard permissions and insecure contexts are handled by the manual fallback below.
+    }
+    try {
+      selectLink();
+      const copied = document.execCommand && document.execCommand('copy');
+      if (copied) {
+        announce('Referral link copied. Ready to send.', 'text-success');
+        return true;
+      }
+    } catch (_) {
+      // Keep the link selected so the visitor can use the browser's own copy command.
+    }
+    selectLink();
+    announce('Copy was blocked by your browser. The link is selected; copy it manually.', 'text-muted');
+    return false;
+  };
+
+  copyButton.addEventListener('click', () => { copyLink(); });
+  shareButton.addEventListener('click', async () => {
+    if (!input.value) {
+      announce('Your referral link is not available right now. Refresh and try again.', 'text-danger');
+      return;
+    }
+    try {
+      if (navigator.share && typeof navigator.share === 'function') {
+        await navigator.share({
+          title: 'Join me on CricPredict',
+          text: 'Make your first successful cricket prediction on CricPredict.',
+          url: input.value
+        });
+        announce('Referral link shared.', 'text-success');
+        return;
+      }
+    } catch (error) {
+      if (error && error.name === 'AbortError') {
+        announce('Share cancelled. Your referral link is still ready to copy.', 'text-muted');
+        return;
+      }
+      // Sharing can fail because of permissions or browser support; use the copy path.
+    }
+    await copyLink();
+  });
+})();
+</script>
+{% endblock %}
