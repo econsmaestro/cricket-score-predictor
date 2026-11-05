@@ -14,3 +14,45 @@ mtime_ms = 1793872159483
 storage_uri = "gcs://replit-rams-assets-sisko/rams/assets/repl:b407f9d4-a912-4514-9106-fd10bd03162e/61f6f69d-f9d4-4552-ad74-2b71e98b9d87/47a06ad0-de1e-4711-b5b4-a823e6e0d67f"
 storage_version_token = "1793872203778603"
 content_type = "text/html"
+
+[[outputs]]
+id = "NZ9No_l4HZfPnlFCCX_JS"
+uri = "file://generated-artifacts/wicket-audit/report.html"
+type = "html"
+title = "CricPredict wicket diagnostic and ablation audit"
+description = "Root-cause analysis, six charts, all eight ablations, chronological comparisons, uncertainty and leakage limitations. No production changes."
+logical_id = "2d391d8b-fc28-4830-8798-7d3352777e3b"
+content_hash = "sha256:8f43f985e5ae497a84b965e6fe45559beb1fae3e9629f6a214fae3535df781ed"
+size = 404578
+mtime_ms = 1793876591428
+storage_uri = "gcs://replit-rams-assets-sisko/rams/assets/repl:b407f9d4-a912-4514-9106-fd10bd03162e/2d391d8b-fc28-4830-8798-7d3352777e3b/d95df607-b5c5-41f7-bfaa-5e19c53e4eaa"
+storage_version_token = "1793876593408845"
+content_type = "text/html"
+
+[[outputs]]
+id = "VlgbFKt2CevTeF9Ij_IjZ"
+uri = "file://generated-artifacts/wicket-audit/comparison-metrics.csv"
+type = "table"
+title = "Baseline versus experimental metrics"
+description = "96 comparison rows across four formats, eight variants and three evaluation lanes; wicket and score errors, RMSE and interval coverage."
+logical_id = "4b3699b6-5346-40b5-88dd-856377355d7c"
+content_hash = "sha256:0c48b71df4412e296c9a0e4406b936cda19c69decfd6414784254fed825d603b"
+size = 12558
+mtime_ms = 1793876547328
+storage_uri = "gcs://replit-rams-assets-sisko/rams/assets/repl:b407f9d4-a912-4514-9106-fd10bd03162e/4b3699b6-5346-40b5-88dd-856377355d7c/55f63a7a-47b6-4789-9591-b5bd35b8501f"
+storage_version_token = "1793876595077971"
+content_type = "text/csv"
+
+[[outputs]]
+id = "RD0J_LrLQb-6ealBB_0EH"
+uri = "file://generated-artifacts/wicket-audit/ablation-predictions.csv"
+type = "table"
+title = "All paired experimental predictions"
+description = "43,200 prediction records with fixture IDs, dates, checkpoints, variants, actual targets and signed errors."
+logical_id = "c6dfd13a-a9ca-4efe-b78a-ef2b87ec6e47"
+content_hash = "sha256:8bbbadcae5134a6dd3b53136aa9774673fffc2766138bddef1baae1af2773a00"
+size = 4524918
+mtime_ms = 1793876446962
+storage_uri = "gcs://replit-rams-assets-sisko/rams/assets/repl:b407f9d4-a912-4514-9106-fd10bd03162e/c6dfd13a-a9ca-4efe-b78a-ef2b87ec6e47/a8bf58cd-78de-4a20-88d7-cf2330581e92"
+storage_version_token = "1793876596567313"
+content_type = "text/csv"

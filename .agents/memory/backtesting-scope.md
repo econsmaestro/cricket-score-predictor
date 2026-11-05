@@ -20,3 +20,9 @@ ODI calibration changes must stay isolated from T20 behavior.
 **Why:** The user explicitly said the T20 engine is fine and requested ODI-specific corrections without changing T20 logic.
 
 **How to apply:** Compare T20 predictions before and after ODI changes, not only overall averages. Report any range widening separately from improvement in point forecasts. A cohort used to diagnose or adjust a model is calibration data, not independent validation.
+
+Freeze and disclose the replay's empirical-input providers and learned-adjustment context, not just its model-source hash. A chronological split alone does not establish leakage-free evaluation.
+
+**Why:** Diagnostic replay can match saved reports while using different effective historical priors or learned offsets from a live session. Unversioned aggregates cannot establish what was available at a past forecast timestamp.
+
+**How to apply:** Separate production-input sensitivity comparisons from training-only historical-input controls. Keep all fixtures/checkpoints paired, disclose unsupported historical provenance, and require untouched validation before activating corrections.
