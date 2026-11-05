@@ -112,3 +112,17 @@ mtime_ms = 1793878771621
 storage_uri = "gcs://replit-rams-assets-sisko/rams/assets/repl:b407f9d4-a912-4514-9106-fd10bd03162e/d97942f8-9f25-45b4-bc6e-4a88e8fe9739/340a9669-e1a2-46ab-9a80-1910a88ed65f"
 storage_version_token = "1793878798878197"
 content_type = "text/csv"
+
+[[outputs]]
+id = "5EDToGssSNnYuZ2inskaN"
+uri = "file://generated-artifacts/wicket-phase2-verification/20261105T114851Z/verification-metrics.csv"
+type = "table"
+title = "Phase 2 Verification — Previous vs Fresh Rerun"
+description = "All 36 format/configuration comparisons match exactly. Includes previous and rerun run/wicket metrics with zero differences."
+logical_id = "4d79aa1a-7053-4a96-a3b9-9c9cf2cd470f"
+content_hash = "sha256:e3681a70d8bbc717bbb7b99d6f0f58aa21fbc1c4a0217d7d7d564be856bf456c"
+size = 13606
+mtime_ms = 1793879865829
+storage_uri = "gcs://replit-rams-assets-sisko/rams/assets/repl:b407f9d4-a912-4514-9106-fd10bd03162e/4d79aa1a-7053-4a96-a3b9-9c9cf2cd470f/40ab3658-769b-4fec-aa35-de506b3e8b3c"
+storage_version_token = "1793879875932389"
+content_type = "text/csv"
