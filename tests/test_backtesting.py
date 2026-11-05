@@ -1,6 +1,7 @@
 import csv
 import io
 import json
+import hashlib
 import zipfile
 
 import pytest
@@ -19,11 +20,25 @@ def test_real_reports_contain_exactly_100_unique_matches(name):
     assert report["match_count"] == 100
     assert report["prediction_count"] == len(rows) == 100 * len(checkpoints)
     assert len({row["match_id"] for row in rows}) == 100
+    assert report["schema_version"] == 2
+    assert report["source_archive_sha256"] == hashlib.sha256(
+        (backtest_data.CACHE_DIR / FORMATS[name]["archive"]).read_bytes()
+    ).hexdigest()
+    assert list(dict.fromkeys(row["match_id"] for row in rows)) == [
+        match["match_id"] for match in backtest_data.parse_matches(match_format=name, max_matches=100)
+    ]
     assert {row["match_format"] for row in rows} == {name}
     for match_id in {row["match_id"] for row in rows}:
         match_rows = [row for row in rows if row["match_id"] == match_id]
         assert sorted(row["checkpoint"] for row in match_rows) == checkpoints
         assert len({row["actual"] for row in match_rows}) == 1
+        assert len({row["actual_wickets"] for row in match_rows}) == 1
+    assert all(
+        row["wicket_error"] == row["predicted_wickets"] - row["actual_wickets"]
+        and row["wicket_abs_error"] == abs(row["wicket_error"])
+        and 0 <= row["actual_wickets"] <= 10
+        for row in rows
+    )
     assert report["metrics"] == json.loads(json.dumps(backtest.compute_metrics(rows)))
     assert "not an out-of-time training holdout" in report["methodology"]
 
@@ -40,12 +55,18 @@ def test_format_specific_api_and_csv(client, name):
     assert len(rows) == report["prediction_count"]
     assert len({row["match_id"] for row in rows}) == 100
     assert {row["match_format"] for row in rows} == {name}
+    assert all(row["predicted_wickets"] and row["actual_wickets"] != ""
+               and row["wicket_error"] != "" and row["wicket_abs_error"] != ""
+               for row in rows)
+    assert int(rows[0]["wicket_error"]) == int(rows[0]["predicted_wickets"]) - int(rows[0]["actual_wickets"])
 
 
 def test_page_and_availability(client):
     response = client.get("/backtest")
     assert response.status_code == 200
     assert b"Backtesting" in response.data
+    assert b"metricWicketMae" in response.data
+    assert b"Predicted final wickets" in response.data
     status = client.get("/backtest/status").json
     assert {row["format"] for row in status["formats"]} == set(FORMATS)
     assert all(row["match_count"] == 100 and row["available"] for row in status["formats"])
@@ -129,8 +150,29 @@ def test_backtest_does_not_silently_return_fewer_than_requested(monkeypatch):
 def test_metrics_bucket_computation():
     rows = [{
         "error": 10, "abs_error": 10, "in_range": True, "range_width": 40,
-        "actual": 150, "checkpoint": 10,
+        "actual": 150, "checkpoint": 10, "wicket_error": -3,
+    }, {
+        "error": -6, "abs_error": 6, "in_range": False, "range_width": 40,
+        "actual": 180, "checkpoint": 20, "wicket_error": 0,
     }]
     metrics = backtest.compute_metrics(rows)
     assert metrics["overall"]["bucket_mae"]["under_160"] == 10
-    assert metrics["overall"]["hit_rate"] == 100
+    assert metrics["overall"]["hit_rate"] == 50
+    assert metrics["overall"]["wicket_mae"] == 1.5
+    assert metrics["overall"]["wicket_rmse"] == 2.12
+    assert metrics["overall"]["wicket_bias"] == -1.5
+    assert metrics["overall"]["exact_wicket_rate"] == 50
+    assert metrics["by_checkpoint"][10]["wicket_bias"] == -3
+    assert metrics["by_checkpoint"][20]["exact_wicket_rate"] == 100
+
+
+def test_old_reports_are_marked_unavailable_until_wicket_errors_are_regenerated(
+        client, tmp_path, monkeypatch):
+    import backtest_reports
+    monkeypatch.setattr(backtest_reports, "REPORT_DIR", tmp_path)
+    old = {"format": "mens_odi", "match_count": 100, "results": [
+        {"match_id": str(i)} for i in range(100)]}
+    (tmp_path / "mens_odi.json").write_text(json.dumps(old))
+    assert client.get("/backtest/status").json["formats"][
+        list(FORMATS).index("mens_odi")]["available"] is False
+    assert client.get("/backtest/report/mens_odi").status_code == 400

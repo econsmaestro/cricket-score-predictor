@@ -69,10 +69,10 @@ def _parse_innings(innings_data):
     return overs
 
 
-def parse_matches(force=False, match_format="mens_t20", max_matches=None):
+def parse_matches(force=False, match_format="mens_t20", max_matches=None, archive_path=None):
     """Return list of parsed first-innings match dicts, downloading if needed."""
     config = format_config(match_format)
-    archive = download_data(force=force, match_format=match_format)
+    archive = Path(archive_path) if archive_path is not None else download_data(force=force, match_format=match_format)
     matches = []
 
     with zipfile.ZipFile(archive) as zf:

@@ -9,6 +9,12 @@ The backtesting webpage must cover 100 men's ODI matches, 100 men's T20 matches,
 
 **How to apply:** Count distinct fixtures independently of checkpoint rows. Do not advertise a full cohort when any matches failed to replay. Clearly distinguish retrospective replay of the current model from independent out-of-time validation; existing model priors may already reflect historical results.
 
+When the user asks for the *latest* 100 matches, refresh the source archives before replaying; regenerating a report against an old cached download does not meet that request.
+
+**Why:** Earlier reports had been generated from weeks-old archives while newer completed matches were available.
+
+**How to apply:** Record the source snapshot and newest included match date, and validate that each format has 100 distinct eligible fixtures. Track final-wicket error alongside runs so changes to fielding models can be assessed on both outcomes.
+
 ODI calibration changes must stay isolated from T20 behavior.
 
 **Why:** The user explicitly said the T20 engine is fine and requested ODI-specific corrections without changing T20 logic.

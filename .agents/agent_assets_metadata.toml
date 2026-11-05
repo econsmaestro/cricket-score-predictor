@@ -1,0 +1,16 @@
+uploads = []
+generated = []
+
+[[outputs]]
+id = "MNe1lMKTE2nXvCQE7O036"
+uri = "file://generated-artifacts/fielding/report.html"
+type = "html"
+title = "CricPredict fielding intelligence evidence report"
+description = "Stage-by-stage audit, real data coverage, 950-fixture shadow comparison, limitations and test results."
+logical_id = "61f6f69d-f9d4-4552-ad74-2b71e98b9d87"
+content_hash = "sha256:fa27b4b1c75ef5d73abf5669d74ba4f18cf8a8fad845a084328ac2144d3fb3d8"
+size = 12820
+mtime_ms = 1793872159483
+storage_uri = "gcs://replit-rams-assets-sisko/rams/assets/repl:b407f9d4-a912-4514-9106-fd10bd03162e/61f6f69d-f9d4-4552-ad74-2b71e98b9d87/47a06ad0-de1e-4711-b5b4-a823e6e0d67f"
+storage_version_token = "1793872203778603"
+content_type = "text/html"

@@ -5,7 +5,7 @@ import hashlib
 import json
 from pathlib import Path
 
-from backtest_data import FORMATS, format_config
+from backtest_data import CACHE_DIR, FORMATS, format_config
 
 REPORT_DIR = Path(__file__).parent / "data" / "backtests"
 MATCH_COUNT = 100
@@ -18,8 +18,11 @@ def load_report(match_format):
         raise FileNotFoundError("Report unavailable. Generate it with python backtest_reports.py")
     with path.open() as stream:
         report = json.load(stream)
-    if (report["format"] != match_format or report["match_count"] != MATCH_COUNT
-            or len({row["match_id"] for row in report["results"]}) != MATCH_COUNT):
+    if (report.get("schema_version") != 2 or report["format"] != match_format
+            or report["match_count"] != MATCH_COUNT
+            or len({row["match_id"] for row in report["results"]}) != MATCH_COUNT
+            or not all({"predicted_wickets", "actual_wickets", "wicket_error", "wicket_abs_error"} <= row.keys()
+                       for row in report["results"])):
         raise ValueError("Stored report did not pass match-count/format validation")
     return report
 
@@ -53,13 +56,17 @@ def generate_report(match_format):
     fingerprint = hashlib.sha256()
     for filename in model_files:
         fingerprint.update(Path(filename).read_bytes())
+    with (CACHE_DIR / config["archive"]).open("rb") as archive:
+        source_archive_sha256 = hashlib.file_digest(archive, "sha256").hexdigest()
     report = {
+        "schema_version": 2,
         "success": True, "format": match_format, "label": config["label"],
         "requested_matches": MATCH_COUNT, "match_count": match_count,
         "prediction_count": len(results), "checkpoints": config["checkpoints"],
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "model_fingerprint": fingerprint.hexdigest(),
         "source": "Cricsheet", "source_url": "https://cricsheet.org/downloads/" + config["archive"],
+        "source_archive_sha256": source_archive_sha256,
         "date_from": min(row["date"] for row in results),
         "date_to": max(row["date"] for row in results),
         "methodology": (
@@ -87,6 +94,8 @@ def generate_report(match_format):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Generate four real 100-match backtest reports")
     parser.add_argument("--format", choices=list(FORMATS))
+    parser.add_argument("--refresh", action="store_true",
+                        help="Download fresh Cricsheet archives before replaying (requires network)")
     args = parser.parse_args()
     # Use the same configured app/DB context as production predictions.
     from app import app
@@ -94,6 +103,9 @@ if __name__ == "__main__":
     logging.getLogger().setLevel(logging.WARNING)
     with app.app_context():
         for name in ([args.format] if args.format else FORMATS):
+            if args.refresh:
+                from backtest_data import download_data
+                download_data(force=True, match_format=name)
             print(f"Generating {name}: 100 matches", flush=True)
             report = generate_report(name)
             print(f"{name}: {report['match_count']} matches, {report['prediction_count']} predictions, MAE {report['metrics']['overall']['mae']}", flush=True)

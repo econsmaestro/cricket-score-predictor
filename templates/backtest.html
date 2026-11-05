@@ -25,13 +25,13 @@
   .bt-stat-label { display:block; color:#587184; font-size:.76rem; font-weight:700; }
   .bt-stat-value { display:block; margin-top:.25rem; font-size:1.6rem; font-weight:800; letter-spacing:-.04em; line-height:1.15; font-variant-numeric:tabular-nums; }
   .bt-stat-detail { display:block; color:#587184; font-size:.74rem; margin-top:.25rem; }
-  .bt-metric-grid { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:10px; }
+  .bt-metric-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:10px; }
   .bt-metric { padding:.9rem; border-left:3px solid #75b9a6; background:#f5f9f7; min-width:0; }
   .bt-metric strong { display:block; font-size:1.25rem; font-variant-numeric:tabular-nums; }
   .bt-metric span { display:block; color:#547083; font-size:.75rem; margin-top:.2rem; }
   .bt-section-title { font-size:1.08rem; font-weight:800; margin:0; }
   .bt-table-wrap { overflow:auto; max-height:470px; border-radius:0 0 14px 14px; }
-  .bt-table { min-width:930px; margin:0; font-size:.84rem; }
+  .bt-table { min-width:1150px; margin:0; font-size:.84rem; }
   .bt-table thead th { position:sticky; top:0; z-index:1; background:#eaf2f2; color:#29495c; border-bottom:1px solid #cfdfdf; white-space:nowrap; }
   .bt-table tbody td { vertical-align:middle; }
   .bt-table tbody tr:hover { background:#f0f8f5; }
@@ -55,7 +55,6 @@
     .bt-page { padding-top:1rem; }
     .bt-format-list { grid-template-columns:repeat(2,minmax(0,1fr)); }
     .bt-metric-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
-    .bt-metric:last-child { grid-column:span 2; }
     .bt-panel-head { padding:.9rem; }
     .bt-panel-body { padding:.9rem; }
     .bt-pagination { flex-wrap:wrap; }
@@ -66,8 +65,8 @@
 <div class="bt-page">
   <section class="bt-hero mb-4" aria-labelledby="backtest-title">
     <div class="eyebrow">Historical replay · Cricsheet</div>
-    <h2 id="backtest-title">How do score forecasts hold up against completed innings?</h2>
-    <p>Review the current model’s predictions at in-innings checkpoints against actual final scores. Each format report covers up to 100 distinct matches; a match may contribute several checkpoint predictions.</p>
+    <h2 id="backtest-title">How do runs and wicket forecasts hold up against completed innings?</h2>
+    <p>Review the current model’s predicted final runs and wickets at in-innings checkpoints against completed first innings. Each format report covers 100 distinct eligible matches; a match contributes several checkpoint predictions.</p>
   </section>
 
   <section class="bt-panel mb-4" aria-label="Choose a report">
@@ -127,12 +126,15 @@
           </div>
         </div>
         <p id="summaryText" class="mb-3"></p>
-        <div class="bt-metric-grid" aria-label="Overall prediction metrics">
+        <div class="bt-metric-grid" aria-label="Overall runs and wicket prediction metrics">
           <div class="bt-metric"><strong id="metricMae">—</strong><span>MAE · runs</span></div>
           <div class="bt-metric"><strong id="metricRmse">—</strong><span>RMSE · runs</span></div>
           <div class="bt-metric"><strong id="metricBias">—</strong><span>Bias · signed runs</span></div>
           <div class="bt-metric"><strong id="metricHit">—</strong><span>Interval hit rate</span></div>
           <div class="bt-metric"><strong id="metricWidth">—</strong><span>Average interval width · runs</span></div>
+          <div class="bt-metric"><strong id="metricWicketMae">—</strong><span>Final-wicket MAE · wickets</span></div>
+          <div class="bt-metric"><strong id="metricWicketBias">—</strong><span>Final-wicket bias · predicted − actual</span></div>
+          <div class="bt-metric"><strong id="metricWicketExact">—</strong><span>Exact final-wicket count</span></div>
         </div>
         <p id="sourceLine" class="bt-note small mt-3 mb-0"></p>
       </div>
@@ -141,11 +143,11 @@
     <section class="bt-panel mb-4" aria-labelledby="checkpoint-heading">
       <div class="bt-panel-head">
         <h3 class="bt-section-title" id="checkpoint-heading">Results by checkpoint</h3>
-        <p class="bt-note small mb-0 mt-1">Error metrics are measured in runs. Interval hit rate means the actual score fell within the predicted range; it is not an accuracy percentage.</p>
+        <p class="bt-note small mb-0 mt-1">Wicket error is predicted final wickets minus actual final wickets; negative bias means too few wickets predicted. Each checkpoint is assessed against the same finished innings. Interval hit rate refers only to runs.</p>
       </div>
       <div class="table-responsive">
         <table class="table table-sm bt-table">
-          <thead><tr><th scope="col">After overs</th><th scope="col">Predictions</th><th scope="col">MAE (runs)</th><th scope="col">RMSE (runs)</th><th scope="col">Bias (runs)</th><th scope="col">Interval hit rate</th><th scope="col">Avg range width (runs)</th></tr></thead>
+          <thead><tr><th scope="col">After overs</th><th scope="col">Predictions</th><th scope="col">Score MAE (runs)</th><th scope="col">Score RMSE (runs)</th><th scope="col">Score bias (runs)</th><th scope="col">Interval hit rate</th><th scope="col">Avg range width (runs)</th><th scope="col">Wicket MAE</th><th scope="col">Wicket RMSE</th><th scope="col">Wicket bias</th><th scope="col">Exact wickets</th></tr></thead>
           <tbody id="checkpointBody"></tbody>
         </table>
       </div>
@@ -175,7 +177,7 @@
       </div>
       <div class="bt-table-wrap">
         <table class="table table-sm table-hover bt-table">
-          <thead><tr><th scope="col">Date</th><th scope="col">Venue</th><th scope="col">Batting team</th><th scope="col">Fielding team</th><th scope="col">After overs</th><th scope="col">Score / wickets</th><th scope="col">Predicted</th><th scope="col">Predicted range</th><th scope="col">Actual</th><th scope="col">Error</th><th scope="col">Within range</th></tr></thead>
+          <thead><tr><th scope="col">Date</th><th scope="col">Venue</th><th scope="col">Batting team</th><th scope="col">Fielding team</th><th scope="col">After overs</th><th scope="col">Score / wickets at checkpoint</th><th scope="col">Predicted runs</th><th scope="col">Predicted range</th><th scope="col">Actual runs</th><th scope="col">Run error</th><th scope="col">Predicted final wickets</th><th scope="col">Actual final wickets</th><th scope="col">Wicket error</th><th scope="col">Within runs range</th></tr></thead>
           <tbody id="matchesBody"></tbody>
         </table>
       </div>
@@ -310,6 +312,10 @@
     document.getElementById("metricBias").textContent = bias === null || bias === undefined ? "—" : `${Number(bias)>0?"+":""}${number(bias)}`;
     document.getElementById("metricHit").textContent = overall.hit_rate === null || overall.hit_rate === undefined ? "—" : `${number(overall.hit_rate)}%`;
     document.getElementById("metricWidth").textContent = number(overall.avg_range_width);
+    document.getElementById("metricWicketMae").textContent = number(overall.wicket_mae);
+    const wicketBias = overall.wicket_bias;
+    document.getElementById("metricWicketBias").textContent = wicketBias === null || wicketBias === undefined ? "—" : `${Number(wicketBias)>0?"+":""}${number(wicketBias)}`;
+    document.getElementById("metricWicketExact").textContent = overall.exact_wicket_rate === null || overall.exact_wicket_rate === undefined ? "—" : `${number(overall.exact_wicket_rate)}%`;
     document.getElementById("sourceLine").textContent = `Source: ${data.source || "Not supplied"} · Distinct match count and checkpoint prediction count are separate measures.`;
     document.getElementById("methodologyText").textContent = `${data.methodology || "Historical replay using the current model."} This is not an out-of-time training holdout; these results are not independently validated accuracy and do not guarantee future performance.`;
     renderCheckpoints(data);
@@ -323,13 +329,14 @@
     checkpoints.forEach(cp => {
       const item = metrics[cp] || metrics[String(cp)] || {};
       const tr = document.createElement("tr");
-      const values = [`After ${cp} overs`,number(item.n),number(item.mae),number(item.rmse),item.bias === null || item.bias === undefined ? "—" : `${Number(item.bias)>0?"+":""}${number(item.bias)}`,item.hit_rate === null || item.hit_rate === undefined ? "—" : `${number(item.hit_rate)}%`,number(item.avg_range_width)];
+      const signed = value => value === null || value === undefined ? "—" : `${Number(value)>0?"+":""}${number(value)}`;
+      const values = [`After ${cp} overs`,number(item.n),number(item.mae),number(item.rmse),signed(item.bias),item.hit_rate === null || item.hit_rate === undefined ? "—" : `${number(item.hit_rate)}%`,number(item.avg_range_width),number(item.wicket_mae),number(item.wicket_rmse),signed(item.wicket_bias),item.exact_wicket_rate === null || item.exact_wicket_rate === undefined ? "—" : `${number(item.exact_wicket_rate)}%`];
       values.forEach(value => { const td=document.createElement("td"); td.textContent=value; tr.append(td); });
       body.append(tr);
     });
     if (!checkpoints.length) {
       const tr=document.createElement("tr"),td=document.createElement("td");
-      td.colSpan=7;td.textContent="Checkpoint metrics were not included in this report.";tr.append(td);body.append(tr);
+      td.colSpan=11;td.textContent="Checkpoint metrics were not included in this report.";tr.append(td);body.append(tr);
     }
   }
   function setupRows(rows) {
@@ -363,13 +370,17 @@
       const tr=document.createElement("tr");
       const err = row.error;
       const errorText = err === null || err === undefined ? "—" : `${Number(err)>0?"+":""}${number(err)}`;
-      const cells=[row.date,row.venue,row.batting_team,row.fielding_team,`After ${row.checkpoint ?? "—"}`,`${row.score_at_cp ?? "—"} / ${row.wickets_at_cp ?? "—"}`,row.predicted, row.pred_low !== null && row.pred_low !== undefined && row.pred_high !== null && row.pred_high !== undefined ? `${number(row.pred_low)}–${number(row.pred_high)}` : "—",row.actual,errorText];
+      const werr = row.wicket_error;
+      const wicketErrorText = werr === null || werr === undefined ? "—" : `${Number(werr)>0?"+":""}${number(werr)}`;
+      const cells=[row.date,row.venue,row.batting_team,row.fielding_team,`After ${row.checkpoint ?? "—"}`,`${row.score_at_cp ?? "—"} / ${row.wickets_at_cp ?? "—"}`,row.predicted, row.pred_low !== null && row.pred_low !== undefined && row.pred_high !== null && row.pred_high !== undefined ? `${number(row.pred_low)}–${number(row.pred_high)}` : "—",row.actual,errorText,row.predicted_wickets,row.actual_wickets,wicketErrorText];
       cells.forEach((value,index) => {
         const td=document.createElement("td");
         td.textContent=value === null || value === undefined || value === "" ? "—" : String(value);
         if(index===8) td.className="fw-bold";
         if(index===9 && Number(err)>0) td.className="text-danger fw-semibold";
         if(index===9 && Number(err)<0) td.className="text-primary fw-semibold";
+        if(index===12 && Number(werr)>0) td.className="text-danger fw-semibold";
+        if(index===12 && Number(werr)<0) td.className="text-primary fw-semibold";
         tr.append(td);
       });
       const range=document.createElement("td");

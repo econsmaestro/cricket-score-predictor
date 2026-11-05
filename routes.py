@@ -531,6 +531,11 @@ def api_live_matches():
             "matches": []
         }), 500
 
+
+# Read-only research endpoints; existing prediction routes remain unchanged.
+from fielding_intelligence.api import blueprint as fielding_blueprint
+app.register_blueprint(fielding_blueprint)
+
 @app.route("/api/live-matches/refresh", methods=["POST"])
 def api_refresh_live_matches():
     """Force refresh of live matches list"""
@@ -2695,7 +2700,9 @@ def backtest_export():
     fields = [
         "match_id", "date", "venue", "batting_team", "fielding_team", "match_format", "checkpoint",
         "score_at_cp", "wickets_at_cp", "predicted", "pred_low", "pred_high",
-        "actual", "error", "abs_error", "in_range", "range_width",
+        "actual", "error", "abs_error",
+        "predicted_wickets", "actual_wickets", "wicket_error", "wicket_abs_error",
+        "in_range", "range_width",
     ]
     writer = csv.DictWriter(output, fieldnames=fields, extrasaction="ignore")
     writer.writeheader()
