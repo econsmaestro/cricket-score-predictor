@@ -117,6 +117,25 @@ function click(s, id, format) {
         assert.equal(s.get('select[name="last_over_bowler"]').value, 'Bowler A');
         assert.ok(s.get('liveMatchStatus').innerHTML.includes('Click Predict'));
     }
+    // A detail page's T20 fallback must not overwrite an ODI card's format.
+    // U19 titles may omit ODI even though the match listing identifies it.
+    for (const format of ['mens_odi', 'womens_odi']) {
+        const odi = setup();
+        odi.context.loadMatchFromCard({dataset: {
+            matchId: 'u19-odi', matchFormat: format,
+            matchLabel: 'Afghanistan U19 vs Bangladesh U19', matchStatus: 'Live',
+        }});
+        assert.equal(odi.get('match_format_hidden').value, format);
+        await respond(odi.pending[0], {success: true, match: {
+            ...sample(format.startsWith('womens_') ? 'womens_t20' : 'mens_t20'),
+            overs: 45, innings: 1, target: 0,
+        }});
+        assert.equal(odi.get('match_format_hidden').value, format);
+        assert.equal(odi.get('format_' + format).checked, true);
+        assert.equal(odi.get('overs_completed').value, 45);
+        assert.equal(odi.get('live_match_id').value, 'u19-odi');
+        assert.ok(odi.get('liveMatchStatus').innerHTML.includes('Click Predict'));
+    }
     // Card selection supersedes an in-flight list request and a previous match fetch.
     const s = setup();
     s.context.fetchLiveMatches();

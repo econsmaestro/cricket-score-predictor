@@ -1379,9 +1379,10 @@ function loadMatchData() {
             if (requestId !== matchDetailsRequest) return;
             spinner.style.display = 'none';
             if (data.success && data.match) {
-                // Auto-switch format if the scraper detected one
-                if (data.match.format && formatConfig[data.match.format]) {
-                    const detectedFmt = data.match.format;
+                // Preserve the selected fixture's format: sparse detail pages
+                // can default to T20, including U19 ODIs already past 20 overs.
+                const detectedFmt = formatConfig[listFormat] ? listFormat : data.match.format;
+                if (detectedFmt && formatConfig[detectedFmt]) {
                     if (detectedFmt !== currentFormat) {
                         const fmtRadio = document.getElementById('format_' + detectedFmt);
                         if (fmtRadio) { fmtRadio.checked = true; updateFormat(detectedFmt, false); }
