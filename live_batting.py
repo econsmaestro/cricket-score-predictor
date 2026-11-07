@@ -14,6 +14,22 @@ def _objects(text, key):
             continue
 
 
+def disruption_notice(mini):
+    """Describe only interruptions explicitly reported by the provider."""
+    details = mini.get("matchScoreDetails") or {}
+    state = str(details.get("state") or "").strip()
+    status = str(mini.get("status") or details.get("customStatus") or "").strip()
+    disrupted = (
+        state.casefold() in {"rain", "delay", "delayed", "interrupted", "suspended", "abandoned"}
+        or bool(re.search(r"\b(?:rain stops play|play (?:suspended|interrupted)|"
+                          r"(?:start|match|play) delayed|match abandoned)\b", status, re.I))
+    )
+    reason = ""
+    if disrupted:
+        reason = status or ("Rain" if state.casefold() == "rain" else "")
+    return {"game_disrupted": disrupted, "disruption_reason": reason}
+
+
 def current_batting_snapshot(soup, match_id):
     """Return one match-bound, internally consistent miniscore, or None.
 
@@ -63,6 +79,7 @@ def current_batting_snapshot(soup, match_id):
                     "innings": innings, "batsmen": [],
                     "batsmen_verified": False,
                     "batting_snapshot_timestamp": mini.get("responseLastUpdated"),
+                    **disruption_notice(mini),
                 }
                 if innings == 1:
                     result["target"] = 0

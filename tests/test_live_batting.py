@@ -6,7 +6,7 @@ from unittest.mock import Mock, patch
 import pytest
 from bs4 import BeautifulSoup
 
-from live_batting import current_batting_snapshot
+from live_batting import current_batting_snapshot, disruption_notice
 from live_match_scraper import extract_batsmen, get_cricbuzz_match_details
 
 
@@ -154,6 +154,29 @@ def test_rain_interruption_retains_verified_current_pair(innings):
     assert [p["name"] for p in result["batsmen"]] == ["KL Rahul", "Auqib Nabi"]
     assert result["innings"] == innings
     assert result["target"] == (135 if innings == 2 else 0)
+    assert result["game_disrupted"]
+    assert result["disruption_reason"] == "Rain"
+
+
+@pytest.mark.parametrize("state,status,expected,reason", [
+    ("Rain", "Rain stops play - India need 22 runs", True, "Rain stops play - India need 22 runs"),
+    ("Delayed", "Wet outfield delays start", True, "Wet outfield delays start"),
+    ("Suspended", "", True, ""),
+    ("In Progress", "Play suspended due to bad light", True, "Play suspended due to bad light"),
+    ("In Progress", "India need 22 runs", False, ""),
+    ("Innings Break", "Innings break", False, ""),
+    ("Complete", "India won by 3 wickets", False, ""),
+])
+def test_provider_disruption_notices(state, status, expected, reason):
+    assert disruption_notice({"status": status, "matchScoreDetails": {"state": state}}) == {
+        "game_disrupted": expected, "disruption_reason": reason,
+    }
+
+
+def test_disruption_reason_uses_custom_status_when_available():
+    assert disruption_notice({"matchScoreDetails": {
+        "state": "Delayed", "customStatus": "Start delayed due to wet outfield",
+    }})["disruption_reason"] == "Start delayed due to wet outfield"
 
 
 @pytest.mark.parametrize("invalid", ["dismissed", "all_out", "mismatched_score"])

@@ -239,6 +239,7 @@
             </select>
             <div id="liveMatchShimmer" class="skeleton-shimmer-block"></div>
             <div id="liveMatchStatus" class="mt-2"></div>
+            <div id="matchDisruptionNotice" class="alert alert-warning mt-3 mb-0" role="status" hidden></div>
             <div id="matchLoadingSpinner" class="text-center py-3" style="display: none;">
                 <div class="spinner-border spinner-border-sm text-primary" role="status"></div>
                 <small class="text-muted ms-2">Fetching match data...</small>
@@ -1354,6 +1355,7 @@ function loadMatchData() {
     }
     
     spinner.style.display = 'block';
+    showMatchDisruption(null);
     // Clear the previous match, including chase targets and squad selections.
     document.getElementById('live_match_id').value = '';
     ['current_score', 'wickets_fallen', 'overs_completed', 'target', 'bowling_team_11'].forEach(id => {
@@ -1438,7 +1440,17 @@ function loadMatchData() {
         });
 }
 
+function showMatchDisruption(match) {
+    const notice = document.getElementById('matchDisruptionNotice');
+    notice.hidden = !match?.game_disrupted;
+    // Provider text is untrusted; never interpolate it into HTML.
+    notice.textContent = notice.hidden ? '' : 'Game disrupted' +
+        (match.disruption_reason ? ' — ' + match.disruption_reason : ' — Reason unavailable.') +
+        ' Scores and players reflect the latest available update.';
+}
+
 function populateFormFromMatch(match) {
+    showMatchDisruption(match);
     if (match.current_score !== undefined) {
         document.getElementById('current_score').value = match.current_score;
     }
