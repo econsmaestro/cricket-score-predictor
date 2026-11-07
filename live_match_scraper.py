@@ -768,51 +768,27 @@ def extract_batsmen(soup: BeautifulSoup) -> List[Dict]:
     batsmen = []
     
     try:
-        batsman_rows = soup.find_all('tr')
-        for row in batsman_rows:
-            cells = row.find_all(['td', 'th'])
-            if len(cells) >= 3:
-                text = row.get_text(separator=' ', strip=True)
-                if any(indicator in text.lower() for indicator in ['batting', 'not out', '*']):
-                    name_cell = cells[0].get_text(strip=True)
-                    name = re.sub(r'[\*\(\)]+', '', name_cell).strip()
-                    
-                    if len(name) < 2 or name.isdigit():
-                        continue
-                    
-                    runs = 0
-                    balls = 0
-                    
-                    for cell in cells[1:]:
-                        cell_text = cell.get_text(strip=True)
-                        if cell_text.isdigit():
-                            if runs == 0:
-                                runs = int(cell_text)
-                            elif balls == 0:
-                                balls = int(cell_text)
-                                break
-                    
-                    if name:
-                        batsmen.append({
-                            'name': name,
-                            'runs': runs,
-                            'balls': balls
-                        })
-                    
-                    if len(batsmen) >= 2:
-                        break
-        
-        if not batsmen:
-            page_text = soup.get_text()
-            batsman_pattern = r'([A-Z][a-z]+(?:\s+[A-Z][a-z]+)*)\s*\*?\s+(\d+)\s*\((\d+)\)'
-            matches = re.findall(batsman_pattern, page_text)
-            for match in matches[:2]:
-                batsmen.append({
-                    'name': match[0],
-                    'runs': int(match[1]),
-                    'balls': int(match[2])
-                })
-                
+        # Do not search arbitrary page text: commentary contains dismissed
+        # batters and old innings. Require explicit not-out status in one table.
+        tables = soup.find_all('table')
+        candidates = []
+        for table in tables:
+            active = []
+            for row in table.find_all('tr'):
+                cells = row.find_all('td', recursive=False)
+                if len(cells) < 4:
+                    continue
+                dismissal = cells[1].get_text(' ', strip=True).casefold()
+                if dismissal not in ('not out', 'batting'):
+                    continue
+                name = re.sub(r'\s*\((?:c|wk|c & wk)\)|\*', '', cells[0].get_text(' ', strip=True)).strip()
+                runs, balls = (c.get_text(strip=True) for c in cells[2:4])
+                if name and runs.isdigit() and balls.isdigit():
+                    active.append({'name': name, 'runs': int(runs), 'balls': int(balls)})
+            if len(active) == 2 and active[0]['name'] != active[1]['name']:
+                candidates.append(active)
+        # Two completed/live innings can each have not-out batters: ambiguous.
+        return candidates[0] if len(candidates) == 1 else []
     except Exception as e:
         logger.debug(f"Error extracting batsmen: {e}")
     
@@ -1081,26 +1057,19 @@ def get_cricbuzz_match_details(match_id: str) -> Optional[Dict]:
         except Exception as e:
             logger.debug(f"Could not extract start time: {e}")
 
-        try:
-            striker = re.search(r'batStrikerObj.*?playerName.*?([A-Za-z\s]+).*?playerScore.*?(\d+)\((\d+)\)', raw_html)
-            non_striker = re.search(r'batNonStrikerObj.*?playerName.*?([A-Za-z\s]+).*?playerScore.*?(\d+)\((\d+)\)', raw_html)
-            
-            if striker:
-                match_data['batsmen'].append({
-                    'name': striker.group(1).strip().replace('\\', ''),
-                    'runs': int(striker.group(2)),
-                    'balls': int(striker.group(3))
-                })
-            if non_striker:
-                match_data['batsmen'].append({
-                    'name': non_striker.group(1).strip().replace('\\', ''),
-                    'runs': int(non_striker.group(2)),
-                    'balls': int(non_striker.group(3))
-                })
-            if match_data['batsmen']:
+        from live_batting import current_batting_snapshot
+        snapshot = current_batting_snapshot(soup, match_id)
+        if snapshot:
+            match_data.update(snapshot)
+            for field in ('current_score', 'wickets', 'overs'):
+                if field not in match_data['loaded_fields']:
+                    match_data['loaded_fields'].append(field)
+            if snapshot['batsmen_verified']:
                 match_data['loaded_fields'].append('batsmen')
-        except Exception as e:
-            logger.debug(f"Could not extract batsmen from Cricbuzz: {e}")
+        if not match_data['batsmen']:
+            match_data['batsmen_verified'] = False
+            match_data['partial'] = True
+            logger.warning("Active batters unverified for Cricbuzz match %s; manual entry required", match_id)
         
         # Detect format from page title — far more reliable than scanning full page_text
         # (Cricbuzz nav always contains "ODI" links, causing false positives for T20 matches)
