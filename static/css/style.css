@@ -381,11 +381,46 @@ body {
     padding: 0.5rem 0.75rem;
 }
 
-/* Fix wickets fallen input display */
+/* Keep the wicket controls together, including inside narrow form columns. */
+.match-score-fields {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(8.5rem, 1.4fr) minmax(0, 1fr);
+    gap: 1rem;
+    margin: 0;
+}
+
+.match-score-fields > div {
+    width: auto;
+    min-width: 0;
+    padding: 0;
+    margin: 0;
+}
+
+.wicket-stepper {
+    flex-wrap: nowrap;
+}
+
+.input-group.wicket-stepper > .btn {
+    flex: 0 0 44px;
+    min-width: 44px;
+    padding-left: 0;
+    padding-right: 0;
+}
+
 #wickets_fallen {
-    min-width: 60px;
+    min-width: 0;
+    width: 1%;
+    padding-left: 0.25rem;
+    padding-right: 0.25rem;
     -moz-appearance: textfield;
     appearance: textfield;
+}
+
+/* At very narrow widths keep each field readable rather than squeezing it. */
+@media (max-width: 379px) {
+    .match-score-fields {
+        grid-template-columns: minmax(0, 1fr);
+    }
 }
 
 #wickets_fallen::-webkit-outer-spin-button,

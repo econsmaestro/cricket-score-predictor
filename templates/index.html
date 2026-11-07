@@ -297,19 +297,19 @@
                         </div>
                     </div>
                     
-                    <div class="row g-3">
+                    <div class="row g-3 match-score-fields">
                         <div class="col-4 col-md-4">
                             <label for="current_score" class="form-label">Current Score</label>
                             <input type="number" class="form-control form-control-lg" id="current_score" name="current_score" min="0" max="500" value="{{ form_data.get('current_score', '0') }}" required>
                         </div>
                         <div class="col-4 col-md-4">
                             <label for="wickets_fallen" class="form-label">Wickets Fallen</label>
-                            <div class="input-group">
-                                <button type="button" class="btn btn-outline-secondary" id="wkt-minus-btn" onclick="adjustWickets(-1)" {% if form_data.get('wickets_fallen', '0') == '0' %}disabled{% endif %}>
+                            <div class="input-group wicket-stepper">
+                                <button type="button" class="btn btn-outline-secondary" id="wkt-minus-btn" aria-label="Decrease wickets" onclick="adjustWickets(-1)" {% if form_data.get('wickets_fallen', '0') == '0' %}disabled{% endif %}>
                                     <i class="bi bi-dash"></i>
                                 </button>
                                 <input type="number" class="form-control text-center" id="wickets_fallen" name="wickets_fallen" min="0" max="9" value="{{ form_data.get('wickets_fallen', '0') }}" required>
-                                <button type="button" class="btn btn-outline-secondary" id="wkt-plus-btn" onclick="adjustWickets(1)" {% if form_data.get('wickets_fallen', '0') == '9' %}disabled{% endif %}>
+                                <button type="button" class="btn btn-outline-secondary" id="wkt-plus-btn" aria-label="Increase wickets" onclick="adjustWickets(1)" {% if form_data.get('wickets_fallen', '0') == '9' %}disabled{% endif %}>
                                     <i class="bi bi-plus"></i>
                                 </button>
                             </div>
