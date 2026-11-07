@@ -68,7 +68,10 @@ def current_batting_snapshot(soup, match_id):
                     result["target"] = 0
                 elif type(mini.get("target")) is int and mini["target"] > score:
                     result["target"] = mini["target"]
-                if details.get("state", "").casefold() != "in progress" or wickets == 10:
+                # Rain suspends play, not the innings: the verified pair still
+                # occupies the crease. Do not extend this to innings breaks or
+                # completed games, where the provider can retain an old pair.
+                if details.get("state", "").strip().casefold() not in ("in progress", "rain") or wickets == 10:
                     candidates.append(result)
                     continue
                 pair = []

@@ -139,6 +139,38 @@ def test_chase_uses_its_own_active_pair_and_target():
     assert result["batsmen_verified"]
 
 
+@pytest.mark.parametrize("innings", [1, 2])
+def test_rain_interruption_retains_verified_current_pair(innings):
+    s = mini()
+    s["inningsId"] = innings
+    s["matchScoreDetails"]["inningsScoreList"][0]["inningsId"] = innings
+    s["matchScoreDetails"]["state"] = "Rain"
+    s["batsmanStriker"].update(name="KL Rahul", id=8733, runs=26, balls=38)
+    s["batsmanNonStriker"].update(name="Auqib Nabi", id=14179, runs=1, balls=1)
+    if innings == 2:
+        s["target"] = 135
+    result = parse(s)
+    assert result["batsmen_verified"]
+    assert [p["name"] for p in result["batsmen"]] == ["KL Rahul", "Auqib Nabi"]
+    assert result["innings"] == innings
+    assert result["target"] == (135 if innings == 2 else 0)
+
+
+@pytest.mark.parametrize("invalid", ["dismissed", "all_out", "mismatched_score"])
+def test_rain_does_not_bypass_batting_validation(invalid):
+    s = mini()
+    s["matchScoreDetails"]["state"] = "Rain"
+    if invalid == "dismissed":
+        s["lastWicket"] = "Kyle Jamieson c Rahul b Brar 0(1)"
+    elif invalid == "all_out":
+        s["batTeam"]["teamWkts"] = 10
+        s["matchScoreDetails"]["inningsScoreList"][0]["wickets"] = 10
+    else:
+        s["matchScoreDetails"]["inningsScoreList"][0]["score"] += 1
+    result = parse(s)
+    assert result is None or not result["batsmen_verified"]
+
+
 def test_generic_scraper_does_not_guess_from_commentary_or_stars():
     soup = BeautifulSoup("<article>Daryl Mitchell 55 (104) Santner 25 (33)</article>"
                          "<table><tr><td>Daryl Mitchell*</td><td>c Rahul b Brar</td>"
