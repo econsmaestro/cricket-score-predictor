@@ -2688,3 +2688,69 @@ def backtest_export():
         as_attachment=True,
         download_name=f"backtest_{match_format}_100_matches.csv",
     )
+
+
+# ---------------------------------------------------------------------------
+# Fielding stats routes
+# ---------------------------------------------------------------------------
+
+@app.route("/fielding/stats")
+def fielding_stats():
+    """Return computed team fielding ratings for all formats."""
+    from fielding_stats import get_all_team_stats
+    try:
+        data = get_all_team_stats()
+        return jsonify(success=True, teams=data)
+    except Exception as exc:
+        return jsonify(success=False, error=str(exc)), 500
+
+
+@app.route("/fielding/team/<team_name>")
+def fielding_team(team_name):
+    """Return fielding ratings for a specific team across all formats."""
+    from fielding_stats import get_all_team_stats
+    try:
+        data = get_all_team_stats()
+        team_data = data.get(team_name)
+        if team_data is None:
+            return jsonify(success=False, error=f"No data for team: {team_name}"), 404
+        return jsonify(success=True, team=team_name, formats=team_data)
+    except Exception as exc:
+        return jsonify(success=False, error=str(exc)), 500
+
+
+@app.route("/fielding/player/<player_name>")
+def fielding_player(player_name):
+    """Return fielding dismissal stats for a specific player."""
+    from fielding_stats import get_player_stats
+    stats = get_player_stats(player_name)
+    if stats is None:
+        return jsonify(success=False, error=f"No stats for: {player_name}"), 404
+    return jsonify(success=True, player=player_name, stats=stats)
+
+
+@app.route("/fielding/top")
+def fielding_top():
+    """Return top fielders sorted by a stat (catches, run_out_direct, etc.)."""
+    from fielding_stats import get_top_fielders
+    fmt = request.args.get("format")
+    stat = request.args.get("stat", "total_fielding_dismissals")
+    n = min(int(request.args.get("n", 50)), 200)
+    try:
+        rows = get_top_fielders(fmt=fmt, stat=stat, n=n)
+        return jsonify(success=True, stat=stat, format=fmt, players=rows)
+    except Exception as exc:
+        return jsonify(success=False, error=str(exc)), 500
+
+
+@app.route("/fielding/rebuild", methods=["POST"])
+def fielding_rebuild():
+    """Recompute fielding ratings from current backtest data."""
+    from fielding_stats import rebuild_ratings
+    try:
+        ratings = rebuild_ratings()
+        team_count = len(ratings)
+        fmt_count = sum(len(v) for v in ratings.values())
+        return jsonify(success=True, teams=team_count, format_entries=fmt_count)
+    except Exception as exc:
+        return jsonify(success=False, error=str(exc)), 500

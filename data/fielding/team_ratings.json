@@ -1,0 +1,1143 @@
+{
+  "Argentina": {
+    "womens_t20": {
+      "adjustment": 0.0004,
+      "baseline_efficiency": 0.85,
+      "bias_runs": 0.8,
+      "confidence": 0.2,
+      "efficiency": 0.8504,
+      "matches": 3
+    }
+  },
+  "Australia": {
+    "mens_odi": {
+      "adjustment": -0.0363,
+      "baseline_efficiency": 0.94,
+      "bias_runs": -31.07,
+      "confidence": 0.467,
+      "efficiency": 0.9037,
+      "matches": 7
+    },
+    "womens_odi": {
+      "adjustment": -0.0052,
+      "baseline_efficiency": 0.94,
+      "bias_runs": -3.12,
+      "confidence": 0.667,
+      "efficiency": 0.9348,
+      "matches": 10
+    },
+    "womens_t20": {
+      "adjustment": -0.0086,
+      "baseline_efficiency": 0.94,
+      "bias_runs": -17.27,
+      "confidence": 0.2,
+      "efficiency": 0.9314,
+      "matches": 3
+    }
+  },
+  "Austria": {
+    "womens_t20": {
+      "adjustment": 0.0,
+      "baseline_efficiency": 0.85,
+      "bias_runs": -1.4,
+      "confidence": 0.133,
+      "efficiency": 0.85,
+      "matches": 2,
+      "note": "insufficient_data"
+    }
+  },
+  "Bahamas": {
+    "mens_t20": {
+      "adjustment": 0.0,
+      "baseline_efficiency": 0.85,
+      "bias_runs": 38.8,
+      "confidence": 0.067,
+      "efficiency": 0.85,
+      "matches": 1,
+      "note": "insufficient_data"
+    }
+  },
+  "Bahrain": {
+    "mens_t20": {
+      "adjustment": 0.0,
+      "baseline_efficiency": 0.85,
+      "bias_runs": -4.2,
+      "confidence": 0.133,
+      "efficiency": 0.85,
+      "matches": 2,
+      "note": "insufficient_data"
+    }
+  },
+  "Bangladesh": {
+    "mens_odi": {
+      "adjustment": -0.0071,
+      "baseline_efficiency": 0.8,
+      "bias_runs": -8.5,
+      "confidence": 0.333,
+      "efficiency": 0.7929,
+      "matches": 5
+    },
+    "mens_t20": {
+      "adjustment": 0.0,
+      "baseline_efficiency": 0.8,
+      "bias_runs": -55.2,
+      "confidence": 0.067,
+      "efficiency": 0.8,
+      "matches": 1,
+      "note": "insufficient_data"
+    },
+    "womens_odi": {
+      "adjustment": 0.0179,
+      "baseline_efficiency": 0.8,
+      "bias_runs": 26.81,
+      "confidence": 0.267,
+      "efficiency": 0.8179,
+      "matches": 4
+    },
+    "womens_t20": {
+      "adjustment": 0.0027,
+      "baseline_efficiency": 0.8,
+      "bias_runs": 5.47,
+      "confidence": 0.2,
+      "efficiency": 0.8027,
+      "matches": 3
+    }
+  },
+  "Belgium": {
+    "womens_t20": {
+      "adjustment": -0.0046,
+      "baseline_efficiency": 0.85,
+      "bias_runs": -9.2,
+      "confidence": 0.2,
+      "efficiency": 0.8454,
+      "matches": 3
+    }
+  },
+  "Bermuda": {
+    "mens_t20": {
+      "adjustment": 0.0,
+      "baseline_efficiency": 0.85,
+      "bias_runs": -6.2,
+      "confidence": 0.133,
+      "efficiency": 0.85,
+      "matches": 2,
+      "note": "insufficient_data"
+    }
+  },
+  "Bhutan": {
+    "mens_t20": {
+      "adjustment": 0.0,
+      "baseline_efficiency": 0.85,
+      "bias_runs": -17.0,
+      "confidence": 0.133,
+      "efficiency": 0.85,
+      "matches": 2,
+      "note": "insufficient_data"
+    }
+  },
+  "Botswana": {
+    "mens_t20": {
+      "adjustment": 0.0,
+      "baseline_efficiency": 0.85,
+      "bias_runs": 14.9,
+      "confidence": 0.133,
+      "efficiency": 0.85,
+      "matches": 2,
+      "note": "insufficient_data"
+    }
+  },
+  "Bulgaria": {
+    "mens_t20": {
+      "adjustment": 0.0,
+      "baseline_efficiency": 0.85,
+      "bias_runs": -27.9,
+      "confidence": 0.133,
+      "efficiency": 0.85,
+      "matches": 2,
+      "note": "insufficient_data"
+    },
+    "womens_t20": {
+      "adjustment": 0.0,
+      "baseline_efficiency": 0.85,
+      "bias_runs": -21.8,
+      "confidence": 0.133,
+      "efficiency": 0.85,
+      "matches": 2,
+      "note": "insufficient_data"
+    }
+  },
+  "Canada": {
+    "mens_odi": {
+      "adjustment": -0.01,
+      "baseline_efficiency": 0.75,
+      "bias_runs": -8.61,
+      "confidence": 0.467,
+      "efficiency": 0.74,
+      "matches": 7
+    },
+    "womens_t20": {
+      "adjustment": 0.0,
+      "baseline_efficiency": 0.75,
+      "bias_runs": -2.6,
+      "confidence": 0.067,
+      "efficiency": 0.75,
+      "matches": 1,
+      "note": "insufficient_data"
+    }
+  },
+  "Cayman Islands": {
+    "mens_t20": {
+      "adjustment": 0.0,
+      "baseline_efficiency": 0.85,
+      "bias_runs": -0.4,
+      "confidence": 0.067,
+      "efficiency": 0.85,
+      "matches": 1,
+      "note": "insufficient_data"
+    }
+  },
+  "China": {
+    "mens_t20": {
+      "adjustment": 0.0,
+      "baseline_efficiency": 0.85,
+      "bias_runs": -4.8,
+      "confidence": 0.067,
+      "efficiency": 0.85,
+      "matches": 1,
+      "note": "insufficient_data"
+    }
+  },
+  "Costa Rica": {
+    "womens_t20": {
+      "adjustment": 0.0,
+      "baseline_efficiency": 0.85,
+      "bias_runs": 3.1,
+      "confidence": 0.133,
+      "efficiency": 0.85,
+      "matches": 2,
+      "note": "insufficient_data"
+    }
+  },
+  "Croatia": {
+    "womens_t20": {
+      "adjustment": 0.0,
+      "baseline_efficiency": 0.85,
+      "bias_runs": -3.0,
+      "confidence": 0.067,
+      "efficiency": 0.85,
+      "matches": 1,
+      "note": "insufficient_data"
+    }
+  },
+  "Czech Republic": {
+    "mens_t20": {
+      "adjustment": -0.0067,
+      "baseline_efficiency": 0.85,
+      "bias_runs": -13.4,
+      "confidence": 0.2,
+      "efficiency": 0.8433,
+      "matches": 3
+    },
+    "womens_t20": {
+      "adjustment": -0.0035,
+      "baseline_efficiency": 0.85,
+      "bias_runs": -7.0,
+      "confidence": 0.2,
+      "efficiency": 0.8465,
+      "matches": 3
+    }
+  },
+  "Denmark": {
+    "womens_t20": {
+      "adjustment": 0.0,
+      "baseline_efficiency": 0.85,
+      "bias_runs": -8.1,
+      "confidence": 0.133,
+      "efficiency": 0.85,
+      "matches": 2,
+      "note": "insufficient_data"
+    }
+  },
+  "England": {
+    "mens_odi": {
+      "adjustment": -0.0103,
+      "baseline_efficiency": 0.9,
+      "bias_runs": -12.35,
+      "confidence": 0.333,
+      "efficiency": 0.8897,
+      "matches": 5
+    },
+    "mens_t20": {
+      "adjustment": 0.0,
+      "baseline_efficiency": 0.9,
+      "bias_runs": 7.2,
+      "confidence": 0.133,
+      "efficiency": 0.9,
+      "matches": 2,
+      "note": "insufficient_data"
+    },
+    "womens_odi": {
+      "adjustment": -0.0136,
+      "baseline_efficiency": 0.9,
+      "bias_runs": -13.62,
+      "confidence": 0.4,
+      "efficiency": 0.8864,
+      "matches": 6
+    },
+    "womens_t20": {
+      "adjustment": 0.0,
+      "baseline_efficiency": 0.9,
+      "bias_runs": -12.2,
+      "confidence": 0.067,
+      "efficiency": 0.9,
+      "matches": 1,
+      "note": "insufficient_data"
+    }
+  },
+  "Finland": {
+    "mens_t20": {
+      "adjustment": 0.0,
+      "baseline_efficiency": 0.85,
+      "bias_runs": -9.6,
+      "confidence": 0.067,
+      "efficiency": 0.85,
+      "matches": 1,
+      "note": "insufficient_data"
+    },
+    "womens_t20": {
+      "adjustment": 0.0,
+      "baseline_efficiency": 0.85,
+      "bias_runs": 11.5,
+      "confidence": 0.133,
+      "efficiency": 0.85,
+      "matches": 2,
+      "note": "insufficient_data"
+    }
+  },
+  "Germany": {
+    "mens_t20": {
+      "adjustment": 0.0,
+      "baseline_efficiency": 0.85,
+      "bias_runs": 9.0,
+      "confidence": 0.133,
+      "efficiency": 0.85,
+      "matches": 2,
+      "note": "insufficient_data"
+    },
+    "womens_t20": {
+      "adjustment": 0.0,
+      "baseline_efficiency": 0.85,
+      "bias_runs": -5.2,
+      "confidence": 0.133,
+      "efficiency": 0.85,
+      "matches": 2,
+      "note": "insufficient_data"
+    }
+  },
+  "Ghana": {
+    "mens_t20": {
+      "adjustment": 0.0,
+      "baseline_efficiency": 0.85,
+      "bias_runs": 2.2,
+      "confidence": 0.067,
+      "efficiency": 0.85,
+      "matches": 1,
+      "note": "insufficient_data"
+    }
+  },
+  "Guernsey": {
+    "womens_t20": {
+      "adjustment": -0.0027,
+      "baseline_efficiency": 0.85,
+      "bias_runs": -5.47,
+      "confidence": 0.2,
+      "efficiency": 0.8473,
+      "matches": 3
+    }
+  },
+  "Hong Kong": {
+    "mens_t20": {
+      "adjustment": 0.0,
+      "baseline_efficiency": 0.74,
+      "bias_runs": 17.0,
+      "confidence": 0.133,
+      "efficiency": 0.74,
+      "matches": 2,
+      "note": "insufficient_data"
+    },
+    "womens_t20": {
+      "adjustment": 0.0075,
+      "baseline_efficiency": 0.74,
+      "bias_runs": 11.2,
+      "confidence": 0.267,
+      "efficiency": 0.7475,
+      "matches": 4
+    }
+  },
+  "India": {
+    "mens_odi": {
+      "adjustment": 0.002,
+      "baseline_efficiency": 0.92,
+      "bias_runs": 1.47,
+      "confidence": 0.533,
+      "efficiency": 0.922,
+      "matches": 8
+    },
+    "mens_t20": {
+      "adjustment": 0.0,
+      "baseline_efficiency": 0.92,
+      "bias_runs": -25.6,
+      "confidence": 0.067,
+      "efficiency": 0.92,
+      "matches": 1,
+      "note": "insufficient_data"
+    },
+    "womens_odi": {
+      "adjustment": 0.0007,
+      "baseline_efficiency": 0.92,
+      "bias_runs": 0.85,
+      "confidence": 0.333,
+      "efficiency": 0.9207,
+      "matches": 5
+    },
+    "womens_t20": {
+      "adjustment": 0.0,
+      "baseline_efficiency": 0.92,
+      "bias_runs": 16.6,
+      "confidence": 0.133,
+      "efficiency": 0.92,
+      "matches": 2,
+      "note": "insufficient_data"
+    }
+  },
+  "Indonesia": {
+    "mens_t20": {
+      "adjustment": 0.0,
+      "baseline_efficiency": 0.85,
+      "bias_runs": -23.8,
+      "confidence": 0.067,
+      "efficiency": 0.85,
+      "matches": 1,
+      "note": "insufficient_data"
+    },
+    "womens_t20": {
+      "adjustment": 0.0,
+      "baseline_efficiency": 0.85,
+      "bias_runs": -19.3,
+      "confidence": 0.133,
+      "efficiency": 0.85,
+      "matches": 2,
+      "note": "insufficient_data"
+    }
+  },
+  "Ireland": {
+    "womens_odi": {
+      "adjustment": -0.0001,
+      "baseline_efficiency": 0.81,
+      "bias_runs": -0.08,
+      "confidence": 0.4,
+      "efficiency": 0.8099,
+      "matches": 6
+    }
+  },
+  "Isle of Man": {
+    "mens_t20": {
+      "adjustment": 0.0,
+      "baseline_efficiency": 0.85,
+      "bias_runs": 21.4,
+      "confidence": 0.133,
+      "efficiency": 0.85,
+      "matches": 2,
+      "note": "insufficient_data"
+    },
+    "womens_t20": {
+      "adjustment": 0.0,
+      "baseline_efficiency": 0.85,
+      "bias_runs": 15.6,
+      "confidence": 0.067,
+      "efficiency": 0.85,
+      "matches": 1,
+      "note": "insufficient_data"
+    }
+  },
+  "Israel": {
+    "mens_t20": {
+      "adjustment": 0.0,
+      "baseline_efficiency": 0.85,
+      "bias_runs": -33.6,
+      "confidence": 0.067,
+      "efficiency": 0.85,
+      "matches": 1,
+      "note": "insufficient_data"
+    }
+  },
+  "Japan": {
+    "womens_t20": {
+      "adjustment": 0.0,
+      "baseline_efficiency": 0.85,
+      "bias_runs": 17.4,
+      "confidence": 0.067,
+      "efficiency": 0.85,
+      "matches": 1,
+      "note": "insufficient_data"
+    }
+  },
+  "Kenya": {
+    "mens_t20": {
+      "adjustment": -0.0107,
+      "baseline_efficiency": 0.73,
+      "bias_runs": -12.8,
+      "confidence": 0.333,
+      "efficiency": 0.7193,
+      "matches": 5
+    }
+  },
+  "Kuwait": {
+    "mens_t20": {
+      "adjustment": 0.0,
+      "baseline_efficiency": 0.85,
+      "bias_runs": 21.0,
+      "confidence": 0.133,
+      "efficiency": 0.85,
+      "matches": 2,
+      "note": "insufficient_data"
+    }
+  },
+  "Luxembourg": {
+    "mens_t20": {
+      "adjustment": 0.0,
+      "baseline_efficiency": 0.85,
+      "bias_runs": -30.2,
+      "confidence": 0.133,
+      "efficiency": 0.85,
+      "matches": 2,
+      "note": "insufficient_data"
+    },
+    "womens_t20": {
+      "adjustment": 0.0019,
+      "baseline_efficiency": 0.85,
+      "bias_runs": 3.8,
+      "confidence": 0.2,
+      "efficiency": 0.8519,
+      "matches": 3
+    }
+  },
+  "Malawi": {
+    "mens_t20": {
+      "adjustment": 0.0,
+      "baseline_efficiency": 0.85,
+      "bias_runs": -11.0,
+      "confidence": 0.067,
+      "efficiency": 0.85,
+      "matches": 1,
+      "note": "insufficient_data"
+    }
+  },
+  "Malaysia": {
+    "mens_t20": {
+      "adjustment": -0.0021,
+      "baseline_efficiency": 0.85,
+      "bias_runs": -4.27,
+      "confidence": 0.2,
+      "efficiency": 0.8479,
+      "matches": 3
+    },
+    "womens_t20": {
+      "adjustment": 0.0,
+      "baseline_efficiency": 0.85,
+      "bias_runs": 10.3,
+      "confidence": 0.133,
+      "efficiency": 0.85,
+      "matches": 2,
+      "note": "insufficient_data"
+    }
+  },
+  "Maldives": {
+    "mens_t20": {
+      "adjustment": 0.0057,
+      "baseline_efficiency": 0.85,
+      "bias_runs": 11.33,
+      "confidence": 0.2,
+      "efficiency": 0.8557,
+      "matches": 3
+    }
+  },
+  "Mongolia": {
+    "mens_t20": {
+      "adjustment": 0.0,
+      "baseline_efficiency": 0.85,
+      "bias_runs": 14.4,
+      "confidence": 0.133,
+      "efficiency": 0.85,
+      "matches": 2,
+      "note": "insufficient_data"
+    }
+  },
+  "Myanmar": {
+    "mens_t20": {
+      "adjustment": 0.0,
+      "baseline_efficiency": 0.85,
+      "bias_runs": -9.9,
+      "confidence": 0.133,
+      "efficiency": 0.85,
+      "matches": 2,
+      "note": "insufficient_data"
+    }
+  },
+  "Namibia": {
+    "mens_odi": {
+      "adjustment": -0.0082,
+      "baseline_efficiency": 0.76,
+      "bias_runs": -7.04,
+      "confidence": 0.467,
+      "efficiency": 0.7518,
+      "matches": 7
+    },
+    "mens_t20": {
+      "adjustment": 0.0,
+      "baseline_efficiency": 0.76,
+      "bias_runs": 17.9,
+      "confidence": 0.133,
+      "efficiency": 0.76,
+      "matches": 2,
+      "note": "insufficient_data"
+    },
+    "womens_t20": {
+      "adjustment": 0.0093,
+      "baseline_efficiency": 0.76,
+      "bias_runs": 9.27,
+      "confidence": 0.4,
+      "efficiency": 0.7693,
+      "matches": 6
+    }
+  },
+  "Nepal": {
+    "mens_odi": {
+      "adjustment": 0.0153,
+      "baseline_efficiency": 0.75,
+      "bias_runs": 22.94,
+      "confidence": 0.267,
+      "efficiency": 0.7653,
+      "matches": 4
+    }
+  },
+  "Netherlands": {
+    "mens_odi": {
+      "adjustment": 0.0,
+      "baseline_efficiency": 0.77,
+      "bias_runs": 15.75,
+      "confidence": 0.067,
+      "efficiency": 0.77,
+      "matches": 1,
+      "note": "insufficient_data"
+    }
+  },
+  "New Zealand": {
+    "mens_odi": {
+      "adjustment": -0.0122,
+      "baseline_efficiency": 0.93,
+      "bias_runs": -18.31,
+      "confidence": 0.267,
+      "efficiency": 0.9178,
+      "matches": 4
+    },
+    "womens_odi": {
+      "adjustment": 0.0,
+      "baseline_efficiency": 0.93,
+      "bias_runs": -24.12,
+      "confidence": 0.133,
+      "efficiency": 0.93,
+      "matches": 2,
+      "note": "insufficient_data"
+    }
+  },
+  "Nigeria": {
+    "mens_t20": {
+      "adjustment": 0.0,
+      "baseline_efficiency": 0.85,
+      "bias_runs": 0.6,
+      "confidence": 0.067,
+      "efficiency": 0.85,
+      "matches": 1,
+      "note": "insufficient_data"
+    }
+  },
+  "Norway": {
+    "womens_t20": {
+      "adjustment": -0.0028,
+      "baseline_efficiency": 0.85,
+      "bias_runs": -5.67,
+      "confidence": 0.2,
+      "efficiency": 0.8472,
+      "matches": 3
+    }
+  },
+  "Oman": {
+    "mens_odi": {
+      "adjustment": 0.0264,
+      "baseline_efficiency": 0.74,
+      "bias_runs": 26.42,
+      "confidence": 0.4,
+      "efficiency": 0.7664,
+      "matches": 6
+    },
+    "mens_t20": {
+      "adjustment": 0.0,
+      "baseline_efficiency": 0.74,
+      "bias_runs": 0.2,
+      "confidence": 0.067,
+      "efficiency": 0.74,
+      "matches": 1,
+      "note": "insufficient_data"
+    }
+  },
+  "Pakistan": {
+    "mens_odi": {
+      "adjustment": 0.025,
+      "baseline_efficiency": 0.82,
+      "bias_runs": 16.64,
+      "confidence": 0.6,
+      "efficiency": 0.845,
+      "matches": 9
+    },
+    "mens_t20": {
+      "adjustment": 0.0,
+      "baseline_efficiency": 0.82,
+      "bias_runs": -13.0,
+      "confidence": 0.133,
+      "efficiency": 0.82,
+      "matches": 2,
+      "note": "insufficient_data"
+    },
+    "womens_odi": {
+      "adjustment": 0.0033,
+      "baseline_efficiency": 0.82,
+      "bias_runs": 3.25,
+      "confidence": 0.4,
+      "efficiency": 0.8233,
+      "matches": 6
+    },
+    "womens_t20": {
+      "adjustment": 0.0,
+      "baseline_efficiency": 0.82,
+      "bias_runs": 30.8,
+      "confidence": 0.067,
+      "efficiency": 0.82,
+      "matches": 1,
+      "note": "insufficient_data"
+    }
+  },
+  "Papua New Guinea": {
+    "womens_odi": {
+      "adjustment": 0.0192,
+      "baseline_efficiency": 0.71,
+      "bias_runs": 28.81,
+      "confidence": 0.267,
+      "efficiency": 0.7292,
+      "matches": 4
+    },
+    "womens_t20": {
+      "adjustment": 0.0,
+      "baseline_efficiency": 0.71,
+      "bias_runs": 18.4,
+      "confidence": 0.067,
+      "efficiency": 0.71,
+      "matches": 1,
+      "note": "insufficient_data"
+    }
+  },
+  "Portugal": {
+    "mens_t20": {
+      "adjustment": 0.0,
+      "baseline_efficiency": 0.85,
+      "bias_runs": -0.1,
+      "confidence": 0.133,
+      "efficiency": 0.85,
+      "matches": 2,
+      "note": "insufficient_data"
+    },
+    "womens_t20": {
+      "adjustment": 0.0,
+      "baseline_efficiency": 0.85,
+      "bias_runs": -9.3,
+      "confidence": 0.133,
+      "efficiency": 0.85,
+      "matches": 2,
+      "note": "insufficient_data"
+    }
+  },
+  "Qatar": {
+    "mens_t20": {
+      "adjustment": -0.0043,
+      "baseline_efficiency": 0.85,
+      "bias_runs": -6.4,
+      "confidence": 0.267,
+      "efficiency": 0.8457,
+      "matches": 4
+    }
+  },
+  "Rwanda": {
+    "mens_t20": {
+      "adjustment": 0.002,
+      "baseline_efficiency": 0.85,
+      "bias_runs": 2.36,
+      "confidence": 0.333,
+      "efficiency": 0.852,
+      "matches": 5
+    }
+  },
+  "Saudi Arabia": {
+    "mens_t20": {
+      "adjustment": 0.0,
+      "baseline_efficiency": 0.85,
+      "bias_runs": -14.0,
+      "confidence": 0.067,
+      "efficiency": 0.85,
+      "matches": 1,
+      "note": "insufficient_data"
+    }
+  },
+  "Scotland": {
+    "mens_odi": {
+      "adjustment": 0.0,
+      "baseline_efficiency": 0.79,
+      "bias_runs": -25.88,
+      "confidence": 0.133,
+      "efficiency": 0.79,
+      "matches": 2,
+      "note": "insufficient_data"
+    },
+    "womens_odi": {
+      "adjustment": 0.0,
+      "baseline_efficiency": 0.79,
+      "bias_runs": -14.75,
+      "confidence": 0.067,
+      "efficiency": 0.79,
+      "matches": 1,
+      "note": "insufficient_data"
+    }
+  },
+  "Serbia": {
+    "womens_t20": {
+      "adjustment": -0.0008,
+      "baseline_efficiency": 0.85,
+      "bias_runs": -1.0,
+      "confidence": 0.333,
+      "efficiency": 0.8492,
+      "matches": 5
+    }
+  },
+  "Sierra Leone": {
+    "mens_t20": {
+      "adjustment": -0.0001,
+      "baseline_efficiency": 0.85,
+      "bias_runs": -0.09,
+      "confidence": 0.467,
+      "efficiency": 0.8499,
+      "matches": 7
+    }
+  },
+  "Singapore": {
+    "mens_t20": {
+      "adjustment": -0.0029,
+      "baseline_efficiency": 0.85,
+      "bias_runs": -5.8,
+      "confidence": 0.2,
+      "efficiency": 0.8471,
+      "matches": 3
+    }
+  },
+  "South Africa": {
+    "mens_odi": {
+      "adjustment": 0.0035,
+      "baseline_efficiency": 0.91,
+      "bias_runs": 4.25,
+      "confidence": 0.333,
+      "efficiency": 0.9135,
+      "matches": 5
+    },
+    "mens_t20": {
+      "adjustment": 0.0,
+      "baseline_efficiency": 0.91,
+      "bias_runs": 7.8,
+      "confidence": 0.133,
+      "efficiency": 0.91,
+      "matches": 2,
+      "note": "insufficient_data"
+    },
+    "womens_odi": {
+      "adjustment": -0.032,
+      "baseline_efficiency": 0.91,
+      "bias_runs": -17.48,
+      "confidence": 0.733,
+      "efficiency": 0.878,
+      "matches": 11
+    },
+    "womens_t20": {
+      "adjustment": -0.0103,
+      "baseline_efficiency": 0.91,
+      "bias_runs": -20.6,
+      "confidence": 0.2,
+      "efficiency": 0.8997,
+      "matches": 3
+    }
+  },
+  "South Korea": {
+    "mens_t20": {
+      "adjustment": 0.0023,
+      "baseline_efficiency": 0.85,
+      "bias_runs": 4.67,
+      "confidence": 0.2,
+      "efficiency": 0.8523,
+      "matches": 3
+    }
+  },
+  "Spain": {
+    "mens_t20": {
+      "adjustment": 0.0,
+      "baseline_efficiency": 0.85,
+      "bias_runs": 2.4,
+      "confidence": 0.133,
+      "efficiency": 0.85,
+      "matches": 2,
+      "note": "insufficient_data"
+    }
+  },
+  "Sri Lanka": {
+    "mens_odi": {
+      "adjustment": -0.0219,
+      "baseline_efficiency": 0.84,
+      "bias_runs": -26.3,
+      "confidence": 0.333,
+      "efficiency": 0.8181,
+      "matches": 5
+    },
+    "mens_t20": {
+      "adjustment": 0.0004,
+      "baseline_efficiency": 0.84,
+      "bias_runs": 0.65,
+      "confidence": 0.267,
+      "efficiency": 0.8404,
+      "matches": 4
+    },
+    "womens_odi": {
+      "adjustment": -0.0295,
+      "baseline_efficiency": 0.84,
+      "bias_runs": -17.7,
+      "confidence": 0.667,
+      "efficiency": 0.8105,
+      "matches": 10
+    },
+    "womens_t20": {
+      "adjustment": 0.0138,
+      "baseline_efficiency": 0.84,
+      "bias_runs": 10.33,
+      "confidence": 0.533,
+      "efficiency": 0.8538,
+      "matches": 8
+    }
+  },
+  "Switzerland": {
+    "womens_t20": {
+      "adjustment": 0.001,
+      "baseline_efficiency": 0.85,
+      "bias_runs": 1.5,
+      "confidence": 0.267,
+      "efficiency": 0.851,
+      "matches": 4
+    }
+  },
+  "Tanzania": {
+    "womens_t20": {
+      "adjustment": -0.0066,
+      "baseline_efficiency": 0.85,
+      "bias_runs": -13.13,
+      "confidence": 0.2,
+      "efficiency": 0.8434,
+      "matches": 3
+    }
+  },
+  "Thailand": {
+    "mens_t20": {
+      "adjustment": 0.0,
+      "baseline_efficiency": 0.85,
+      "bias_runs": -3.6,
+      "confidence": 0.067,
+      "efficiency": 0.85,
+      "matches": 1,
+      "note": "insufficient_data"
+    },
+    "womens_odi": {
+      "adjustment": 0.0066,
+      "baseline_efficiency": 0.85,
+      "bias_runs": 7.95,
+      "confidence": 0.333,
+      "efficiency": 0.8566,
+      "matches": 5
+    },
+    "womens_t20": {
+      "adjustment": 0.0036,
+      "baseline_efficiency": 0.85,
+      "bias_runs": 7.2,
+      "confidence": 0.2,
+      "efficiency": 0.8536,
+      "matches": 3
+    }
+  },
+  "Turkey": {
+    "womens_t20": {
+      "adjustment": 0.0,
+      "baseline_efficiency": 0.85,
+      "bias_runs": 15.2,
+      "confidence": 0.067,
+      "efficiency": 0.85,
+      "matches": 1,
+      "note": "insufficient_data"
+    }
+  },
+  "Uganda": {
+    "mens_t20": {
+      "adjustment": -0.0026,
+      "baseline_efficiency": 0.72,
+      "bias_runs": -3.95,
+      "confidence": 0.267,
+      "efficiency": 0.7174,
+      "matches": 4
+    },
+    "womens_t20": {
+      "adjustment": 0.0015,
+      "baseline_efficiency": 0.72,
+      "bias_runs": 2.93,
+      "confidence": 0.2,
+      "efficiency": 0.7215,
+      "matches": 3
+    }
+  },
+  "United Arab Emirates": {
+    "mens_odi": {
+      "adjustment": -0.0201,
+      "baseline_efficiency": 0.85,
+      "bias_runs": -24.15,
+      "confidence": 0.333,
+      "efficiency": 0.8299,
+      "matches": 5
+    },
+    "womens_odi": {
+      "adjustment": 0.0,
+      "baseline_efficiency": 0.85,
+      "bias_runs": -20.0,
+      "confidence": 0.133,
+      "efficiency": 0.85,
+      "matches": 2,
+      "note": "insufficient_data"
+    },
+    "womens_t20": {
+      "adjustment": 0.0,
+      "baseline_efficiency": 0.85,
+      "bias_runs": -2.6,
+      "confidence": 0.133,
+      "efficiency": 0.85,
+      "matches": 2,
+      "note": "insufficient_data"
+    }
+  },
+  "United States of America": {
+    "mens_odi": {
+      "adjustment": -0.0067,
+      "baseline_efficiency": 0.85,
+      "bias_runs": -4.5,
+      "confidence": 0.6,
+      "efficiency": 0.8433,
+      "matches": 9
+    },
+    "womens_odi": {
+      "adjustment": 0.0,
+      "baseline_efficiency": 0.85,
+      "bias_runs": 53.25,
+      "confidence": 0.067,
+      "efficiency": 0.85,
+      "matches": 1,
+      "note": "insufficient_data"
+    }
+  },
+  "West Indies": {
+    "mens_odi": {
+      "adjustment": -0.0024,
+      "baseline_efficiency": 0.85,
+      "bias_runs": -1.81,
+      "confidence": 0.533,
+      "efficiency": 0.8476,
+      "matches": 8
+    },
+    "mens_t20": {
+      "adjustment": 0.0,
+      "baseline_efficiency": 0.85,
+      "bias_runs": 5.9,
+      "confidence": 0.133,
+      "efficiency": 0.85,
+      "matches": 2,
+      "note": "insufficient_data"
+    },
+    "womens_odi": {
+      "adjustment": 0.0274,
+      "baseline_efficiency": 0.85,
+      "bias_runs": 10.96,
+      "confidence": 1.0,
+      "efficiency": 0.8774,
+      "matches": 17
+    },
+    "womens_t20": {
+      "adjustment": 0.0022,
+      "baseline_efficiency": 0.85,
+      "bias_runs": 4.4,
+      "confidence": 0.2,
+      "efficiency": 0.8522,
+      "matches": 3
+    }
+  },
+  "Zambia": {
+    "mens_t20": {
+      "adjustment": 0.0,
+      "baseline_efficiency": 0.85,
+      "bias_runs": -4.4,
+      "confidence": 0.067,
+      "efficiency": 0.85,
+      "matches": 1,
+      "note": "insufficient_data"
+    }
+  },
+  "Zimbabwe": {
+    "mens_odi": {
+      "adjustment": 0.0073,
+      "baseline_efficiency": 0.78,
+      "bias_runs": 14.67,
+      "confidence": 0.2,
+      "efficiency": 0.7873,
+      "matches": 3
+    },
+    "mens_t20": {
+      "adjustment": 0.0069,
+      "baseline_efficiency": 0.78,
+      "bias_runs": 13.73,
+      "confidence": 0.2,
+      "efficiency": 0.7869,
+      "matches": 3
+    },
+    "womens_odi": {
+      "adjustment": 0.0604,
+      "baseline_efficiency": 0.78,
+      "bias_runs": 36.23,
+      "confidence": 0.667,
+      "efficiency": 0.8404,
+      "matches": 10
+    },
+    "womens_t20": {
+      "adjustment": 0.0006,
+      "baseline_efficiency": 0.78,
+      "bias_runs": 0.9,
+      "confidence": 0.267,
+      "efficiency": 0.7806,
+      "matches": 4
+    }
+  }
+}
