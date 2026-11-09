@@ -182,3 +182,31 @@ mtime_ms = 1793954852925
 storage_uri = "gcs://replit-rams-assets-sisko/rams/assets/repl:b407f9d4-a912-4514-9106-fd10bd03162e/86f39186-e80f-46f4-84a0-4ab734d07c34/374146a2-7d68-4f76-b0a3-4199bfbbd699"
 storage_version_token = "1793954865313480"
 content_type = "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+
+[[outputs]]
+id = "a3Tr9mMSQhgj3vWQUDtg0"
+uri = "file://generated-artifacts/paired-current/report.html"
+type = "html"
+title = "Paired baseline vs experimental comparison"
+description = "100 matched first innings per format, with run and wicket errors, checkpoint tables, uncertainty intervals and validation limits."
+logical_id = "74eae403-70d2-42b1-967b-fc0d38c2dca6"
+content_hash = "sha256:1eff167d2b0d3053a5ea17e97f1af8a1c4a3daab55c6c804ee4b606e38d68a94"
+size = 11081
+mtime_ms = 1794208097826
+storage_uri = "gcs://replit-rams-assets-sisko/rams/assets/repl:b407f9d4-a912-4514-9106-fd10bd03162e/74eae403-70d2-42b1-967b-fc0d38c2dca6/5277333b-e717-441b-b8a7-da6a33698697"
+storage_version_token = "1794208177907064"
+content_type = "text/html"
+
+[[outputs]]
+id = "EkbB8KFEsDvuGwchJk4ov"
+uri = "file://generated-artifacts/paired-current/comparison.csv"
+type = "table"
+title = "Side-by-side comparison tables"
+description = "All three model/input configurations on identical observations across four formats."
+logical_id = "68acbaea-e6b2-48ff-aeca-762973fc5694"
+content_hash = "sha256:5b46675900598bcd8e99688f5e0131b325ba6b4347fc2a70d16d45c6e0d26784"
+size = 2532
+mtime_ms = 1794208097824
+storage_uri = "gcs://replit-rams-assets-sisko/rams/assets/repl:b407f9d4-a912-4514-9106-fd10bd03162e/68acbaea-e6b2-48ff-aeca-762973fc5694/835b8cae-250d-4d3c-bfeb-aaab7c545fff"
+storage_version_token = "1794208179358630"
+content_type = "text/csv"
