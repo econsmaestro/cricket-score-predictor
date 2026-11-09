@@ -154,6 +154,7 @@ def run_backtest(max_matches=100, match_format="mens_t20"):
                     raise ValueError(f"Innings already ended at checkpoint {cp}")
                 pred = predict_score(state)
                 actual = match["actual_final_score"]
+                actual_wickets = match["actual_wickets"]
                 low, high = pred.score_range
                 match_results.append({
                     "match_id": match["match_id"],
@@ -173,6 +174,10 @@ def run_backtest(max_matches=100, match_format="mens_t20"):
                     "abs_error": abs(pred.predicted_final_score - actual),
                     "in_range": low <= actual <= high,
                     "range_width": high - low,
+                    "predicted_wickets": pred.predicted_wickets,
+                    "actual_wickets": actual_wickets,
+                    "wicket_error": pred.predicted_wickets - actual_wickets,
+                    "wicket_abs_error": abs(pred.predicted_wickets - actual_wickets),
                 })
             except Exception as e:
                 raise RuntimeError(f"Backtest failed for {match_format}/{match['match_id']} at {cp} overs") from e
@@ -205,6 +210,11 @@ def compute_metrics(results):
             else:
                 buckets["over_200"].append(r["abs_error"])
 
+        wkt_abs = [r["wicket_abs_error"] for r in rows if "wicket_abs_error" in r]
+        wkt_errors = [r["wicket_error"] for r in rows if "wicket_error" in r]
+        wicket_mae = round(sum(wkt_abs) / len(wkt_abs), 2) if wkt_abs else None
+        wicket_bias = round(sum(wkt_errors) / len(wkt_errors), 2) if wkt_errors else None
+
         return {
             "n": n,
             "mae": round(mae, 1),
@@ -213,6 +223,8 @@ def compute_metrics(results):
             "hit_rate": round(hit_rate, 1),
             "avg_width": round(avg_width, 1),
             "avg_range_width": round(avg_width, 1),
+            "wicket_mae": wicket_mae,
+            "wicket_bias": wicket_bias,
             "bucket_mae": {
                 key: round(sum(values) / len(values), 1) if values else None
                 for key, values in buckets.items()
