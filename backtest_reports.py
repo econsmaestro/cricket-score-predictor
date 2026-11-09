@@ -11,14 +11,18 @@ REPORT_DIR = Path(__file__).parent / "data" / "backtests"
 MATCH_COUNT = 100
 
 
-def load_report(match_format):
+def load_report(match_format, innings=1):
     format_config(match_format)
-    path = REPORT_DIR / f"{match_format}.json"
+    if innings not in (1, 2):
+        raise ValueError("Innings must be 1 or 2")
+    suffix = "_innings2" if innings == 2 else ""
+    path = REPORT_DIR / f"{match_format}{suffix}.json"
     if not path.exists():
         raise FileNotFoundError("Report unavailable. Generate it with python backtest_reports.py")
     with path.open() as stream:
         report = json.load(stream)
     if (report.get("schema_version") != 2 or report["format"] != match_format
+            or report.get("innings", 1) != innings
             or report["match_count"] != MATCH_COUNT
             or len({row["match_id"] for row in report["results"]}) != MATCH_COUNT
             or not all({"predicted_wickets", "actual_wickets", "wicket_error", "wicket_abs_error"} <= row.keys()
@@ -27,13 +31,13 @@ def load_report(match_format):
     return report
 
 
-def report_status():
+def report_status(innings=1):
     formats = []
     for name, config in FORMATS.items():
         entry = dict(format=name, label=config["label"], requested_matches=MATCH_COUNT,
                      available=False, match_count=0, prediction_count=0, generated_at=None)
         try:
-            report = load_report(name)
+            report = load_report(name, innings)
             entry.update(available=True, match_count=report["match_count"],
                          prediction_count=report["prediction_count"],
                          generated_at=report["generated_at"])

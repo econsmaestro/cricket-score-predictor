@@ -66,12 +66,19 @@
   <section class="bt-hero mb-4" aria-labelledby="backtest-title">
     <div class="eyebrow">Historical replay · Cricsheet</div>
     <h2 id="backtest-title">How do runs and wicket forecasts hold up against completed innings?</h2>
-    <p>Review the current model’s predicted final runs and wickets at in-innings checkpoints against completed first innings. Each format report covers 100 distinct eligible matches; a match contributes several checkpoint predictions.</p>
+    <p>Review predicted final runs and wickets against completed innings. Choose first innings or second-innings chases separately: each format report covers 100 distinct eligible matches, with several active checkpoint predictions per match. The two innings reports can use different fixtures and checkpoint counts.</p>
   </section>
 
   <section class="bt-panel mb-4" aria-label="Choose a report">
     <div class="bt-panel-body">
       <div class="row g-3 align-items-end">
+        <div class="col-12">
+          <label class="form-label fw-bold mb-1" for="inningsSelect">Innings</label>
+          <select id="inningsSelect" class="form-select">
+            <option value="1">1st innings · existing checkpoint sample</option>
+            <option value="2">2nd innings · chases, including early finishes</option>
+          </select>
+        </div>
         <div class="col-12 col-md-5">
           <label class="form-label fw-bold mb-1" for="formatSelect">Match format</label>
           <select id="formatSelect" class="form-select bt-format-select" aria-describedby="formatHelp">
@@ -125,6 +132,7 @@
             <span class="bt-stat-detail">Rows evaluated across checkpoints</span>
           </div>
         </div>
+        <p id="chaseCaveat" class="bt-disclaimer d-none">Second-innings runs and wickets are measured when the chase ends. The existing model caps runs at the target but does not fully model wicket-taking until chase termination. Short chases include an innings-start forecast; these results are not directly comparable with the first-innings checkpoint sample.</p>
         <p id="summaryText" class="mb-3"></p>
         <div class="bt-metric-grid" aria-label="Overall runs and wicket prediction metrics">
           <div class="bt-metric"><strong id="metricMae">—</strong><span>MAE · runs</span></div>
@@ -209,6 +217,8 @@
   let currentReport = null;
   let visibleRows = [];
   let page = 0;
+  let reportRequest = 0;
+  let statusRequest = 0;
 
   const show = (id, yes) => document.getElementById(id).classList.toggle("d-none",!yes);
   function setStatus(message, unavailable=false) {
@@ -220,10 +230,16 @@
     document.getElementById("errorMessage").textContent = message || "Please try again in a moment.";
   }
   async function loadStatus() {
+    const statusId = ++statusRequest;
+    ++reportRequest;
+    currentReport = null;
+    show("reportContent", false);
+    document.getElementById("exportBtn").classList.add("d-none");
     setStatus("Checking report availability");
     try {
-      const response = await fetch("/backtest/status",{headers:{Accept:"application/json"}});
+      const response = await fetch(`/backtest/status?innings=${document.getElementById("inningsSelect").value}`,{headers:{Accept:"application/json"}});
       const data = await response.json();
+      if (statusId !== statusRequest) return;
       if (!response.ok) throw new Error(data.error || "Could not check report availability.");
       reports = Array.isArray(data.formats) ? data.formats : [];
       select.replaceChildren();
@@ -246,6 +262,7 @@
       setStatus(`${available.length} of ${reports.length} reports available`);
       await loadReport(first.format);
     } catch (error) {
+      if (statusId !== statusRequest) return;
       select.replaceChildren(new Option("Unable to load available formats",""));
       showError(error.message);
       setStatus("Availability check failed",true);
@@ -277,23 +294,27 @@
   }
   async function loadReport(format) {
     if (!format) return;
+    const requestId = ++reportRequest;
+    const innings = document.getElementById("inningsSelect").value;
     currentReport = null;
     show("loadingState",true); show("errorState",false); show("emptyState",false); show("reportContent",false);
     document.getElementById("loadingState").querySelector(".small").textContent = `Loading ${names[format] || format} report…`;
     document.getElementById("exportBtn").classList.add("d-none");
     setStatus("Loading selected report");
     try {
-      const response = await fetch(`/backtest/report/${encodeURIComponent(format)}`,{headers:{Accept:"application/json"}});
+      const response = await fetch(`/backtest/report/${encodeURIComponent(format)}?innings=${innings}`,{headers:{Accept:"application/json"}});
       const data = await response.json();
+      if (requestId !== reportRequest) return;
       if (!response.ok || !data.success) throw new Error(data.error || `The ${names[format] || format} report is unavailable.`);
       currentReport = data;
       renderReport(data);
-      document.getElementById("exportBtn").href = `/backtest/export.csv?format=${encodeURIComponent(format)}`;
+      document.getElementById("exportBtn").href = `/backtest/export.csv?format=${encodeURIComponent(format)}&innings=${innings}`;
       document.getElementById("exportBtn").classList.remove("d-none");
       show("loadingState",false); show("reportContent",true);
       setStatus(`${number(data.match_count)} distinct matches · ${number(data.prediction_count)} checkpoint predictions`);
       renderFormatSummaries();
     } catch (error) {
+      if (requestId !== reportRequest) return;
       showError(error.message);
       setStatus("Selected report unavailable",true);
     }
@@ -305,6 +326,7 @@
     document.getElementById("matchCount").textContent = number(data.match_count);
     document.getElementById("predictionCount").textContent = number(data.prediction_count);
     document.getElementById("summaryText").textContent = data.summary || "No summary was supplied for this report.";
+    show("chaseCaveat", data.innings === 2);
     const overall = (data.metrics || {}).overall || {};
     document.getElementById("metricMae").textContent = number(overall.mae);
     document.getElementById("metricRmse").textContent = number(overall.rmse);
@@ -316,7 +338,7 @@
     const wicketBias = overall.wicket_bias;
     document.getElementById("metricWicketBias").textContent = wicketBias === null || wicketBias === undefined ? "—" : `${Number(wicketBias)>0?"+":""}${number(wicketBias)}`;
     document.getElementById("metricWicketExact").textContent = overall.exact_wicket_rate === null || overall.exact_wicket_rate === undefined ? "—" : `${number(overall.exact_wicket_rate)}%`;
-    document.getElementById("sourceLine").textContent = `Source: ${data.source || "Not supplied"} · Distinct match count and checkpoint prediction count are separate measures.`;
+    document.getElementById("sourceLine").textContent = `Source: ${data.source || "Not supplied"} · Match dates: ${data.date_from || "not supplied"} to ${data.date_to || "not supplied"}. Distinct match count and checkpoint prediction count are separate measures.`;
     document.getElementById("methodologyText").textContent = `${data.methodology || "Historical replay using the current model."} This is not an out-of-time training holdout; these results are not independently validated accuracy and do not guarantee future performance.`;
     renderCheckpoints(data);
     setupRows(matches);
@@ -408,11 +430,15 @@
     }
     loadReport(select.value);
   });
+  document.getElementById("inningsSelect").addEventListener("change", loadStatus);
   document.getElementById("retryBtn").addEventListener("click",()=>reports.length ? loadReport(select.value) : loadStatus());
   document.getElementById("checkpointFilter").addEventListener("change",applyFilters);
   document.getElementById("matchSearch").addEventListener("input",applyFilters);
   document.getElementById("prevPage").addEventListener("click",()=>{if(page>0){page--;renderRows();}});
   document.getElementById("nextPage").addEventListener("click",()=>{if((page+1)*PAGE_SIZE<visibleRows.length){page++;renderRows();}});
+  if (new URLSearchParams(window.location.search).get("innings") === "2") {
+    document.getElementById("inningsSelect").value = "2";
+  }
   loadStatus();
 })();
 </script>

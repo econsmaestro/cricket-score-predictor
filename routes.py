@@ -2663,14 +2663,24 @@ def backtest_page():
 @app.route("/backtest/status")
 def backtest_status():
     from backtest_reports import report_status
-    return jsonify(report_status())
+    try:
+        return jsonify(report_status(_backtest_innings()))
+    except ValueError as exc:
+        return jsonify(success=False, error=str(exc)), 400
+
+
+def _backtest_innings():
+    value = request.args.get("innings", "1")
+    if value not in ("1", "2"):
+        raise ValueError("Innings must be 1 or 2")
+    return int(value)
 
 
 @app.route("/backtest/report/<match_format>")
 def backtest_report(match_format):
     from backtest_reports import load_report
     try:
-        return jsonify(load_report(match_format))
+        return jsonify(load_report(match_format, _backtest_innings()))
     except ValueError as exc:
         return jsonify(success=False, error=str(exc)), 400
     except FileNotFoundError as exc:
@@ -2691,7 +2701,8 @@ def backtest_export():
     from backtest_reports import load_report
     match_format = request.args.get("format", "mens_t20")
     try:
-        results = load_report(match_format)["results"]
+        innings = _backtest_innings()
+        results = load_report(match_format, innings)["results"]
     except ValueError as exc:
         return jsonify(success=False, error=str(exc)), 400
     except FileNotFoundError as exc:
@@ -2702,7 +2713,7 @@ def backtest_export():
         "score_at_cp", "wickets_at_cp", "predicted", "pred_low", "pred_high",
         "actual", "error", "abs_error",
         "predicted_wickets", "actual_wickets", "wicket_error", "wicket_abs_error",
-        "in_range", "range_width",
+        "in_range", "range_width", "innings", "target", "chase_won",
     ]
     writer = csv.DictWriter(output, fieldnames=fields, extrasaction="ignore")
     writer.writeheader()
@@ -2712,5 +2723,5 @@ def backtest_export():
         io.BytesIO(output.read().encode()),
         mimetype="text/csv",
         as_attachment=True,
-        download_name=f"backtest_{match_format}_100_matches.csv",
+        download_name=f"backtest_{match_format}_innings{innings}_100_matches.csv",
     )

@@ -38,3 +38,9 @@ Never backdate source availability to a fixture's event date. Treat event-time r
 **Why:** Downloaded historical archives do not prove when their corrected record versions were published; the user withheld approval because chronological splitting alone did not resolve leakage.
 
 **How to apply:** Preserve actual first-seen times and immutable prior/source versions. Keep approval blocked when historical revision availability or model tuning provenance cannot be established.
+
+Report first-innings and chase accuracy separately, with the checkpoint sampling and cohort differences disclosed. Chase outcomes are measured at innings termination, not a hypothetical full allocation.
+
+**Why:** The user requested four-format backtesting with both innings. A successful chase stops at the target, so its run-error metric is not directly comparable with unconstrained first-innings totals.
+
+**How to apply:** Retain short chases and early collapses through an innings-start observation; never add terminal perfect forecasts. Disclose that the unchanged engine does not jointly simulate wickets until target attainment.
