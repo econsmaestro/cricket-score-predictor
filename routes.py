@@ -2745,12 +2745,30 @@ def fielding_top():
 
 @app.route("/fielding/rebuild", methods=["POST"])
 def fielding_rebuild():
-    """Recompute fielding ratings from current backtest data."""
-    from fielding_stats import rebuild_ratings
+    """Recompute fielding ratings (Cricsheet + backtest blend). Pass ?full=1 to re-download zips."""
+    from fielding_stats import rebuild_all, rebuild_ratings
+    force = request.args.get("full", "0") == "1"
     try:
-        ratings = rebuild_ratings()
+        if force:
+            player_stats, ratings = rebuild_all(force_download=True)
+            source = "cricsheet+backtest"
+        else:
+            # Try Cricsheet first (zips already cached), fallback to backtest-only
+            try:
+                player_stats, ratings = rebuild_all(force_download=False)
+                source = "cricsheet+backtest"
+            except Exception:
+                ratings = rebuild_ratings()
+                player_stats = {}
+                source = "backtest_only"
         team_count = len(ratings)
         fmt_count = sum(len(v) for v in ratings.values())
-        return jsonify(success=True, teams=team_count, format_entries=fmt_count)
+        return jsonify(
+            success=True,
+            source=source,
+            teams=team_count,
+            format_entries=fmt_count,
+            players=len(player_stats),
+        )
     except Exception as exc:
         return jsonify(success=False, error=str(exc)), 500

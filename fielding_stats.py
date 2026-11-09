@@ -1,14 +1,15 @@
 """
 Fielding statistics engine.
 
-Derives team fielding efficiency from backtest calibration:
-  - For each (fielding_team, format), measures mean prediction bias
-    across all backtest matches where that team fielded.
-  - Positive bias (we over-predict) → fielding team better than assumed → higher efficiency
-  - Negative bias (we under-predict) → fielding team worse than assumed → lower efficiency
+Two-layer calibration:
+  1. Cricsheet ball-by-ball data  — authoritative long-run fielding events
+     (catches, run-outs direct/relay, stumpings, runs-allowed rate).
+     Computed when Cricsheet zips are available locally or downloaded fresh.
+  2. Backtest bias calibration  — fine-tunes using prediction error signals
+     per (fielding_team, format). Positive bias = better fielding = higher efficiency.
 
-Player-level dismissal stats (catches, run-outs, stumpings) are computed
-from Cricsheet ball-by-ball data when that data is available locally.
+Team efficiency combines both layers; player-level dismissal stats come
+exclusively from Cricsheet ball-by-ball data.
 """
 
 import json
@@ -178,6 +179,231 @@ def get_team_efficiency(team: str, match_format: str = "mens_t20") -> Optional[f
 def rebuild_ratings() -> dict:
     """Force recompute team ratings from current backtest data."""
     return compute_team_ratings(save=True)
+
+
+# ---------------------------------------------------------------------------
+# Cricsheet-based fielding pipeline (player + team level)
+# ---------------------------------------------------------------------------
+
+CRICSHEET_FORMATS = ["mens_t20", "womens_t20", "mens_odi", "womens_odi"]
+
+
+def compute_cricsheet_fielding(formats=None, force_download=False, save=True) -> tuple:
+    """
+    Download Cricsheet ball-by-ball data for all formats, then compute:
+      - Per-player dismissal stats (catches, run-outs, stumpings).
+      - Per-team fielding stats (dismissal rates, runs-allowed rate).
+      - Per-team efficiency scores blended with backtest calibration.
+
+    Returns (player_stats, team_ratings) dicts.
+    """
+    from backtest_data import download_data, parse_matches
+
+    if formats is None:
+        formats = CRICSHEET_FORMATS
+
+    # Accumulate raw stats
+    players: dict = defaultdict(lambda: {
+        "catches": 0,
+        "run_out_direct": 0,
+        "run_out_involved": 0,
+        "stumpings": 0,
+        "teams": set(),
+        "formats": set(),
+    })
+
+    # (team, fmt) → fielding event totals
+    team_fmt: dict = defaultdict(lambda: {
+        "innings": 0,
+        "catches": 0,
+        "run_out_direct": 0,
+        "run_out_involved": 0,
+        "stumpings": 0,
+        "runs_allowed": 0,
+        "balls_fielded": 0,
+    })
+
+    for fmt in formats:
+        logger.info("Downloading/parsing Cricsheet data for %s ...", fmt)
+        try:
+            download_data(force=force_download, match_format=fmt)
+            matches = parse_matches(match_format=fmt)
+        except Exception as exc:
+            logger.warning("Could not load %s: %s", fmt, exc)
+            continue
+
+        logger.info("  %d matches loaded for %s", len(matches), fmt)
+
+        for match in matches:
+            fielding_team = match.get("fielding_team", "")
+            if not fielding_team:
+                continue
+
+            key = (fielding_team, fmt)
+            team_fmt[key]["innings"] += 1
+
+            for over in match.get("overs", []):
+                for d in over.get("deliveries", []):
+                    extras = d.get("extras", {})
+                    is_wide = "wides" in extras
+
+                    team_fmt[key]["runs_allowed"] += d.get("runs_total", 0)
+                    if not is_wide:
+                        team_fmt[key]["balls_fielded"] += 1
+
+                    for wicket in d.get("wickets", []):
+                        kind = wicket.get("kind", "")
+                        fielder_objs = wicket.get("fielders", [])
+                        names = [f.get("name", "") for f in fielder_objs if f.get("name")]
+
+                        for name in names:
+                            players[name]["teams"].add(fielding_team)
+                            players[name]["formats"].add(fmt)
+
+                        if kind == "caught":
+                            team_fmt[key]["catches"] += 1
+                            if names:
+                                players[names[0]]["catches"] += 1
+
+                        elif kind == "stumped":
+                            team_fmt[key]["stumpings"] += 1
+                            if names:
+                                players[names[0]]["stumpings"] += 1
+
+                        elif kind == "run out":
+                            if len(names) == 1:
+                                team_fmt[key]["run_out_direct"] += 1
+                                players[names[0]]["run_out_direct"] += 1
+                            else:
+                                team_fmt[key]["run_out_involved"] += 1
+                                for name in names:
+                                    players[name]["run_out_involved"] += 1
+
+    # Serialise player stats
+    player_stats_out: dict = {}
+    for name, s in players.items():
+        total = s["catches"] + s["run_out_direct"] + s["run_out_involved"] + s["stumpings"]
+        player_stats_out[name] = {
+            "catches": s["catches"],
+            "run_out_direct": s["run_out_direct"],
+            "run_out_involved": s["run_out_involved"],
+            "stumpings": s["stumpings"],
+            "total_fielding_dismissals": total,
+            "teams": sorted(s["teams"]),
+            "formats": sorted(s["formats"]),
+        }
+
+    # Compute per-format baselines for normalization
+    fmt_baselines: dict = {}
+    for fmt in formats:
+        entries = [(k, v) for k, v in team_fmt.items() if k[1] == fmt and v["innings"] >= 3]
+        if not entries:
+            continue
+        dis_rates = [
+            (v["catches"] + v["run_out_direct"] + v["run_out_involved"] + v["stumpings"]) / v["innings"]
+            for _, v in entries
+        ]
+        rpo_vals = [
+            v["runs_allowed"] / (v["balls_fielded"] / 6)
+            for _, v in entries if v["balls_fielded"] > 0
+        ]
+        fmt_baselines[fmt] = {
+            "mean_dismissal_rate": sum(dis_rates) / len(dis_rates),
+            "mean_rpo": sum(rpo_vals) / len(rpo_vals) if rpo_vals else 6.5,
+        }
+
+    # Load backtest calibration for blending
+    bt_calibration: dict = {}
+    try:
+        bt_calibration = compute_team_ratings(save=False)
+    except Exception:
+        pass
+
+    # Build blended team ratings
+    hardcoded = _load_hardcoded_baseline()
+    team_ratings_out: dict = {}
+
+    for (team, fmt), v in team_fmt.items():
+        if v["innings"] < 1:
+            continue
+
+        base = fmt_baselines.get(fmt, {"mean_dismissal_rate": 1.5, "mean_rpo": 6.5})
+        total_dis = v["catches"] + v["run_out_direct"] + v["run_out_involved"] + v["stumpings"]
+        dis_per_inn = total_dis / v["innings"]
+        rpo = v["runs_allowed"] / (v["balls_fielded"] / 6) if v["balls_fielded"] > 0 else base["mean_rpo"]
+
+        # Cricsheet-based efficiency (dismissal 65%, ground-fielding RPO proxy 35%)
+        dis_delta = (dis_per_inn - base["mean_dismissal_rate"]) * 0.06
+        rpo_delta = (base["mean_rpo"] - rpo) * 0.015
+        cricsheet_eff = max(0.65, min(0.98, 0.85 + dis_delta + rpo_delta))
+
+        # Backtest calibration adjustment
+        bt_adj = 0.0
+        if team in bt_calibration and fmt in bt_calibration[team]:
+            bt_entry = bt_calibration[team][fmt]
+            bt_n = bt_entry.get("matches", 0)
+            if bt_n >= 3:
+                # Blend: Cricsheet weight grows with innings, BT weight grows with matches
+                cs_weight = min(1.0, v["innings"] / 20)
+                bt_weight = min(0.3, bt_n / 50)  # backtest caps at 30% influence
+                blended = (cs_weight * cricsheet_eff + bt_weight * (cricsheet_eff + bt_entry["adjustment"])) / (cs_weight + bt_weight)
+                efficiency = round(max(0.65, min(0.98, blended)), 4)
+                bt_adj = round(bt_entry["adjustment"], 4)
+            else:
+                efficiency = round(cricsheet_eff, 4)
+        else:
+            efficiency = round(cricsheet_eff, 4)
+
+        if team not in team_ratings_out:
+            team_ratings_out[team] = {}
+
+        team_ratings_out[team][fmt] = {
+            "efficiency": efficiency,
+            "cricsheet_efficiency": round(cricsheet_eff, 4),
+            "backtest_adjustment": bt_adj,
+            "innings": v["innings"],
+            "catches": v["catches"],
+            "run_out_direct": v["run_out_direct"],
+            "run_out_involved": v["run_out_involved"],
+            "stumpings": v["stumpings"],
+            "dismissals_per_innings": round(dis_per_inn, 3),
+            "rpo_allowed": round(rpo, 3),
+            "source": "cricsheet",
+        }
+
+    # For teams in backtest but NOT in Cricsheet, keep the BT-calibrated rating
+    for team, fmt_map in bt_calibration.items():
+        for fmt, bt_entry in fmt_map.items():
+            if team not in team_ratings_out or fmt not in team_ratings_out[team]:
+                if team not in team_ratings_out:
+                    team_ratings_out[team] = {}
+                team_ratings_out[team][fmt] = {
+                    "efficiency": bt_entry["efficiency"],
+                    "baseline_efficiency": bt_entry["baseline_efficiency"],
+                    "bias_runs": bt_entry["bias_runs"],
+                    "matches": bt_entry["matches"],
+                    "source": "backtest_calibration",
+                }
+
+    if save:
+        FIELDING_DIR.mkdir(parents=True, exist_ok=True)
+        with open(PLAYER_STATS_FILE, "w") as f:
+            json.dump(player_stats_out, f, indent=2, sort_keys=True)
+        with open(TEAM_RATINGS_FILE, "w") as f:
+            json.dump(team_ratings_out, f, indent=2, sort_keys=True)
+        logger.info(
+            "Saved: %d players, %d teams (%d format entries)",
+            len(player_stats_out),
+            len(team_ratings_out),
+            sum(len(v) for v in team_ratings_out.values()),
+        )
+
+    return player_stats_out, team_ratings_out
+
+
+def rebuild_all(force_download=False) -> tuple:
+    """Full rebuild: download Cricsheet, compute everything, save JSON files."""
+    return compute_cricsheet_fielding(force_download=force_download, save=True)
 
 
 def get_all_team_stats() -> dict:
