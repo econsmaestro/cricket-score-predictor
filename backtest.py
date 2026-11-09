@@ -154,6 +154,8 @@ def run_backtest(max_matches=100, match_format="mens_t20"):
                     raise ValueError(f"Innings already ended at checkpoint {cp}")
                 pred = predict_score(state)
                 actual = match["actual_final_score"]
+                actual_wickets = match["actual_wickets"]
+                wicket_error = pred.predicted_wickets - actual_wickets
                 low, high = pred.score_range
                 match_results.append({
                     "match_id": match["match_id"],
@@ -171,6 +173,10 @@ def run_backtest(max_matches=100, match_format="mens_t20"):
                     "actual": actual,
                     "error": pred.predicted_final_score - actual,
                     "abs_error": abs(pred.predicted_final_score - actual),
+                    "predicted_wickets": pred.predicted_wickets,
+                    "actual_wickets": actual_wickets,
+                    "wicket_error": wicket_error,
+                    "wicket_abs_error": abs(wicket_error),
                     "in_range": low <= actual <= high,
                     "range_width": high - low,
                 })
@@ -189,6 +195,7 @@ def compute_metrics(results):
             return None
         errors = [r["error"] for r in rows]
         abs_err = [r["abs_error"] for r in rows]
+        wicket_errors = [r["wicket_error"] for r in rows]
         mae = sum(abs_err) / n
         rmse = math.sqrt(sum(e ** 2 for e in errors) / n)
         bias = sum(errors) / n
@@ -210,6 +217,10 @@ def compute_metrics(results):
             "mae": round(mae, 1),
             "rmse": round(rmse, 1),
             "bias": round(bias, 1),
+            "wicket_mae": round(sum(abs(error) for error in wicket_errors) / n, 2),
+            "wicket_rmse": round(math.sqrt(sum(error ** 2 for error in wicket_errors) / n), 2),
+            "wicket_bias": round(sum(wicket_errors) / n, 2),
+            "exact_wicket_rate": round(100 * sum(error == 0 for error in wicket_errors) / n, 1),
             "hit_rate": round(hit_rate, 1),
             "avg_width": round(avg_width, 1),
             "avg_range_width": round(avg_width, 1),
@@ -244,6 +255,12 @@ def generate_summary(metrics):
     bias_dir = "overshoots" if ov["bias"] > 0 else "undershoots"
     lines.append(
         f"Bias is {ov['bias']:+.1f} runs (the model {bias_dir} on average)."
+    )
+    lines.append(
+        f"Final-wicket MAE is {ov['wicket_mae']:.2f} wickets, with a signed "
+        f"bias of {ov['wicket_bias']:+.2f} wickets (predicted minus actual). "
+        f"Exact final-wicket counts occur in {ov['exact_wicket_rate']:.1f}% "
+        "of checkpoint predictions."
     )
 
     lines.append(

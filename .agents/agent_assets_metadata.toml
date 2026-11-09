@@ -1,0 +1,212 @@
+uploads = []
+generated = []
+
+[[outputs]]
+id = "MNe1lMKTE2nXvCQE7O036"
+uri = "file://generated-artifacts/fielding/report.html"
+type = "html"
+title = "CricPredict fielding intelligence evidence report"
+description = "Stage-by-stage audit, real data coverage, 950-fixture shadow comparison, limitations and test results."
+logical_id = "61f6f69d-f9d4-4552-ad74-2b71e98b9d87"
+content_hash = "sha256:fa27b4b1c75ef5d73abf5669d74ba4f18cf8a8fad845a084328ac2144d3fb3d8"
+size = 12820
+mtime_ms = 1793872159483
+storage_uri = "gcs://replit-rams-assets-sisko/rams/assets/repl:b407f9d4-a912-4514-9106-fd10bd03162e/61f6f69d-f9d4-4552-ad74-2b71e98b9d87/47a06ad0-de1e-4711-b5b4-a823e6e0d67f"
+storage_version_token = "1793872203778603"
+content_type = "text/html"
+
+[[outputs]]
+id = "NZ9No_l4HZfPnlFCCX_JS"
+uri = "file://generated-artifacts/wicket-audit/report.html"
+type = "html"
+title = "CricPredict wicket diagnostic and ablation audit"
+description = "Root-cause analysis, six charts, all eight ablations, chronological comparisons, uncertainty and leakage limitations. No production changes."
+logical_id = "2d391d8b-fc28-4830-8798-7d3352777e3b"
+content_hash = "sha256:8f43f985e5ae497a84b965e6fe45559beb1fae3e9629f6a214fae3535df781ed"
+size = 404578
+mtime_ms = 1793876591428
+storage_uri = "gcs://replit-rams-assets-sisko/rams/assets/repl:b407f9d4-a912-4514-9106-fd10bd03162e/2d391d8b-fc28-4830-8798-7d3352777e3b/d95df607-b5c5-41f7-bfaa-5e19c53e4eaa"
+storage_version_token = "1793876593408845"
+content_type = "text/html"
+
+[[outputs]]
+id = "VlgbFKt2CevTeF9Ij_IjZ"
+uri = "file://generated-artifacts/wicket-audit/comparison-metrics.csv"
+type = "table"
+title = "Baseline versus experimental metrics"
+description = "96 comparison rows across four formats, eight variants and three evaluation lanes; wicket and score errors, RMSE and interval coverage."
+logical_id = "4b3699b6-5346-40b5-88dd-856377355d7c"
+content_hash = "sha256:0c48b71df4412e296c9a0e4406b936cda19c69decfd6414784254fed825d603b"
+size = 12558
+mtime_ms = 1793876547328
+storage_uri = "gcs://replit-rams-assets-sisko/rams/assets/repl:b407f9d4-a912-4514-9106-fd10bd03162e/4b3699b6-5346-40b5-88dd-856377355d7c/55f63a7a-47b6-4789-9591-b5bd35b8501f"
+storage_version_token = "1793876595077971"
+content_type = "text/csv"
+
+[[outputs]]
+id = "RD0J_LrLQb-6ealBB_0EH"
+uri = "file://generated-artifacts/wicket-audit/ablation-predictions.csv"
+type = "table"
+title = "All paired experimental predictions"
+description = "43,200 prediction records with fixture IDs, dates, checkpoints, variants, actual targets and signed errors."
+logical_id = "c6dfd13a-a9ca-4efe-b78a-ef2b87ec6e47"
+content_hash = "sha256:8bbbadcae5134a6dd3b53136aa9774673fffc2766138bddef1baae1af2773a00"
+size = 4524918
+mtime_ms = 1793876446962
+storage_uri = "gcs://replit-rams-assets-sisko/rams/assets/repl:b407f9d4-a912-4514-9106-fd10bd03162e/c6dfd13a-a9ca-4efe-b78a-ef2b87ec6e47/a8bf58cd-78de-4a20-88d7-cf2330581e92"
+storage_version_token = "1793876596567313"
+content_type = "text/csv"
+
+[[outputs]]
+id = "AYpB6P_JuJmRa40X3UUBK"
+uri = "file://generated-artifacts/wicket-phase2/report.html"
+type = "html"
+title = "Wicket Calibration Phase 2 — Evidence and Limitations"
+description = "Full comparisons, phase/checkpoint diagnostics, early-all-out eligibility, conditional hazards, late-innings regressions and source-availability limits."
+logical_id = "7e0062ef-633a-44e1-922a-31359bb46f57"
+content_hash = "sha256:13bd450049c5c90a178096c6bfc077ad30364b0e6f94879fbf1ec79716ca6a03"
+size = 755776
+mtime_ms = 1793878793082
+storage_uri = "gcs://replit-rams-assets-sisko/rams/assets/repl:b407f9d4-a912-4514-9106-fd10bd03162e/7e0062ef-633a-44e1-922a-31359bb46f57/95499cdc-b021-430e-a76d-372f61d499dc"
+storage_version_token = "1793878794597089"
+content_type = "text/html"
+
+[[outputs]]
+id = "LkZ7FtYSkNbNygyS7MuZ-"
+uri = "file://generated-artifacts/wicket-phase2/comparison-metrics.csv"
+type = "table"
+title = "Phase 2 — All Model Comparison Metrics"
+description = "Nine experimental configurations across four formats: wicket and score errors, bias, exact accuracy and interval coverage."
+logical_id = "9b5495e2-1d55-470b-b725-0e4053f9d7bf"
+content_hash = "sha256:78a63dd78789a3a32c2694568135edb6cae1cda263e5cd393d341c63121a4c87"
+size = 7295
+mtime_ms = 1793878771691
+storage_uri = "gcs://replit-rams-assets-sisko/rams/assets/repl:b407f9d4-a912-4514-9106-fd10bd03162e/9b5495e2-1d55-470b-b725-0e4053f9d7bf/daa9143a-712f-4d3a-9892-7e75066b6c97"
+storage_version_token = "1793878796051774"
+content_type = "text/csv"
+
+[[outputs]]
+id = "bGOrrolLfaa15ourg8bDd"
+uri = "file://generated-artifacts/wicket-phase2/predictions.csv"
+type = "table"
+title = "Phase 2 — Paired Forecasts"
+description = "19,485 paired forecast records from 400 distinct historical first innings, with matching fixtures and checkpoints."
+logical_id = "c6b8f1db-70c4-4eec-a06c-353c7668611a"
+content_hash = "sha256:9724e7d65a2f8a798ec0747c6d1a4f98b39dd2e558684b3a5ec2bb870e226417"
+size = 3541854
+mtime_ms = 1793878014637
+storage_uri = "gcs://replit-rams-assets-sisko/rams/assets/repl:b407f9d4-a912-4514-9106-fd10bd03162e/c6b8f1db-70c4-4eec-a06c-353c7668611a/28604ef1-ccce-4266-85f3-6874273e70c4"
+storage_version_token = "1793878797436914"
+content_type = "text/csv"
+
+[[outputs]]
+id = "QDW36Q2QgMJrbbxAGT6nT"
+uri = "file://generated-artifacts/wicket-phase2/conditional-hazards.csv"
+type = "table"
+title = "Historical Conditional Dismissal Hazards"
+description = "Training-only exposures grouped by exact over, wickets remaining, run-rate bucket and recent dismissals."
+logical_id = "d97942f8-9f25-45b4-bc6e-4a88e8fe9739"
+content_hash = "sha256:15406abde76088c2028f16ccf096cea7eb678a785ec260d71d49b788430f2324"
+size = 189805
+mtime_ms = 1793878771621
+storage_uri = "gcs://replit-rams-assets-sisko/rams/assets/repl:b407f9d4-a912-4514-9106-fd10bd03162e/d97942f8-9f25-45b4-bc6e-4a88e8fe9739/340a9669-e1a2-46ab-9a80-1910a88ed65f"
+storage_version_token = "1793878798878197"
+content_type = "text/csv"
+
+[[outputs]]
+id = "5EDToGssSNnYuZ2inskaN"
+uri = "file://generated-artifacts/wicket-phase2-verification/20261105T114851Z/verification-metrics.csv"
+type = "table"
+title = "Phase 2 Verification — Previous vs Fresh Rerun"
+description = "All 36 format/configuration comparisons match exactly. Includes previous and rerun run/wicket metrics with zero differences."
+logical_id = "4d79aa1a-7053-4a96-a3b9-9c9cf2cd470f"
+content_hash = "sha256:e3681a70d8bbc717bbb7b99d6f0f58aa21fbc1c4a0217d7d7d564be856bf456c"
+size = 13606
+mtime_ms = 1793879865829
+storage_uri = "gcs://replit-rams-assets-sisko/rams/assets/repl:b407f9d4-a912-4514-9106-fd10bd03162e/4d79aa1a-7053-4a96-a3b9-9c9cf2cd470f/40ab3658-769b-4fec-aa35-de506b3e8b3c"
+storage_version_token = "1793879875932389"
+content_type = "text/csv"
+
+[[outputs]]
+id = "CTjSaER760mekHdjJ_IGI"
+uri = "file://generated-artifacts/linkedin-script/CricPredict_LinkedIn_Revised.pdf"
+type = "pdf"
+title = "Revised LinkedIn Video Script & Post"
+description = "Recording-ready narration, revised LinkedIn caption, screenshot timings and factual corrections. Searchable four-page PDF."
+logical_id = "d18105a2-8ea0-4d2e-95f0-606305438be1"
+content_hash = "sha256:fe89aee9921683fb584918d7a53d84a30ce1e6224e08db5458484a8b154bdbee"
+size = 15521
+mtime_ms = 1793888431792
+storage_uri = "gcs://replit-rams-assets-sisko/rams/assets/repl:b407f9d4-a912-4514-9106-fd10bd03162e/d18105a2-8ea0-4d2e-95f0-606305438be1/176d62a3-4668-4264-96c2-774e84109592"
+storage_version_token = "1793888493827597"
+content_type = "application/pdf"
+
+[[outputs]]
+id = "kEI40pweBA4_nS5pZhgef"
+uri = "file://generated-artifacts/linkedin-script/CricPredict_LinkedIn_Revised.docx"
+type = "word_document"
+title = "Editable LinkedIn Script"
+description = "Word version of the revised narration, post and editor notes for your own changes."
+logical_id = "58f2ae13-2c7a-41d1-b697-7c423d524f36"
+content_hash = "sha256:29e7e1f158a3229f19be92b1f1e6fa13364ba47281acf3bac4e9acaf85eaa5ac"
+size = 4619
+mtime_ms = 1793888431796
+storage_uri = "gcs://replit-rams-assets-sisko/rams/assets/repl:b407f9d4-a912-4514-9106-fd10bd03162e/58f2ae13-2c7a-41d1-b697-7c423d524f36/5aab503e-baa8-40ba-92ad-793f977d9b8e"
+storage_version_token = "1793888495228876"
+content_type = "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+
+[[outputs]]
+id = "7dtkwyTK0SC3q67Xz5GuJ"
+uri = "file://generated-artifacts/linkedin-script/CricPredict_LinkedIn_With_Statistics.pdf"
+type = "pdf"
+title = "Updated LinkedIn Script — PDF"
+description = "Identifies the match as the first ODI of India's 2026 tour to New Zealand in both the narration and LinkedIn post."
+logical_id = "5ebc7740-d538-426e-8240-ac30b54238dd"
+content_hash = "sha256:683bf80dede1723d91f91cb9bf60f3ca32c2976bc89c6c6580b9575935430a64"
+size = 20190
+mtime_ms = 1793954852921
+storage_uri = "gcs://replit-rams-assets-sisko/rams/assets/repl:b407f9d4-a912-4514-9106-fd10bd03162e/5ebc7740-d538-426e-8240-ac30b54238dd/360bb7c6-9113-4e40-bb6e-66750e30168d"
+storage_version_token = "1793954863908882"
+content_type = "application/pdf"
+
+[[outputs]]
+id = "x92UtksCNmh3OPCS4BqXL"
+uri = "file://generated-artifacts/linkedin-script/CricPredict_LinkedIn_With_Statistics.docx"
+type = "word_document"
+title = "Updated LinkedIn Script — Editable"
+description = "Editable script with the match detail added."
+logical_id = "86f39186-e80f-46f4-84a0-4ab734d07c34"
+content_hash = "sha256:0375807fbb93b4cb1febe54486f6fc8ed37ae766e99d016cec02b38be006a25f"
+size = 5476
+mtime_ms = 1793954852925
+storage_uri = "gcs://replit-rams-assets-sisko/rams/assets/repl:b407f9d4-a912-4514-9106-fd10bd03162e/86f39186-e80f-46f4-84a0-4ab734d07c34/374146a2-7d68-4f76-b0a3-4199bfbbd699"
+storage_version_token = "1793954865313480"
+content_type = "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+
+[[outputs]]
+id = "a3Tr9mMSQhgj3vWQUDtg0"
+uri = "file://generated-artifacts/paired-current/report.html"
+type = "html"
+title = "Paired baseline vs experimental comparison"
+description = "100 matched first innings per format, with run and wicket errors, checkpoint tables, uncertainty intervals and validation limits."
+logical_id = "74eae403-70d2-42b1-967b-fc0d38c2dca6"
+content_hash = "sha256:1eff167d2b0d3053a5ea17e97f1af8a1c4a3daab55c6c804ee4b606e38d68a94"
+size = 11081
+mtime_ms = 1794208097826
+storage_uri = "gcs://replit-rams-assets-sisko/rams/assets/repl:b407f9d4-a912-4514-9106-fd10bd03162e/74eae403-70d2-42b1-967b-fc0d38c2dca6/5277333b-e717-441b-b8a7-da6a33698697"
+storage_version_token = "1794208177907064"
+content_type = "text/html"
+
+[[outputs]]
+id = "EkbB8KFEsDvuGwchJk4ov"
+uri = "file://generated-artifacts/paired-current/comparison.csv"
+type = "table"
+title = "Side-by-side comparison tables"
+description = "All three model/input configurations on identical observations across four formats."
+logical_id = "68acbaea-e6b2-48ff-aeca-762973fc5694"
+content_hash = "sha256:5b46675900598bcd8e99688f5e0131b325ba6b4347fc2a70d16d45c6e0d26784"
+size = 2532
+mtime_ms = 1794208097824
+storage_uri = "gcs://replit-rams-assets-sisko/rams/assets/repl:b407f9d4-a912-4514-9106-fd10bd03162e/68acbaea-e6b2-48ff-aeca-762973fc5694/835b8cae-250d-4d3c-bfeb-aaab7c545fff"
+storage_version_token = "1794208179358630"
+content_type = "text/csv"

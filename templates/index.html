@@ -239,6 +239,7 @@
             </select>
             <div id="liveMatchShimmer" class="skeleton-shimmer-block"></div>
             <div id="liveMatchStatus" class="mt-2"></div>
+            <div id="matchDisruptionNotice" class="alert alert-warning mt-3 mb-0" role="status" hidden></div>
             <div id="matchLoadingSpinner" class="text-center py-3" style="display: none;">
                 <div class="spinner-border spinner-border-sm text-primary" role="status"></div>
                 <small class="text-muted ms-2">Fetching match data...</small>
@@ -297,19 +298,19 @@
                         </div>
                     </div>
                     
-                    <div class="row g-3">
+                    <div class="row g-3 match-score-fields">
                         <div class="col-4 col-md-4">
                             <label for="current_score" class="form-label">Current Score</label>
                             <input type="number" class="form-control form-control-lg" id="current_score" name="current_score" min="0" max="500" value="{{ form_data.get('current_score', '0') }}" required>
                         </div>
                         <div class="col-4 col-md-4">
                             <label for="wickets_fallen" class="form-label">Wickets Fallen</label>
-                            <div class="input-group">
-                                <button type="button" class="btn btn-outline-secondary" id="wkt-minus-btn" onclick="adjustWickets(-1)" {% if form_data.get('wickets_fallen', '0') == '0' %}disabled{% endif %}>
+                            <div class="input-group wicket-stepper">
+                                <button type="button" class="btn btn-outline-secondary" id="wkt-minus-btn" aria-label="Decrease wickets" onclick="adjustWickets(-1)" {% if form_data.get('wickets_fallen', '0') == '0' %}disabled{% endif %}>
                                     <i class="bi bi-dash"></i>
                                 </button>
                                 <input type="number" class="form-control text-center" id="wickets_fallen" name="wickets_fallen" min="0" max="9" value="{{ form_data.get('wickets_fallen', '0') }}" required>
-                                <button type="button" class="btn btn-outline-secondary" id="wkt-plus-btn" onclick="adjustWickets(1)" {% if form_data.get('wickets_fallen', '0') == '9' %}disabled{% endif %}>
+                                <button type="button" class="btn btn-outline-secondary" id="wkt-plus-btn" aria-label="Increase wickets" onclick="adjustWickets(1)" {% if form_data.get('wickets_fallen', '0') == '9' %}disabled{% endif %}>
                                     <i class="bi bi-plus"></i>
                                 </button>
                             </div>
@@ -1354,6 +1355,7 @@ function loadMatchData() {
     }
     
     spinner.style.display = 'block';
+    showMatchDisruption(null);
     // Clear the previous match, including chase targets and squad selections.
     document.getElementById('live_match_id').value = '';
     ['current_score', 'wickets_fallen', 'overs_completed', 'target', 'bowling_team_11'].forEach(id => {
@@ -1438,7 +1440,17 @@ function loadMatchData() {
         });
 }
 
+function showMatchDisruption(match) {
+    const notice = document.getElementById('matchDisruptionNotice');
+    notice.hidden = !match?.game_disrupted;
+    // Provider text is untrusted; never interpolate it into HTML.
+    notice.textContent = notice.hidden ? '' : 'Game disrupted' +
+        (match.disruption_reason ? ' — ' + match.disruption_reason : ' — Reason unavailable.') +
+        ' Scores and players reflect the latest available update.';
+}
+
 function populateFormFromMatch(match) {
+    showMatchDisruption(match);
     if (match.current_score !== undefined) {
         document.getElementById('current_score').value = match.current_score;
     }

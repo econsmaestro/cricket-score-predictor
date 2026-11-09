@@ -608,3 +608,7 @@ class MatchAlert(db.Model):
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
     user = db.relationship('User', backref='match_alerts')
+
+
+# Register additive fielding research tables with the existing database.
+import fielding_intelligence.models  # noqa: E402,F401

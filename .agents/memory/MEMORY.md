@@ -3,3 +3,4 @@
 - [GitHub transfer integrity](github-transfer-integrity.md) — verify blob and tree hashes when using the integration instead of authenticated Git push.
 - [Match selection](match-selection.md) — card Predict must autofill the selected match and format, leaving only prediction submission.
 - [Referral policy](referral-programme.md) — Singapore-month caps, queued rewards, calendar expiry stacking and honest identity-assurance limits.
+- [Fielding evidence](fielding-evidence.md) — fielding ratings must have a justifiable evidence base rather than arbitrary team scores.
