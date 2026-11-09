@@ -291,6 +291,17 @@
                                 <option value="{{ team }}" {% if form_data.get('fielding_team') == team %}selected{% endif %}>{{ team }}</option>
                                 {% endfor %}
                             </select>
+                            <div id="fieldingRatingBadge" class="mt-2 px-2 py-2 rounded" style="display:none; background:rgba(26,107,58,0.08); border:1px solid rgba(26,107,58,0.18); font-size:12px;">
+                                <div class="d-flex align-items-center gap-2 flex-wrap mb-1">
+                                    <span class="badge" id="frBadgeLevel" style="font-size:11px;">—</span>
+                                    <span class="fw-bold" id="frScore" style="font-size:13px;">—</span>
+                                    <span class="text-muted" id="frSource" style="font-size:11px;"></span>
+                                </div>
+                                <div class="progress mb-1" style="height:4px; background:rgba(255,255,255,0.1);">
+                                    <div class="progress-bar" id="frBar" style="width:0%; transition:width .4s;"></div>
+                                </div>
+                                <div class="text-muted" id="frStats" style="font-size:11px;"></div>
+                            </div>
                         </div>
                         <div class="col-12 col-md-4" id="targetContainer" style="display: none;">
                             <label for="target" class="form-label">Target to Chase</label>
@@ -696,6 +707,28 @@
                 </div>
                 <div class="text-center mt-3">
                     <a href="{{ url_for('demo_prediction') }}" class="btn btn-success px-4"><i class="bi bi-play-circle-fill me-2"></i>Try a Live Demo Prediction</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12">
+            <div class="form-card" id="fieldingRatingsSection">
+                <h2 class="section-title"><i class="bi bi-shield-check"></i> Team Fielding Ratings</h2>
+                <p class="text-muted small mb-3">Efficiency scores derived from <strong>7,700+ innings</strong> of Cricsheet ball-by-ball data — catches, run-outs, stumpings, and runs-allowed rate. Blended with backtest prediction-error calibration. <span class="badge bg-success" style="font-size:10px;">5,094 players tracked</span></p>
+                <div class="d-flex gap-2 flex-wrap mb-3 align-items-center">
+                    <div>
+                        <select class="form-select form-select-sm" id="frTableFormat" style="width:auto; display:inline-block;">
+                            <option value="mens_t20">Men's T20I</option>
+                            <option value="womens_t20">Women's T20I</option>
+                            <option value="mens_odi">Men's ODI</option>
+                            <option value="womens_odi">Women's ODI</option>
+                        </select>
+                    </div>
+                    <input type="text" class="form-control form-control-sm" id="frTableSearch" placeholder="Search team…" style="max-width:160px;">
+                    <span class="text-muted small ms-auto" id="frTableCount"></span>
+                </div>
+                <div id="frTableContainer">
+                    <div class="text-center text-muted py-3"><span class="spinner-border spinner-border-sm me-2"></span>Loading ratings…</div>
                 </div>
             </div>
         </div>
@@ -1871,5 +1904,176 @@ $(document).ready(function() {
 window.addEventListener('pageshow', function() {
     document.getElementById('predictionLoadingOverlay').classList.remove('active');
 });
+
+// ── Fielding ratings ────────────────────────────────────────────────────────
+
+let _frCache = null;
+
+function _frEffColor(eff) {
+    if (eff >= 0.91) return { bg: '#198754', label: 'Excellent' };
+    if (eff >= 0.87) return { bg: '#0d6efd', label: 'Good' };
+    if (eff >= 0.83) return { bg: '#fd7e14', label: 'Average' };
+    return { bg: '#dc3545', label: 'Below Avg' };
+}
+
+function _frBarPct(eff) {
+    // Map [0.65, 0.98] → [0, 100]
+    return Math.round(Math.max(0, Math.min(100, (eff - 0.65) / 0.33 * 100)));
+}
+
+function updateFieldingBadge() {
+    const team = document.getElementById('fielding_team').value;
+    const badge = document.getElementById('fieldingRatingBadge');
+    if (!team) { badge.style.display = 'none'; return; }
+
+    fetch('/fielding/team/' + encodeURIComponent(team))
+        .then(r => r.json())
+        .then(data => {
+            if (!data.success) { badge.style.display = 'none'; return; }
+            const fmts = data.formats;
+            const fmt = currentFormat;
+            // Pick exact format, then same gender, then any
+            let entry = fmts[fmt];
+            if (!entry) {
+                const isW = fmt.includes('womens');
+                entry = Object.entries(fmts).find(([k]) => k.includes('womens') === isW)?.[1];
+            }
+            if (!entry) entry = Object.values(fmts)[0];
+            if (!entry) { badge.style.display = 'none'; return; }
+
+            const eff = entry.efficiency;
+            const col = _frEffColor(eff);
+            const pct = _frBarPct(eff);
+
+            document.getElementById('frBadgeLevel').textContent = col.label;
+            document.getElementById('frBadgeLevel').style.background = col.bg;
+            document.getElementById('frScore').textContent = 'Fielding: ' + eff.toFixed(3);
+            document.getElementById('frBar').style.width = pct + '%';
+            document.getElementById('frBar').style.background = col.bg;
+
+            const src = entry.source === 'cricsheet' ? 'Cricsheet (' + (entry.innings || '?') + ' inn)' : 'Calibrated';
+            document.getElementById('frSource').textContent = src;
+
+            let statsStr = '';
+            if (entry.dismissals_per_innings) statsStr += entry.dismissals_per_innings.toFixed(2) + ' dis/inn';
+            if (entry.rpo_allowed) statsStr += ' · ' + entry.rpo_allowed.toFixed(2) + ' RPO';
+            document.getElementById('frStats').textContent = statsStr;
+
+            badge.style.display = 'block';
+        })
+        .catch(() => { badge.style.display = 'none'; });
+}
+
+document.getElementById('fielding_team').addEventListener('change', updateFieldingBadge);
+// Also refresh badge when format changes
+const _origFormatChange = window._onFormatChange;
+window._onFormatChange = function(fmt) {
+    if (_origFormatChange) _origFormatChange(fmt);
+    updateFieldingBadge();
+};
+
+// Fielding ratings table
+function buildFrTable(allTeams, fmt, search) {
+    const rows = Object.entries(allTeams)
+        .map(([team, fmts]) => {
+            let e = fmts[fmt];
+            if (!e) {
+                const isW = fmt.includes('womens');
+                const alt = Object.entries(fmts).find(([k]) => k.includes('womens') === isW);
+                if (alt) e = alt[1];
+            }
+            return e ? { team, ...e } : null;
+        })
+        .filter(r => r && (!search || r.team.toLowerCase().includes(search.toLowerCase())))
+        .sort((a, b) => b.efficiency - a.efficiency);
+
+    document.getElementById('frTableCount').textContent = rows.length + ' teams';
+
+    if (!rows.length) {
+        document.getElementById('frTableContainer').innerHTML = '<p class="text-muted small text-center py-3">No data for this filter.</p>';
+        return;
+    }
+
+    const tbody = rows.map((r, i) => {
+        const col = _frEffColor(r.efficiency);
+        const pct = _frBarPct(r.efficiency);
+        const dpi = r.dismissals_per_innings ? r.dismissals_per_innings.toFixed(2) : '—';
+        const rpo = r.rpo_allowed ? r.rpo_allowed.toFixed(2) : '—';
+        const inn = r.innings || r.matches || '—';
+        const src = r.source === 'cricsheet' ? '<span class="badge bg-success" style="font-size:9px;">CS</span>' : '<span class="badge bg-secondary" style="font-size:9px;">BT</span>';
+        return `<tr>
+            <td class="text-muted" style="font-size:11px;">${i+1}</td>
+            <td style="font-size:12px; font-weight:500;">${r.team}</td>
+            <td>
+                <div class="d-flex align-items-center gap-2">
+                    <span class="badge" style="background:${col.bg}; font-size:10px; min-width:62px;">${col.label}</span>
+                    <span style="font-size:12px; font-family:monospace;">${r.efficiency.toFixed(3)}</span>
+                    <div class="progress flex-grow-1" style="height:4px; background:rgba(255,255,255,0.1); min-width:40px;">
+                        <div class="progress-bar" style="width:${pct}%; background:${col.bg};"></div>
+                    </div>
+                </div>
+            </td>
+            <td class="text-center" style="font-size:11px;">${dpi}</td>
+            <td class="text-center" style="font-size:11px;">${rpo}</td>
+            <td class="text-center" style="font-size:11px;">${inn}</td>
+            <td class="text-center">${src}</td>
+        </tr>`;
+    }).join('');
+
+    document.getElementById('frTableContainer').innerHTML = `
+        <div style="max-height:380px; overflow-y:auto;">
+        <table class="table table-sm mb-0" style="font-size:12px;">
+            <thead style="position:sticky;top:0;background:var(--bs-body-bg,#1a1a2e);z-index:1;">
+                <tr>
+                    <th style="width:28px;">#</th>
+                    <th>Team</th>
+                    <th>Fielding Efficiency</th>
+                    <th class="text-center">Dis/Inn</th>
+                    <th class="text-center">RPO</th>
+                    <th class="text-center">Inn</th>
+                    <th class="text-center">Src</th>
+                </tr>
+            </thead>
+            <tbody>${tbody}</tbody>
+        </table>
+        </div>`;
+}
+
+function loadFrTable() {
+    if (_frCache) {
+        const fmt = document.getElementById('frTableFormat').value;
+        const search = document.getElementById('frTableSearch').value;
+        buildFrTable(_frCache, fmt, search);
+        return;
+    }
+    fetch('/fielding/stats')
+        .then(r => r.json())
+        .then(data => {
+            if (!data.success) return;
+            _frCache = data.teams;
+            const fmt = document.getElementById('frTableFormat').value;
+            const search = document.getElementById('frTableSearch').value;
+            buildFrTable(_frCache, fmt, search);
+        })
+        .catch(() => {
+            document.getElementById('frTableContainer').innerHTML = '<p class="text-muted small text-center py-3">Could not load ratings.</p>';
+        });
+}
+
+document.getElementById('frTableFormat').addEventListener('change', loadFrTable);
+document.getElementById('frTableSearch').addEventListener('input', loadFrTable);
+
+// Lazy-load the table when section scrolls into view
+const _frObserver = new IntersectionObserver(entries => {
+    if (entries[0].isIntersecting) {
+        loadFrTable();
+        _frObserver.disconnect();
+    }
+}, { threshold: 0.1 });
+const _frSection = document.getElementById('fieldingRatingsSection');
+if (_frSection) _frObserver.observe(_frSection);
+
+// Trigger badge for pre-filled fielding team (page reload with form data)
+if (document.getElementById('fielding_team').value) updateFieldingBadge();
 </script>
 {% endblock %}

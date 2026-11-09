@@ -153,8 +153,13 @@ TEAM_FIELDING_EFFICIENCY = {
 
 FIELDING_TEAMS = sorted(TEAM_FIELDING_EFFICIENCY.keys())
 
-def get_fielding_modifier(fielding_team: str) -> dict:
-    efficiency = TEAM_FIELDING_EFFICIENCY.get(fielding_team, 0.85)
+def get_fielding_modifier(fielding_team: str, match_format: str = "mens_t20") -> dict:
+    try:
+        from fielding_stats import get_team_efficiency
+        computed = get_team_efficiency(fielding_team, match_format)
+        efficiency = computed if computed is not None else TEAM_FIELDING_EFFICIENCY.get(fielding_team, 0.85)
+    except Exception:
+        efficiency = TEAM_FIELDING_EFFICIENCY.get(fielding_team, 0.85)
     drop_rate = 1.0 - efficiency
     baseline_drop = 0.15
     relative_drop = drop_rate / baseline_drop
@@ -728,7 +733,7 @@ def predict_score(match_state: MatchState) -> PredictionResult:
     max_overs = match_state.max_overs
     is_odi = match_state.is_odi
     
-    fielding_mod = get_fielding_modifier(match_state.fielding_team) if match_state.fielding_team else get_fielding_modifier("")
+    fielding_mod = get_fielding_modifier(match_state.fielding_team, match_state.match_format) if match_state.fielding_team else get_fielding_modifier("", match_state.match_format)
     
     overs_remaining = float(max_overs) - match_state.overs_completed
     default_rr = 5.5 if is_odi else 8.0

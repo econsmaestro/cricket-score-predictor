@@ -2725,3 +2725,107 @@ def backtest_export():
         as_attachment=True,
         download_name=f"backtest_{match_format}_innings{innings}_100_matches.csv",
     )
+
+
+# ---------------------------------------------------------------------------
+# Fielding stats routes
+# ---------------------------------------------------------------------------
+
+@app.route("/fielding/stats")
+def fielding_stats():
+    """Return computed team fielding ratings for all formats."""
+    from fielding_stats import get_all_team_stats
+    try:
+        data = get_all_team_stats()
+        return jsonify(success=True, teams=data)
+    except Exception as exc:
+        return jsonify(success=False, error=str(exc)), 500
+
+
+@app.route("/fielding/team/<team_name>")
+def fielding_team(team_name):
+    """Return fielding ratings for a specific team across all formats."""
+    from fielding_stats import get_all_team_stats
+    # UI uses "India W", "UAE" etc.; Cricsheet uses "India", "United Arab Emirates"
+    _TEAM_ALIASES = {
+        "UAE": "United Arab Emirates",
+        "USA": "United States of America",
+    }
+    try:
+        data = get_all_team_stats()
+        team_data = data.get(team_name)
+        is_womens = team_name.endswith(" W")
+
+        # Try alias (UAE → United Arab Emirates)
+        if team_data is None:
+            canonical = _TEAM_ALIASES.get(team_name)
+            if canonical:
+                team_data = data.get(canonical)
+
+        # Women's teams: "India W" → look up "India", filter to womens formats
+        if team_data is None and is_womens:
+            base = team_name[:-2].strip()
+            base_data = data.get(base) or data.get(_TEAM_ALIASES.get(base, ""))
+            if base_data:
+                team_data = {k: v for k, v in base_data.items() if "womens" in k} or base_data
+
+        if team_data is None:
+            return jsonify(success=False, error=f"No data for team: {team_name}"), 404
+        return jsonify(success=True, team=team_name, formats=team_data)
+    except Exception as exc:
+        return jsonify(success=False, error=str(exc)), 500
+
+
+@app.route("/fielding/player/<player_name>")
+def fielding_player(player_name):
+    """Return fielding dismissal stats for a specific player."""
+    from fielding_stats import get_player_stats
+    stats = get_player_stats(player_name)
+    if stats is None:
+        return jsonify(success=False, error=f"No stats for: {player_name}"), 404
+    return jsonify(success=True, player=player_name, stats=stats)
+
+
+@app.route("/fielding/top")
+def fielding_top():
+    """Return top fielders sorted by a stat (catches, run_out_direct, etc.)."""
+    from fielding_stats import get_top_fielders
+    fmt = request.args.get("format")
+    stat = request.args.get("stat", "total_fielding_dismissals")
+    n = min(int(request.args.get("n", 50)), 200)
+    try:
+        rows = get_top_fielders(fmt=fmt, stat=stat, n=n)
+        return jsonify(success=True, stat=stat, format=fmt, players=rows)
+    except Exception as exc:
+        return jsonify(success=False, error=str(exc)), 500
+
+
+@app.route("/fielding/rebuild", methods=["POST"])
+def fielding_rebuild():
+    """Recompute fielding ratings (Cricsheet + backtest blend). Pass ?full=1 to re-download zips."""
+    from fielding_stats import rebuild_all, rebuild_ratings
+    force = request.args.get("full", "0") == "1"
+    try:
+        if force:
+            player_stats, ratings = rebuild_all(force_download=True)
+            source = "cricsheet+backtest"
+        else:
+            # Try Cricsheet first (zips already cached), fallback to backtest-only
+            try:
+                player_stats, ratings = rebuild_all(force_download=False)
+                source = "cricsheet+backtest"
+            except Exception:
+                ratings = rebuild_ratings()
+                player_stats = {}
+                source = "backtest_only"
+        team_count = len(ratings)
+        fmt_count = sum(len(v) for v in ratings.values())
+        return jsonify(
+            success=True,
+            source=source,
+            teams=team_count,
+            format_entries=fmt_count,
+            players=len(player_stats),
+        )
+    except Exception as exc:
+        return jsonify(success=False, error=str(exc)), 500
