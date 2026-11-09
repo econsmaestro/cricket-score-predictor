@@ -2709,9 +2709,29 @@ def fielding_stats():
 def fielding_team(team_name):
     """Return fielding ratings for a specific team across all formats."""
     from fielding_stats import get_all_team_stats
+    # UI uses "India W", "UAE" etc.; Cricsheet uses "India", "United Arab Emirates"
+    _TEAM_ALIASES = {
+        "UAE": "United Arab Emirates",
+        "USA": "United States of America",
+    }
     try:
         data = get_all_team_stats()
         team_data = data.get(team_name)
+        is_womens = team_name.endswith(" W")
+
+        # Try alias (UAE → United Arab Emirates)
+        if team_data is None:
+            canonical = _TEAM_ALIASES.get(team_name)
+            if canonical:
+                team_data = data.get(canonical)
+
+        # Women's teams: "India W" → look up "India", filter to womens formats
+        if team_data is None and is_womens:
+            base = team_name[:-2].strip()
+            base_data = data.get(base) or data.get(_TEAM_ALIASES.get(base, ""))
+            if base_data:
+                team_data = {k: v for k, v in base_data.items() if "womens" in k} or base_data
+
         if team_data is None:
             return jsonify(success=False, error=f"No data for team: {team_name}"), 404
         return jsonify(success=True, team=team_name, formats=team_data)
