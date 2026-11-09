@@ -9,6 +9,12 @@ Fielding ratings used in this app must be justifiable.
 
 **How to apply:** Do not justify arbitrary team values as observed statistics. Any proposed replacement should explain its evidence, calculation and limitations.
 
+Use only free data sources for the fielding model. Fielding estimates must reflect who is playing and allow performance to improve or worsen, rather than fixing a rating by team.
+
+**Why:** The user explicitly required free sources and explained that team fielding changes over time and depends on the players on the field.
+
+**How to apply:** Verify commercial reuse permissions, not just free website access. Use dated player-level evidence and the confirmed fielding lineup; leave unsupported abilities unavailable instead of inventing ratings.
+
 Keep the existing prediction engine as the baseline and new fielding work in shadow mode until the user approves a replacement. Do not deploy or publish it automatically.
 
 **Why:** The user explicitly approved modular implementation with this restriction, and said existing hardcoded ratings must not be removed before replacements are validated.
