@@ -28,7 +28,7 @@
       <ul class="mb-0">
         <li><strong>Account and sign-in details:</strong> email address, display name, profile image, and provider account identifiers when you sign in with Replit or, when enabled, Google.</li>
         <li><strong>Predictions and account activity:</strong> match format, venue, score and wickets entered, prediction results, saved prediction history, and feature usage. Predictions may be linked to your account when you are signed in.</li>
-        <li><strong>Pro and referral records:</strong> subscription status and period, Stripe customer/subscription identifiers, referral link attribution, qualification status, and Pro reward history. CricPredict does not receive or store full payment-card numbers.</li>
+        <li><strong>Pro and referral records:</strong> subscription status and period, Stripe customer/subscription identifiers, referral link attribution, qualification status, and Pro reward history. To screen referral eligibility and duplicate accounts, we store a one-way hash of a normalized email address. CricPredict does not receive or store full payment-card numbers.</li>
         <li><strong>Feedback and support:</strong> feedback text, optional contact email, bug-report descriptions, diagnostic details or screenshots you submit, and support-chat messages and attachments.</li>
         <li><strong>Technical and usage information:</strong> page path, a truncated hash derived from the request IP address, browser user-agent, referrer, device and browser category, and session or feature-event identifiers.</li>
       </ul>
@@ -39,6 +39,8 @@
       <ul class="mb-0">
         <li>Provide sign-in, predictions, saved history, Pro features, referrals, and support.</li>
         <li>Process subscription payments and keep subscription access in sync.</li>
+        <li>Use information received from Google or Replit sign-in, such as your name, email address, and profile image, to authenticate you and operate your account. We do not use this sign-in information for advertising or sell it.</li>
+        <li>Use account or alert email addresses for service communications when those emails are enabled, such as match alerts or reminders about earned Pro access.</li>
         <li>Respond to feedback and bug reports, diagnose errors, and improve the service.</li>
         <li>Measure page and feature usage, protect the service, investigate abuse, and meet legal obligations.</li>
       </ul>
@@ -66,7 +68,7 @@
     <div class="card border-0 shadow-sm mb-3"><div class="card-body p-4">
       <h2 class="h5 fw-bold">6. Retention and your choices</h2>
       <p>We do not currently apply one fixed retention period to every category of data. Information may be retained while needed to provide and secure the service, maintain prediction and referral records, handle support, and meet legal or accounting obligations.</p>
-      <p class="mb-0">You may request access to or correction or deletion of personal information by emailing <a href="mailto:talldudeplayspiano@gmail.com">talldudeplayspiano@gmail.com</a>. We may need to verify your identity and may retain information where required or permitted by law or necessary for legitimate service records. Requests are handled subject to applicable Singapore law, including the Personal Data Protection Act 2012.</p>
+      <p class="mb-0">We take reasonable steps to stop retaining or delete personal information when it is no longer needed for the purpose it was collected, unless retention is required or permitted by law. You may request access to or correction or deletion of personal information by emailing <a href="mailto:talldudeplayspiano@gmail.com">talldudeplayspiano@gmail.com</a>. We may need to verify your identity and may retain information where required or permitted by law or necessary for legitimate service records. Requests are handled subject to applicable Singapore law, including the Personal Data Protection Act 2012.</p>
     </div></div>
 
     <div class="card border-0 shadow-sm mb-3"><div class="card-body p-4">
