@@ -2287,6 +2287,12 @@ def privacy_policy():
     return render_template("privacy.html")
 
 
+@app.route("/terms-of-service")
+def terms_of_service():
+    """Terms of service page."""
+    return render_template("terms.html")
+
+
 @app.route("/robots.txt")
 def robots_txt():
     """Serve robots.txt for search engine crawlers."""
@@ -2319,6 +2325,7 @@ def sitemap_xml():
         ("/insights", "0.8", "weekly"),
         ("/about", "0.7", "monthly"),
         ("/privacy-policy", "0.5", "monthly"),
+        ("/terms-of-service", "0.5", "monthly"),
         ("/support-chat", "0.6", "monthly"),
     ]
     from flask import Response
