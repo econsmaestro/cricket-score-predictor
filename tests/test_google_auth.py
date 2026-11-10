@@ -45,3 +45,12 @@ def test_google_subject_mismatch_rejected(monkeypatch):
 def test_signin_chooser_always_offers_replit():
     resp = app.test_client().get("/auth/signin")
     assert resp.status_code == 200 and b"Continue with Replit" in resp.data
+
+
+def test_accepts_replit_style_secret_names(monkeypatch):
+    for k in ("GOOGLE_CLIENT_ID", "GOOGLE_CLIENT_SECRET"):
+        monkeypatch.delenv(k, raising=False)
+    assert not google_auth.google_configured()
+    monkeypatch.setenv("GOOGLE_OAUTH_CLIENT_ID", "id")
+    monkeypatch.setenv("GOOGLE_OAUTH_CLIENT_SECRET", "secret")
+    assert google_auth.google_configured()

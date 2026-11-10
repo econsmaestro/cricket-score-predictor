@@ -1,6 +1,7 @@
 """Optional "Continue with Google" sign-in (OpenID Connect) alongside Replit sign-in.
 
-Enabled only when GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET are set. Register
+Enabled only when GOOGLE_CLIENT_ID/GOOGLE_CLIENT_SECRET (or GOOGLE_OAUTH_CLIENT_ID/
+GOOGLE_OAUTH_CLIENT_SECRET) are set. Register
 https://<your-domain>/auth/google/authorized as an authorized redirect URI in Google Cloud.
 """
 import os
@@ -14,16 +15,21 @@ GOOGLE_PREFIX = "google:"  # keeps Google "sub" values from colliding with Repli
 GOOGLE_USERINFO = "https://openidconnect.googleapis.com/v1/userinfo"
 
 
+def _credential(name):
+    """Accept GOOGLE_CLIENT_* or the GOOGLE_OAUTH_CLIENT_* names Replit's secrets form uses."""
+    return os.environ.get(f"GOOGLE_{name}") or os.environ.get(f"GOOGLE_OAUTH_{name}")
+
+
 def google_configured():
-    return bool(os.environ.get("GOOGLE_CLIENT_ID") and os.environ.get("GOOGLE_CLIENT_SECRET"))
+    return bool(_credential("CLIENT_ID") and _credential("CLIENT_SECRET"))
 
 
 def make_google_blueprint():
     from replit_auth import UserSessionStorage
     bp = OAuth2ConsumerBlueprint(
         "google_auth", __name__,
-        client_id=os.environ["GOOGLE_CLIENT_ID"],
-        client_secret=os.environ["GOOGLE_CLIENT_SECRET"],
+        client_id=_credential("CLIENT_ID"),
+        client_secret=_credential("CLIENT_SECRET"),
         base_url="https://openidconnect.googleapis.com/",
         authorization_url="https://accounts.google.com/o/oauth2/v2/auth",
         authorization_url_params={"prompt": "select_account"},
