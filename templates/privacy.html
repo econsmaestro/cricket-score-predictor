@@ -1,95 +1,94 @@
 {% extends "base.html" %}
+
+{% block page_title %}Privacy Policy — CricPredict{% endblock %}
+{% block page_description %}Learn what information CricPredict collects, how it is used, and how to contact us about privacy requests.{% endblock %}
+
 {% block content %}
-<div class="row justify-content-center mt-4 mb-5">
-    <div class="col-lg-8">
+<div class="row justify-content-center py-4">
+  <div class="col-lg-9 col-xl-8">
+    <header class="mb-4">
+      <h1 class="fw-bold mb-2" style="color: var(--primary-color, #1a6b3a);">
+        <i class="bi bi-shield-check-fill me-2" aria-hidden="true"></i>Privacy Policy
+      </h1>
+      <p class="text-muted mb-0">CricPredict · Last updated November 10, 2026</p>
+    </header>
 
-        <div class="card shadow-sm mb-4">
-            <div class="card-body p-4">
-                <h1 class="fw-bold mb-1" style="color: var(--primary-color, #1a6b3a);">
-                    <i class="bi bi-shield-check-fill me-2"></i>Privacy Policy
-                </h1>
-                <p class="text-muted mb-0">Last updated: April 2026</p>
-            </div>
-        </div>
-
-        <div class="card shadow-sm mb-4">
-            <div class="card-body p-4">
-                <h2 class="h5 fw-bold mb-3">Overview</h2>
-                <p class="mb-0">Cricket Match Intelligence is a free, entertainment-focused cricket prediction tool. We take your privacy seriously and collect only the minimum data necessary to operate the service.</p>
-            </div>
-        </div>
-
-        <div class="card shadow-sm mb-4">
-            <div class="card-body p-4">
-                <h2 class="h5 fw-bold mb-3">What we collect</h2>
-                <ul class="list-unstyled mb-0">
-                    <li class="mb-3">
-                        <i class="bi bi-person-fill text-success me-2"></i>
-                        <strong>Account information (optional)</strong><br>
-                        <span class="text-muted ms-4">If you log in via Replit OAuth, we store your display name and profile image to personalise your experience. You can use the tool without logging in.</span>
-                    </li>
-                    <li class="mb-3">
-                        <i class="bi bi-chat-left-text-fill text-success me-2"></i>
-                        <strong>Feedback and bug reports</strong><br>
-                        <span class="text-muted ms-4">Any ratings, comments, or bug reports you submit voluntarily are stored to help improve the tool.</span>
-                    </li>
-                    <li class="mb-3">
-                        <i class="bi bi-bar-chart-fill text-success me-2"></i>
-                        <strong>Anonymous page views</strong><br>
-                        <span class="text-muted ms-4">We log anonymous visit counts per page to understand which features are most used. No personal identifiers are attached.</span>
-                    </li>
-                    <li class="mb-0">
-                        <i class="bi bi-robot text-success me-2"></i>
-                        <strong>Support chat messages</strong><br>
-                        <span class="text-muted ms-4">If you use the Third Umpire AI support chat, messages are processed by OpenAI and stored temporarily for the duration of your session only.</span>
-                    </li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="card shadow-sm mb-4">
-            <div class="card-body p-4">
-                <h2 class="h5 fw-bold mb-3">What we do not collect</h2>
-                <ul class="list-unstyled mb-0">
-                    <li class="mb-1"><i class="bi bi-x-circle-fill text-danger me-2"></i>No passwords or payment information</li>
-                    <li class="mb-1"><i class="bi bi-x-circle-fill text-danger me-2"></i>No location tracking</li>
-                    <li class="mb-1"><i class="bi bi-x-circle-fill text-danger me-2"></i>No advertising or third-party tracking cookies</li>
-                    <li class="mb-0"><i class="bi bi-x-circle-fill text-danger me-2"></i>No sale of data to third parties</li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="card shadow-sm mb-4">
-            <div class="card-body p-4">
-                <h2 class="h5 fw-bold mb-3">Third-party services</h2>
-                <p>The app uses the following external services, each with their own privacy policies:</p>
-                <ul class="mb-0">
-                    <li><strong>Replit</strong> — hosting and OAuth authentication</li>
-                    <li><strong>OpenAI</strong> — powers the Third Umpire AI support chat</li>
-                    <li><strong>Cricbuzz / ESPN Cricinfo</strong> — live match data (read-only scraping, no user data shared)</li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="card shadow-sm mb-4">
-            <div class="card-body p-4">
-                <h2 class="h5 fw-bold mb-3">Data retention</h2>
-                <p class="mb-0">Feedback and bug reports are retained indefinitely to improve the tool. Anonymous page view counts are aggregated and retained for analytics. If you would like your data removed, use the Feedback page to send a request.</p>
-            </div>
-        </div>
-
-        <div class="card shadow-sm mb-4">
-            <div class="card-body p-4">
-                <h2 class="h5 fw-bold mb-3">Contact</h2>
-                <p class="mb-0">This tool is independently developed by Anjaneya Sharma. For any privacy-related queries, please use the <a href="/bug-report" class="text-success">Feedback page</a>.</p>
-            </div>
-        </div>
-
-        <div class="text-center">
-            <a href="/" class="btn btn-success px-4"><i class="bi bi-lightning-fill me-2"></i>Back to Predictor</a>
-            <a href="/about" class="btn btn-outline-secondary ms-2 px-4"><i class="bi bi-info-circle me-2"></i>About</a>
-        </div>
-
+    <div class="alert alert-warning" role="note">
+      This policy explains CricPredict’s current data practices. It is general information, not legal advice, and does not limit any rights you have under applicable law.
     </div>
+
+    <div class="card border-0 shadow-sm mb-3"><div class="card-body p-4">
+      <h2 class="h5 fw-bold">1. Who we are and how to contact us</h2>
+      <p>CricPredict operates the Cricket Match Intelligence website and related prediction, analytics, referral, and Matchday Pro features. The service is operated from Singapore.</p>
+      <p class="mb-0">For privacy questions or requests, email <a href="mailto:talldudeplayspiano@gmail.com">talldudeplayspiano@gmail.com</a>.</p>
+    </div></div>
+
+    <div class="card border-0 shadow-sm mb-3"><div class="card-body p-4">
+      <h2 class="h5 fw-bold">2. Information we collect</h2>
+      <ul class="mb-0">
+        <li><strong>Account and sign-in details:</strong> email address, display name, profile image, and provider account identifiers when you sign in with Replit or, when enabled, Google.</li>
+        <li><strong>Predictions and account activity:</strong> match format, venue, score and wickets entered, prediction results, saved prediction history, and feature usage. Predictions may be linked to your account when you are signed in.</li>
+        <li><strong>Pro and referral records:</strong> subscription status and period, Stripe customer/subscription identifiers, referral link attribution, qualification status, and Pro reward history. CricPredict does not receive or store full payment-card numbers.</li>
+        <li><strong>Feedback and support:</strong> feedback text, optional contact email, bug-report descriptions, diagnostic details or screenshots you submit, and support-chat messages and attachments.</li>
+        <li><strong>Technical and usage information:</strong> page path, a truncated hash derived from the request IP address, browser user-agent, referrer, device and browser category, and session or feature-event identifiers.</li>
+      </ul>
+    </div></div>
+
+    <div class="card border-0 shadow-sm mb-3"><div class="card-body p-4">
+      <h2 class="h5 fw-bold">3. How we use information</h2>
+      <ul class="mb-0">
+        <li>Provide sign-in, predictions, saved history, Pro features, referrals, and support.</li>
+        <li>Process subscription payments and keep subscription access in sync.</li>
+        <li>Respond to feedback and bug reports, diagnose errors, and improve the service.</li>
+        <li>Measure page and feature usage, protect the service, investigate abuse, and meet legal obligations.</li>
+      </ul>
+      <p class="mt-3 mb-0">We do not sell personal information. Match and player data is retrieved from third-party cricket sources; CricPredict does not send your account information to those sources to obtain match data.</p>
+    </div></div>
+
+    <div class="card border-0 shadow-sm mb-3"><div class="card-body p-4">
+      <h2 class="h5 fw-bold">4. Service providers and external resources</h2>
+      <p>Information is shared with providers only as needed to run the service:</p>
+      <ul>
+        <li><strong>Replit:</strong> application hosting, database infrastructure, and Replit sign-in.</li>
+        <li><strong>Google:</strong> Google sign-in when enabled; connected Gmail services may send replies to feedback or bug reports. Google Fonts and other externally hosted website resources may receive your browser’s request information when loaded.</li>
+        <li><strong>Stripe:</strong> checkout, subscription billing, and subscription management. Stripe processes payment details under its own privacy terms; CricPredict stores subscription-related identifiers and status, not full card details.</li>
+        <li><strong>OpenAI:</strong> support-chat messages and relevant attachments may be sent to generate an AI response.</li>
+        <li><strong>Website resource providers:</strong> services such as jsDelivr and code.jquery.com deliver site libraries and may receive standard connection information from your browser.</li>
+      </ul>
+      <p class="mb-0">These providers may process information in countries outside Singapore under their own terms and privacy policies. External cricket-data sources are used to retrieve match information, not to process CricPredict account data.</p>
+    </div></div>
+
+    <div class="card border-0 shadow-sm mb-3"><div class="card-body p-4">
+      <h2 class="h5 fw-bold">5. Cookies and similar technologies</h2>
+      <p class="mb-0">CricPredict uses an essential signed session cookie for functions such as sign-in, security checks, and preserving temporary session state. We do not add advertising cookies or advertising pixels. Your browser may also contact external providers when loading hosted fonts or website libraries.</p>
+    </div></div>
+
+    <div class="card border-0 shadow-sm mb-3"><div class="card-body p-4">
+      <h2 class="h5 fw-bold">6. Retention and your choices</h2>
+      <p>We do not currently apply one fixed retention period to every category of data. Information may be retained while needed to provide and secure the service, maintain prediction and referral records, handle support, and meet legal or accounting obligations.</p>
+      <p class="mb-0">You may request access to or correction or deletion of personal information by emailing <a href="mailto:talldudeplayspiano@gmail.com">talldudeplayspiano@gmail.com</a>. We may need to verify your identity and may retain information where required or permitted by law or necessary for legitimate service records. Requests are handled subject to applicable Singapore law, including the Personal Data Protection Act 2012.</p>
+    </div></div>
+
+    <div class="card border-0 shadow-sm mb-3"><div class="card-body p-4">
+      <h2 class="h5 fw-bold">7. Security</h2>
+      <p class="mb-0">We use reasonable technical and organizational measures intended to protect information. No website or storage system can be guaranteed completely secure; please avoid putting sensitive personal information in prediction forms, feedback, bug reports, or support-chat messages.</p>
+    </div></div>
+
+    <div class="card border-0 shadow-sm mb-3"><div class="card-body p-4">
+      <h2 class="h5 fw-bold">8. Children and age</h2>
+      <p class="mb-0">CricPredict does not currently set a minimum age for using the service. Users and, where applicable, their parents or guardians are responsible for ensuring use complies with laws that apply to them. Please contact us if you believe a child has provided personal information and you want us to review it.</p>
+    </div></div>
+
+    <div class="card border-0 shadow-sm mb-4"><div class="card-body p-4">
+      <h2 class="h5 fw-bold">9. Changes to this policy</h2>
+      <p class="mb-0">We may update this policy as the service or its data practices change. The current version and its effective date will be posted on this page. Material changes will be highlighted on the site where reasonably practicable.</p>
+    </div></div>
+
+    <div class="d-flex flex-wrap gap-2">
+      <a href="/" class="btn btn-success"><i class="bi bi-house me-1" aria-hidden="true"></i>Back to CricPredict</a>
+      <a href="{{ url_for('terms_of_service') }}" class="btn btn-outline-secondary">Terms of Service</a>
+      <a href="mailto:talldudeplayspiano@gmail.com" class="btn btn-outline-secondary">Privacy contact</a>
+    </div>
+  </div>
 </div>
 {% endblock %}
