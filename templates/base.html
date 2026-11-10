@@ -82,7 +82,7 @@
                     <a href="/bug-report" class="nav-link text-white"><i class="bi bi-chat-square-text me-1"></i>Feedback</a>
                     <a href="/support-chat" class="nav-link text-white"><i class="bi bi-robot me-1"></i>Support</a>
                     {% if current_user.is_authenticated %}
-                    <a href="/referrals" class="nav-link text-white"><i class="bi bi-people me-1"></i>Refer &amp; Earn</a>
+                    <a href="/referrals" class="nav-link text-white"><i class="bi bi-people me-1"></i>Refer &amp; Earn Pro Access</a>
                     {% if current_user.id == '38814631' %}
                     <a href="/accuracy" class="nav-link text-white"><i class="bi bi-graph-up-arrow me-1"></i>Accuracy</a>
                     {% endif %}
@@ -101,10 +101,13 @@
                         {{ current_user.display_name }}
                         {% if current_user.has_pro %}<span class="badge bg-warning text-dark ms-1" style="font-size:0.65rem;">PRO</span>{% endif %}
                     </span>
+                    {% if google_auth_enabled and not google_connected %}
+                    <a href="{{ url_for('link_google_account') }}" class="nav-link text-white">Connect Google</a>
+                    {% endif %}
                     <a href="{{ url_for('replit_auth.logout') }}" class="btn btn-outline-light btn-sm"><i class="bi bi-box-arrow-right me-1"></i>Log Out</a>
                     {% else %}
                     <a href="/pricing" class="nav-link text-warning fw-semibold"><i class="bi bi-lightning-fill me-1"></i>Go Pro</a>
-                    <a href="{{ signin_url() }}" class="btn btn-outline-light btn-sm"><i class="bi bi-person me-1"></i>Log In</a>
+                    <a href="{{ url_for('auth_options') }}" class="btn btn-outline-light btn-sm"><i class="bi bi-person me-1"></i>Log In</a>
                     {% endif %}
                 </nav>
                 <button class="btn btn-outline-light d-md-none" type="button" data-bs-toggle="collapse" data-bs-target="#mobileNav">
@@ -121,7 +124,7 @@
                     <a href="/bug-report" class="text-white text-decoration-none"><i class="bi bi-chat-square-text me-2"></i>Feedback</a>
                     <a href="/support-chat" class="text-white text-decoration-none"><i class="bi bi-robot me-2"></i>Support</a>
                     {% if current_user.is_authenticated %}
-                    <a href="/referrals" class="text-white text-decoration-none"><i class="bi bi-people me-2"></i>Refer &amp; Earn</a>
+                    <a href="/referrals" class="text-white text-decoration-none"><i class="bi bi-people me-2"></i>Refer &amp; Earn Pro Access</a>
                     {% if current_user.id == '38814631' %}
                     <a href="/accuracy" class="text-white text-decoration-none"><i class="bi bi-graph-up-arrow me-2"></i>Accuracy</a>
                     {% endif %}
@@ -133,10 +136,13 @@
                     {% endif %}
                     <hr class="my-1 border-light">
                     <span class="text-white-50"><i class="bi bi-person-circle me-2"></i>{{ current_user.display_name }}{% if current_user.has_pro %}<span class="badge bg-warning text-dark ms-1">PRO</span>{% endif %}</span>
+                    {% if google_auth_enabled and not google_connected %}
+                    <a href="{{ url_for('link_google_account') }}" class="text-white text-decoration-none"><i class="bi bi-google me-2"></i>Connect Google</a>
+                    {% endif %}
                     <a href="{{ url_for('replit_auth.logout') }}" class="text-white text-decoration-none"><i class="bi bi-box-arrow-right me-2"></i>Log Out</a>
                     {% else %}
                     <a href="/pricing" class="text-warning text-decoration-none fw-semibold"><i class="bi bi-lightning-fill me-2"></i>Go Pro</a>
-                    <a href="{{ signin_url() }}" class="text-white text-decoration-none"><i class="bi bi-person me-2"></i>Log In</a>
+                    <a href="{{ url_for('auth_options') }}" class="text-white text-decoration-none"><i class="bi bi-person me-2"></i>Log In</a>
                     {% endif %}
                 </div>
             </div>

@@ -12,8 +12,7 @@ from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.orm import Session
 
 from app import db
-from models import (User, Prediction, ReferralProfile, ReferralIdentity, Referral,
-                    ReferralReward, ReferralWelcomeGrant)
+from models import User, Prediction, ReferralProfile, ReferralIdentity, Referral, ReferralReward, ReferralWelcomeGrant
 
 SG = ZoneInfo("Asia/Singapore")
 ATTRIBUTION_DAYS = 30

@@ -212,11 +212,6 @@ def compute_metrics(results):
             else:
                 buckets["over_200"].append(r["abs_error"])
 
-        wkt_abs = [r["wicket_abs_error"] for r in rows if "wicket_abs_error" in r]
-        wkt_errors = [r["wicket_error"] for r in rows if "wicket_error" in r]
-        wicket_mae = round(sum(wkt_abs) / len(wkt_abs), 2) if wkt_abs else None
-        wicket_bias = round(sum(wkt_errors) / len(wkt_errors), 2) if wkt_errors else None
-
         return {
             "n": n,
             "mae": round(mae, 1),

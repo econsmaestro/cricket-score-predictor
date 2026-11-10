@@ -124,13 +124,26 @@ class ReferralWelcomeGrant(db.Model):
 
 
 class ProExpiryReminder(db.Model):
-    """One row per (user, expiry) already reminded; a later extension gets its own reminder."""
+    """Persistent, retryable record for an earned-Pro expiry email."""
     __tablename__ = 'pro_expiry_reminder'
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.String, db.ForeignKey('users.id'), nullable=False, index=True)
     expires_at = db.Column(db.DateTime, nullable=False)
-    sent_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-    __table_args__ = (UniqueConstraint('user_id', 'expires_at', name='pro_reminder_once'),)
+    status = db.Column(db.String(20), nullable=False, default='pending', index=True)
+    attempt_count = db.Column(db.Integer, nullable=False, default=0)
+    claimed_at = db.Column(db.DateTime, nullable=True)
+    next_attempt_at = db.Column(db.DateTime, nullable=True, index=True)
+    last_attempt_at = db.Column(db.DateTime, nullable=True)
+    sent_at = db.Column(db.DateTime, nullable=True)
+    last_error = db.Column(db.String(500), nullable=True)
+    created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    __table_args__ = (
+        UniqueConstraint('user_id', 'expires_at', name='uq_pro_expiry_reminder_user_expiry'),
+        db.CheckConstraint(
+            "status IN ('pending','sending','sent','superseded')",
+            name='pro_expiry_reminder_valid_status',
+        ),
+    )
 
 
 class OAuth(OAuthConsumerMixin, db.Model):
@@ -145,6 +158,23 @@ class OAuth(OAuthConsumerMixin, db.Model):
         'provider',
         name='uq_user_browser_session_key_provider',
     ),)
+
+
+class AuthIdentity(db.Model):
+    """Provider identities linked to a single CricPredict user account."""
+    __tablename__ = 'auth_identity'
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.String, db.ForeignKey(User.id), nullable=False, index=True)
+    provider = db.Column(db.String(32), nullable=False)
+    provider_subject = db.Column(db.String(255), nullable=False)
+    email = db.Column(db.String, nullable=True, index=True)
+    email_verified = db.Column(db.Boolean, nullable=False, default=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
+    __table_args__ = (
+        UniqueConstraint('provider', 'provider_subject', name='uq_auth_provider_subject'),
+        UniqueConstraint('user_id', 'provider', name='uq_auth_user_provider'),
+        db.CheckConstraint("provider IN ('replit_auth', 'google')", name='auth_identity_provider'),
+    )
 
 
 class Prediction(db.Model):

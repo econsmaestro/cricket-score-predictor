@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block page_title %}Sign in — Cricket Match Intelligence{% endblock %}
+
+{% block content %}
+<section class="card border-0 shadow-sm mx-auto my-4" style="max-width: 520px; border-radius: 16px;">
+  <div class="card-body p-4 p-md-5 text-center">
+    <h2 class="h3 fw-bold mb-2">Sign in or create an account</h2>
+    <p class="text-muted mb-4">Choose how you want to access your CricPredict account.</p>
+
+    {% if google_auth_enabled %}
+    <a class="btn btn-light border w-100 py-2 mb-3 fw-semibold"
+       href="{{ url_for('google.login') }}">
+      <i class="bi bi-google me-2" aria-hidden="true"></i>Continue with Google
+    </a>
+    {% else %}
+    <button class="btn btn-light border w-100 py-2 mb-3 fw-semibold" type="button" disabled>
+      <i class="bi bi-google me-2" aria-hidden="true"></i>Google sign-in setup pending
+    </button>
+    <div class="small text-muted mb-3">Google sign-in will appear here after its OAuth setup is complete.</div>
+    {% endif %}
+
+    <a class="btn btn-outline-secondary w-100 py-2 fw-semibold"
+       href="{{ url_for('replit_auth.login') }}">
+      <i class="bi bi-box-arrow-in-right me-2" aria-hidden="true"></i>Continue with Replit
+    </a>
+    <p class="small text-muted mt-4 mb-0">
+      Your predictions, Pro access and referral history stay attached to your CricPredict account.
+      By continuing, you agree to the <a href="{{ url_for('terms_of_service') }}">Terms of Service</a>
+      and acknowledge the <a href="{{ url_for('privacy_policy') }}">Privacy Policy</a>.
+    </p>
+  </div>
+</section>
+{% endblock %}
