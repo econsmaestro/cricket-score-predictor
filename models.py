@@ -122,6 +122,23 @@ class OAuth(OAuthConsumerMixin, db.Model):
     ),)
 
 
+class AuthIdentity(db.Model):
+    """Provider identities linked to a single CricPredict user account."""
+    __tablename__ = 'auth_identity'
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.String, db.ForeignKey(User.id), nullable=False, index=True)
+    provider = db.Column(db.String(32), nullable=False)
+    provider_subject = db.Column(db.String(255), nullable=False)
+    email = db.Column(db.String, nullable=True, index=True)
+    email_verified = db.Column(db.Boolean, nullable=False, default=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
+    __table_args__ = (
+        UniqueConstraint('provider', 'provider_subject', name='uq_auth_provider_subject'),
+        UniqueConstraint('user_id', 'provider', name='uq_auth_user_provider'),
+        db.CheckConstraint("provider IN ('replit_auth', 'google')", name='auth_identity_provider'),
+    )
+
+
 class Prediction(db.Model):
     """Stores a single score prediction made by the engine for historical tracking."""
     id = db.Column(db.Integer, primary_key=True)

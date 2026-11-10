@@ -4,7 +4,7 @@ import uuid
 from functools import wraps, lru_cache
 from urllib.parse import urlencode
 
-from flask import g, session, redirect, request, render_template, url_for
+from flask import g, session, redirect, request, render_template, url_for, flash
 from flask_dance.consumer import (
     OAuth2ConsumerBlueprint,
     oauth_authorized,
@@ -18,7 +18,7 @@ from werkzeug.local import LocalProxy
 import requests
 
 from app import app, db
-from models import OAuth, User
+from models import AuthIdentity, OAuth, User
 
 login_manager = LoginManager(app)
 
@@ -106,8 +106,16 @@ def make_replit_blueprint():
 
     @replit_bp.route("/logout")
     def logout():
-        del replit_bp.token
+        had_replit_session = bool(replit_bp.token)
+        try:
+            del replit_bp.token
+        except (NoResultFound, RuntimeError):
+            pass
         logout_user()
+        session.clear()
+
+        if not had_replit_session:
+            return redirect("/")
 
         end_session_endpoint = issuer_url + "/session/end"
         encoded_params = urlencode({
@@ -127,36 +135,224 @@ def make_replit_blueprint():
     return replit_bp
 
 
+def make_google_blueprint():
+    """Google is an optional second provider, enabled only after OAuth secrets are set."""
+    from flask_dance.contrib.google import make_google_blueprint as google_blueprint
+
+    return google_blueprint(
+        client_id=os.environ.get("GOOGLE_OAUTH_CLIENT_ID"),
+        client_secret=os.environ.get("GOOGLE_OAUTH_CLIENT_SECRET"),
+        scope=["openid", "email", "profile"],
+        reprompt_select_account=True,
+        login_url="/google",
+        authorized_url="/google/authorized",
+    )
+
+
+def _normalized_email(email):
+    return (email or "").strip().casefold()
+
+
+def _store_auth_identity(user, provider, subject, email, email_verified):
+    identity = AuthIdentity.query.filter_by(
+        provider=provider, provider_subject=subject
+    ).first()
+    if identity and identity.user_id != user.id:
+        raise ValueError("This sign-in identity is already linked to another account.")
+
+    provider_for_user = AuthIdentity.query.filter_by(
+        user_id=user.id, provider=provider
+    ).first()
+    if provider_for_user and provider_for_user.provider_subject != subject:
+        raise ValueError("This account already has a different identity for this provider.")
+
+    if identity is None:
+        identity = AuthIdentity(
+            user_id=user.id,
+            provider=provider,
+            provider_subject=subject,
+        )
+        db.session.add(identity)
+    identity.email = email
+    identity.email_verified = bool(email_verified)
+    return identity
+
+
 def save_user(user_claims):
     from referrals import register_identity
-    is_new = db.session.get(User, user_claims['sub']) is None
-    user = User()
-    user.id = user_claims['sub']
-    user.email = user_claims.get('email')
-    user.first_name = user_claims.get('first_name')
-    user.last_name = user_claims.get('last_name')
-    user.profile_image_url = user_claims.get('profile_image_url')
-    merged_user = db.session.merge(user)
+    subject = user_claims["sub"]
+    email = user_claims.get("email")
+    identity = AuthIdentity.query.filter_by(
+        provider="replit_auth", provider_subject=subject
+    ).first()
+    user = db.session.get(User, identity.user_id) if identity else db.session.get(User, subject)
+    is_new = user is None
+
+    if user is None and email:
+        matching_user = User.query.filter(
+            db.func.lower(User.email) == _normalized_email(email)
+        ).first()
+        if matching_user:
+            trusted_identity = None
+            if user_claims.get("email_verified") is True:
+                trusted_identity = AuthIdentity.query.filter_by(
+                    user_id=matching_user.id, email_verified=True
+                ).filter(
+                    db.func.lower(AuthIdentity.email) == _normalized_email(email)
+                ).first()
+            if not trusted_identity:
+                raise ValueError(
+                    "An account with this email already exists; sign in with its linked provider."
+                )
+            user = matching_user
+            is_new = False
+
+    if user is None:
+        user = User(id=subject)
+        db.session.add(user)
+    if email and (not user.email or _normalized_email(user.email) == _normalized_email(email)):
+        user.email = email
+    user.first_name = user_claims.get("first_name") or user.first_name
+    user.last_name = user_claims.get("last_name") or user.last_name
+    user.profile_image_url = user_claims.get("profile_image_url") or user.profile_image_url
     db.session.flush()
+    _store_auth_identity(
+        user, "replit_auth", subject, email, user_claims.get("email_verified") is True
+    )
     register_identity(
-        db.session, merged_user, user_claims, is_new,
+        db.session, user, user_claims, is_new,
         session.get("referral_attribution"),
         known_account=bool(session.get("referral_known_account")),
     )
     db.session.commit()
     session.pop("referral_attribution", None)
     session["referral_known_account"] = True
-    return merged_user
+    session["auth_provider"] = "replit_auth"
+    return user
+
+
+def authenticated_google_claims(token):
+    response = requests.get(
+        "https://openidconnect.googleapis.com/v1/userinfo",
+        headers={"Authorization": "Bearer " + token["access_token"]},
+        timeout=10,
+    )
+    response.raise_for_status()
+    claims = response.json()
+    if not claims.get("sub") or not claims.get("email") or claims.get("email_verified") is not True:
+        raise ValueError("Google must return a verified email address.")
+    return {
+        "sub": claims["sub"],
+        "email": claims["email"],
+        "email_verified": True,
+        "first_name": claims.get("given_name"),
+        "last_name": claims.get("family_name"),
+        "profile_image_url": claims.get("picture"),
+    }
+
+
+def save_google_user(user_claims, link_user_id=None):
+    from referrals import register_identity
+
+    subject = user_claims["sub"]
+    email = user_claims["email"]
+    identity = AuthIdentity.query.filter_by(
+        provider="google", provider_subject=subject
+    ).first()
+    is_new = False
+
+    if link_user_id:
+        user = db.session.get(User, link_user_id)
+        if user is None or not current_user.is_authenticated or current_user.id != user.id:
+            raise ValueError("The account to link is no longer signed in.")
+        email_owner = User.query.filter(
+            db.func.lower(User.email) == _normalized_email(email)
+        ).first()
+        if email_owner and email_owner.id != user.id:
+            raise ValueError("That Google email belongs to a different CricPredict account.")
+        _store_auth_identity(user, "google", subject, email, True)
+    elif identity:
+        user = db.session.get(User, identity.user_id)
+        if user is None:
+            raise ValueError("The linked CricPredict account no longer exists.")
+    else:
+        normalized = _normalized_email(email)
+        matching_user = User.query.filter(
+            db.func.lower(User.email) == normalized
+        ).first()
+        if matching_user:
+            verified_identity = AuthIdentity.query.filter_by(
+                user_id=matching_user.id, email_verified=True
+            ).filter(db.func.lower(AuthIdentity.email) == normalized).first()
+            if not verified_identity:
+                raise ValueError(
+                    "This email already has an account. Sign in with Replit once, "
+                    "then use Connect Google to link it safely."
+                )
+            user = matching_user
+            _store_auth_identity(user, "google", subject, email, True)
+        else:
+            is_new = True
+            user = User(
+                id=f"google:{subject}",
+                email=email,
+                first_name=user_claims.get("first_name"),
+                last_name=user_claims.get("last_name"),
+                profile_image_url=user_claims.get("profile_image_url"),
+            )
+            db.session.add(user)
+            db.session.flush()
+            _store_auth_identity(user, "google", subject, email, True)
+
+    if link_user_id:
+        db.session.commit()
+        return user, False
+
+    register_identity(
+        db.session, user, user_claims, is_new,
+        session.get("referral_attribution"),
+        known_account=bool(session.get("referral_known_account")),
+    )
+    db.session.commit()
+    if is_new:
+        session.pop("referral_attribution", None)
+    session["referral_known_account"] = True
+    session["auth_provider"] = "google"
+    return user, is_new
 
 
 @oauth_authorized.connect
 def logged_in(blueprint, token):
+    if blueprint.name == "google":
+        try:
+            claims = authenticated_google_claims(token)
+            link_user_id = session.pop("google_link_user_id", None)
+            user, _ = save_google_user(claims, link_user_id=link_user_id)
+        except (requests.RequestException, ValueError, KeyError) as exc:
+            db.session.rollback()
+            app.logger.info("Google sign-in could not be completed: %s", exc)
+            flash(str(exc), "error")
+            return redirect(url_for("auth_options"))
+        if link_user_id:
+            flash("Google has been linked to your CricPredict account.", "success")
+        else:
+            login_user(user)
+        next_url = session.pop("next_url", None)
+        return redirect(next_url or "/")
+
+    if blueprint.name != "replit_auth":
+        return
     try:
         user_claims = authenticated_user_claims(token)
     except (requests.RequestException, ValueError, KeyError, jwt.PyJWTError):
         app.logger.warning("Authentication provider identity validation failed")
         return redirect(url_for('replit_auth.error'))
-    user = save_user(user_claims)
+    try:
+        user = save_user(user_claims)
+    except ValueError as exc:
+        db.session.rollback()
+        flash(str(exc), "error")
+        return redirect(url_for("auth_options"))
     login_user(user)
     blueprint.token = token
     next_url = session.pop("next_url", None)
@@ -204,6 +400,10 @@ def authenticated_user_claims(token):
 
 @oauth_error.connect
 def handle_error(blueprint, error, error_description=None, error_uri=None):
+    if blueprint.name == "google":
+        session.pop("google_link_user_id", None)
+        flash("Google sign-in was cancelled or could not be completed. Please try again.", "error")
+        return redirect(url_for("auth_options"))
     return redirect(url_for('replit_auth.error'))
 
 
@@ -213,9 +413,10 @@ def require_login(f):
     def decorated_function(*args, **kwargs):
         if not current_user.is_authenticated:
             session["next_url"] = get_next_navigation_url(request)
-            return redirect(url_for('replit_auth.login'))
+            return redirect(url_for('auth_options'))
 
-        expires_in = replit.token.get('expires_in', 0) if replit.token else 0
+        token = replit.token
+        expires_in = token.get('expires_in', 0) if token else 0
         if expires_in < 0:
             issuer_url = os.environ.get('ISSUER_URL', "https://replit.com/oidc")
             refresh_token_url = issuer_url + "/token"
@@ -224,7 +425,7 @@ def require_login(f):
                                              client_id=os.environ['REPL_ID'])
             except InvalidGrantError:
                 session["next_url"] = get_next_navigation_url(request)
-                return redirect(url_for('replit_auth.login'))
+                return redirect(url_for('auth_options'))
             replit.token_updater(token)
 
         return f(*args, **kwargs)
