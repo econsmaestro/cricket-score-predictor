@@ -1,11 +1,13 @@
+import json
 from uuid import uuid4
 
 import pytest
+from oauthlib.oauth2.rfc6749.parameters import parse_token_response
 from sqlalchemy import text
 
 from app import app, db
 from models import AuthIdentity, User
-from replit_auth import save_google_user, save_user
+from replit_auth import make_google_blueprint, save_google_user, save_user
 
 
 @pytest.fixture
@@ -37,6 +39,30 @@ def google_claims(subject="google-subject", email="new@example.test"):
         "first_name": "Google",
         "last_name": "User",
         "profile_image_url": None,
+    }
+
+
+def test_google_scopes_accept_canonical_token_response(monkeypatch):
+    monkeypatch.setenv("GOOGLE_OAUTH_CLIENT_ID", "test-client-id")
+    monkeypatch.setenv("GOOGLE_OAUTH_CLIENT_SECRET", "test-client-secret")
+    monkeypatch.delenv("OAUTHLIB_RELAX_TOKEN_SCOPE", raising=False)
+    blueprint = make_google_blueprint()
+    payload = json.dumps({
+        "access_token": "synthetic-test-token",
+        "token_type": "Bearer",
+        "scope": (
+            "openid https://www.googleapis.com/auth/userinfo.email "
+            "https://www.googleapis.com/auth/userinfo.profile"
+        ),
+    })
+
+    token = parse_token_response(payload, scope=blueprint.scope)
+
+    assert token["access_token"] == "synthetic-test-token"
+    assert set(blueprint.scope) == {
+        "openid",
+        "https://www.googleapis.com/auth/userinfo.email",
+        "https://www.googleapis.com/auth/userinfo.profile",
     }
 
 

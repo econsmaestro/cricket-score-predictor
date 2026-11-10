@@ -142,7 +142,11 @@ def make_google_blueprint():
     return google_blueprint(
         client_id=os.environ.get("GOOGLE_OAUTH_CLIENT_ID"),
         client_secret=os.environ.get("GOOGLE_OAUTH_CLIENT_SECRET"),
-        scope=["openid", "email", "profile"],
+        scope=[
+            "openid",
+            "https://www.googleapis.com/auth/userinfo.email",
+            "https://www.googleapis.com/auth/userinfo.profile",
+        ],
         reprompt_select_account=True,
         login_url="/google",
         authorized_url="/google/authorized",
