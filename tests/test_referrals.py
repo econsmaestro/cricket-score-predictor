@@ -9,7 +9,7 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 from app import app, db
-from models import User, Prediction, Referral, ReferralProfile, ReferralReward
+from models import User, Prediction, Referral, ReferralProfile, ReferralReward, ReferralWelcomeGrant
 from referrals import (
     add_pro_month, singapore_month, canonical_email, ensure_profile,
     register_identity, complete_prediction, settle_rewards,
@@ -89,6 +89,25 @@ def test_unique_links_and_successful_reward(referral_db):
     assert reward.expires_at == datetime(2026, 12, 4, 6)
     assert reward.reward_month == "2026-11"
     assert rows(engine, Referral)[0].status == "rewarded"
+
+
+def test_referred_friend_gets_30_days_pro_on_signup(referral_db):
+    engine = referral_db
+    code = create_user(engine)
+    register(engine, "new", code)
+    grant = rows(engine, ReferralWelcomeGrant)[0]
+    assert grant.user_id == "new"
+    assert grant.starts_at == NOW
+    assert grant.expires_at == NOW + timedelta(days=30)
+    with Session(engine) as tx:
+        assert tx.get(User, "new").pro_expires_at == NOW + timedelta(days=30)
+
+
+def test_rejected_referral_gets_no_welcome_pro(referral_db):
+    engine = referral_db
+    code = create_user(engine)
+    register(engine, "new", code, verified=False)
+    assert rows(engine, ReferralWelcomeGrant) == []
 
 
 def test_retries_and_repeated_predictions_never_reward_twice(referral_db):

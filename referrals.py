@@ -2,7 +2,7 @@
 import calendar
 import hashlib
 import secrets
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from zoneinfo import ZoneInfo
 
 from flask import redirect, render_template, session, url_for
@@ -12,10 +12,11 @@ from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.orm import Session
 
 from app import db
-from models import User, Prediction, ReferralProfile, ReferralIdentity, Referral, ReferralReward
+from models import User, Prediction, ReferralProfile, ReferralIdentity, Referral, ReferralReward, ReferralWelcomeGrant
 
 SG = ZoneInfo("Asia/Singapore")
 ATTRIBUTION_DAYS = 30
+WELCOME_PRO_DAYS = 30
 
 
 def utc_now():
@@ -95,9 +96,16 @@ def register_identity(tx, user, claims, is_new, attribution, known_account=False
         reason = "previous_account_on_browser"
     elif not fingerprint or claims.get("email_verified") is not True:
         reason = "verified_email_required"
-    tx.add(Referral(
+    referral = Referral(
         referrer_id=owner.user_id, referred_id=user.id, created_at=now,
-        status="rejected" if reason else "pending", rejection_reason=reason))
+        status="rejected" if reason else "pending", rejection_reason=reason)
+    tx.add(referral)
+    if not reason:
+        # Friend-side reward: only for referrals that passed every anti-abuse check.
+        tx.flush()
+        tx.add(ReferralWelcomeGrant(
+            referral_id=referral.id, user_id=user.id,
+            starts_at=now, expires_at=now + timedelta(days=WELCOME_PRO_DAYS)))
 
 
 def _award_qualified(tx, referrer, now):

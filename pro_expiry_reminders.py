@@ -8,11 +8,11 @@ from sqlalchemy import func, or_, select
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
-from models import ProExpiryReminder, ReferralReward, User
+from models import ProExpiryReminder, ReferralReward, ReferralWelcomeGrant, User
 
 logger = logging.getLogger(__name__)
 
-REMINDER_LEAD = timedelta(days=3)
+REMINDER_LEAD = timedelta(days=2)
 RETRY_DELAY = timedelta(hours=6)
 CLAIM_TIMEOUT = timedelta(minutes=15)
 SINGAPORE = ZoneInfo("Asia/Singapore")
@@ -41,13 +41,23 @@ def _eligible_expiry_user(tx, user_id, earned_expiry):
     return user
 
 
+def _latest_earned_expiry(tx, user_id):
+    """Latest end of earned access: referral rewards or the friend-side welcome grant."""
+    values = (
+        tx.scalar(select(func.max(ReferralReward.expires_at)).where(
+            ReferralReward.referrer_id == user_id)),
+        tx.scalar(select(func.max(ReferralWelcomeGrant.expires_at)).where(
+            ReferralWelcomeGrant.user_id == user_id)),
+    )
+    return max(filter(None, values), default=None)
+
+
 def _ensure_due_reminders(engine, now):
     deadline = now + REMINDER_LEAD
     with Session(engine) as tx:
-        latest_expiries = tx.execute(
-            select(ReferralReward.referrer_id, func.max(ReferralReward.expires_at))
-            .group_by(ReferralReward.referrer_id)
-        ).all()
+        candidate_ids = set(tx.scalars(select(ReferralReward.referrer_id).distinct()))
+        candidate_ids |= set(tx.scalars(select(ReferralWelcomeGrant.user_id)))
+        latest_expiries = [(uid, _latest_earned_expiry(tx, uid)) for uid in candidate_ids]
 
     created = 0
     for user_id, earned_expiry in latest_expiries:
@@ -97,11 +107,7 @@ def _claim_reminder(engine, reminder_id, now):
                 return None
 
             user = _eligible_expiry_user(tx, reminder.user_id, reminder.expires_at)
-            latest_expiry = tx.scalar(
-                select(func.max(ReferralReward.expires_at)).where(
-                    ReferralReward.referrer_id == reminder.user_id
-                )
-            )
+            latest_expiry = _latest_earned_expiry(tx, reminder.user_id)
             # Rewards may have been extended after this reminder was queued.
             if user is None or latest_expiry != reminder.expires_at:
                 reminder.status = "superseded"

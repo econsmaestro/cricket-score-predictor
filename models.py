@@ -44,8 +44,10 @@ class User(UserMixin, db.Model):
         session = object_session(self)
         earned = session.query(db.func.max(ReferralReward.expires_at)).filter_by(
             referrer_id=self.id).scalar() if session else None
+        welcome = session.query(db.func.max(ReferralWelcomeGrant.expires_at)).filter_by(
+            user_id=self.id).scalar() if session else None
         paid = self.subscription_period_end if self.subscription_active else None
-        return max(filter(None, (paid, earned)), default=None)
+        return max(filter(None, (paid, earned, welcome)), default=None)
 
     @property
     def has_pro(self):
@@ -105,6 +107,19 @@ class ReferralReward(db.Model):
                          name='referral_monthly_slot'),
         db.CheckConstraint('month_slot BETWEEN 1 AND 5', name='referral_slot_limit'),
         db.CheckConstraint('expires_at > starts_at', name='referral_positive_period'),
+    )
+
+
+class ReferralWelcomeGrant(db.Model):
+    """Friend-side reward: Pro access for a newly referred account (one per referral)."""
+    __tablename__ = 'referral_welcome_grant'
+    id = db.Column(db.Integer, primary_key=True)
+    referral_id = db.Column(db.Integer, db.ForeignKey('referral.id'), unique=True, nullable=False)
+    user_id = db.Column(db.String, db.ForeignKey('users.id'), unique=True, nullable=False)
+    starts_at = db.Column(db.DateTime, nullable=False)
+    expires_at = db.Column(db.DateTime, nullable=False)
+    __table_args__ = (
+        db.CheckConstraint('expires_at > starts_at', name='welcome_positive_period'),
     )
 
 

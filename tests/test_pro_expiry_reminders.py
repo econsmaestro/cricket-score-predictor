@@ -11,6 +11,7 @@ from models import (
     ProExpiryReminder,
     Referral,
     ReferralReward,
+    ReferralWelcomeGrant,
     User,
 )
 from pro_expiry_reminders import sweep_expiry_reminders
@@ -80,7 +81,7 @@ def sender_spy(calls, result=True) -> Callable:
 
 
 def test_sends_once_for_earned_expiry_with_singapore_date(engine):
-    add_user_with_reward(engine, expiry=NOW + timedelta(hours=72))
+    add_user_with_reward(engine, expiry=NOW + timedelta(hours=48))
     calls = []
 
     result = sweep_expiry_reminders(engine, NOW, sender_spy(calls))
@@ -88,7 +89,7 @@ def test_sends_once_for_earned_expiry_with_singapore_date(engine):
     assert len(calls) == 1
     assert calls[0]["to"] == "member@example.com"
     assert "expires soon" in calls[0]["subject"].lower()
-    assert "13 November 2026 at 20:00 SGT" in calls[0]["plain"]
+    assert "12 November 2026 at 20:00 SGT" in calls[0]["plain"]
 
     second = sweep_expiry_reminders(engine, NOW, sender_spy(calls))
     assert second["sent"] == 0
@@ -190,3 +191,31 @@ def test_supersedes_reminder_if_rewards_extend_expiry(engine):
     with Session(engine) as tx:
         row = tx.query(ProExpiryReminder).one()
         assert row.status == "superseded"
+
+
+def test_reminder_is_sent_two_days_before_not_earlier(engine):
+    add_user_with_reward(engine, expiry=NOW + timedelta(days=2, hours=1))
+    calls = []
+    assert sweep_expiry_reminders(engine, NOW, sender_spy(calls))["sent"] == 0
+    later = NOW + timedelta(hours=2)
+    assert sweep_expiry_reminders(engine, later, sender_spy(calls))["sent"] == 1
+
+
+def test_friend_welcome_grant_gets_expiry_reminder(engine):
+    with Session(engine) as tx, tx.begin():
+        owner = User(id="owner", email="owner@example.com")
+        friend = User(id="friend", email="friend@example.com")
+        tx.add_all([owner, friend])
+        tx.flush()
+        referral = Referral(referrer_id="owner", referred_id="friend",
+                            status="pending", created_at=NOW - timedelta(days=28))
+        tx.add(referral)
+        tx.flush()
+        tx.add(ReferralWelcomeGrant(
+            referral_id=referral.id, user_id="friend",
+            starts_at=NOW - timedelta(days=28), expires_at=NOW + timedelta(days=2)))
+    calls = []
+    result = sweep_expiry_reminders(engine, NOW, sender_spy(calls))
+    assert result["sent"] == 1
+    assert calls[0]["to"] == "friend@example.com"
+    assert sweep_expiry_reminders(engine, NOW, sender_spy(calls))["sent"] == 0
