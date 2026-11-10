@@ -6,7 +6,7 @@ from models import (Prediction, DiscoveredPlayer, PredictionFeedback, PageView, 
                    SupportChat, UserPreference, ConversionEvent, SavedPrediction, MatchAlert,
                    AuthIdentity)
 from flask_login import current_user
-from replit_auth import make_replit_blueprint, make_google_blueprint, require_login
+from replit_auth import make_replit_blueprint, make_google_blueprint, require_login, safe_next_url
 from referrals import init_referrals
 
 app.register_blueprint(make_replit_blueprint(), url_prefix="/auth")
@@ -1840,8 +1840,11 @@ def login_and_redirect():
 def auth_options():
     """Offer the enabled sign-in providers without changing existing Replit accounts."""
     next_path = request.args.get("next")
-    if next_path and next_path.startswith("/") and not next_path.startswith("//"):
-        session["next_url"] = request.url_root.rstrip("/") + next_path
+    if current_user.is_authenticated:
+        stored_next = session.pop("next_url", None)
+        return redirect(safe_next_url(next_path if next_path is not None else stored_next))
+    if next_path is not None:
+        session["next_url"] = safe_next_url(next_path)
     return render_template("sign_in.html")
 
 

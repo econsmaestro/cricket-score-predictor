@@ -1,8 +1,9 @@
 import jwt
 import os
+import posixpath
 import uuid
 from functools import wraps, lru_cache
-from urllib.parse import urlencode
+from urllib.parse import unquote, urlencode, urlsplit, urlunsplit
 
 from flask import g, session, redirect, request, render_template, url_for, flash
 from flask_dance.consumer import (
@@ -325,6 +326,43 @@ def save_google_user(user_claims, link_user_id=None):
     return user, is_new
 
 
+def safe_next_url(value):
+    """Return a local destination, excluding sign-in loops and external redirects."""
+    if not isinstance(value, str) or not value or value != value.strip():
+        return "/"
+    if "\\" in value or any(ord(char) < 32 or ord(char) == 127 for char in value):
+        return "/"
+    try:
+        target = urlsplit(value)
+        origin = urlsplit(request.host_url)
+        if target.scheme or target.netloc:
+            if (target.scheme.lower(), target.netloc.lower()) != (
+                origin.scheme.lower(), origin.netloc.lower()
+            ):
+                return "/"
+        path = target.path or "/"
+        decoded = path
+        for _ in range(5):
+            previous = decoded
+            decoded = unquote(decoded)
+            if decoded == previous:
+                break
+        else:
+            return "/"
+        if (
+            not path.startswith("/") or path.startswith("//")
+            or decoded.startswith("//") or "\\" in decoded
+            or any(ord(char) < 32 or ord(char) == 127 for char in decoded)
+        ):
+            return "/"
+        normalized = posixpath.normpath(decoded)
+        if normalized in ("/sign-in", "/auth") or normalized.startswith("/auth/"):
+            return "/"
+        return urlunsplit(("", "", path, target.query, target.fragment))
+    except ValueError:
+        return "/"
+
+
 @oauth_authorized.connect
 def logged_in(blueprint, token):
     if blueprint.name == "google":
@@ -341,8 +379,9 @@ def logged_in(blueprint, token):
             flash("Google has been linked to your CricPredict account.", "success")
         else:
             login_user(user)
+            flash("You're signed in.", "success")
         next_url = session.pop("next_url", None)
-        return redirect(next_url or "/")
+        return redirect(safe_next_url(next_url))
 
     if blueprint.name != "replit_auth":
         return
@@ -359,9 +398,9 @@ def logged_in(blueprint, token):
         return redirect(url_for("auth_options"))
     login_user(user)
     blueprint.token = token
+    flash("You're signed in.", "success")
     next_url = session.pop("next_url", None)
-    if next_url is not None:
-        return redirect(next_url)
+    return redirect(safe_next_url(next_url))
 
 
 @lru_cache(maxsize=4)

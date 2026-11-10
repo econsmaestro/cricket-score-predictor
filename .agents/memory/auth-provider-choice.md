@@ -13,6 +13,6 @@ CricPredict should offer Google sign-in alongside the existing Replit sign-in, n
 
 Request Google's canonical userinfo scope URLs rather than the short `email` and `profile` aliases.
 
-**Why:** Google returns canonical URLs in its token response. The installed OAuthlib rejects the alias-to-URL difference with a scope-change warning after a successful token exchange, before the authenticated-user handler runs.
+**Why:** Google returns canonical URLs in its token response. The installed OAuthlib rejects the alias-to-URL difference with a scope-change warning after a successful token exchange, before the authenticated-user handler runs. The user confirmed that Google sign-in works after switching to canonical scopes.
 
 **How to apply:** Keep requested scopes consistent with Google's returned scope names and retain strict scope validation. Test token-response parsing when changing Google scopes; do not work around mismatches by relaxing scope checks.
