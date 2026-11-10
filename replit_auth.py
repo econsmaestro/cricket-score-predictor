@@ -106,8 +106,12 @@ def make_replit_blueprint():
 
     @replit_bp.route("/logout")
     def logout():
-        del replit_bp.token
+        was_google = str(current_user.get_id() or "").startswith("google:")
+        if not was_google:
+            del replit_bp.token
         logout_user()
+        if was_google:
+            return redirect(url_for("index"))
 
         end_session_endpoint = issuer_url + "/session/end"
         encoded_params = urlencode({
@@ -152,7 +156,11 @@ def save_user(user_claims):
 @oauth_authorized.connect
 def logged_in(blueprint, token):
     try:
-        user_claims = authenticated_user_claims(token)
+        if blueprint.name == "google_auth":
+            from google_auth import google_user_claims
+            user_claims = google_user_claims(token)
+        else:
+            user_claims = authenticated_user_claims(token)
     except (requests.RequestException, ValueError, KeyError, jwt.PyJWTError):
         app.logger.warning("Authentication provider identity validation failed")
         return redirect(url_for('replit_auth.error'))
@@ -207,13 +215,22 @@ def handle_error(blueprint, error, error_description=None, error_uri=None):
     return redirect(url_for('replit_auth.error'))
 
 
+def signin_url():
+    """Sign-in chooser when Google is enabled, otherwise straight to Replit."""
+    from google_auth import google_configured
+    return url_for('signin_chooser') if google_configured() else url_for('replit_auth.login')
+
+
+app.jinja_env.globals["signin_url"] = signin_url
+
+
 def require_login(f):
 
     @wraps(f)
     def decorated_function(*args, **kwargs):
         if not current_user.is_authenticated:
             session["next_url"] = get_next_navigation_url(request)
-            return redirect(url_for('replit_auth.login'))
+            return redirect(signin_url())
 
         expires_in = replit.token.get('expires_in', 0) if replit.token else 0
         if expires_in < 0:
@@ -224,7 +241,7 @@ def require_login(f):
                                              client_id=os.environ['REPL_ID'])
             except InvalidGrantError:
                 session["next_url"] = get_next_navigation_url(request)
-                return redirect(url_for('replit_auth.login'))
+                return redirect(signin_url())
             replit.token_updater(token)
 
         return f(*args, **kwargs)

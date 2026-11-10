@@ -26,6 +26,11 @@ try:
         next_run_time=__import__('datetime').datetime.utcnow(),
         replace_existing=True,
     )
+    from pro_reminders import run_scheduled
+    scheduler.add_job(
+        run_scheduled, trigger=IntervalTrigger(hours=1),
+        id='pro_expiry_reminders', replace_existing=True,
+    )
     scheduler.start()
     import logging
     logging.getLogger(__name__).info("APScheduler started — daily match scrape scheduled.")

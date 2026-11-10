@@ -25,7 +25,7 @@
           </button>
           {% endif %}
         {% else %}
-        <a href="{{ url_for('replit_auth.login') }}" class="btn btn-outline-success btn-sm py-0" style="font-size:11px; border-radius:6px;">
+        <a href="{{ signin_url() }}" class="btn btn-outline-success btn-sm py-0" style="font-size:11px; border-radius:6px;">
           <i class="bi bi-star me-1"></i>Follow a team
         </a>
         {% endif %}
@@ -110,7 +110,7 @@
     {# Guest + no matches #}
     <div class="alert alert-light border mb-4 py-2 px-3 d-flex align-items-center gap-2" style="border-radius:10px; font-size:13px;">
       <span>🏏</span>
-      <span class="text-muted"><a href="{{ url_for('replit_auth.login') }}" class="text-success fw-semibold text-decoration-none">Log in</a> to follow your team and see their next match instantly.</span>
+      <span class="text-muted"><a href="{{ signin_url() }}" class="text-success fw-semibold text-decoration-none">Log in</a> to follow your team and see their next match instantly.</span>
     </div>
     {% endif %}
 

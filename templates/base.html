@@ -104,7 +104,7 @@
                     <a href="{{ url_for('replit_auth.logout') }}" class="btn btn-outline-light btn-sm"><i class="bi bi-box-arrow-right me-1"></i>Log Out</a>
                     {% else %}
                     <a href="/pricing" class="nav-link text-warning fw-semibold"><i class="bi bi-lightning-fill me-1"></i>Go Pro</a>
-                    <a href="{{ url_for('replit_auth.login') }}" class="btn btn-outline-light btn-sm"><i class="bi bi-person me-1"></i>Log In</a>
+                    <a href="{{ signin_url() }}" class="btn btn-outline-light btn-sm"><i class="bi bi-person me-1"></i>Log In</a>
                     {% endif %}
                 </nav>
                 <button class="btn btn-outline-light d-md-none" type="button" data-bs-toggle="collapse" data-bs-target="#mobileNav">
@@ -136,7 +136,7 @@
                     <a href="{{ url_for('replit_auth.logout') }}" class="text-white text-decoration-none"><i class="bi bi-box-arrow-right me-2"></i>Log Out</a>
                     {% else %}
                     <a href="/pricing" class="text-warning text-decoration-none fw-semibold"><i class="bi bi-lightning-fill me-2"></i>Go Pro</a>
-                    <a href="{{ url_for('replit_auth.login') }}" class="text-white text-decoration-none"><i class="bi bi-person me-2"></i>Log In</a>
+                    <a href="{{ signin_url() }}" class="text-white text-decoration-none"><i class="bi bi-person me-2"></i>Log In</a>
                     {% endif %}
                 </div>
             </div>
