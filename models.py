@@ -123,6 +123,16 @@ class ReferralWelcomeGrant(db.Model):
     )
 
 
+class ProExpiryReminder(db.Model):
+    """One row per (user, expiry) already reminded; a later extension gets its own reminder."""
+    __tablename__ = 'pro_expiry_reminder'
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.String, db.ForeignKey('users.id'), nullable=False, index=True)
+    expires_at = db.Column(db.DateTime, nullable=False)
+    sent_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    __table_args__ = (UniqueConstraint('user_id', 'expires_at', name='pro_reminder_once'),)
+
+
 class OAuth(OAuthConsumerMixin, db.Model):
     """OAuth tokens for Replit Auth"""
     __tablename__ = 'flask_dance_oauth'
