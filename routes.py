@@ -3,10 +3,12 @@ from app import app, db
 from models import (Prediction, DiscoveredPlayer, PredictionFeedback, PageView, User, BugReport,
                    SupportChat, UserPreference, ConversionEvent, SavedPrediction, MatchAlert)
 from flask_login import current_user
-from replit_auth import make_replit_blueprint, require_login
+from replit_auth import make_replit_blueprint, require_login, signin_url
+from google_auth import init_google_auth
 from referrals import init_referrals
 
 app.register_blueprint(make_replit_blueprint(), url_prefix="/auth")
+init_google_auth(app)
 init_referrals(app, require_login)
 
 @app.before_request
@@ -1221,7 +1223,7 @@ def submit_feedback_form():
     """Submit user feedback on a prediction via form POST - requires login"""
     if not current_user.is_authenticated:
         flash("Please log in to submit feedback.", "warning")
-        return redirect(url_for('replit_auth.login'))
+        return redirect(signin_url())
     
     try:
         is_positive = request.form.get('is_positive', 'true').lower() == 'true'
@@ -1811,7 +1813,7 @@ def login_and_redirect():
     if current_user.is_authenticated:
         return redirect(next_url)
     session["next_url"] = request.url_root.rstrip("/") + next_url
-    return redirect(url_for('replit_auth.login'))
+    return redirect(signin_url())
 
 
 @app.route("/support-chat")
@@ -2351,7 +2353,7 @@ def require_pro(f):
     def _inner(*args, **kwargs):
         if not current_user.is_authenticated:
             session["next_url"] = request.url
-            return redirect(url_for('replit_auth.login'))
+            return redirect(signin_url())
         if not current_user.has_pro:
             flash("This feature is part of Matchday Pro. Upgrade to unlock it.", "warning")
             _track_event("upgrade_clicked", {"source": request.path})
@@ -2421,7 +2423,7 @@ def subscribe():
     from replit_auth import require_login as _rl
     if not current_user.is_authenticated:
         session["next_url"] = url_for('pricing')
-        return redirect(url_for('replit_auth.login'))
+        return redirect(signin_url())
 
     from stripe_helper import create_checkout_session, is_configured
     if not is_configured():
