@@ -210,3 +210,31 @@ mtime_ms = 1794208097824
 storage_uri = "gcs://replit-rams-assets-sisko/rams/assets/repl:b407f9d4-a912-4514-9106-fd10bd03162e/68acbaea-e6b2-48ff-aeca-762973fc5694/835b8cae-250d-4d3c-bfeb-aaab7c545fff"
 storage_version_token = "1794208179358630"
 content_type = "text/csv"
+
+[[outputs]]
+id = "JuRQ3shOHNaQg87ZDljQV"
+uri = "file://generated-artifacts/linkedin-script/CricPredict_LinkedIn_90_Second.pdf"
+type = "pdf"
+title = "CricPredict — 90-second video script"
+description = "Updated consumer-app positioning, key match snapshots, paired error statistics and validation caveats. Voiceover on page 1; on-screen details and factual notes follow."
+logical_id = "f512d7fe-653d-405c-8660-cd3802159e3d"
+content_hash = "sha256:4f11d2e250a5aa61c2c5584f2b9dab87b15f727f3a3b4caa96ab6a9a0ffb425c"
+size = 10004
+mtime_ms = 1794319726626
+storage_uri = "gcs://replit-rams-assets-sisko/rams/assets/repl:b407f9d4-a912-4514-9106-fd10bd03162e/f512d7fe-653d-405c-8660-cd3802159e3d/3d579a50-9252-48c3-93b0-f800c4120486"
+storage_version_token = "1794319773580627"
+content_type = "application/pdf"
+
+[[outputs]]
+id = "oh7GbU5wDUmGudSrJ2fvN"
+uri = "file://generated-artifacts/linkedin-script/CricPredict_LinkedIn_90_Second.docx"
+type = "word_document"
+title = "Editable video script"
+description = "Word version of the shortened voiceover and supporting editor notes."
+logical_id = "a6cde105-95fc-4804-8296-73b8bdaa0087"
+content_hash = "sha256:9d8d717c870d6b6f5939faff0a83bde315c842cfe9a9e277129d9c0590e3bf4d"
+size = 3623
+mtime_ms = 1794319726627
+storage_uri = "gcs://replit-rams-assets-sisko/rams/assets/repl:b407f9d4-a912-4514-9106-fd10bd03162e/a6cde105-95fc-4804-8296-73b8bdaa0087/fb385621-612f-4997-a40f-af1ed9f5c377"
+storage_version_token = "1794319775125687"
+content_type = "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
