@@ -108,6 +108,29 @@ class ReferralReward(db.Model):
     )
 
 
+class ProExpiryReminder(db.Model):
+    """Persistent, retryable record for an earned-Pro expiry email."""
+    __tablename__ = 'pro_expiry_reminder'
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.String, db.ForeignKey('users.id'), nullable=False, index=True)
+    expires_at = db.Column(db.DateTime, nullable=False)
+    status = db.Column(db.String(20), nullable=False, default='pending', index=True)
+    attempt_count = db.Column(db.Integer, nullable=False, default=0)
+    claimed_at = db.Column(db.DateTime, nullable=True)
+    next_attempt_at = db.Column(db.DateTime, nullable=True, index=True)
+    last_attempt_at = db.Column(db.DateTime, nullable=True)
+    sent_at = db.Column(db.DateTime, nullable=True)
+    last_error = db.Column(db.String(500), nullable=True)
+    created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    __table_args__ = (
+        UniqueConstraint('user_id', 'expires_at', name='uq_pro_expiry_reminder_user_expiry'),
+        db.CheckConstraint(
+            "status IN ('pending','sending','sent','superseded')",
+            name='pro_expiry_reminder_valid_status',
+        ),
+    )
+
+
 class OAuth(OAuthConsumerMixin, db.Model):
     """OAuth tokens for Replit Auth"""
     __tablename__ = 'flask_dance_oauth'

@@ -8,6 +8,7 @@ try:
     from apscheduler.schedulers.background import BackgroundScheduler
     from apscheduler.triggers.interval import IntervalTrigger
     from background_jobs import daily_match_scrape
+    from pro_expiry_reminders import send_pro_expiry_reminders
 
     scheduler = BackgroundScheduler(daemon=True)
     # Run every 24 hours; also fire immediately on first startup so we
@@ -24,6 +25,13 @@ try:
         settle_pending_rewards, trigger=IntervalTrigger(hours=1),
         id='referral_reward_settlement',
         next_run_time=__import__('datetime').datetime.utcnow(),
+        replace_existing=True,
+    )
+    scheduler.add_job(
+        send_pro_expiry_reminders, trigger=IntervalTrigger(hours=1),
+        id='pro_expiry_reminders',
+        coalesce=True,
+        max_instances=1,
         replace_existing=True,
     )
     scheduler.start()
