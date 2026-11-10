@@ -54,3 +54,9 @@ def test_accepts_replit_style_secret_names(monkeypatch):
     monkeypatch.setenv("GOOGLE_OAUTH_CLIENT_ID", "id")
     monkeypatch.setenv("GOOGLE_OAUTH_CLIENT_SECRET", "secret")
     assert google_auth.google_configured()
+
+
+@pytest.mark.parametrize("path", ["/privacy-policy", "/terms"])
+def test_legal_pages_render(path):
+    resp = app.test_client().get(path)
+    assert resp.status_code == 200 and b"Last updated" in resp.data
