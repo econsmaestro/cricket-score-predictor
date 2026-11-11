@@ -156,6 +156,9 @@ TEAM_FIELDING_EFFICIENCY = {
 
 FIELDING_TEAMS = sorted(TEAM_FIELDING_EFFICIENCY.keys())
 
+FIELDING_EFFECT_STRENGTH = 1.0
+
+
 def get_fielding_modifier(fielding_team: str) -> dict:
     efficiency = TEAM_FIELDING_EFFICIENCY.get(fielding_team, 0.85)
     drop_rate = 1.0 - efficiency
@@ -170,6 +173,13 @@ def get_fielding_modifier(fielding_team: str) -> dict:
 
     boundary_save_mod = 1.0 - (efficiency - 0.85) * 0.8
     boundary_save_mod = max(0.85, min(1.15, boundary_save_mod))
+
+    # Scale only after the existing raw calculations and clamps. At 1.0 the
+    # original modifiers are retained exactly; offline experiments may shrink
+    # the effects without editing the hand-assigned rating table.
+    run_mod = 1.0 + FIELDING_EFFECT_STRENGTH * (run_mod - 1.0)
+    wicket_mod = 1.0 + FIELDING_EFFECT_STRENGTH * (wicket_mod - 1.0)
+    boundary_save_mod = 1.0 + FIELDING_EFFECT_STRENGTH * (boundary_save_mod - 1.0)
 
     return {
         "efficiency": efficiency,
