@@ -69,6 +69,7 @@ def chase_matches(fmt, archive, limit=100):
 
 def chase_state(match, checkpoint):
     """Set chase context and recover both active batters from observed deliveries."""
+    # The shared builder also applies the format-aware women's fielding key.
     from prediction import Batsman
     state = build_state_at_over(match, checkpoint)
     state.innings, state.target = 2, match["target"]

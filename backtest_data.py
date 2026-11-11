@@ -13,6 +13,37 @@ PARSED_CACHE = CACHE_DIR / "parsed_matches.pkl"
 CRICSHEET_URL = "https://cricsheet.org/downloads/t20s_male_json.zip"
 
 MIN_CHECKPOINT_OVER = 16
+
+
+def fielding_rating_key(team, match_format):
+    """Historical equivalent of routes.py's canonical women's '<team> W' key.
+
+    Keep raw names in source/report records. Apply this at state construction
+    too, so previously parsed caches cannot retain the old women's mapping.
+    As in live autofill, fall back to the base key if no women's key exists.
+    Unlisted teams retain the engine's neutral 0.85 fallback.
+    """
+    import re
+    from prediction import TEAM_FIELDING_EFFICIENCY
+    aliases = dict(zip(
+        ("ind", "aus", "eng", "nz", "sa", "pak", "sl", "ban", "wi", "afg",
+         "zim", "ire", "ned", "sco", "nam", "usa", "nep", "oma", "uae", "can",
+         "ken", "uga", "png", "hk"),
+        ("India", "Australia", "England", "New Zealand", "South Africa",
+         "Pakistan", "Sri Lanka", "Bangladesh", "West Indies", "Afghanistan",
+         "Zimbabwe", "Ireland", "Netherlands", "Scotland", "Namibia", "USA",
+         "Nepal", "Oman", "UAE", "Canada", "Kenya", "Uganda",
+         "Papua New Guinea", "Hong Kong"),
+    ))
+    name = re.sub(r"\s+(women|wmn|w)\s*$", "", team.strip(), flags=re.I).strip()
+    canonical = {key.casefold(): key for key in TEAM_FIELDING_EFFICIENCY
+                 if not key.endswith(" W")}
+    base = aliases.get(name.casefold(), canonical.get(name.casefold(), name))
+    if match_format.startswith("womens_") and f"{base} W" in TEAM_FIELDING_EFFICIENCY:
+        return f"{base} W"
+    return base
+
+
 FORMATS = {
     "mens_t20": {"label": "Men's T20", "archive": "t20s_male_json.zip", "gender": "male", "type": "T20", "overs": 20, "checkpoints": [6, 10, 11, 15, 16]},
     "womens_t20": {"label": "Women's T20", "archive": "t20s_female_json.zip", "gender": "female", "type": "T20", "overs": 20, "checkpoints": [6, 10, 11, 15, 16]},
