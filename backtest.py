@@ -39,6 +39,7 @@ def _resolve_venue(raw_venue):
 def build_state_at_over(match, checkpoint_over):
     """Reconstruct MatchState from ball-by-ball data at checkpoint_over."""
     from prediction import MatchState, Batsman, Bowler
+    from backtest_data import fielding_rating_key
 
     current_score = 0
     wickets_fallen = 0
@@ -130,7 +131,8 @@ def build_state_at_over(match, checkpoint_over):
         innings=1,
         target=0,
         match_format=match.get("match_format", "mens_t20"),
-        fielding_team=match.get("fielding_team", ""),
+        fielding_team=fielding_rating_key(
+            match.get("fielding_team", ""), match.get("match_format", "mens_t20")),
     )
 
 

@@ -115,6 +115,9 @@ def get_venues_by_country() -> Dict[str, List[str]]:
 
 DEFAULT_VENUE_FACTORS = {"avg_score": 165, "boundary_rate": 0.15, "wicket_rate": 0.088}
 
+# Hand-assigned fielding prior, first added in commit 04f9846 (3 May 2026).
+# No measured derivation: these values are analyst estimates, not observed
+# catching/fielding percentages. See docs/fielding-rating-audit.md.
 TEAM_FIELDING_EFFICIENCY = {
     "India": 0.92,
     "Australia": 0.94,
@@ -153,6 +156,9 @@ TEAM_FIELDING_EFFICIENCY = {
 
 FIELDING_TEAMS = sorted(TEAM_FIELDING_EFFICIENCY.keys())
 
+FIELDING_EFFECT_STRENGTH = 1.0
+
+
 def get_fielding_modifier(fielding_team: str) -> dict:
     efficiency = TEAM_FIELDING_EFFICIENCY.get(fielding_team, 0.85)
     drop_rate = 1.0 - efficiency
@@ -167,6 +173,13 @@ def get_fielding_modifier(fielding_team: str) -> dict:
 
     boundary_save_mod = 1.0 - (efficiency - 0.85) * 0.8
     boundary_save_mod = max(0.85, min(1.15, boundary_save_mod))
+
+    # Scale only after the existing raw calculations and clamps. At 1.0 the
+    # original modifiers are retained exactly; offline experiments may shrink
+    # the effects without editing the hand-assigned rating table.
+    run_mod = 1.0 + FIELDING_EFFECT_STRENGTH * (run_mod - 1.0)
+    wicket_mod = 1.0 + FIELDING_EFFECT_STRENGTH * (wicket_mod - 1.0)
+    boundary_save_mod = 1.0 + FIELDING_EFFECT_STRENGTH * (boundary_save_mod - 1.0)
 
     return {
         "efficiency": efficiency,

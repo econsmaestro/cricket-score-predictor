@@ -40,9 +40,9 @@
                     {% if result.fielding_team %}
                     {% set eff_pct = (result.fielding_efficiency * 100)|int %}
                     {% set eff_color = 'success' if eff_pct >= 90 else ('warning' if eff_pct >= 80 else 'danger') %}
-                    <span class="badge bg-{{ eff_color }} ms-2">
+                    <span class="badge bg-{{ eff_color }} ms-2" title="Hand-assigned, not a measured statistic.">
                         <i class="bi bi-shield-check"></i>
-                        {{ result.fielding_team }} fielding {{ eff_pct }}%
+                        {{ result.fielding_team }} · Fielding rating (analyst estimate): {{ eff_pct }}%
                     </span>
                     {% endif %}
                 </div>

@@ -6,6 +6,7 @@ not be imported by a request handler.
 
     python -m research.fielding_rating_audit
 
+NOTE: superseded for k < 1 by research.fielding_strength_replay (real model, corrected women's keys).
 Method (approximate, stated limits in docs/fielding-rating-audit.md): the run modifier from
 prediction.get_fielding_modifier scales projected remaining runs. For each stored prediction
 the no-modifier projection is reconstructed as

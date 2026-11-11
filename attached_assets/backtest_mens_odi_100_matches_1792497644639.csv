@@ -1,401 +1,401 @@
-match_id,date,venue,batting_team,fielding_team,match_format,checkpoint,score_at_cp,wickets_at_cp,predicted,pred_low,pred_high,actual,error,abs_error,in_range,range_width
-1554417,2026-10-13,Al Amerat Cricket Ground Oman Cricket (Ministry Turf 1),Nepal,Oman,mens_odi,10,33,1,210,179,241,263,-53,53,False,62
-1554417,2026-10-13,Al Amerat Cricket Ground Oman Cricket (Ministry Turf 1),Nepal,Oman,mens_odi,20,76,1,243,224,262,263,-20,20,False,38
-1554417,2026-10-13,Al Amerat Cricket Ground Oman Cricket (Ministry Turf 1),Nepal,Oman,mens_odi,30,110,3,185,171,199,263,-78,78,False,28
-1554417,2026-10-13,Al Amerat Cricket Ground Oman Cricket (Ministry Turf 1),Nepal,Oman,mens_odi,40,171,4,210,194,226,263,-53,53,False,32
-1554414,2026-10-13,"Grand Prairie Stadium, Dallas",United States of America,Namibia,mens_odi,10,34,1,208,177,239,277,-69,69,False,62
-1554414,2026-10-13,"Grand Prairie Stadium, Dallas",United States of America,Namibia,mens_odi,20,77,3,182,168,196,277,-95,95,False,28
-1554414,2026-10-13,"Grand Prairie Stadium, Dallas",United States of America,Namibia,mens_odi,30,120,5,190,175,205,277,-87,87,False,30
-1554414,2026-10-13,"Grand Prairie Stadium, Dallas",United States of America,Namibia,mens_odi,40,185,7,211,195,227,277,-66,66,False,32
-1554416,2026-10-11,Al Amerat Cricket Ground Oman Cricket (Ministry Turf 1),Nepal,Canada,mens_odi,10,34,2,191,163,219,235,-44,44,False,56
-1554416,2026-10-11,Al Amerat Cricket Ground Oman Cricket (Ministry Turf 1),Nepal,Canada,mens_odi,20,64,3,169,156,182,235,-66,66,False,26
-1554416,2026-10-11,Al Amerat Cricket Ground Oman Cricket (Ministry Turf 1),Nepal,Canada,mens_odi,30,98,3,169,156,182,235,-66,66,False,26
-1554416,2026-10-11,Al Amerat Cricket Ground Oman Cricket (Ministry Turf 1),Nepal,Canada,mens_odi,40,148,5,183,169,197,235,-52,52,False,28
-1554413,2026-10-11,"Grand Prairie Stadium, Dallas",United Arab Emirates,United States of America,mens_odi,10,28,1,176,150,202,213,-37,37,False,52
-1554413,2026-10-11,"Grand Prairie Stadium, Dallas",United Arab Emirates,United States of America,mens_odi,20,78,2,217,200,234,213,4,4,True,34
-1554413,2026-10-11,"Grand Prairie Stadium, Dallas",United Arab Emirates,United States of America,mens_odi,30,141,3,233,215,251,213,20,20,False,36
-1554413,2026-10-11,"Grand Prairie Stadium, Dallas",United Arab Emirates,United States of America,mens_odi,40,178,7,204,188,220,213,-9,9,True,32
-1554415,2026-10-09,Al Amerat Cricket Ground Oman Cricket (Ministry Turf 1),Oman,Canada,mens_odi,10,58,1,315,268,362,263,52,52,False,94
-1554415,2026-10-09,Al Amerat Cricket Ground Oman Cricket (Ministry Turf 1),Oman,Canada,mens_odi,20,107,1,300,276,324,263,37,37,False,48
-1554415,2026-10-09,Al Amerat Cricket Ground Oman Cricket (Ministry Turf 1),Oman,Canada,mens_odi,30,183,3,349,322,376,263,86,86,False,54
-1554415,2026-10-09,Al Amerat Cricket Ground Oman Cricket (Ministry Turf 1),Oman,Canada,mens_odi,40,210,5,245,226,264,263,-18,18,True,38
-1554411,2026-10-07,"Grand Prairie Stadium, Dallas",Namibia,United States of America,mens_odi,10,29,2,191,163,219,298,-107,107,False,56
-1554411,2026-10-07,"Grand Prairie Stadium, Dallas",Namibia,United States of America,mens_odi,20,86,2,243,224,262,298,-55,55,False,38
-1554411,2026-10-07,"Grand Prairie Stadium, Dallas",Namibia,United States of America,mens_odi,30,139,3,280,258,302,298,-18,18,True,44
-1554411,2026-10-07,"Grand Prairie Stadium, Dallas",Namibia,United States of America,mens_odi,40,224,3,309,285,333,298,11,11,True,48
-1554410,2026-10-05,"Grand Prairie Stadium, Dallas",United Arab Emirates,United States of America,mens_odi,10,50,0,290,247,333,330,-40,40,True,86
-1554410,2026-10-05,"Grand Prairie Stadium, Dallas",United Arab Emirates,United States of America,mens_odi,20,109,1,285,263,307,330,-45,45,False,44
-1554410,2026-10-05,"Grand Prairie Stadium, Dallas",United Arab Emirates,United States of America,mens_odi,30,162,2,254,234,274,330,-76,76,False,40
-1554410,2026-10-05,"Grand Prairie Stadium, Dallas",United Arab Emirates,United States of America,mens_odi,40,231,4,273,252,294,330,-57,57,False,42
-1529229,2026-10-03,"Maharaja Yadavindra Singh International Cricket Stadium, New Chandigarh",India,West Indies,mens_odi,10,28,2,168,143,193,351,-183,183,False,50
-1529229,2026-10-03,"Maharaja Yadavindra Singh International Cricket Stadium, New Chandigarh",India,West Indies,mens_odi,20,102,2,286,264,308,351,-65,65,False,44
-1529229,2026-10-03,"Maharaja Yadavindra Singh International Cricket Stadium, New Chandigarh",India,West Indies,mens_odi,30,172,4,283,261,305,351,-68,68,False,44
-1529229,2026-10-03,"Maharaja Yadavindra Singh International Cricket Stadium, New Chandigarh",India,West Indies,mens_odi,40,246,5,294,271,317,351,-57,57,False,46
-1529228,2026-09-30,"Barsapara Cricket Stadium, Guwahati",West Indies,India,mens_odi,10,96,1,433,369,497,405,28,28,True,128
-1529228,2026-09-30,"Barsapara Cricket Stadium, Guwahati",West Indies,India,mens_odi,20,158,2,370,341,399,405,-35,35,False,58
-1529228,2026-09-30,"Barsapara Cricket Stadium, Guwahati",West Indies,India,mens_odi,30,234,2,409,377,441,405,4,4,True,64
-1529228,2026-09-30,"Barsapara Cricket Stadium, Guwahati",West Indies,India,mens_odi,40,329,3,407,375,439,405,2,2,True,64
-1529227,2026-09-27,"Greenfield International Stadium, Thiruvananthapuram",West Indies,India,mens_odi,10,85,0,464,395,533,295,169,169,False,138
-1529227,2026-09-27,"Greenfield International Stadium, Thiruvananthapuram",West Indies,India,mens_odi,20,136,1,326,300,352,295,31,31,False,52
-1529227,2026-09-27,"Greenfield International Stadium, Thiruvananthapuram",West Indies,India,mens_odi,30,176,1,305,281,329,295,10,10,True,48
-1529227,2026-09-27,"Greenfield International Stadium, Thiruvananthapuram",West Indies,India,mens_odi,40,213,5,248,229,267,295,-47,47,False,38
-1525656,2026-09-27,"Wanderers Stadium, Johannesburg",South Africa,Australia,mens_odi,10,51,2,213,182,244,365,-152,152,False,62
-1525656,2026-09-27,"Wanderers Stadium, Johannesburg",South Africa,Australia,mens_odi,20,118,3,255,235,275,365,-110,110,False,40
-1525656,2026-09-27,"Wanderers Stadium, Johannesburg",South Africa,Australia,mens_odi,30,181,3,292,269,315,365,-73,73,False,46
-1525656,2026-09-27,"Wanderers Stadium, Johannesburg",South Africa,Australia,mens_odi,40,265,5,317,292,342,365,-48,48,False,50
-1496590,2026-09-27,The Oval,England,Sri Lanka,mens_odi,10,50,1,284,242,326,355,-71,71,False,84
-1496590,2026-09-27,The Oval,England,Sri Lanka,mens_odi,20,87,2,235,217,253,355,-120,120,False,36
-1496590,2026-09-27,The Oval,England,Sri Lanka,mens_odi,30,157,2,312,288,336,355,-43,43,False,48
-1496590,2026-09-27,The Oval,England,Sri Lanka,mens_odi,40,251,4,302,278,326,355,-53,53,False,48
-1525655,2026-09-24,"Kingsmead, Durban",South Africa,Australia,mens_odi,10,40,2,180,153,207,297,-117,117,False,54
-1525655,2026-09-24,"Kingsmead, Durban",South Africa,Australia,mens_odi,20,93,3,198,183,213,297,-99,99,False,30
-1525655,2026-09-24,"Kingsmead, Durban",South Africa,Australia,mens_odi,30,152,4,222,205,239,297,-75,75,False,34
-1525655,2026-09-24,"Kingsmead, Durban",South Africa,Australia,mens_odi,40,208,5,247,228,266,297,-50,50,False,38
-1496589,2026-09-24,Headingley,Sri Lanka,England,mens_odi,10,46,1,211,180,242,321,-110,110,False,62
-1496589,2026-09-24,Headingley,Sri Lanka,England,mens_odi,20,105,1,292,269,315,321,-29,29,False,46
-1496589,2026-09-24,Headingley,Sri Lanka,England,mens_odi,30,188,2,348,321,375,321,27,27,True,54
-1496589,2026-09-24,Headingley,Sri Lanka,England,mens_odi,40,237,4,277,255,299,321,-44,44,False,44
-1496588,2026-09-22,"Riverside Ground, Chester-le-Street",England,Sri Lanka,mens_odi,10,64,1,360,306,414,265,95,95,False,108
-1496588,2026-09-22,"Riverside Ground, Chester-le-Street",England,Sri Lanka,mens_odi,20,119,2,334,308,360,265,69,69,False,52
-1496588,2026-09-22,"Riverside Ground, Chester-le-Street",England,Sri Lanka,mens_odi,30,175,3,287,265,309,265,22,22,True,44
-1496588,2026-09-22,"Riverside Ground, Chester-le-Street",England,Sri Lanka,mens_odi,40,214,7,240,221,259,265,-25,25,False,38
-1530205,2026-09-20,Harare Sports Club,Zimbabwe,Australia,mens_odi,10,57,2,264,225,303,271,-7,7,True,78
-1530205,2026-09-20,Harare Sports Club,Zimbabwe,Australia,mens_odi,20,99,3,208,192,224,271,-63,63,False,32
-1530205,2026-09-20,Harare Sports Club,Zimbabwe,Australia,mens_odi,30,151,3,223,206,240,271,-48,48,False,34
-1530205,2026-09-20,Harare Sports Club,Zimbabwe,Australia,mens_odi,40,206,3,256,236,276,271,-15,15,True,40
-1530204,2026-09-18,Harare Sports Club,Australia,Zimbabwe,mens_odi,10,78,0,558,475,641,356,202,202,False,166
-1530204,2026-09-18,Harare Sports Club,Australia,Zimbabwe,mens_odi,20,137,1,416,383,449,356,60,60,False,66
-1530204,2026-09-18,Harare Sports Club,Australia,Zimbabwe,mens_odi,30,200,2,360,332,388,356,4,4,True,56
-1530204,2026-09-18,Harare Sports Club,Australia,Zimbabwe,mens_odi,40,255,3,316,291,341,356,-40,40,False,50
-1530203,2026-09-15,Harare Sports Club,Australia,Zimbabwe,mens_odi,10,65,2,330,281,379,294,36,36,True,98
-1530203,2026-09-15,Harare Sports Club,Australia,Zimbabwe,mens_odi,20,118,4,223,206,240,294,-71,71,False,34
-1530203,2026-09-15,Harare Sports Club,Australia,Zimbabwe,mens_odi,30,167,4,252,232,272,294,-42,42,False,40
-1530203,2026-09-15,Harare Sports Club,Australia,Zimbabwe,mens_odi,40,228,5,273,252,294,294,-21,21,True,42
-1549969,2026-09-12,"Bayuemas Oval, Kuala Lumpur",Nepal,United Arab Emirates,mens_odi,10,45,0,239,204,274,313,-74,74,False,70
-1549969,2026-09-12,"Bayuemas Oval, Kuala Lumpur",Nepal,United Arab Emirates,mens_odi,20,95,0,274,253,295,313,-39,39,False,42
-1549969,2026-09-12,"Bayuemas Oval, Kuala Lumpur",Nepal,United Arab Emirates,mens_odi,30,150,2,271,250,292,313,-42,42,False,42
-1549969,2026-09-12,"Bayuemas Oval, Kuala Lumpur",Nepal,United Arab Emirates,mens_odi,40,227,3,290,267,313,313,-23,23,True,46
-1549532,2026-09-11,"Namibia Cricket Ground, Windhoek",South Africa,Namibia,mens_odi,10,40,1,205,175,235,335,-130,130,False,60
-1549532,2026-09-11,"Namibia Cricket Ground, Windhoek",South Africa,Namibia,mens_odi,20,96,1,300,276,324,335,-35,35,False,48
-1549532,2026-09-11,"Namibia Cricket Ground, Windhoek",South Africa,Namibia,mens_odi,30,168,1,350,322,378,335,15,15,True,56
-1549532,2026-09-11,"Namibia Cricket Ground, Windhoek",South Africa,Namibia,mens_odi,40,242,4,296,273,319,335,-39,39,False,46
-1549966,2026-09-10,"Bayuemas Oval, Kuala Lumpur",Nepal,Oman,mens_odi,10,33,3,173,148,198,147,26,26,False,50
-1549966,2026-09-10,"Bayuemas Oval, Kuala Lumpur",Nepal,Oman,mens_odi,20,68,4,173,160,186,147,26,26,False,26
-1549966,2026-09-10,"Bayuemas Oval, Kuala Lumpur",Nepal,Oman,mens_odi,30,113,4,186,172,200,147,39,39,False,28
-1549966,2026-09-10,"Bayuemas Oval, Kuala Lumpur",Nepal,Oman,mens_odi,40,136,6,162,150,174,147,15,15,False,24
-1549965,2026-09-08,"YSD-UKM Cricket Oval, Bangi",United Arab Emirates,Oman,mens_odi,10,57,0,370,315,425,192,178,178,False,110
-1549965,2026-09-08,"YSD-UKM Cricket Oval, Bangi",United Arab Emirates,Oman,mens_odi,20,93,1,218,201,235,192,26,26,False,34
-1549965,2026-09-08,"YSD-UKM Cricket Oval, Bangi",United Arab Emirates,Oman,mens_odi,30,115,5,185,171,199,192,-7,7,True,28
-1549965,2026-09-08,"YSD-UKM Cricket Oval, Bangi",United Arab Emirates,Oman,mens_odi,40,164,5,199,184,214,192,7,7,True,30
-1546003,2026-08-13,"Forthill, Dundee",Scotland,Canada,mens_odi,10,33,2,190,162,218,347,-157,157,False,56
-1546003,2026-08-13,"Forthill, Dundee",Scotland,Canada,mens_odi,20,111,2,349,322,376,347,2,2,True,54
-1546003,2026-08-13,"Forthill, Dundee",Scotland,Canada,mens_odi,30,180,3,306,282,330,347,-41,41,False,48
-1546003,2026-08-13,"Forthill, Dundee",Scotland,Canada,mens_odi,40,253,4,305,281,329,347,-42,42,False,48
-1546002,2026-08-11,"Forthill, Dundee",United Arab Emirates,Canada,mens_odi,10,33,2,198,169,227,282,-84,84,False,58
-1546002,2026-08-11,"Forthill, Dundee",United Arab Emirates,Canada,mens_odi,20,87,3,208,192,224,282,-74,74,False,32
-1546002,2026-08-11,"Forthill, Dundee",United Arab Emirates,Canada,mens_odi,30,138,3,239,220,258,282,-43,43,False,38
-1546002,2026-08-11,"Forthill, Dundee",United Arab Emirates,Canada,mens_odi,40,210,4,266,245,287,282,-16,16,True,42
-1546000,2026-08-07,"Forthill, Dundee",Scotland,Canada,mens_odi,10,31,2,171,146,196,281,-110,110,False,50
-1546000,2026-08-07,"Forthill, Dundee",Scotland,Canada,mens_odi,20,83,2,229,211,247,281,-52,52,False,36
-1546000,2026-08-07,"Forthill, Dundee",Scotland,Canada,mens_odi,30,133,3,225,207,243,281,-56,56,False,36
-1546000,2026-08-07,"Forthill, Dundee",Scotland,Canada,mens_odi,40,183,4,228,210,246,281,-53,53,False,36
-1544129,2026-07-31,"Sportpark Maarschalkerweerd, Utrecht",Netherlands,Namibia,mens_odi,10,22,2,166,142,190,183,-17,17,True,48
-1544129,2026-07-31,"Sportpark Maarschalkerweerd, Utrecht",Netherlands,Namibia,mens_odi,20,61,3,166,153,179,183,-17,17,False,26
-1544129,2026-07-31,"Sportpark Maarschalkerweerd, Utrecht",Netherlands,Namibia,mens_odi,30,98,6,150,138,162,183,-33,33,False,24
-1544129,2026-07-31,"Sportpark Maarschalkerweerd, Utrecht",Netherlands,Namibia,mens_odi,40,139,7,165,152,178,183,-18,18,False,26
-1544128,2026-07-29,"Sportpark Maarschalkerweerd, Utrecht",Netherlands,Nepal,mens_odi,10,42,3,255,217,293,225,30,30,True,76
-1544128,2026-07-29,"Sportpark Maarschalkerweerd, Utrecht",Netherlands,Nepal,mens_odi,20,64,4,169,156,182,225,-56,56,False,26
-1544128,2026-07-29,"Sportpark Maarschalkerweerd, Utrecht",Netherlands,Nepal,mens_odi,30,110,4,180,166,194,225,-45,45,False,28
-1544128,2026-07-29,"Sportpark Maarschalkerweerd, Utrecht",Netherlands,Nepal,mens_odi,40,164,4,207,191,223,225,-18,18,False,32
-1544127,2026-07-27,"Sportpark Maarschalkerweerd, Utrecht",Namibia,Nepal,mens_odi,10,32,1,199,170,228,211,-12,12,True,58
-1544127,2026-07-27,"Sportpark Maarschalkerweerd, Utrecht",Namibia,Nepal,mens_odi,20,66,2,182,168,196,211,-29,29,False,28
-1544127,2026-07-27,"Sportpark Maarschalkerweerd, Utrecht",Namibia,Nepal,mens_odi,30,102,2,198,183,213,211,-13,13,True,30
-1544127,2026-07-27,"Sportpark Maarschalkerweerd, Utrecht",Namibia,Nepal,mens_odi,40,163,2,222,205,239,211,11,11,True,34
-1544126,2026-07-25,"Sportpark Maarschalkerweerd, Utrecht",Netherlands,Namibia,mens_odi,10,35,1,193,165,221,251,-58,58,False,56
-1544126,2026-07-25,"Sportpark Maarschalkerweerd, Utrecht",Netherlands,Namibia,mens_odi,20,64,2,169,156,182,251,-82,82,False,26
-1544126,2026-07-25,"Sportpark Maarschalkerweerd, Utrecht",Netherlands,Namibia,mens_odi,30,112,3,188,173,203,251,-63,63,False,30
-1544126,2026-07-25,"Sportpark Maarschalkerweerd, Utrecht",Netherlands,Namibia,mens_odi,40,159,4,199,184,214,251,-52,52,False,30
-1544125,2026-07-23,"Sportpark Maarschalkerweerd, Utrecht",Nepal,Netherlands,mens_odi,10,33,3,173,148,198,157,16,16,True,50
-1544125,2026-07-23,"Sportpark Maarschalkerweerd, Utrecht",Nepal,Netherlands,mens_odi,20,68,4,173,160,186,157,16,16,False,26
-1544125,2026-07-23,"Sportpark Maarschalkerweerd, Utrecht",Nepal,Netherlands,mens_odi,30,90,5,160,148,172,157,3,3,True,24
-1544125,2026-07-23,"Sportpark Maarschalkerweerd, Utrecht",Nepal,Netherlands,mens_odi,40,141,7,167,154,180,157,10,10,True,26
-1544124,2026-07-21,"Sportpark Maarschalkerweerd, Utrecht",Nepal,Namibia,mens_odi,10,25,2,186,159,213,157,29,29,False,54
-1544124,2026-07-21,"Sportpark Maarschalkerweerd, Utrecht",Nepal,Namibia,mens_odi,20,53,3,158,146,170,157,1,1,True,24
-1544124,2026-07-21,"Sportpark Maarschalkerweerd, Utrecht",Nepal,Namibia,mens_odi,30,93,3,168,155,181,157,11,11,True,26
-1544124,2026-07-21,"Sportpark Maarschalkerweerd, Utrecht",Nepal,Namibia,mens_odi,40,125,6,151,139,163,157,-6,6,True,24
-1538628,2026-07-21,"Kensington Oval, Bridgetown, Barbados",New Zealand,West Indies,mens_odi,10,48,1,252,215,289,268,-16,16,True,74
-1538628,2026-07-21,"Kensington Oval, Bridgetown, Barbados",New Zealand,West Indies,mens_odi,20,107,2,332,306,358,268,64,64,False,52
-1538628,2026-07-21,"Kensington Oval, Bridgetown, Barbados",New Zealand,West Indies,mens_odi,30,160,3,250,230,270,268,-18,18,True,40
-1538628,2026-07-21,"Kensington Oval, Bridgetown, Barbados",New Zealand,West Indies,mens_odi,40,198,5,233,215,251,268,-35,35,False,36
-1538627,2026-07-19,"Kensington Oval, Bridgetown, Barbados",West Indies,New Zealand,mens_odi,10,35,1,176,150,202,188,-12,12,True,52
-1538627,2026-07-19,"Kensington Oval, Bridgetown, Barbados",West Indies,New Zealand,mens_odi,20,77,5,174,161,187,188,-14,14,False,26
-1538627,2026-07-19,"Kensington Oval, Bridgetown, Barbados",West Indies,New Zealand,mens_odi,30,116,6,168,155,181,188,-20,20,False,26
-1538627,2026-07-19,"Kensington Oval, Bridgetown, Barbados",West Indies,New Zealand,mens_odi,40,171,7,197,182,212,188,9,9,True,30
-1496581,2026-07-19,"Lord's, London",England,India,mens_odi,10,58,0,282,240,324,387,-105,105,False,84
-1496581,2026-07-19,"Lord's, London",England,India,mens_odi,20,125,0,342,315,369,387,-45,45,False,54
-1496581,2026-07-19,"Lord's, London",England,India,mens_odi,30,192,0,365,336,394,387,-22,22,True,58
-1496581,2026-07-19,"Lord's, London",England,India,mens_odi,40,261,1,345,318,372,387,-42,42,False,54
-1496580,2026-07-16,"Sophia Gardens, Cardiff",India,England,mens_odi,10,61,1,283,241,325,233,50,50,False,84
-1496580,2026-07-16,"Sophia Gardens, Cardiff",India,England,mens_odi,20,110,2,284,262,306,233,51,51,False,44
-1496580,2026-07-16,"Sophia Gardens, Cardiff",India,England,mens_odi,30,168,3,277,255,299,233,44,44,False,44
-1496580,2026-07-16,"Sophia Gardens, Cardiff",India,England,mens_odi,40,210,7,236,218,254,233,3,3,True,36
-1496579,2026-07-14,"Edgbaston, Birmingham",England,India,mens_odi,10,51,0,239,204,274,258,-19,19,True,70
-1496579,2026-07-14,"Edgbaston, Birmingham",England,India,mens_odi,20,93,5,190,175,205,258,-68,68,False,30
-1496579,2026-07-14,"Edgbaston, Birmingham",England,India,mens_odi,30,143,6,195,180,210,258,-63,63,False,30
-1496579,2026-07-14,"Edgbaston, Birmingham",England,India,mens_odi,40,203,6,229,211,247,258,-29,29,False,36
-1538624,2026-07-11,"Providence Stadium, Guyana",New Zealand,West Indies,mens_odi,10,45,0,226,193,259,267,-41,41,False,66
-1538624,2026-07-11,"Providence Stadium, Guyana",New Zealand,West Indies,mens_odi,20,103,2,282,260,304,267,15,15,True,44
-1538624,2026-07-11,"Providence Stadium, Guyana",New Zealand,West Indies,mens_odi,30,155,3,245,226,264,267,-22,22,False,38
-1538624,2026-07-11,"Providence Stadium, Guyana",New Zealand,West Indies,mens_odi,40,216,4,268,247,289,267,1,1,True,42
-1538300,2026-07-11,Harare Sports Club,Zimbabwe,Bangladesh,mens_odi,10,21,2,168,143,193,199,-31,31,False,50
-1538300,2026-07-11,Harare Sports Club,Zimbabwe,Bangladesh,mens_odi,20,51,3,156,144,168,199,-43,43,False,24
-1538300,2026-07-11,Harare Sports Club,Zimbabwe,Bangladesh,mens_odi,30,93,4,163,150,176,199,-36,36,False,26
-1538300,2026-07-11,Harare Sports Club,Zimbabwe,Bangladesh,mens_odi,40,150,6,176,162,190,199,-23,23,False,28
-1538299,2026-07-09,Harare Sports Club,Zimbabwe,Bangladesh,mens_odi,10,37,3,177,151,203,247,-70,70,False,52
-1538299,2026-07-09,Harare Sports Club,Zimbabwe,Bangladesh,mens_odi,20,77,4,182,168,196,247,-65,65,False,28
-1538299,2026-07-09,Harare Sports Club,Zimbabwe,Bangladesh,mens_odi,30,127,4,206,190,222,247,-41,41,False,32
-1538299,2026-07-09,Harare Sports Club,Zimbabwe,Bangladesh,mens_odi,40,162,6,188,173,203,247,-59,59,False,30
-1532482,2026-06-14,"Shere Bangla National Stadium, Mirpur",Bangladesh,Australia,mens_odi,10,53,2,201,171,231,274,-73,73,False,60
-1532482,2026-06-14,"Shere Bangla National Stadium, Mirpur",Bangladesh,Australia,mens_odi,20,86,3,191,176,206,274,-83,83,False,30
-1532482,2026-06-14,"Shere Bangla National Stadium, Mirpur",Bangladesh,Australia,mens_odi,30,144,3,220,203,237,274,-54,54,False,34
-1532482,2026-06-14,"Shere Bangla National Stadium, Mirpur",Bangladesh,Australia,mens_odi,40,198,3,241,222,260,274,-33,33,False,38
-1538428,2026-06-12,"Maple Leaf North-West Ground, King City",Canada,United States of America,mens_odi,10,69,1,336,286,386,275,61,61,False,100
-1538428,2026-06-12,"Maple Leaf North-West Ground, King City",Canada,United States of America,mens_odi,20,108,2,234,216,252,275,-41,41,False,36
-1538428,2026-06-12,"Maple Leaf North-West Ground, King City",Canada,United States of America,mens_odi,30,145,3,215,198,232,275,-60,60,False,34
-1538428,2026-06-12,"Maple Leaf North-West Ground, King City",Canada,United States of America,mens_odi,40,192,4,230,212,248,275,-45,45,False,36
-1538427,2026-06-10,"Maple Leaf North-West Ground, King City",Netherlands,Canada,mens_odi,10,31,1,211,180,242,214,-3,3,True,62
-1538427,2026-06-10,"Maple Leaf North-West Ground, King City",Netherlands,Canada,mens_odi,20,74,3,189,174,204,214,-25,25,False,30
-1538427,2026-06-10,"Maple Leaf North-West Ground, King City",Netherlands,Canada,mens_odi,30,120,4,192,177,207,214,-22,22,False,30
-1538427,2026-06-10,"Maple Leaf North-West Ground, King City",Netherlands,Canada,mens_odi,40,160,5,195,180,210,214,-19,19,False,30
-1538426,2026-06-08,"Maple Leaf North-West Ground, King City",Netherlands,United States of America,mens_odi,10,42,0,229,195,263,196,33,33,True,68
-1538426,2026-06-08,"Maple Leaf North-West Ground, King City",Netherlands,United States of America,mens_odi,20,74,0,216,199,233,196,20,20,False,34
-1538426,2026-06-08,"Maple Leaf North-West Ground, King City",Netherlands,United States of America,mens_odi,30,104,2,189,174,204,196,-7,7,True,30
-1538426,2026-06-08,"Maple Leaf North-West Ground, King City",Netherlands,United States of America,mens_odi,40,137,5,172,159,185,196,-24,24,False,26
-1535647,2026-06-04,"Gaddafi Stadium, Lahore",Australia,Pakistan,mens_odi,10,41,1,241,205,277,157,84,84,False,72
-1535647,2026-06-04,"Gaddafi Stadium, Lahore",Australia,Pakistan,mens_odi,20,89,2,255,235,275,157,98,98,False,40
-1535647,2026-06-04,"Gaddafi Stadium, Lahore",Australia,Pakistan,mens_odi,30,126,6,178,164,192,157,21,21,False,28
-1535647,2026-06-04,"Gaddafi Stadium, Lahore",Australia,Pakistan,mens_odi,40,154,8,171,158,184,157,14,14,False,26
-1538304,2026-06-03,"Sabina Park, Kingston, Jamaica",Sri Lanka,West Indies,mens_odi,10,32,1,172,147,197,303,-131,131,False,50
-1538304,2026-06-03,"Sabina Park, Kingston, Jamaica",Sri Lanka,West Indies,mens_odi,20,108,1,329,303,355,303,26,26,True,52
-1538304,2026-06-03,"Sabina Park, Kingston, Jamaica",Sri Lanka,West Indies,mens_odi,30,166,2,272,251,293,303,-31,31,False,42
-1538304,2026-06-03,"Sabina Park, Kingston, Jamaica",Sri Lanka,West Indies,mens_odi,40,218,3,270,249,291,303,-33,33,False,42
-1535646,2026-06-02,"Gaddafi Stadium, Lahore",Australia,Pakistan,mens_odi,10,51,2,244,208,280,231,13,13,True,72
-1535646,2026-06-02,"Gaddafi Stadium, Lahore",Australia,Pakistan,mens_odi,20,81,3,186,172,200,231,-45,45,False,28
-1535646,2026-06-02,"Gaddafi Stadium, Lahore",Australia,Pakistan,mens_odi,30,113,4,183,169,197,231,-48,48,False,28
-1535646,2026-06-02,"Gaddafi Stadium, Lahore",Australia,Pakistan,mens_odi,40,167,5,202,186,218,231,-29,29,False,32
-1535645,2026-05-30,Rawalpindi Cricket Stadium,Australia,Pakistan,mens_odi,10,51,1,263,224,302,200,63,63,False,78
-1535645,2026-05-30,Rawalpindi Cricket Stadium,Australia,Pakistan,mens_odi,20,97,4,214,197,231,200,14,14,True,34
-1535645,2026-05-30,Rawalpindi Cricket Stadium,Australia,Pakistan,mens_odi,30,140,5,210,194,226,200,10,10,True,32
-1535645,2026-05-30,Rawalpindi Cricket Stadium,Australia,Pakistan,mens_odi,40,193,7,219,202,236,200,19,19,False,34
-1531707,2026-05-22,"Tribhuvan University International Cricket Ground, Kirtipur",Nepal,United States of America,mens_odi,10,62,0,367,312,422,317,50,50,True,110
-1531707,2026-05-22,"Tribhuvan University International Cricket Ground, Kirtipur",Nepal,United States of America,mens_odi,20,87,2,198,183,213,317,-119,119,False,30
-1531707,2026-05-22,"Tribhuvan University International Cricket Ground, Kirtipur",Nepal,United States of America,mens_odi,30,130,2,221,204,238,317,-96,96,False,34
-1531707,2026-05-22,"Tribhuvan University International Cricket Ground, Kirtipur",Nepal,United States of America,mens_odi,40,212,3,267,246,288,317,-50,50,False,42
-1531706,2026-05-20,"Tribhuvan University International Cricket Ground, Kirtipur",Scotland,United States of America,mens_odi,10,47,3,187,159,215,169,18,18,True,56
-1531706,2026-05-20,"Tribhuvan University International Cricket Ground, Kirtipur",Scotland,United States of America,mens_odi,20,70,5,167,154,180,169,-2,2,True,26
-1531706,2026-05-20,"Tribhuvan University International Cricket Ground, Kirtipur",Scotland,United States of America,mens_odi,30,105,6,157,145,169,169,-12,12,True,24
-1531706,2026-05-20,"Tribhuvan University International Cricket Ground, Kirtipur",Scotland,United States of America,mens_odi,40,152,8,169,156,182,169,0,0,True,26
-1531704,2026-05-16,"Tribhuvan University International Cricket Ground, Kirtipur",United States of America,Nepal,mens_odi,10,49,1,292,249,335,195,97,97,False,86
-1531704,2026-05-16,"Tribhuvan University International Cricket Ground, Kirtipur",United States of America,Nepal,mens_odi,20,104,1,350,322,378,195,155,155,False,56
-1531704,2026-05-16,"Tribhuvan University International Cricket Ground, Kirtipur",United States of America,Nepal,mens_odi,30,155,3,254,234,274,195,59,59,False,40
-1531704,2026-05-16,"Tribhuvan University International Cricket Ground, Kirtipur",United States of America,Nepal,mens_odi,40,186,9,198,183,213,195,3,3,True,30
-1531701,2026-05-05,"Tribhuvan University International Cricket Ground, Kirtipur",Nepal,Oman,mens_odi,10,29,1,207,176,238,256,-49,49,False,62
-1531701,2026-05-05,"Tribhuvan University International Cricket Ground, Kirtipur",Nepal,Oman,mens_odi,20,82,1,258,238,278,256,2,2,True,40
-1531701,2026-05-05,"Tribhuvan University International Cricket Ground, Kirtipur",Nepal,Oman,mens_odi,30,131,2,248,229,267,256,-8,8,True,38
-1531701,2026-05-05,"Tribhuvan University International Cricket Ground, Kirtipur",Nepal,Oman,mens_odi,40,186,4,229,211,247,256,-27,27,False,36
-1531697,2026-04-27,"Tribhuvan University International Cricket Ground, Kirtipur",United Arab Emirates,Oman,mens_odi,10,51,0,313,267,359,268,45,45,True,92
-1531697,2026-04-27,"Tribhuvan University International Cricket Ground, Kirtipur",United Arab Emirates,Oman,mens_odi,20,101,0,330,304,356,268,62,62,False,52
-1531697,2026-04-27,"Tribhuvan University International Cricket Ground, Kirtipur",United Arab Emirates,Oman,mens_odi,30,163,0,350,322,378,268,82,82,False,56
-1531697,2026-04-27,"Tribhuvan University International Cricket Ground, Kirtipur",United Arab Emirates,Oman,mens_odi,40,201,3,244,225,263,268,-24,24,False,38
-1531696,2026-04-25,"Tribhuvan University International Cricket Ground, Kirtipur",Nepal,United Arab Emirates,mens_odi,10,48,3,188,160,216,200,-12,12,True,56
-1531696,2026-04-25,"Tribhuvan University International Cricket Ground, Kirtipur",Nepal,United Arab Emirates,mens_odi,20,90,4,195,180,210,200,-5,5,True,30
-1531696,2026-04-25,"Tribhuvan University International Cricket Ground, Kirtipur",Nepal,United Arab Emirates,mens_odi,30,121,6,173,160,186,200,-27,27,False,26
-1531696,2026-04-25,"Tribhuvan University International Cricket Ground, Kirtipur",Nepal,United Arab Emirates,mens_odi,40,168,7,194,179,209,200,-6,6,True,30
-1528274,2026-04-23,"Bir Sreshtho Flight Lieutenant Matiur Rahman Stadium, Chattogram",Bangladesh,New Zealand,mens_odi,10,36,3,176,150,202,265,-89,89,False,52
-1528274,2026-04-23,"Bir Sreshtho Flight Lieutenant Matiur Rahman Stadium, Chattogram",Bangladesh,New Zealand,mens_odi,20,84,3,189,174,204,265,-76,76,False,30
-1528274,2026-04-23,"Bir Sreshtho Flight Lieutenant Matiur Rahman Stadium, Chattogram",Bangladesh,New Zealand,mens_odi,30,135,3,212,196,228,265,-53,53,False,32
-1528274,2026-04-23,"Bir Sreshtho Flight Lieutenant Matiur Rahman Stadium, Chattogram",Bangladesh,New Zealand,mens_odi,40,204,4,258,238,278,265,-7,7,True,40
-1528273,2026-04-20,"Shere Bangla National Stadium, Mirpur",New Zealand,Bangladesh,mens_odi,10,28,2,168,143,193,198,-30,30,False,50
-1528273,2026-04-20,"Shere Bangla National Stadium, Mirpur",New Zealand,Bangladesh,mens_odi,20,66,3,171,158,184,198,-27,27,False,26
-1528273,2026-04-20,"Shere Bangla National Stadium, Mirpur",New Zealand,Bangladesh,mens_odi,30,109,4,179,165,193,198,-19,19,False,28
-1528273,2026-04-20,"Shere Bangla National Stadium, Mirpur",New Zealand,Bangladesh,mens_odi,40,158,6,184,170,198,198,-14,14,True,28
-1528272,2026-04-17,"Shere Bangla National Stadium, Mirpur",New Zealand,Bangladesh,mens_odi,10,38,1,213,182,244,247,-34,34,False,62
-1528272,2026-04-17,"Shere Bangla National Stadium, Mirpur",New Zealand,Bangladesh,mens_odi,20,82,1,245,226,264,247,-2,2,True,38
-1528272,2026-04-17,"Shere Bangla National Stadium, Mirpur",New Zealand,Bangladesh,mens_odi,30,142,4,216,199,233,247,-31,31,False,34
-1528272,2026-04-17,"Shere Bangla National Stadium, Mirpur",New Zealand,Bangladesh,mens_odi,40,185,5,220,203,237,247,-27,27,False,34
-1529144,2026-04-12,"Namibia Cricket Ground, Windhoek",Namibia,Scotland,mens_odi,10,38,3,178,152,204,198,-20,20,True,52
-1529144,2026-04-12,"Namibia Cricket Ground, Windhoek",Namibia,Scotland,mens_odi,20,83,4,188,173,203,198,-10,10,True,30
-1529144,2026-04-12,"Namibia Cricket Ground, Windhoek",Namibia,Scotland,mens_odi,30,106,5,176,162,190,198,-22,22,False,28
-1529144,2026-04-12,"Namibia Cricket Ground, Windhoek",Namibia,Scotland,mens_odi,40,151,5,186,172,200,198,-12,12,True,28
-1529143,2026-04-10,"Namibia Cricket Ground, Windhoek",Oman,Namibia,mens_odi,10,38,1,214,182,246,218,-4,4,True,64
-1529143,2026-04-10,"Namibia Cricket Ground, Windhoek",Oman,Namibia,mens_odi,20,67,4,172,159,185,218,-46,46,False,26
-1529143,2026-04-10,"Namibia Cricket Ground, Windhoek",Oman,Namibia,mens_odi,30,103,4,173,160,186,218,-45,45,False,26
-1529143,2026-04-10,"Namibia Cricket Ground, Windhoek",Oman,Namibia,mens_odi,40,157,5,192,177,207,218,-26,26,False,30
-1529140,2026-04-04,"Namibia Cricket Ground, Windhoek",Namibia,Oman,mens_odi,10,27,0,183,156,210,268,-85,85,False,54
-1529140,2026-04-04,"Namibia Cricket Ground, Windhoek",Namibia,Oman,mens_odi,20,73,2,270,249,291,268,2,2,True,42
-1529140,2026-04-04,"Namibia Cricket Ground, Windhoek",Namibia,Oman,mens_odi,30,113,3,190,175,205,268,-78,78,False,30
-1529140,2026-04-04,"Namibia Cricket Ground, Windhoek",Namibia,Oman,mens_odi,40,170,3,227,209,245,268,-41,41,False,36
-1525654,2026-03-15,"Shere Bangla National Stadium, Mirpur",Bangladesh,Pakistan,mens_odi,10,50,0,294,250,338,290,4,4,True,88
-1525654,2026-03-15,"Shere Bangla National Stadium, Mirpur",Bangladesh,Pakistan,mens_odi,20,119,1,369,340,398,290,79,79,False,58
-1525654,2026-03-15,"Shere Bangla National Stadium, Mirpur",Bangladesh,Pakistan,mens_odi,30,160,2,279,257,301,290,-11,11,True,44
-1525654,2026-03-15,"Shere Bangla National Stadium, Mirpur",Bangladesh,Pakistan,mens_odi,40,213,3,263,242,284,290,-27,27,False,42
-1507718,2026-01-27,"R Premadasa Stadium, Colombo",England,Sri Lanka,mens_odi,10,40,1,232,198,266,357,-125,125,False,68
-1507718,2026-01-27,"R Premadasa Stadium, Colombo",England,Sri Lanka,mens_odi,20,77,2,207,191,223,357,-150,150,False,32
-1507718,2026-01-27,"R Premadasa Stadium, Colombo",England,Sri Lanka,mens_odi,30,154,2,300,276,324,357,-57,57,False,48
-1507718,2026-01-27,"R Premadasa Stadium, Colombo",England,Sri Lanka,mens_odi,40,227,3,305,281,329,357,-52,52,False,48
-1507717,2026-01-24,"R Premadasa Stadium, Colombo",Sri Lanka,England,mens_odi,10,36,1,176,150,202,219,-43,43,False,52
-1507717,2026-01-24,"R Premadasa Stadium, Colombo",Sri Lanka,England,mens_odi,20,80,3,185,171,199,219,-34,34,False,28
-1507717,2026-01-24,"R Premadasa Stadium, Colombo",Sri Lanka,England,mens_odi,30,119,3,189,174,204,219,-30,30,False,30
-1507717,2026-01-24,"R Premadasa Stadium, Colombo",Sri Lanka,England,mens_odi,40,173,5,208,192,224,219,-11,11,True,32
-1507716,2026-01-22,"R Premadasa Stadium, Colombo",Sri Lanka,England,mens_odi,10,49,0,247,210,284,271,-24,24,True,74
-1507716,2026-01-22,"R Premadasa Stadium, Colombo",Sri Lanka,England,mens_odi,20,97,2,227,209,245,271,-44,44,False,36
-1507716,2026-01-22,"R Premadasa Stadium, Colombo",Sri Lanka,England,mens_odi,30,143,4,213,196,230,271,-58,58,False,34
-1507716,2026-01-22,"R Premadasa Stadium, Colombo",Sri Lanka,England,mens_odi,40,191,4,230,212,248,271,-41,41,False,36
-1490233,2026-01-18,"Holkar Cricket Stadium, Indore",New Zealand,India,mens_odi,10,47,2,215,183,247,337,-122,122,False,64
-1490233,2026-01-18,"Holkar Cricket Stadium, Indore",New Zealand,India,mens_odi,20,95,3,200,184,216,337,-137,137,False,32
-1490233,2026-01-18,"Holkar Cricket Stadium, Indore",New Zealand,India,mens_odi,30,159,3,258,238,278,337,-79,79,False,40
-1490233,2026-01-18,"Holkar Cricket Stadium, Indore",New Zealand,India,mens_odi,40,238,3,302,278,326,337,-35,35,False,48
-1490232,2026-01-14,"Niranjan Shah Stadium, Rajkot",India,New Zealand,mens_odi,10,57,0,339,289,389,284,55,55,False,100
-1490232,2026-01-14,"Niranjan Shah Stadium, Rajkot",India,New Zealand,mens_odi,20,112,2,261,241,281,284,-23,23,False,40
-1490232,2026-01-14,"Niranjan Shah Stadium, Rajkot",India,New Zealand,mens_odi,30,142,4,212,196,228,284,-72,72,False,32
-1490232,2026-01-14,"Niranjan Shah Stadium, Rajkot",India,New Zealand,mens_odi,40,199,5,234,216,252,284,-50,50,False,36
-1490231,2026-01-11,"Kotambi Stadium, Vadodara",New Zealand,India,mens_odi,10,49,0,257,219,295,300,-43,43,False,76
-1490231,2026-01-11,"Kotambi Stadium, Vadodara",New Zealand,India,mens_odi,20,104,0,296,273,319,300,-4,4,True,46
-1490231,2026-01-11,"Kotambi Stadium, Vadodara",New Zealand,India,mens_odi,30,153,3,224,207,241,300,-76,76,False,34
-1490231,2026-01-11,"Kotambi Stadium, Vadodara",New Zealand,India,mens_odi,40,212,5,247,228,266,300,-53,53,False,38
-1479575,2025-12-06,"Dr. Y.S. Rajasekhara Reddy ACA-VDCA Cricket Stadium, Visakhapatnam",South Africa,India,mens_odi,10,42,1,214,182,246,270,-56,56,False,64
-1479575,2025-12-06,"Dr. Y.S. Rajasekhara Reddy ACA-VDCA Cricket Stadium, Visakhapatnam",South Africa,India,mens_odi,20,104,1,294,271,317,270,24,24,False,46
-1479575,2025-12-06,"Dr. Y.S. Rajasekhara Reddy ACA-VDCA Cricket Stadium, Visakhapatnam",South Africa,India,mens_odi,30,185,4,321,296,346,270,51,51,False,50
-1479575,2025-12-06,"Dr. Y.S. Rajasekhara Reddy ACA-VDCA Cricket Stadium, Visakhapatnam",South Africa,India,mens_odi,40,244,7,270,249,291,270,0,0,True,42
-1479574,2025-12-03,"Shaheed Veer Narayan Singh International Stadium, Raipur",India,South Africa,mens_odi,10,66,2,347,295,399,358,-11,11,True,104
-1479574,2025-12-03,"Shaheed Veer Narayan Singh International Stadium, Raipur",India,South Africa,mens_odi,20,121,2,311,287,335,358,-47,47,False,48
-1479574,2025-12-03,"Shaheed Veer Narayan Singh International Stadium, Raipur",India,South Africa,mens_odi,30,207,2,386,356,416,358,28,28,True,60
-1479574,2025-12-03,"Shaheed Veer Narayan Singh International Stadium, Raipur",India,South Africa,mens_odi,40,284,4,352,324,380,358,-6,6,True,56
-1479573,2025-11-30,"JSCA International Stadium Complex, Ranchi",India,South Africa,mens_odi,10,80,1,371,316,426,349,22,22,True,110
-1479573,2025-11-30,"JSCA International Stadium Complex, Ranchi",India,South Africa,mens_odi,20,153,1,430,396,464,349,81,81,False,68
-1479573,2025-11-30,"JSCA International Stadium Complex, Ranchi",India,South Africa,mens_odi,30,198,3,301,277,325,349,-48,48,False,48
-1479573,2025-11-30,"JSCA International Stadium Complex, Ranchi",India,South Africa,mens_odi,40,264,4,333,307,359,349,-16,16,True,52
-1502169,2025-11-16,Rawalpindi Cricket Stadium,Sri Lanka,Pakistan,mens_odi,10,57,1,277,236,318,211,66,66,False,82
-1502169,2025-11-16,Rawalpindi Cricket Stadium,Sri Lanka,Pakistan,mens_odi,20,99,2,235,217,253,211,24,24,False,36
-1502169,2025-11-16,Rawalpindi Cricket Stadium,Sri Lanka,Pakistan,mens_odi,30,140,4,210,194,226,211,-1,1,True,32
-1502169,2025-11-16,Rawalpindi Cricket Stadium,Sri Lanka,Pakistan,mens_odi,40,185,7,211,195,227,211,0,0,True,32
-1491728,2025-11-16,"Hagley Oval, Christchurch",New Zealand,West Indies,mens_odi,10,39,2,193,165,221,269,-76,76,False,56
-1491728,2025-11-16,"Hagley Oval, Christchurch",New Zealand,West Indies,mens_odi,20,94,3,199,184,214,269,-70,70,False,30
-1491728,2025-11-16,"Hagley Oval, Christchurch",New Zealand,West Indies,mens_odi,30,133,4,203,187,219,269,-66,66,False,32
-1491728,2025-11-16,"Hagley Oval, Christchurch",New Zealand,West Indies,mens_odi,40,185,4,230,212,248,269,-39,39,False,36
-1502168,2025-11-14,Rawalpindi Cricket Stadium,Sri Lanka,Pakistan,mens_odi,10,51,1,240,204,276,288,-48,48,False,72
-1502168,2025-11-14,Rawalpindi Cricket Stadium,Sri Lanka,Pakistan,mens_odi,20,92,3,198,183,213,288,-90,90,False,30
-1502168,2025-11-14,Rawalpindi Cricket Stadium,Sri Lanka,Pakistan,mens_odi,30,146,4,224,207,241,288,-64,64,False,34
-1502168,2025-11-14,Rawalpindi Cricket Stadium,Sri Lanka,Pakistan,mens_odi,40,213,5,254,234,274,288,-34,34,False,40
-1502167,2025-11-11,Rawalpindi Cricket Stadium,Pakistan,Sri Lanka,mens_odi,10,28,1,168,143,193,299,-131,131,False,50
-1502167,2025-11-11,Rawalpindi Cricket Stadium,Pakistan,Sri Lanka,mens_odi,20,77,3,182,168,196,299,-117,117,False,28
-1502167,2025-11-11,Rawalpindi Cricket Stadium,Pakistan,Sri Lanka,mens_odi,30,119,4,189,174,204,299,-110,110,False,30
-1502167,2025-11-11,Rawalpindi Cricket Stadium,Pakistan,Sri Lanka,mens_odi,40,195,4,251,231,271,299,-48,48,False,40
-1501899,2025-11-06,"Iqbal Stadium, Faisalabad",Pakistan,South Africa,mens_odi,10,41,3,181,154,208,269,-88,88,False,54
-1501899,2025-11-06,"Iqbal Stadium, Faisalabad",Pakistan,South Africa,mens_odi,20,85,3,190,175,205,269,-79,79,False,30
-1501899,2025-11-06,"Iqbal Stadium, Faisalabad",Pakistan,South Africa,mens_odi,30,131,5,201,185,217,269,-68,68,False,32
-1501899,2025-11-06,"Iqbal Stadium, Faisalabad",Pakistan,South Africa,mens_odi,40,179,5,214,197,231,269,-55,55,False,34
-1507889,2025-11-05,"ICC Academy, Dubai",Nepal,United Arab Emirates,mens_odi,10,41,1,220,187,253,239,-19,19,True,66
-1507889,2025-11-05,"ICC Academy, Dubai",Nepal,United Arab Emirates,mens_odi,20,80,2,185,171,199,239,-54,54,False,28
-1507889,2025-11-05,"ICC Academy, Dubai",Nepal,United Arab Emirates,mens_odi,30,124,4,194,179,209,239,-45,45,False,30
-1507889,2025-11-05,"ICC Academy, Dubai",Nepal,United Arab Emirates,mens_odi,40,170,5,205,189,221,239,-34,34,False,32
-1501898,2025-11-04,"Iqbal Stadium, Faisalabad",South Africa,Pakistan,mens_odi,10,62,0,388,330,446,263,125,125,False,116
-1501898,2025-11-04,"Iqbal Stadium, Faisalabad",South Africa,Pakistan,mens_odi,20,125,1,369,340,398,263,106,106,False,58
-1501898,2025-11-04,"Iqbal Stadium, Faisalabad",South Africa,Pakistan,mens_odi,30,167,3,253,233,273,263,-10,10,True,40
-1501898,2025-11-04,"Iqbal Stadium, Faisalabad",South Africa,Pakistan,mens_odi,40,211,6,237,219,255,263,-26,26,False,36
-1507888,2025-11-03,Dubai International Cricket Stadium,United States of America,United Arab Emirates,mens_odi,10,47,3,187,159,215,292,-105,105,False,56
-1507888,2025-11-03,Dubai International Cricket Stadium,United States of America,United Arab Emirates,mens_odi,20,90,3,196,181,211,292,-96,96,False,30
-1507888,2025-11-03,Dubai International Cricket Stadium,United States of America,United Arab Emirates,mens_odi,30,145,3,234,216,252,292,-58,58,False,36
-1507888,2025-11-03,Dubai International Cricket Stadium,United States of America,United Arab Emirates,mens_odi,40,198,3,249,230,268,292,-43,43,False,38
-1507887,2025-11-01,"ICC Academy, Dubai",Nepal,United States of America,mens_odi,10,50,1,275,234,316,271,4,4,True,82
-1507887,2025-11-01,"ICC Academy, Dubai",Nepal,United States of America,mens_odi,20,90,2,221,204,238,271,-50,50,False,34
-1507887,2025-11-01,"ICC Academy, Dubai",Nepal,United States of America,mens_odi,30,144,4,225,207,243,271,-46,46,False,36
-1507887,2025-11-01,"ICC Academy, Dubai",Nepal,United States of America,mens_odi,40,201,5,236,218,254,271,-35,35,False,36
-1491722,2025-11-01,"Sky Stadium, Wellington",England,New Zealand,mens_odi,10,44,4,184,157,211,222,-38,38,False,54
-1491722,2025-11-01,"Sky Stadium, Wellington",England,New Zealand,mens_odi,20,92,5,189,174,204,222,-33,33,False,30
-1491722,2025-11-01,"Sky Stadium, Wellington",England,New Zealand,mens_odi,30,152,7,195,180,210,222,-27,27,False,30
-1491722,2025-11-01,"Sky Stadium, Wellington",England,New Zealand,mens_odi,40,222,9,234,216,252,222,12,12,True,36
-1507886,2025-10-30,"ICC Academy, Dubai",Nepal,United Arab Emirates,mens_odi,10,33,2,173,148,198,233,-60,60,False,50
-1507886,2025-10-30,"ICC Academy, Dubai",Nepal,United Arab Emirates,mens_odi,20,82,3,204,188,220,233,-29,29,False,32
-1507886,2025-10-30,"ICC Academy, Dubai",Nepal,United Arab Emirates,mens_odi,30,117,3,188,173,203,233,-45,45,False,30
-1507886,2025-10-30,"ICC Academy, Dubai",Nepal,United Arab Emirates,mens_odi,40,178,4,220,203,237,233,-13,13,True,34
-1507885,2025-10-28,Dubai International Cricket Stadium,United Arab Emirates,United States of America,mens_odi,10,29,2,169,144,194,211,-42,42,False,50
-1507885,2025-10-28,Dubai International Cricket Stadium,United Arab Emirates,United States of America,mens_odi,20,67,2,181,167,195,211,-30,30,False,28
-1507885,2025-10-28,Dubai International Cricket Stadium,United Arab Emirates,United States of America,mens_odi,30,108,4,178,164,192,211,-33,33,False,28
-1507885,2025-10-28,Dubai International Cricket Stadium,United Arab Emirates,United States of America,mens_odi,40,153,6,179,165,193,211,-32,32,False,28
-1507884,2025-10-26,Dubai International Cricket Stadium,United States of America,Nepal,mens_odi,10,32,1,211,180,242,262,-51,51,False,62
-1507884,2025-10-26,Dubai International Cricket Stadium,United States of America,Nepal,mens_odi,20,72,2,200,184,216,262,-62,62,False,32
-1507884,2025-10-26,Dubai International Cricket Stadium,United States of America,Nepal,mens_odi,30,121,2,238,219,257,262,-24,24,False,38
-1507884,2025-10-26,Dubai International Cricket Stadium,United States of America,Nepal,mens_odi,40,171,5,206,190,222,262,-56,56,False,32
-1478906,2025-10-25,Sydney Cricket Ground,Australia,India,mens_odi,10,63,1,252,215,289,236,16,16,True,74
-1478906,2025-10-25,Sydney Cricket Ground,Australia,India,mens_odi,20,113,2,255,235,275,236,19,19,True,40
-1478906,2025-10-25,Sydney Cricket Ground,Australia,India,mens_odi,30,156,3,226,208,244,236,-10,10,True,36
-1478906,2025-10-25,Sydney Cricket Ground,Australia,India,mens_odi,40,206,7,232,214,250,236,-4,4,True,36
-1505124,2025-10-23,"Shere Bangla National Stadium, Mirpur",Bangladesh,West Indies,mens_odi,10,74,0,469,399,539,296,173,173,False,140
-1505124,2025-10-23,"Shere Bangla National Stadium, Mirpur",Bangladesh,West Indies,mens_odi,20,139,0,451,415,487,296,155,155,False,72
-1505124,2025-10-23,"Shere Bangla National Stadium, Mirpur",Bangladesh,West Indies,mens_odi,30,194,2,321,296,346,296,25,25,True,50
-1505124,2025-10-23,"Shere Bangla National Stadium, Mirpur",Bangladesh,West Indies,mens_odi,40,231,3,266,245,287,296,-30,30,False,42
-1478905,2025-10-23,Adelaide Oval,India,Australia,mens_odi,10,29,2,169,144,194,264,-95,95,False,50
-1478905,2025-10-23,Adelaide Oval,India,Australia,mens_odi,20,86,2,219,202,236,264,-45,45,False,34
-1478905,2025-10-23,Adelaide Oval,India,Australia,mens_odi,30,137,3,207,191,223,264,-57,57,False,32
-1478905,2025-10-23,Adelaide Oval,India,Australia,mens_odi,40,198,5,233,215,251,264,-31,31,False,36
-1505123,2025-10-21,"Shere Bangla National Stadium, Mirpur",Bangladesh,West Indies,mens_odi,10,40,1,204,174,234,213,-9,9,True,60
-1505123,2025-10-21,"Shere Bangla National Stadium, Mirpur",Bangladesh,West Indies,mens_odi,20,74,3,179,165,193,213,-34,34,False,28
-1505123,2025-10-21,"Shere Bangla National Stadium, Mirpur",Bangladesh,West Indies,mens_odi,30,103,4,173,160,186,213,-40,40,False,26
-1505123,2025-10-21,"Shere Bangla National Stadium, Mirpur",Bangladesh,West Indies,mens_odi,40,131,6,157,145,169,213,-56,56,False,24
-1505122,2025-10-18,"Shere Bangla National Stadium, Mirpur",Bangladesh,West Indies,mens_odi,10,33,2,173,148,198,207,-34,34,False,50
-1505122,2025-10-18,"Shere Bangla National Stadium, Mirpur",Bangladesh,West Indies,mens_odi,20,66,2,180,166,194,207,-27,27,False,28
-1505122,2025-10-18,"Shere Bangla National Stadium, Mirpur",Bangladesh,West Indies,mens_odi,30,100,3,170,157,183,207,-37,37,False,26
-1505122,2025-10-18,"Shere Bangla National Stadium, Mirpur",Bangladesh,West Indies,mens_odi,40,140,4,175,161,189,207,-32,32,False,28
-1448356,2025-09-07,"The Rose Bowl, Southampton",England,South Africa,mens_odi,10,67,1,332,283,381,414,-82,82,False,98
-1448356,2025-09-07,"The Rose Bowl, Southampton",England,South Africa,mens_odi,20,139,2,345,318,372,414,-69,69,False,54
-1448356,2025-09-07,"The Rose Bowl, Southampton",England,South Africa,mens_odi,30,200,2,353,325,381,414,-61,61,False,56
-1448356,2025-09-07,"The Rose Bowl, Southampton",England,South Africa,mens_odi,40,299,2,398,367,429,414,-16,16,True,62
-1448355,2025-09-04,"Lord's, London",South Africa,England,mens_odi,10,51,0,277,236,318,330,-53,53,False,82
-1448355,2025-09-04,"Lord's, London",South Africa,England,mens_odi,20,95,3,200,184,216,330,-130,130,False,32
-1448355,2025-09-04,"Lord's, London",South Africa,England,mens_odi,30,150,3,225,207,243,330,-105,105,False,36
-1448355,2025-09-04,"Lord's, London",South Africa,England,mens_odi,40,240,4,287,265,309,330,-43,43,False,44
-1498184,2025-09-02,"Maple Leaf North-West Ground, King City",Namibia,Canada,mens_odi,10,25,0,178,152,204,261,-83,83,False,52
-1498184,2025-09-02,"Maple Leaf North-West Ground, King City",Namibia,Canada,mens_odi,20,74,0,225,207,243,261,-36,36,False,36
-1498184,2025-09-02,"Maple Leaf North-West Ground, King City",Namibia,Canada,mens_odi,30,111,1,217,200,234,261,-44,44,False,34
-1498184,2025-09-02,"Maple Leaf North-West Ground, King City",Namibia,Canada,mens_odi,40,178,2,230,212,248,261,-31,31,False,36
-1498183,2025-08-31,"Maple Leaf North-West Ground, King City",Canada,Scotland,mens_odi,10,18,4,158,135,181,184,-26,26,False,46
-1498183,2025-08-31,"Maple Leaf North-West Ground, King City",Canada,Scotland,mens_odi,20,45,6,122,113,131,184,-62,62,False,18
-1498183,2025-08-31,"Maple Leaf North-West Ground, King City",Canada,Scotland,mens_odi,30,90,6,142,131,153,184,-42,42,False,22
-1498183,2025-08-31,"Maple Leaf North-West Ground, King City",Canada,Scotland,mens_odi,40,127,7,153,141,165,184,-31,31,False,24
-1492822,2025-08-31,Harare Sports Club,Zimbabwe,Sri Lanka,mens_odi,10,55,1,242,206,278,277,-35,35,True,72
-1492822,2025-08-31,Harare Sports Club,Zimbabwe,Sri Lanka,mens_odi,20,99,1,267,246,288,277,-10,10,True,42
-1492822,2025-08-31,Harare Sports Club,Zimbabwe,Sri Lanka,mens_odi,30,145,2,256,236,276,277,-21,21,False,40
-1492822,2025-08-31,Harare Sports Club,Zimbabwe,Sri Lanka,mens_odi,40,194,5,229,211,247,277,-48,48,False,36
-1492821,2025-08-29,Harare Sports Club,Sri Lanka,Zimbabwe,mens_odi,10,29,1,209,178,240,298,-89,89,False,62
-1492821,2025-08-29,Harare Sports Club,Sri Lanka,Zimbabwe,mens_odi,20,81,1,255,235,275,298,-43,43,False,40
-1492821,2025-08-29,Harare Sports Club,Sri Lanka,Zimbabwe,mens_odi,30,121,2,228,210,246,298,-70,70,False,36
-1492821,2025-08-29,Harare Sports Club,Sri Lanka,Zimbabwe,mens_odi,40,185,5,220,203,237,298,-78,78,False,34
-1498181,2025-08-27,"Maple Leaf North-West Ground, King City",Canada,Namibia,mens_odi,10,56,0,354,301,407,219,135,135,False,106
-1498181,2025-08-27,"Maple Leaf North-West Ground, King City",Canada,Namibia,mens_odi,20,93,1,275,253,297,219,56,56,False,44
-1498181,2025-08-27,"Maple Leaf North-West Ground, King City",Canada,Namibia,mens_odi,30,124,4,194,179,209,219,-25,25,False,30
-1498181,2025-08-27,"Maple Leaf North-West Ground, King City",Canada,Namibia,mens_odi,40,157,7,183,169,197,219,-36,36,False,28
-1478903,2025-08-24,"Great Barrier Reef Arena, Mackay",Australia,South Africa,mens_odi,10,86,0,475,404,546,431,44,44,True,142
-1478903,2025-08-24,"Great Barrier Reef Arena, Mackay",Australia,South Africa,mens_odi,20,148,0,438,403,473,431,7,7,True,70
-1478903,2025-08-24,"Great Barrier Reef Arena, Mackay",Australia,South Africa,mens_odi,30,215,0,429,395,463,431,-2,2,True,68
-1478903,2025-08-24,"Great Barrier Reef Arena, Mackay",Australia,South Africa,mens_odi,40,305,2,402,370,434,431,-29,29,True,64
-1478902,2025-08-22,"Great Barrier Reef Arena, Mackay",South Africa,Australia,mens_odi,10,56,2,304,259,349,277,27,27,True,90
-1478902,2025-08-22,"Great Barrier Reef Arena, Mackay",South Africa,Australia,mens_odi,20,103,3,217,200,234,277,-60,60,False,34
-1478902,2025-08-22,"Great Barrier Reef Arena, Mackay",South Africa,Australia,mens_odi,30,176,3,294,271,317,277,17,17,True,46
-1478902,2025-08-22,"Great Barrier Reef Arena, Mackay",South Africa,Australia,mens_odi,40,233,5,272,251,293,277,-5,5,True,42
-1478901,2025-08-19,"Cazaly's Stadium, Cairns",South Africa,Australia,mens_odi,10,56,0,308,262,354,296,12,12,True,92
-1478901,2025-08-19,"Cazaly's Stadium, Cairns",South Africa,Australia,mens_odi,20,114,1,303,279,327,296,7,7,True,48
-1478901,2025-08-19,"Cazaly's Stadium, Cairns",South Africa,Australia,mens_odi,30,160,2,266,245,287,296,-30,30,False,42
-1478901,2025-08-19,"Cazaly's Stadium, Cairns",South Africa,Australia,mens_odi,40,223,3,258,238,278,296,-38,38,False,40
-1472530,2025-08-12,"Brian Lara Stadium, Tarouba, Trinidad",West Indies,Pakistan,mens_odi,10,36,1,205,175,235,294,-89,89,False,60
-1472530,2025-08-12,"Brian Lara Stadium, Tarouba, Trinidad",West Indies,Pakistan,mens_odi,20,69,3,174,161,187,294,-120,120,False,26
-1472530,2025-08-12,"Brian Lara Stadium, Tarouba, Trinidad",West Indies,Pakistan,mens_odi,30,110,3,182,168,196,294,-112,112,False,28
-1472530,2025-08-12,"Brian Lara Stadium, Tarouba, Trinidad",West Indies,Pakistan,mens_odi,40,175,4,234,216,252,294,-60,60,False,36
-1472528,2025-08-08,"Brian Lara Stadium, Tarouba, Trinidad",West Indies,Pakistan,mens_odi,10,59,1,332,283,381,280,52,52,False,98
-1472528,2025-08-08,"Brian Lara Stadium, Tarouba, Trinidad",West Indies,Pakistan,mens_odi,20,112,3,243,224,262,280,-37,37,False,38
-1472528,2025-08-08,"Brian Lara Stadium, Tarouba, Trinidad",West Indies,Pakistan,mens_odi,30,154,4,230,212,248,280,-50,50,False,36
-1472528,2025-08-08,"Brian Lara Stadium, Tarouba, Trinidad",West Indies,Pakistan,mens_odi,40,196,4,243,224,262,280,-37,37,False,38
-1485507,2025-07-08,Pallekele International Cricket Stadium,Sri Lanka,Bangladesh,mens_odi,10,51,1,323,275,371,285,38,38,True,96
-1485507,2025-07-08,Pallekele International Cricket Stadium,Sri Lanka,Bangladesh,mens_odi,20,95,2,270,249,291,285,-15,15,True,42
-1485507,2025-07-08,Pallekele International Cricket Stadium,Sri Lanka,Bangladesh,mens_odi,30,147,3,255,235,275,285,-30,30,False,40
-1485507,2025-07-08,Pallekele International Cricket Stadium,Sri Lanka,Bangladesh,mens_odi,40,222,3,294,271,317,285,9,9,True,46
+match_id,date,venue,batting_team,fielding_team,match_format,checkpoint,score_at_cp,wickets_at_cp,predicted,pred_low,pred_high,actual,error,abs_error,predicted_wickets,actual_wickets,wicket_error,wicket_abs_error,in_range,range_width,innings,target,chase_won
+1559567,2026-11-02,"ICC Academy, Dubai",Oman,Netherlands,mens_odi,10,40,1,265,226,304,182,83,83,5,10,-5,5,False,78,,,
+1559567,2026-11-02,"ICC Academy, Dubai",Oman,Netherlands,mens_odi,20,68,3,194,165,223,182,12,12,5,10,-5,5,True,58,,,
+1559567,2026-11-02,"ICC Academy, Dubai",Oman,Netherlands,mens_odi,30,104,4,190,168,212,182,8,8,6,10,-4,4,True,44,,,
+1559567,2026-11-02,"ICC Academy, Dubai",Oman,Netherlands,mens_odi,40,148,5,185,171,199,182,3,3,6,10,-4,4,True,28,,,
+1559566,2026-10-31,"ICC Academy, Dubai",Netherlands,United Arab Emirates,mens_odi,10,45,1,263,224,302,263,0,0,5,4,1,1,True,78,,,
+1559566,2026-10-31,"ICC Academy, Dubai",Netherlands,United Arab Emirates,mens_odi,20,86,2,240,204,276,263,-23,23,5,4,1,1,True,72,,,
+1559566,2026-10-31,"ICC Academy, Dubai",Netherlands,United Arab Emirates,mens_odi,30,137,2,283,250,316,263,20,20,4,4,0,0,True,66,,,
+1559566,2026-10-31,"ICC Academy, Dubai",Netherlands,United Arab Emirates,mens_odi,40,190,4,246,227,265,263,-17,17,5,4,1,1,True,38,,,
+1550719,2026-10-31,"Gaddafi Stadium, Lahore",Sri Lanka,Pakistan,mens_odi,10,51,0,349,297,401,325,24,24,4,8,-4,4,True,104,,,
+1550719,2026-10-31,"Gaddafi Stadium, Lahore",Sri Lanka,Pakistan,mens_odi,20,97,1,275,234,316,325,-50,50,4,8,-4,4,False,82,,,
+1550719,2026-10-31,"Gaddafi Stadium, Lahore",Sri Lanka,Pakistan,mens_odi,30,163,2,341,301,381,325,16,16,4,8,-4,4,True,80,,,
+1550719,2026-10-31,"Gaddafi Stadium, Lahore",Sri Lanka,Pakistan,mens_odi,40,238,2,376,346,406,325,51,51,3,8,-5,5,False,60,,,
+1558234,2026-10-30,"High Performance Oval, Windhoek",Ireland,Namibia,mens_odi,10,32,1,241,205,277,298,-57,57,4,8,-4,4,False,72,,,
+1558234,2026-10-30,"High Performance Oval, Windhoek",Ireland,Namibia,mens_odi,20,89,2,266,227,305,298,-32,32,5,8,-3,3,True,78,,,
+1558234,2026-10-30,"High Performance Oval, Windhoek",Ireland,Namibia,mens_odi,30,144,3,248,219,277,298,-50,50,5,8,-3,3,False,58,,,
+1558234,2026-10-30,"High Performance Oval, Windhoek",Ireland,Namibia,mens_odi,40,197,5,251,231,271,298,-47,47,6,8,-2,2,False,40,,,
+1559565,2026-10-29,"ICC Academy, Dubai",Oman,United Arab Emirates,mens_odi,10,36,2,219,187,251,196,23,23,6,10,-4,4,True,64,,,
+1559565,2026-10-29,"ICC Academy, Dubai",Oman,United Arab Emirates,mens_odi,20,82,3,215,183,247,196,19,19,5,10,-5,5,True,64,,,
+1559565,2026-10-29,"ICC Academy, Dubai",Oman,United Arab Emirates,mens_odi,30,126,3,224,198,250,196,28,28,5,10,-5,5,False,52,,,
+1559565,2026-10-29,"ICC Academy, Dubai",Oman,United Arab Emirates,mens_odi,40,181,7,207,191,223,196,11,11,9,10,-1,1,True,32,,,
+1550718,2026-10-29,"Gaddafi Stadium, Lahore",England,Sri Lanka,mens_odi,10,62,0,411,350,472,386,25,25,4,5,-1,1,True,122,,,
+1550718,2026-10-29,"Gaddafi Stadium, Lahore",England,Sri Lanka,mens_odi,20,140,0,500,425,575,386,114,114,3,5,-2,2,False,150,,,
+1550718,2026-10-29,"Gaddafi Stadium, Lahore",England,Sri Lanka,mens_odi,30,185,1,373,329,417,386,-13,13,3,5,-2,2,True,88,,,
+1550718,2026-10-29,"Gaddafi Stadium, Lahore",England,Sri Lanka,mens_odi,40,294,2,444,409,479,386,58,58,3,5,-2,2,False,70,,,
+1559564,2026-10-27,"ICC Academy, Dubai",Netherlands,Oman,mens_odi,10,91,0,571,486,656,371,200,200,3,5,-2,2,False,170,,,
+1559564,2026-10-27,"ICC Academy, Dubai",Netherlands,Oman,mens_odi,20,130,2,373,318,428,371,2,2,4,5,-1,1,True,110,,,
+1559564,2026-10-27,"ICC Academy, Dubai",Netherlands,Oman,mens_odi,30,201,2,457,403,511,371,86,86,4,5,-1,1,False,108,,,
+1559564,2026-10-27,"ICC Academy, Dubai",Netherlands,Oman,mens_odi,40,273,3,380,350,410,371,9,9,4,5,-1,1,True,60,,,
+1558233,2026-10-27,"High Performance Oval, Windhoek",Namibia,Ireland,mens_odi,10,48,1,291,248,334,316,-25,25,5,7,-2,2,True,86,,,
+1558233,2026-10-27,"High Performance Oval, Windhoek",Namibia,Ireland,mens_odi,20,98,2,277,236,318,316,-39,39,5,7,-2,2,True,82,,,
+1558233,2026-10-27,"High Performance Oval, Windhoek",Namibia,Ireland,mens_odi,30,155,2,326,287,365,316,10,10,4,7,-3,3,True,78,,,
+1558233,2026-10-27,"High Performance Oval, Windhoek",Namibia,Ireland,mens_odi,40,209,4,265,244,286,316,-51,51,5,7,-2,2,False,42,,,
+1559563,2026-10-25,"ICC Academy, Dubai",United Arab Emirates,Netherlands,mens_odi,10,39,2,231,197,265,244,-13,13,5,8,-3,3,True,68,,,
+1559563,2026-10-25,"ICC Academy, Dubai",United Arab Emirates,Netherlands,mens_odi,20,77,3,189,161,217,244,-55,55,5,8,-3,3,False,56,,,
+1559563,2026-10-25,"ICC Academy, Dubai",United Arab Emirates,Netherlands,mens_odi,30,132,3,249,220,278,244,5,5,5,8,-3,3,True,58,,,
+1559563,2026-10-25,"ICC Academy, Dubai",United Arab Emirates,Netherlands,mens_odi,40,175,3,248,229,267,244,4,4,4,8,-4,4,True,38,,,
+1550716,2026-10-25,"Gaddafi Stadium, Lahore",England,Pakistan,mens_odi,10,56,4,266,227,305,241,25,25,7,10,-3,3,True,78,,,
+1550716,2026-10-25,"Gaddafi Stadium, Lahore",England,Pakistan,mens_odi,20,102,4,265,226,304,241,24,24,6,10,-4,4,True,78,,,
+1550716,2026-10-25,"Gaddafi Stadium, Lahore",England,Pakistan,mens_odi,30,159,5,241,213,269,241,0,0,6,10,-4,4,True,56,,,
+1550716,2026-10-25,"Gaddafi Stadium, Lahore",England,Pakistan,mens_odi,40,199,8,216,199,233,241,-25,25,10,10,0,0,False,34,,,
+1558232,2026-10-24,"High Performance Oval, Windhoek",Namibia,Ireland,mens_odi,10,45,1,295,251,339,321,-26,26,5,6,-1,1,True,88,,,
+1558232,2026-10-24,"High Performance Oval, Windhoek",Namibia,Ireland,mens_odi,20,92,2,291,248,334,321,-30,30,5,6,-1,1,True,86,,,
+1558232,2026-10-24,"High Performance Oval, Windhoek",Namibia,Ireland,mens_odi,30,134,2,277,244,310,321,-44,44,4,6,-2,2,False,66,,,
+1558232,2026-10-24,"High Performance Oval, Windhoek",Namibia,Ireland,mens_odi,40,210,3,288,265,311,321,-33,33,4,6,-2,2,False,46,,,
+1558231,2026-10-22,"High Performance Oval, Windhoek",Ireland,Namibia,mens_odi,10,56,0,384,327,441,229,155,155,4,9,-5,5,False,114,,,
+1558231,2026-10-22,"High Performance Oval, Windhoek",Ireland,Namibia,mens_odi,20,92,1,293,250,336,229,64,64,4,9,-5,5,False,86,,,
+1558231,2026-10-22,"High Performance Oval, Windhoek",Ireland,Namibia,mens_odi,30,131,2,250,220,280,229,21,21,4,9,-5,5,True,60,,,
+1558231,2026-10-22,"High Performance Oval, Windhoek",Ireland,Namibia,mens_odi,40,175,3,230,212,248,229,1,1,4,9,-5,5,True,36,,,
+1550715,2026-10-22,Rawalpindi Cricket Stadium,England,Sri Lanka,mens_odi,10,54,0,331,282,380,429,-98,98,4,4,0,0,False,98,,,
+1550715,2026-10-22,Rawalpindi Cricket Stadium,England,Sri Lanka,mens_odi,20,110,2,320,272,368,429,-109,109,5,4,1,1,False,96,,,
+1550715,2026-10-22,Rawalpindi Cricket Stadium,England,Sri Lanka,mens_odi,30,174,2,371,327,415,429,-58,58,4,4,0,0,False,88,,,
+1550715,2026-10-22,Rawalpindi Cricket Stadium,England,Sri Lanka,mens_odi,40,273,3,423,390,456,429,-6,6,4,4,0,0,True,66,,,
+1550714,2026-10-20,Rawalpindi Cricket Stadium,Pakistan,England,mens_odi,10,46,2,231,197,265,302,-71,71,6,9,-3,3,False,68,,,
+1550714,2026-10-20,Rawalpindi Cricket Stadium,Pakistan,England,mens_odi,20,92,4,215,183,247,302,-87,87,6,9,-3,3,False,64,,,
+1550714,2026-10-20,Rawalpindi Cricket Stadium,Pakistan,England,mens_odi,30,147,5,217,191,243,302,-85,85,6,9,-3,3,False,52,,,
+1550714,2026-10-20,Rawalpindi Cricket Stadium,Pakistan,England,mens_odi,40,211,6,237,219,255,302,-65,65,7,9,-2,2,False,36,,,
+1554420,2026-10-19,Al Amerat Cricket Ground Oman Cricket (Ministry Turf 1),Nepal,Oman,mens_odi,10,24,1,223,190,256,280,-57,57,4,10,-6,6,False,66,,,
+1554420,2026-10-19,Al Amerat Cricket Ground Oman Cricket (Ministry Turf 1),Nepal,Oman,mens_odi,20,71,1,261,222,300,280,-19,19,4,10,-6,6,True,78,,,
+1554420,2026-10-19,Al Amerat Cricket Ground Oman Cricket (Ministry Turf 1),Nepal,Oman,mens_odi,30,124,3,238,210,266,280,-42,42,5,10,-5,5,False,56,,,
+1554420,2026-10-19,Al Amerat Cricket Ground Oman Cricket (Ministry Turf 1),Nepal,Oman,mens_odi,40,187,3,275,253,297,280,-5,5,4,10,-6,6,True,44,,,
+1550713,2026-10-18,Rawalpindi Cricket Stadium,Pakistan,Sri Lanka,mens_odi,10,54,2,303,258,348,305,-2,2,6,10,-4,4,True,90,,,
+1550713,2026-10-18,Rawalpindi Cricket Stadium,Pakistan,Sri Lanka,mens_odi,20,106,3,234,199,269,305,-71,71,5,10,-5,5,False,70,,,
+1550713,2026-10-18,Rawalpindi Cricket Stadium,Pakistan,Sri Lanka,mens_odi,30,160,4,263,232,294,305,-42,42,6,10,-4,4,False,62,,,
+1550713,2026-10-18,Rawalpindi Cricket Stadium,Pakistan,Sri Lanka,mens_odi,40,238,5,302,278,326,305,-3,3,6,10,-4,4,True,48,,,
+1555117,2026-10-17,"Sheikh Zayed Stadium, Abu Dhabi",Zimbabwe,Bangladesh,mens_odi,10,30,3,174,148,200,271,-97,97,6,8,-2,2,False,52,,,
+1555117,2026-10-17,"Sheikh Zayed Stadium, Abu Dhabi",Zimbabwe,Bangladesh,mens_odi,20,86,3,233,199,267,271,-38,38,5,8,-3,3,False,68,,,
+1555117,2026-10-17,"Sheikh Zayed Stadium, Abu Dhabi",Zimbabwe,Bangladesh,mens_odi,30,149,3,283,250,316,271,12,12,5,8,-3,3,True,66,,,
+1555117,2026-10-17,"Sheikh Zayed Stadium, Abu Dhabi",Zimbabwe,Bangladesh,mens_odi,40,201,5,263,242,284,271,-8,8,6,8,-2,2,True,42,,,
+1554419,2026-10-17,Al Amerat Cricket Ground Oman Cricket (Ministry Turf 1),Canada,Nepal,mens_odi,10,62,0,422,359,485,256,166,166,4,10,-6,6,False,126,,,
+1554419,2026-10-17,Al Amerat Cricket Ground Oman Cricket (Ministry Turf 1),Canada,Nepal,mens_odi,20,94,1,313,267,359,256,57,57,4,10,-6,6,False,92,,,
+1554419,2026-10-17,Al Amerat Cricket Ground Oman Cricket (Ministry Turf 1),Canada,Nepal,mens_odi,30,140,2,268,236,300,256,12,12,4,10,-6,6,True,64,,,
+1554419,2026-10-17,Al Amerat Cricket Ground Oman Cricket (Ministry Turf 1),Canada,Nepal,mens_odi,40,191,2,292,269,315,256,36,36,3,10,-7,7,False,46,,,
+1554418,2026-10-15,Al Amerat Cricket Ground Oman Cricket (Ministry Turf 1),Canada,Oman,mens_odi,10,58,2,333,284,382,256,77,77,5,10,-5,5,False,98,,,
+1554418,2026-10-15,Al Amerat Cricket Ground Oman Cricket (Ministry Turf 1),Canada,Oman,mens_odi,20,95,3,249,212,286,256,-7,7,5,10,-5,5,True,74,,,
+1554418,2026-10-15,Al Amerat Cricket Ground Oman Cricket (Ministry Turf 1),Canada,Oman,mens_odi,30,142,3,263,232,294,256,7,7,5,10,-5,5,True,62,,,
+1554418,2026-10-15,Al Amerat Cricket Ground Oman Cricket (Ministry Turf 1),Canada,Oman,mens_odi,40,190,6,223,206,240,256,-33,33,7,10,-3,3,False,34,,,
+1554417,2026-10-13,Al Amerat Cricket Ground Oman Cricket (Ministry Turf 1),Nepal,Oman,mens_odi,10,33,1,252,215,289,263,-11,11,4,8,-4,4,True,74,,,
+1554417,2026-10-13,Al Amerat Cricket Ground Oman Cricket (Ministry Turf 1),Nepal,Oman,mens_odi,20,76,1,276,235,317,263,13,13,4,8,-4,4,True,82,,,
+1554417,2026-10-13,Al Amerat Cricket Ground Oman Cricket (Ministry Turf 1),Nepal,Oman,mens_odi,30,110,3,204,180,228,263,-59,59,5,8,-3,3,False,48,,,
+1554417,2026-10-13,Al Amerat Cricket Ground Oman Cricket (Ministry Turf 1),Nepal,Oman,mens_odi,40,171,4,225,207,243,263,-38,38,5,8,-3,3,False,36,,,
+1554414,2026-10-13,"Grand Prairie Stadium, Dallas",United States of America,Namibia,mens_odi,10,34,1,252,215,289,277,-25,25,4,7,-3,3,True,74,,,
+1554414,2026-10-13,"Grand Prairie Stadium, Dallas",United States of America,Namibia,mens_odi,20,77,3,188,160,216,277,-89,89,5,7,-2,2,False,56,,,
+1554414,2026-10-13,"Grand Prairie Stadium, Dallas",United States of America,Namibia,mens_odi,30,120,5,190,168,212,277,-87,87,6,7,-1,1,False,44,,,
+1554414,2026-10-13,"Grand Prairie Stadium, Dallas",United States of America,Namibia,mens_odi,40,185,7,211,195,227,277,-66,66,9,7,2,2,False,32,,,
+1554416,2026-10-11,Al Amerat Cricket Ground Oman Cricket (Ministry Turf 1),Nepal,Canada,mens_odi,10,34,2,237,202,272,235,2,2,5,10,-5,5,True,70,,,
+1554416,2026-10-11,Al Amerat Cricket Ground Oman Cricket (Ministry Turf 1),Nepal,Canada,mens_odi,20,64,3,176,150,202,235,-59,59,5,10,-5,5,False,52,,,
+1554416,2026-10-11,Al Amerat Cricket Ground Oman Cricket (Ministry Turf 1),Nepal,Canada,mens_odi,30,98,3,190,168,212,235,-45,45,5,10,-5,5,False,44,,,
+1554416,2026-10-11,Al Amerat Cricket Ground Oman Cricket (Ministry Turf 1),Nepal,Canada,mens_odi,40,148,5,183,169,197,235,-52,52,6,10,-4,4,False,28,,,
+1554413,2026-10-11,"Grand Prairie Stadium, Dallas",United Arab Emirates,United States of America,mens_odi,10,28,1,222,189,255,213,9,9,5,10,-5,5,True,66,,,
+1554413,2026-10-11,"Grand Prairie Stadium, Dallas",United Arab Emirates,United States of America,mens_odi,20,78,2,244,208,280,213,31,31,5,10,-5,5,True,72,,,
+1554413,2026-10-11,"Grand Prairie Stadium, Dallas",United Arab Emirates,United States of America,mens_odi,30,141,3,254,224,284,213,41,41,5,10,-5,5,False,60,,,
+1554413,2026-10-11,"Grand Prairie Stadium, Dallas",United Arab Emirates,United States of America,mens_odi,40,178,7,204,188,220,213,-9,9,9,10,-1,1,True,32,,,
+1554415,2026-10-09,Al Amerat Cricket Ground Oman Cricket (Ministry Turf 1),Oman,Canada,mens_odi,10,58,1,352,300,404,263,89,89,4,10,-6,6,False,104,,,
+1554415,2026-10-09,Al Amerat Cricket Ground Oman Cricket (Ministry Turf 1),Oman,Canada,mens_odi,20,107,1,338,288,388,263,75,75,3,10,-7,7,False,100,,,
+1554415,2026-10-09,Al Amerat Cricket Ground Oman Cricket (Ministry Turf 1),Oman,Canada,mens_odi,30,183,3,387,341,433,263,124,124,4,10,-6,6,False,92,,,
+1554415,2026-10-09,Al Amerat Cricket Ground Oman Cricket (Ministry Turf 1),Oman,Canada,mens_odi,40,210,5,245,226,264,263,-18,18,6,10,-4,4,True,38,,,
+1554411,2026-10-07,"Grand Prairie Stadium, Dallas",Namibia,United States of America,mens_odi,10,29,2,218,186,250,298,-80,80,6,9,-3,3,False,64,,,
+1554411,2026-10-07,"Grand Prairie Stadium, Dallas",Namibia,United States of America,mens_odi,20,86,2,270,230,310,298,-28,28,5,9,-4,4,True,80,,,
+1554411,2026-10-07,"Grand Prairie Stadium, Dallas",Namibia,United States of America,mens_odi,30,139,3,310,273,347,298,12,12,5,9,-4,4,True,74,,,
+1554411,2026-10-07,"Grand Prairie Stadium, Dallas",Namibia,United States of America,mens_odi,40,224,3,344,317,371,298,46,46,4,9,-5,5,False,54,,,
+1554410,2026-10-05,"Grand Prairie Stadium, Dallas",United Arab Emirates,United States of America,mens_odi,10,50,0,327,278,376,330,-3,3,4,8,-4,4,True,98,,,
+1554410,2026-10-05,"Grand Prairie Stadium, Dallas",United Arab Emirates,United States of America,mens_odi,20,109,1,317,270,364,330,-13,13,4,8,-4,4,True,94,,,
+1554410,2026-10-05,"Grand Prairie Stadium, Dallas",United Arab Emirates,United States of America,mens_odi,30,162,2,276,243,309,330,-54,54,4,8,-4,4,False,66,,,
+1554410,2026-10-05,"Grand Prairie Stadium, Dallas",United Arab Emirates,United States of America,mens_odi,40,231,4,289,266,312,330,-41,41,5,8,-3,3,False,46,,,
+1529229,2026-10-03,"Maharaja Yadavindra Singh International Cricket Stadium, New Chandigarh",India,West Indies,mens_odi,10,28,2,204,174,234,351,-147,147,6,7,-1,1,False,60,,,
+1529229,2026-10-03,"Maharaja Yadavindra Singh International Cricket Stadium, New Chandigarh",India,West Indies,mens_odi,20,102,2,316,269,363,351,-35,35,5,7,-2,2,True,94,,,
+1529229,2026-10-03,"Maharaja Yadavindra Singh International Cricket Stadium, New Chandigarh",India,West Indies,mens_odi,30,172,4,316,279,353,351,-35,35,6,7,-1,1,True,74,,,
+1529229,2026-10-03,"Maharaja Yadavindra Singh International Cricket Stadium, New Chandigarh",India,West Indies,mens_odi,40,246,5,325,299,351,351,-26,26,6,7,-1,1,True,52,,,
+1529228,2026-09-30,"Barsapara Cricket Stadium, Guwahati",West Indies,India,mens_odi,10,96,1,449,382,516,405,44,44,4,7,-3,3,True,134,,,
+1529228,2026-09-30,"Barsapara Cricket Stadium, Guwahati",West Indies,India,mens_odi,20,158,2,408,347,469,405,3,3,5,7,-2,2,True,122,,,
+1529228,2026-09-30,"Barsapara Cricket Stadium, Guwahati",West Indies,India,mens_odi,30,234,2,460,405,515,405,55,55,4,7,-3,3,True,110,,,
+1529228,2026-09-30,"Barsapara Cricket Stadium, Guwahati",West Indies,India,mens_odi,40,329,3,450,414,486,405,45,45,4,7,-3,3,False,72,,,
+1529227,2026-09-27,"Greenfield International Stadium, Thiruvananthapuram",West Indies,India,mens_odi,10,85,0,485,413,557,295,190,190,3,7,-4,4,False,144,,,
+1529227,2026-09-27,"Greenfield International Stadium, Thiruvananthapuram",West Indies,India,mens_odi,20,136,1,362,308,416,295,67,67,4,7,-3,3,False,108,,,
+1529227,2026-09-27,"Greenfield International Stadium, Thiruvananthapuram",West Indies,India,mens_odi,30,176,1,332,293,371,295,37,37,3,7,-4,4,True,78,,,
+1529227,2026-09-27,"Greenfield International Stadium, Thiruvananthapuram",West Indies,India,mens_odi,40,213,5,248,229,267,295,-47,47,6,7,-1,1,False,38,,,
+1525656,2026-09-27,"Wanderers Stadium, Johannesburg",South Africa,Australia,mens_odi,10,51,2,243,207,279,365,-122,122,6,9,-3,3,False,72,,,
+1525656,2026-09-27,"Wanderers Stadium, Johannesburg",South Africa,Australia,mens_odi,20,118,3,275,234,316,365,-90,90,6,9,-3,3,False,82,,,
+1525656,2026-09-27,"Wanderers Stadium, Johannesburg",South Africa,Australia,mens_odi,30,181,3,326,287,365,365,-39,39,5,9,-4,4,True,78,,,
+1525656,2026-09-27,"Wanderers Stadium, Johannesburg",South Africa,Australia,mens_odi,40,265,5,342,315,369,365,-23,23,6,9,-3,3,True,54,,,
+1496590,2026-09-27,The Oval,England,Sri Lanka,mens_odi,10,50,1,312,266,358,355,-43,43,5,7,-2,2,True,92,,,
+1496590,2026-09-27,The Oval,England,Sri Lanka,mens_odi,20,87,2,263,224,302,355,-92,92,5,7,-2,2,False,78,,,
+1496590,2026-09-27,The Oval,England,Sri Lanka,mens_odi,30,157,2,346,305,387,355,-9,9,4,7,-3,3,True,82,,,
+1496590,2026-09-27,The Oval,England,Sri Lanka,mens_odi,40,251,4,334,308,360,355,-21,21,5,7,-2,2,True,52,,,
+1525655,2026-09-24,"Kingsmead, Durban",South Africa,Australia,mens_odi,10,40,2,202,172,232,297,-95,95,6,8,-2,2,False,60,,,
+1525655,2026-09-24,"Kingsmead, Durban",South Africa,Australia,mens_odi,20,93,3,210,179,241,297,-87,87,6,8,-2,2,False,62,,,
+1525655,2026-09-24,"Kingsmead, Durban",South Africa,Australia,mens_odi,30,152,4,238,210,266,297,-59,59,6,8,-2,2,False,56,,,
+1525655,2026-09-24,"Kingsmead, Durban",South Africa,Australia,mens_odi,40,208,5,261,241,281,297,-36,36,6,8,-2,2,False,40,,,
+1496589,2026-09-24,Headingley,Sri Lanka,England,mens_odi,10,46,1,241,205,277,321,-80,80,5,6,-1,1,False,72,,,
+1496589,2026-09-24,Headingley,Sri Lanka,England,mens_odi,20,105,1,318,271,365,321,-3,3,4,6,-2,2,True,94,,,
+1496589,2026-09-24,Headingley,Sri Lanka,England,mens_odi,30,188,2,383,338,428,321,62,62,4,6,-2,2,False,90,,,
+1496589,2026-09-24,Headingley,Sri Lanka,England,mens_odi,40,237,4,293,270,316,321,-28,28,5,6,-1,1,False,46,,,
+1496588,2026-09-22,"Riverside Ground, Chester-le-Street",England,Sri Lanka,mens_odi,10,64,1,382,325,439,265,117,117,4,10,-6,6,False,114,,,
+1496588,2026-09-22,"Riverside Ground, Chester-le-Street",England,Sri Lanka,mens_odi,20,119,2,363,309,417,265,98,98,5,10,-5,5,False,108,,,
+1496588,2026-09-22,"Riverside Ground, Chester-le-Street",England,Sri Lanka,mens_odi,30,175,3,314,277,351,265,49,49,5,10,-5,5,False,74,,,
+1496588,2026-09-22,"Riverside Ground, Chester-le-Street",England,Sri Lanka,mens_odi,40,214,7,240,221,259,265,-25,25,9,10,-1,1,False,38,,,
+1530205,2026-09-20,Harare Sports Club,Zimbabwe,Australia,mens_odi,10,57,2,287,244,330,271,16,16,6,8,-2,2,True,86,,,
+1530205,2026-09-20,Harare Sports Club,Zimbabwe,Australia,mens_odi,20,99,3,228,194,262,271,-43,43,6,8,-2,2,False,68,,,
+1530205,2026-09-20,Harare Sports Club,Zimbabwe,Australia,mens_odi,30,151,3,240,212,268,271,-31,31,5,8,-3,3,False,56,,,
+1530205,2026-09-20,Harare Sports Club,Zimbabwe,Australia,mens_odi,40,206,3,277,255,299,271,6,6,4,8,-4,4,True,44,,,
+1530204,2026-09-18,Harare Sports Club,Australia,Zimbabwe,mens_odi,10,78,0,558,475,641,356,202,202,3,6,-3,3,False,166,,,
+1530204,2026-09-18,Harare Sports Club,Australia,Zimbabwe,mens_odi,20,137,1,460,391,529,356,104,104,3,6,-3,3,False,138,,,
+1530204,2026-09-18,Harare Sports Club,Australia,Zimbabwe,mens_odi,30,200,2,409,360,458,356,53,53,4,6,-2,2,False,98,,,
+1530204,2026-09-18,Harare Sports Club,Australia,Zimbabwe,mens_odi,40,255,3,349,322,376,356,-7,7,4,6,-2,2,True,54,,,
+1530203,2026-09-15,Harare Sports Club,Australia,Zimbabwe,mens_odi,10,65,2,365,311,419,294,71,71,5,8,-3,3,False,108,,,
+1530203,2026-09-15,Harare Sports Club,Australia,Zimbabwe,mens_odi,20,118,4,242,206,278,294,-52,52,6,8,-2,2,False,72,,,
+1530203,2026-09-15,Harare Sports Club,Australia,Zimbabwe,mens_odi,30,167,4,279,246,312,294,-15,15,6,8,-2,2,True,66,,,
+1530203,2026-09-15,Harare Sports Club,Australia,Zimbabwe,mens_odi,40,228,5,288,265,311,294,-6,6,6,8,-2,2,True,46,,,
+1549969,2026-09-12,"Bayuemas Oval, Kuala Lumpur",Nepal,United Arab Emirates,mens_odi,10,45,0,283,241,325,313,-30,30,4,9,-5,5,True,84,,,
+1549969,2026-09-12,"Bayuemas Oval, Kuala Lumpur",Nepal,United Arab Emirates,mens_odi,20,95,0,310,264,356,313,-3,3,3,9,-6,6,True,92,,,
+1549969,2026-09-12,"Bayuemas Oval, Kuala Lumpur",Nepal,United Arab Emirates,mens_odi,30,150,2,297,262,332,313,-16,16,4,9,-5,5,True,70,,,
+1549969,2026-09-12,"Bayuemas Oval, Kuala Lumpur",Nepal,United Arab Emirates,mens_odi,40,227,3,316,291,341,313,3,3,4,9,-5,5,True,50,,,
+1549532,2026-09-11,"Namibia Cricket Ground, Windhoek",South Africa,Namibia,mens_odi,10,40,1,250,213,287,335,-85,85,4,9,-5,5,False,74,,,
+1549532,2026-09-11,"Namibia Cricket Ground, Windhoek",South Africa,Namibia,mens_odi,20,96,1,334,284,384,335,-1,1,4,9,-5,5,True,100,,,
+1549532,2026-09-11,"Namibia Cricket Ground, Windhoek",South Africa,Namibia,mens_odi,30,168,1,386,340,432,335,51,51,3,9,-6,6,False,92,,,
+1549532,2026-09-11,"Namibia Cricket Ground, Windhoek",South Africa,Namibia,mens_odi,40,242,4,332,306,358,335,-3,3,5,9,-4,4,True,52,,,
+1549966,2026-09-10,"Bayuemas Oval, Kuala Lumpur",Nepal,Oman,mens_odi,10,33,3,194,165,223,147,47,47,5,10,-5,5,False,58,,,
+1549966,2026-09-10,"Bayuemas Oval, Kuala Lumpur",Nepal,Oman,mens_odi,20,68,4,185,158,212,147,38,38,6,10,-4,4,False,54,,,
+1549966,2026-09-10,"Bayuemas Oval, Kuala Lumpur",Nepal,Oman,mens_odi,30,113,4,209,184,234,147,62,62,5,10,-5,5,False,50,,,
+1549966,2026-09-10,"Bayuemas Oval, Kuala Lumpur",Nepal,Oman,mens_odi,40,136,6,162,150,174,147,15,15,7,10,-3,3,False,24,,,
+1549965,2026-09-08,"YSD-UKM Cricket Oval, Bangi",United Arab Emirates,Oman,mens_odi,10,57,0,410,349,471,192,218,218,3,10,-7,7,False,122,,,
+1549965,2026-09-08,"YSD-UKM Cricket Oval, Bangi",United Arab Emirates,Oman,mens_odi,20,93,1,256,218,294,192,64,64,4,10,-6,6,False,76,,,
+1549965,2026-09-08,"YSD-UKM Cricket Oval, Bangi",United Arab Emirates,Oman,mens_odi,30,115,5,185,163,207,192,-7,7,6,10,-4,4,True,44,,,
+1549965,2026-09-08,"YSD-UKM Cricket Oval, Bangi",United Arab Emirates,Oman,mens_odi,40,164,5,205,189,221,192,13,13,6,10,-4,4,True,32,,,
+1546003,2026-08-13,"Forthill, Dundee",Scotland,Canada,mens_odi,10,33,2,233,199,267,347,-114,114,5,7,-2,2,False,68,,,
+1546003,2026-08-13,"Forthill, Dundee",Scotland,Canada,mens_odi,20,111,2,381,324,438,347,34,34,4,7,-3,3,True,114,,,
+1546003,2026-08-13,"Forthill, Dundee",Scotland,Canada,mens_odi,30,180,3,353,311,395,347,6,6,4,7,-3,3,True,84,,,
+1546003,2026-08-13,"Forthill, Dundee",Scotland,Canada,mens_odi,40,253,4,347,320,374,347,0,0,5,7,-2,2,True,54,,,
+1546002,2026-08-11,"Forthill, Dundee",United Arab Emirates,Canada,mens_odi,10,33,2,238,203,273,282,-44,44,5,6,-1,1,False,70,,,
+1546002,2026-08-11,"Forthill, Dundee",United Arab Emirates,Canada,mens_odi,20,87,3,232,198,266,282,-50,50,5,6,-1,1,False,68,,,
+1546002,2026-08-11,"Forthill, Dundee",United Arab Emirates,Canada,mens_odi,30,138,3,263,232,294,282,-19,19,5,6,-1,1,True,62,,,
+1546002,2026-08-11,"Forthill, Dundee",United Arab Emirates,Canada,mens_odi,40,210,4,287,265,309,282,5,5,5,6,-1,1,True,44,,,
+1546000,2026-08-07,"Forthill, Dundee",Scotland,Canada,mens_odi,10,31,2,215,183,247,281,-66,66,5,7,-2,2,False,64,,,
+1546000,2026-08-07,"Forthill, Dundee",Scotland,Canada,mens_odi,20,83,2,261,222,300,281,-20,20,5,7,-2,2,True,78,,,
+1546000,2026-08-07,"Forthill, Dundee",Scotland,Canada,mens_odi,30,133,3,247,218,276,281,-34,34,5,7,-2,2,False,58,,,
+1546000,2026-08-07,"Forthill, Dundee",Scotland,Canada,mens_odi,40,183,4,245,226,264,281,-36,36,5,7,-2,2,False,38,,,
+1544129,2026-07-31,"Sportpark Maarschalkerweerd, Utrecht",Netherlands,Namibia,mens_odi,10,22,2,217,185,249,183,34,34,5,10,-5,5,False,64,,,
+1544129,2026-07-31,"Sportpark Maarschalkerweerd, Utrecht",Netherlands,Namibia,mens_odi,20,61,3,179,153,205,183,-4,4,5,10,-5,5,True,52,,,
+1544129,2026-07-31,"Sportpark Maarschalkerweerd, Utrecht",Netherlands,Namibia,mens_odi,30,98,6,150,132,168,183,-33,33,8,10,-2,2,False,36,,,
+1544129,2026-07-31,"Sportpark Maarschalkerweerd, Utrecht",Netherlands,Namibia,mens_odi,40,139,7,165,152,178,183,-18,18,9,10,-1,1,False,26,,,
+1544128,2026-07-29,"Sportpark Maarschalkerweerd, Utrecht",Netherlands,Nepal,mens_odi,10,42,3,265,226,304,225,40,40,6,9,-3,3,False,78,,,
+1544128,2026-07-29,"Sportpark Maarschalkerweerd, Utrecht",Netherlands,Nepal,mens_odi,20,64,4,169,144,194,225,-56,56,6,9,-3,3,False,50,,,
+1544128,2026-07-29,"Sportpark Maarschalkerweerd, Utrecht",Netherlands,Nepal,mens_odi,30,110,4,199,176,222,225,-26,26,5,9,-4,4,False,46,,,
+1544128,2026-07-29,"Sportpark Maarschalkerweerd, Utrecht",Netherlands,Nepal,mens_odi,40,164,4,224,207,241,225,-1,1,5,9,-4,4,True,34,,,
+1544127,2026-07-27,"Sportpark Maarschalkerweerd, Utrecht",Namibia,Nepal,mens_odi,10,32,1,245,209,281,211,34,34,4,7,-3,3,True,72,,,
+1544127,2026-07-27,"Sportpark Maarschalkerweerd, Utrecht",Namibia,Nepal,mens_odi,20,66,2,217,185,249,211,6,6,5,7,-2,2,True,64,,,
+1544127,2026-07-27,"Sportpark Maarschalkerweerd, Utrecht",Namibia,Nepal,mens_odi,30,102,2,225,198,252,211,14,14,4,7,-3,3,True,54,,,
+1544127,2026-07-27,"Sportpark Maarschalkerweerd, Utrecht",Namibia,Nepal,mens_odi,40,163,2,248,229,267,211,37,37,3,7,-4,4,False,38,,,
+1544126,2026-07-25,"Sportpark Maarschalkerweerd, Utrecht",Netherlands,Namibia,mens_odi,10,35,1,243,207,279,251,-8,8,4,6,-2,2,True,72,,,
+1544126,2026-07-25,"Sportpark Maarschalkerweerd, Utrecht",Netherlands,Namibia,mens_odi,20,64,2,201,171,231,251,-50,50,5,6,-1,1,False,60,,,
+1544126,2026-07-25,"Sportpark Maarschalkerweerd, Utrecht",Netherlands,Namibia,mens_odi,30,112,3,207,183,231,251,-44,44,5,6,-1,1,False,48,,,
+1544126,2026-07-25,"Sportpark Maarschalkerweerd, Utrecht",Netherlands,Namibia,mens_odi,40,159,4,214,197,231,251,-37,37,5,6,-1,1,False,34,,,
+1544125,2026-07-23,"Sportpark Maarschalkerweerd, Utrecht",Nepal,Netherlands,mens_odi,10,33,3,188,160,216,157,31,31,6,10,-4,4,False,56,,,
+1544125,2026-07-23,"Sportpark Maarschalkerweerd, Utrecht",Nepal,Netherlands,mens_odi,20,68,4,176,150,202,157,19,19,6,10,-4,4,True,52,,,
+1544125,2026-07-23,"Sportpark Maarschalkerweerd, Utrecht",Nepal,Netherlands,mens_odi,30,90,5,160,141,179,157,3,3,6,10,-4,4,True,38,,,
+1544125,2026-07-23,"Sportpark Maarschalkerweerd, Utrecht",Nepal,Netherlands,mens_odi,40,141,7,167,154,180,157,10,10,9,10,-1,1,True,26,,,
+1544124,2026-07-21,"Sportpark Maarschalkerweerd, Utrecht",Nepal,Namibia,mens_odi,10,25,2,227,193,261,157,70,70,5,10,-5,5,False,68,,,
+1544124,2026-07-21,"Sportpark Maarschalkerweerd, Utrecht",Nepal,Namibia,mens_odi,20,53,3,168,143,193,157,11,11,5,10,-5,5,True,50,,,
+1544124,2026-07-21,"Sportpark Maarschalkerweerd, Utrecht",Nepal,Namibia,mens_odi,30,93,3,190,168,212,157,33,33,5,10,-5,5,False,44,,,
+1544124,2026-07-21,"Sportpark Maarschalkerweerd, Utrecht",Nepal,Namibia,mens_odi,40,125,6,151,139,163,157,-6,6,7,10,-3,3,True,24,,,
+1538628,2026-07-21,Kensington Oval,New Zealand,West Indies,mens_odi,10,48,1,282,240,324,268,14,14,5,9,-4,4,True,84,,,
+1538628,2026-07-21,Kensington Oval,New Zealand,West Indies,mens_odi,20,107,2,349,297,401,268,81,81,5,9,-4,4,False,104,,,
+1538628,2026-07-21,Kensington Oval,New Zealand,West Indies,mens_odi,30,160,3,271,239,303,268,3,3,5,9,-4,4,True,64,,,
+1538628,2026-07-21,Kensington Oval,New Zealand,West Indies,mens_odi,40,198,5,233,215,251,268,-35,35,6,9,-3,3,False,36,,,
+1538627,2026-07-19,Kensington Oval,West Indies,New Zealand,mens_odi,10,35,1,208,177,239,188,20,20,5,10,-5,5,True,62,,,
+1538627,2026-07-19,Kensington Oval,West Indies,New Zealand,mens_odi,20,77,5,174,148,200,188,-14,14,7,10,-3,3,True,52,,,
+1538627,2026-07-19,Kensington Oval,West Indies,New Zealand,mens_odi,30,116,6,168,148,188,188,-20,20,8,10,-2,2,True,40,,,
+1538627,2026-07-19,Kensington Oval,West Indies,New Zealand,mens_odi,40,171,7,197,182,212,188,9,9,9,10,-1,1,True,30,,,
+1496581,2026-07-19,Lord's,England,India,mens_odi,10,58,0,320,272,368,387,-67,67,4,3,1,1,False,96,,,
+1496581,2026-07-19,Lord's,England,India,mens_odi,20,125,0,378,322,434,387,-9,9,3,3,0,0,True,112,,,
+1496581,2026-07-19,Lord's,England,India,mens_odi,30,192,0,407,359,455,387,20,20,3,3,0,0,True,96,,,
+1496581,2026-07-19,Lord's,England,India,mens_odi,40,261,1,389,358,420,387,2,2,3,3,0,0,True,62,,,
+1496580,2026-07-16,"Sophia Gardens, Cardiff",India,England,mens_odi,10,61,1,307,261,353,233,74,74,5,10,-5,5,False,92,,,
+1496580,2026-07-16,"Sophia Gardens, Cardiff",India,England,mens_odi,20,110,2,305,260,350,233,72,72,5,10,-5,5,False,90,,,
+1496580,2026-07-16,"Sophia Gardens, Cardiff",India,England,mens_odi,30,168,3,302,266,338,233,69,69,5,10,-5,5,False,72,,,
+1496580,2026-07-16,"Sophia Gardens, Cardiff",India,England,mens_odi,40,210,7,236,218,254,233,3,3,9,10,-1,1,True,36,,,
+1496579,2026-07-14,Edgbaston,England,India,mens_odi,10,51,0,277,236,318,258,19,19,4,10,-6,6,True,82,,,
+1496579,2026-07-14,Edgbaston,England,India,mens_odi,20,93,5,190,162,218,258,-68,68,7,10,-3,3,False,56,,,
+1496579,2026-07-14,Edgbaston,England,India,mens_odi,30,143,6,195,172,218,258,-63,63,8,10,-2,2,False,46,,,
+1496579,2026-07-14,Edgbaston,England,India,mens_odi,40,203,6,231,213,249,258,-27,27,7,10,-3,3,False,36,,,
+1538624,2026-07-11,"Providence Stadium, Guyana",New Zealand,West Indies,mens_odi,10,45,0,272,232,312,267,5,5,4,10,-6,6,True,80,,,
+1538624,2026-07-11,"Providence Stadium, Guyana",New Zealand,West Indies,mens_odi,20,103,2,308,262,354,267,41,41,5,10,-5,5,True,92,,,
+1538624,2026-07-11,"Providence Stadium, Guyana",New Zealand,West Indies,mens_odi,30,155,3,266,235,297,267,-1,1,5,10,-5,5,True,62,,,
+1538624,2026-07-11,"Providence Stadium, Guyana",New Zealand,West Indies,mens_odi,40,216,4,287,265,309,267,20,20,5,10,-5,5,True,44,,,
+1538300,2026-07-11,Harare Sports Club,Zimbabwe,Bangladesh,mens_odi,10,21,2,210,179,241,199,11,11,5,10,-5,5,True,62,,,
+1538300,2026-07-11,Harare Sports Club,Zimbabwe,Bangladesh,mens_odi,20,51,3,163,139,187,199,-36,36,5,10,-5,5,False,48,,,
+1538300,2026-07-11,Harare Sports Club,Zimbabwe,Bangladesh,mens_odi,30,93,4,170,150,190,199,-29,29,6,10,-4,4,False,40,,,
+1538300,2026-07-11,Harare Sports Club,Zimbabwe,Bangladesh,mens_odi,40,150,6,180,166,194,199,-19,19,7,10,-3,3,False,28,,,
+1538299,2026-07-09,Harare Sports Club,Zimbabwe,Bangladesh,mens_odi,10,37,3,188,160,216,247,-59,59,6,6,0,0,False,56,,,
+1538299,2026-07-09,Harare Sports Club,Zimbabwe,Bangladesh,mens_odi,20,77,4,191,163,219,247,-56,56,6,6,0,0,False,56,,,
+1538299,2026-07-09,Harare Sports Club,Zimbabwe,Bangladesh,mens_odi,30,127,4,231,204,258,247,-16,16,6,6,0,0,True,54,,,
+1538299,2026-07-09,Harare Sports Club,Zimbabwe,Bangladesh,mens_odi,40,162,6,188,173,203,247,-59,59,7,6,1,1,False,30,,,
+1532482,2026-06-14,"Shere Bangla National Stadium, Mirpur",Bangladesh,Australia,mens_odi,10,53,2,234,199,269,274,-40,40,6,5,1,1,False,70,,,
+1532482,2026-06-14,"Shere Bangla National Stadium, Mirpur",Bangladesh,Australia,mens_odi,20,86,3,191,163,219,274,-83,83,6,5,1,1,False,56,,,
+1532482,2026-06-14,"Shere Bangla National Stadium, Mirpur",Bangladesh,Australia,mens_odi,30,144,3,239,211,267,274,-35,35,5,5,0,0,False,56,,,
+1532482,2026-06-14,"Shere Bangla National Stadium, Mirpur",Bangladesh,Australia,mens_odi,40,198,3,259,239,279,274,-15,15,4,5,-1,1,True,40,,,
+1538428,2026-06-12,"Maple Leaf North-West Ground, King City",Canada,United States of America,mens_odi,10,69,1,380,323,437,275,105,105,4,8,-4,4,False,114,,,
+1538428,2026-06-12,"Maple Leaf North-West Ground, King City",Canada,United States of America,mens_odi,20,108,2,261,222,300,275,-14,14,5,8,-3,3,True,78,,,
+1538428,2026-06-12,"Maple Leaf North-West Ground, King City",Canada,United States of America,mens_odi,30,145,3,224,198,250,275,-51,51,5,8,-3,3,False,52,,,
+1538428,2026-06-12,"Maple Leaf North-West Ground, King City",Canada,United States of America,mens_odi,40,192,4,244,225,263,275,-31,31,5,8,-3,3,False,38,,,
+1538427,2026-06-10,"Maple Leaf North-West Ground, King City",Netherlands,Canada,mens_odi,10,31,1,252,215,289,214,38,38,4,10,-6,6,False,74,,,
+1538427,2026-06-10,"Maple Leaf North-West Ground, King City",Netherlands,Canada,mens_odi,20,74,3,210,179,241,214,-4,4,5,10,-5,5,True,62,,,
+1538427,2026-06-10,"Maple Leaf North-West Ground, King City",Netherlands,Canada,mens_odi,30,120,4,215,190,240,214,1,1,5,10,-5,5,True,50,,,
+1538427,2026-06-10,"Maple Leaf North-West Ground, King City",Netherlands,Canada,mens_odi,40,160,5,196,181,211,214,-18,18,6,10,-4,4,False,30,,,
+1538426,2026-06-08,"Maple Leaf North-West Ground, King City",Netherlands,United States of America,mens_odi,10,42,0,269,229,309,196,73,73,4,8,-4,4,False,80,,,
+1538426,2026-06-08,"Maple Leaf North-West Ground, King City",Netherlands,United States of America,mens_odi,20,74,0,251,214,288,196,55,55,3,8,-5,5,False,74,,,
+1538426,2026-06-08,"Maple Leaf North-West Ground, King City",Netherlands,United States of America,mens_odi,30,104,2,212,187,237,196,16,16,4,8,-4,4,True,50,,,
+1538426,2026-06-08,"Maple Leaf North-West Ground, King City",Netherlands,United States of America,mens_odi,40,137,5,172,159,185,196,-24,24,6,8,-2,2,False,26,,,
+1535647,2026-06-04,"Gaddafi Stadium, Lahore",Australia,Pakistan,mens_odi,10,41,1,273,233,313,157,116,116,5,10,-5,5,False,80,,,
+1535647,2026-06-04,"Gaddafi Stadium, Lahore",Australia,Pakistan,mens_odi,20,89,2,285,243,327,157,128,128,5,10,-5,5,False,84,,,
+1535647,2026-06-04,"Gaddafi Stadium, Lahore",Australia,Pakistan,mens_odi,30,126,6,178,157,199,157,21,21,8,10,-2,2,True,42,,,
+1535647,2026-06-04,"Gaddafi Stadium, Lahore",Australia,Pakistan,mens_odi,40,154,8,171,158,184,157,14,14,10,10,0,0,False,26,,,
+1538304,2026-06-03,Sabina Park,Sri Lanka,West Indies,mens_odi,10,32,1,206,176,236,303,-97,97,5,7,-2,2,False,60,,,
+1538304,2026-06-03,Sabina Park,Sri Lanka,West Indies,mens_odi,20,108,1,358,305,411,303,55,55,4,7,-3,3,False,106,,,
+1538304,2026-06-03,Sabina Park,Sri Lanka,West Indies,mens_odi,30,166,2,297,262,332,303,-6,6,4,7,-3,3,True,70,,,
+1538304,2026-06-03,Sabina Park,Sri Lanka,West Indies,mens_odi,40,218,3,292,269,315,303,-11,11,4,7,-3,3,True,46,,,
+1535646,2026-06-02,"Gaddafi Stadium, Lahore",Australia,Pakistan,mens_odi,10,51,2,275,234,316,231,44,44,6,9,-3,3,False,82,,,
+1535646,2026-06-02,"Gaddafi Stadium, Lahore",Australia,Pakistan,mens_odi,20,81,3,203,173,233,231,-28,28,5,9,-4,4,True,60,,,
+1535646,2026-06-02,"Gaddafi Stadium, Lahore",Australia,Pakistan,mens_odi,30,113,4,186,164,208,231,-45,45,6,9,-3,3,False,44,,,
+1535646,2026-06-02,"Gaddafi Stadium, Lahore",Australia,Pakistan,mens_odi,40,167,5,202,186,218,231,-29,29,6,9,-3,3,False,32,,,
+1535645,2026-05-30,Rawalpindi Cricket Stadium,Australia,Pakistan,mens_odi,10,51,1,297,253,341,200,97,97,5,10,-5,5,False,88,,,
+1535645,2026-05-30,Rawalpindi Cricket Stadium,Australia,Pakistan,mens_odi,20,97,4,240,204,276,200,40,40,6,10,-4,4,False,72,,,
+1535645,2026-05-30,Rawalpindi Cricket Stadium,Australia,Pakistan,mens_odi,30,140,5,210,185,235,200,10,10,6,10,-4,4,True,50,,,
+1535645,2026-05-30,Rawalpindi Cricket Stadium,Australia,Pakistan,mens_odi,40,193,7,219,202,236,200,19,19,9,10,-1,1,False,34,,,
+1531707,2026-05-22,"Tribhuvan University International Cricket Ground, Kirtipur",Nepal,United States of America,mens_odi,10,62,0,399,340,458,317,82,82,3,8,-5,5,False,118,,,
+1531707,2026-05-22,"Tribhuvan University International Cricket Ground, Kirtipur",Nepal,United States of America,mens_odi,20,87,2,223,190,256,317,-94,94,5,8,-3,3,False,66,,,
+1531707,2026-05-22,"Tribhuvan University International Cricket Ground, Kirtipur",Nepal,United States of America,mens_odi,30,130,2,242,213,271,317,-75,75,4,8,-4,4,False,58,,,
+1531707,2026-05-22,"Tribhuvan University International Cricket Ground, Kirtipur",Nepal,United States of America,mens_odi,40,212,3,290,267,313,317,-27,27,4,8,-4,4,False,46,,,
+1531706,2026-05-20,"Tribhuvan University International Cricket Ground, Kirtipur",Scotland,United States of America,mens_odi,10,47,3,206,176,236,169,37,37,6,10,-4,4,False,60,,,
+1531706,2026-05-20,"Tribhuvan University International Cricket Ground, Kirtipur",Scotland,United States of America,mens_odi,20,70,5,167,142,192,169,-2,2,6,10,-4,4,True,50,,,
+1531706,2026-05-20,"Tribhuvan University International Cricket Ground, Kirtipur",Scotland,United States of America,mens_odi,30,105,6,157,139,175,169,-12,12,8,10,-2,2,True,36,,,
+1531706,2026-05-20,"Tribhuvan University International Cricket Ground, Kirtipur",Scotland,United States of America,mens_odi,40,152,8,169,156,182,169,0,0,10,10,0,0,True,26,,,
+1531704,2026-05-16,"Tribhuvan University International Cricket Ground, Kirtipur",United States of America,Nepal,mens_odi,10,49,1,327,278,376,195,132,132,4,10,-6,6,False,98,,,
+1531704,2026-05-16,"Tribhuvan University International Cricket Ground, Kirtipur",United States of America,Nepal,mens_odi,20,104,1,384,327,441,195,189,189,4,10,-6,6,False,114,,,
+1531704,2026-05-16,"Tribhuvan University International Cricket Ground, Kirtipur",United States of America,Nepal,mens_odi,30,155,3,279,246,312,195,84,84,5,10,-5,5,False,66,,,
+1531704,2026-05-16,"Tribhuvan University International Cricket Ground, Kirtipur",United States of America,Nepal,mens_odi,40,186,9,198,183,213,195,3,3,10,10,0,0,True,30,,,
+1531701,2026-05-05,"Tribhuvan University International Cricket Ground, Kirtipur",Nepal,Oman,mens_odi,10,29,1,257,219,295,256,1,1,4,10,-6,6,True,76,,,
+1531701,2026-05-05,"Tribhuvan University International Cricket Ground, Kirtipur",Nepal,Oman,mens_odi,20,82,1,293,250,336,256,37,37,4,10,-6,6,True,86,,,
+1531701,2026-05-05,"Tribhuvan University International Cricket Ground, Kirtipur",Nepal,Oman,mens_odi,30,131,2,275,242,308,256,19,19,4,10,-6,6,True,66,,,
+1531701,2026-05-05,"Tribhuvan University International Cricket Ground, Kirtipur",Nepal,Oman,mens_odi,40,186,4,245,226,264,256,-11,11,5,10,-5,5,True,38,,,
+1531697,2026-04-27,"Tribhuvan University International Cricket Ground, Kirtipur",United Arab Emirates,Oman,mens_odi,10,51,0,356,303,409,268,88,88,4,7,-3,3,False,106,,,
+1531697,2026-04-27,"Tribhuvan University International Cricket Ground, Kirtipur",United Arab Emirates,Oman,mens_odi,20,101,0,371,316,426,268,103,103,3,7,-4,4,False,110,,,
+1531697,2026-04-27,"Tribhuvan University International Cricket Ground, Kirtipur",United Arab Emirates,Oman,mens_odi,30,163,0,392,345,439,268,124,124,2,7,-5,5,False,94,,,
+1531697,2026-04-27,"Tribhuvan University International Cricket Ground, Kirtipur",United Arab Emirates,Oman,mens_odi,40,201,3,261,241,281,268,-7,7,4,7,-3,3,True,40,,,
+1531696,2026-04-25,"Tribhuvan University International Cricket Ground, Kirtipur",Nepal,United Arab Emirates,mens_odi,10,48,3,188,160,216,200,-12,12,6,10,-4,4,True,56,,,
+1531696,2026-04-25,"Tribhuvan University International Cricket Ground, Kirtipur",Nepal,United Arab Emirates,mens_odi,20,90,4,211,180,242,200,11,11,6,10,-4,4,True,62,,,
+1531696,2026-04-25,"Tribhuvan University International Cricket Ground, Kirtipur",Nepal,United Arab Emirates,mens_odi,30,121,6,173,153,193,200,-27,27,8,10,-2,2,False,40,,,
+1531696,2026-04-25,"Tribhuvan University International Cricket Ground, Kirtipur",Nepal,United Arab Emirates,mens_odi,40,168,7,194,179,209,200,-6,6,9,10,-1,1,True,30,,,
+1528274,2026-04-23,"Bir Sreshtho Flight Lieutenant Matiur Rahman Stadium, Chattogram",Bangladesh,New Zealand,mens_odi,10,36,3,176,150,202,265,-89,89,6,8,-2,2,False,52,,,
+1528274,2026-04-23,"Bir Sreshtho Flight Lieutenant Matiur Rahman Stadium, Chattogram",Bangladesh,New Zealand,mens_odi,20,84,3,200,170,230,265,-65,65,6,8,-2,2,False,60,,,
+1528274,2026-04-23,"Bir Sreshtho Flight Lieutenant Matiur Rahman Stadium, Chattogram",Bangladesh,New Zealand,mens_odi,30,135,3,231,204,258,265,-34,34,5,8,-3,3,False,54,,,
+1528274,2026-04-23,"Bir Sreshtho Flight Lieutenant Matiur Rahman Stadium, Chattogram",Bangladesh,New Zealand,mens_odi,40,204,4,279,257,301,265,14,14,5,8,-3,3,True,44,,,
+1528273,2026-04-20,"Shere Bangla National Stadium, Mirpur",New Zealand,Bangladesh,mens_odi,10,28,2,212,181,243,198,14,14,5,10,-5,5,True,62,,,
+1528273,2026-04-20,"Shere Bangla National Stadium, Mirpur",New Zealand,Bangladesh,mens_odi,20,66,3,192,164,220,198,-6,6,5,10,-5,5,True,56,,,
+1528273,2026-04-20,"Shere Bangla National Stadium, Mirpur",New Zealand,Bangladesh,mens_odi,30,109,4,179,158,200,198,-19,19,6,10,-4,4,True,42,,,
+1528273,2026-04-20,"Shere Bangla National Stadium, Mirpur",New Zealand,Bangladesh,mens_odi,40,158,6,184,170,198,198,-14,14,7,10,-3,3,True,28,,,
+1528272,2026-04-17,"Shere Bangla National Stadium, Mirpur",New Zealand,Bangladesh,mens_odi,10,38,1,249,212,286,247,2,2,5,8,-3,3,True,74,,,
+1528272,2026-04-17,"Shere Bangla National Stadium, Mirpur",New Zealand,Bangladesh,mens_odi,20,82,1,277,236,318,247,30,30,4,8,-4,4,True,82,,,
+1528272,2026-04-17,"Shere Bangla National Stadium, Mirpur",New Zealand,Bangladesh,mens_odi,30,142,4,239,211,267,247,-8,8,6,8,-2,2,True,56,,,
+1528272,2026-04-17,"Shere Bangla National Stadium, Mirpur",New Zealand,Bangladesh,mens_odi,40,185,5,227,209,245,247,-20,20,6,8,-2,2,False,36,,,
+1529144,2026-04-12,"Namibia Cricket Ground, Windhoek",Namibia,Scotland,mens_odi,10,38,3,178,152,204,198,-20,20,6,10,-4,4,True,52,,,
+1529144,2026-04-12,"Namibia Cricket Ground, Windhoek",Namibia,Scotland,mens_odi,20,83,4,204,174,234,198,6,6,6,10,-4,4,True,60,,,
+1529144,2026-04-12,"Namibia Cricket Ground, Windhoek",Namibia,Scotland,mens_odi,30,106,5,176,155,197,198,-22,22,6,10,-4,4,False,42,,,
+1529144,2026-04-12,"Namibia Cricket Ground, Windhoek",Namibia,Scotland,mens_odi,40,151,5,188,173,203,198,-10,10,6,10,-4,4,True,30,,,
+1529143,2026-04-10,"Namibia Cricket Ground, Windhoek",Oman,Namibia,mens_odi,10,38,1,255,217,293,218,37,37,4,9,-5,5,True,76,,,
+1529143,2026-04-10,"Namibia Cricket Ground, Windhoek",Oman,Namibia,mens_odi,20,67,4,172,147,197,218,-46,46,6,9,-3,3,False,50,,,
+1529143,2026-04-10,"Namibia Cricket Ground, Windhoek",Oman,Namibia,mens_odi,30,103,4,185,163,207,218,-33,33,5,9,-4,4,False,44,,,
+1529143,2026-04-10,"Namibia Cricket Ground, Windhoek",Oman,Namibia,mens_odi,40,157,5,196,181,211,218,-22,22,6,9,-3,3,False,30,,,
+1529140,2026-04-04,"Namibia Cricket Ground, Windhoek",Namibia,Oman,mens_odi,10,27,0,248,211,285,268,-20,20,4,7,-3,3,True,74,,,
+1529140,2026-04-04,"Namibia Cricket Ground, Windhoek",Namibia,Oman,mens_odi,20,73,2,289,246,332,268,21,21,5,7,-2,2,True,86,,,
+1529140,2026-04-04,"Namibia Cricket Ground, Windhoek",Namibia,Oman,mens_odi,30,113,3,209,184,234,268,-59,59,5,7,-2,2,False,50,,,
+1529140,2026-04-04,"Namibia Cricket Ground, Windhoek",Namibia,Oman,mens_odi,40,170,3,251,231,271,268,-17,17,4,7,-3,3,True,40,,,
+1525654,2026-03-15,"Shere Bangla National Stadium, Mirpur",Bangladesh,Pakistan,mens_odi,10,50,0,336,286,386,290,46,46,4,5,-1,1,True,100,,,
+1525654,2026-03-15,"Shere Bangla National Stadium, Mirpur",Bangladesh,Pakistan,mens_odi,20,119,1,398,339,457,290,108,108,4,5,-1,1,False,118,,,
+1525654,2026-03-15,"Shere Bangla National Stadium, Mirpur",Bangladesh,Pakistan,mens_odi,30,160,2,307,271,343,290,17,17,4,5,-1,1,True,72,,,
+1525654,2026-03-15,"Shere Bangla National Stadium, Mirpur",Bangladesh,Pakistan,mens_odi,40,213,3,284,262,306,290,-6,6,4,5,-1,1,True,44,,,
+1507718,2026-01-27,"R Premadasa Stadium, Colombo",England,Sri Lanka,mens_odi,10,40,1,258,220,296,357,-99,99,5,3,2,2,False,76,,,
+1507718,2026-01-27,"R Premadasa Stadium, Colombo",England,Sri Lanka,mens_odi,20,77,2,234,199,269,357,-123,123,5,3,2,2,False,70,,,
+1507718,2026-01-27,"R Premadasa Stadium, Colombo",England,Sri Lanka,mens_odi,30,154,2,332,293,371,357,-25,25,4,3,1,1,True,78,,,
+1507718,2026-01-27,"R Premadasa Stadium, Colombo",England,Sri Lanka,mens_odi,40,227,3,338,311,365,357,-19,19,4,3,1,1,True,54,,,
+1507717,2026-01-24,"R Premadasa Stadium, Colombo",Sri Lanka,England,mens_odi,10,36,1,207,176,238,219,-12,12,5,10,-5,5,True,62,,,
+1507717,2026-01-24,"R Premadasa Stadium, Colombo",Sri Lanka,England,mens_odi,20,80,3,191,163,219,219,-28,28,6,10,-4,4,True,56,,,
+1507717,2026-01-24,"R Premadasa Stadium, Colombo",Sri Lanka,England,mens_odi,30,119,3,200,176,224,219,-19,19,5,10,-5,5,True,48,,,
+1507717,2026-01-24,"R Premadasa Stadium, Colombo",Sri Lanka,England,mens_odi,40,173,5,208,192,224,219,-11,11,6,10,-4,4,True,32,,,
+1507716,2026-01-22,"R Premadasa Stadium, Colombo",Sri Lanka,England,mens_odi,10,49,0,282,240,324,271,11,11,5,6,-1,1,True,84,,,
+1507716,2026-01-22,"R Premadasa Stadium, Colombo",Sri Lanka,England,mens_odi,20,97,2,251,214,288,271,-20,20,5,6,-1,1,True,74,,,
+1507716,2026-01-22,"R Premadasa Stadium, Colombo",Sri Lanka,England,mens_odi,30,143,4,218,192,244,271,-53,53,6,6,0,0,False,52,,,
+1507716,2026-01-22,"R Premadasa Stadium, Colombo",Sri Lanka,England,mens_odi,40,191,4,245,226,264,271,-26,26,5,6,-1,1,False,38,,,
+1490233,2026-01-18,"Holkar Cricket Stadium, Indore",New Zealand,India,mens_odi,10,47,2,243,207,279,337,-94,94,6,8,-2,2,False,72,,,
+1490233,2026-01-18,"Holkar Cricket Stadium, Indore",New Zealand,India,mens_odi,20,95,3,218,186,250,337,-119,119,6,8,-2,2,False,64,,,
+1490233,2026-01-18,"Holkar Cricket Stadium, Indore",New Zealand,India,mens_odi,30,159,3,282,249,315,337,-55,55,5,8,-3,3,False,66,,,
+1490233,2026-01-18,"Holkar Cricket Stadium, Indore",New Zealand,India,mens_odi,40,238,3,329,303,355,337,-8,8,4,8,-4,4,True,52,,,
+1490232,2026-01-14,"Niranjan Shah Stadium, Rajkot",India,New Zealand,mens_odi,10,57,0,355,302,408,284,71,71,4,7,-3,3,False,106,,,
+1490232,2026-01-14,"Niranjan Shah Stadium, Rajkot",India,New Zealand,mens_odi,20,112,2,285,243,327,284,1,1,5,7,-2,2,True,84,,,
+1490232,2026-01-14,"Niranjan Shah Stadium, Rajkot",India,New Zealand,mens_odi,30,142,4,229,202,256,284,-55,55,6,7,-1,1,False,54,,,
+1490232,2026-01-14,"Niranjan Shah Stadium, Rajkot",India,New Zealand,mens_odi,40,199,5,239,220,258,284,-45,45,6,7,-1,1,False,38,,,
+1490231,2026-01-11,"Kotambi Stadium, Vadodara",New Zealand,India,mens_odi,10,49,0,292,249,335,300,-8,8,5,8,-3,3,True,86,,,
+1490231,2026-01-11,"Kotambi Stadium, Vadodara",New Zealand,India,mens_odi,20,104,0,328,279,377,300,28,28,4,8,-4,4,True,98,,,
+1490231,2026-01-11,"Kotambi Stadium, Vadodara",New Zealand,India,mens_odi,30,153,3,241,213,269,300,-59,59,5,8,-3,3,False,56,,,
+1490231,2026-01-11,"Kotambi Stadium, Vadodara",New Zealand,India,mens_odi,40,212,5,250,230,270,300,-50,50,6,8,-2,2,False,40,,,
+1479575,2025-12-06,"Andhra Cricket Association-Visakhapatnam District Cricket Association Stadium, Visakhapatnam",South Africa,India,mens_odi,10,42,1,241,205,277,270,-29,29,5,10,-5,5,True,72,,,
+1479575,2025-12-06,"Andhra Cricket Association-Visakhapatnam District Cricket Association Stadium, Visakhapatnam",South Africa,India,mens_odi,20,104,1,320,272,368,270,50,50,4,10,-6,6,False,96,,,
+1479575,2025-12-06,"Andhra Cricket Association-Visakhapatnam District Cricket Association Stadium, Visakhapatnam",South Africa,India,mens_odi,30,185,4,361,318,404,270,91,91,6,10,-4,4,False,86,,,
+1479575,2025-12-06,"Andhra Cricket Association-Visakhapatnam District Cricket Association Stadium, Visakhapatnam",South Africa,India,mens_odi,40,244,7,270,249,291,270,0,0,9,10,-1,1,True,42,,,
+1479574,2025-12-03,"Shaheed Veer Narayan Singh International Stadium, Raipur",India,South Africa,mens_odi,10,66,2,357,304,410,358,-1,1,6,5,1,1,True,106,,,
+1479574,2025-12-03,"Shaheed Veer Narayan Singh International Stadium, Raipur",India,South Africa,mens_odi,20,121,2,338,288,388,358,-20,20,5,5,0,0,True,100,,,
+1479574,2025-12-03,"Shaheed Veer Narayan Singh International Stadium, Raipur",India,South Africa,mens_odi,30,207,2,431,380,482,358,73,73,4,5,-1,1,False,102,,,
+1479574,2025-12-03,"Shaheed Veer Narayan Singh International Stadium, Raipur",India,South Africa,mens_odi,40,284,4,384,354,414,358,26,26,5,5,0,0,True,60,,,
+1479573,2025-11-30,"JSCA International Stadium Complex, Ranchi",India,South Africa,mens_odi,10,80,1,400,340,460,349,51,51,4,8,-4,4,True,120,,,
+1479573,2025-11-30,"JSCA International Stadium Complex, Ranchi",India,South Africa,mens_odi,20,153,1,471,401,541,349,122,122,4,8,-4,4,False,140,,,
+1479573,2025-11-30,"JSCA International Stadium Complex, Ranchi",India,South Africa,mens_odi,30,198,3,345,304,386,349,-4,4,5,8,-3,3,True,82,,,
+1479573,2025-11-30,"JSCA International Stadium Complex, Ranchi",India,South Africa,mens_odi,40,264,4,362,334,390,349,13,13,5,8,-3,3,True,56,,,
+1502169,2025-11-16,Rawalpindi Cricket Stadium,Sri Lanka,Pakistan,mens_odi,10,57,1,319,272,366,211,108,108,5,10,-5,5,False,94,,,
+1502169,2025-11-16,Rawalpindi Cricket Stadium,Sri Lanka,Pakistan,mens_odi,20,99,2,267,227,307,211,56,56,5,10,-5,5,False,80,,,
+1502169,2025-11-16,Rawalpindi Cricket Stadium,Sri Lanka,Pakistan,mens_odi,30,140,4,211,186,236,211,0,0,6,10,-4,4,True,50,,,
+1502169,2025-11-16,Rawalpindi Cricket Stadium,Sri Lanka,Pakistan,mens_odi,40,185,7,211,195,227,211,0,0,9,10,-1,1,True,32,,,
+1491728,2025-11-16,"Hagley Oval, Christchurch",New Zealand,West Indies,mens_odi,10,39,2,224,191,257,269,-45,45,6,7,-1,1,False,66,,,
+1491728,2025-11-16,"Hagley Oval, Christchurch",New Zealand,West Indies,mens_odi,20,94,3,217,185,249,269,-52,52,5,7,-2,2,False,64,,,
+1491728,2025-11-16,"Hagley Oval, Christchurch",New Zealand,West Indies,mens_odi,30,133,4,212,187,237,269,-57,57,6,7,-1,1,False,50,,,
+1491728,2025-11-16,"Hagley Oval, Christchurch",New Zealand,West Indies,mens_odi,40,185,4,247,228,266,269,-22,22,5,7,-2,2,False,38,,,
+1502168,2025-11-14,Rawalpindi Cricket Stadium,Sri Lanka,Pakistan,mens_odi,10,51,1,283,241,325,288,-5,5,5,8,-3,3,True,84,,,
+1502168,2025-11-14,Rawalpindi Cricket Stadium,Sri Lanka,Pakistan,mens_odi,20,92,3,220,187,253,288,-68,68,5,8,-3,3,False,66,,,
+1502168,2025-11-14,Rawalpindi Cricket Stadium,Sri Lanka,Pakistan,mens_odi,30,146,4,249,220,278,288,-39,39,6,8,-2,2,False,58,,,
+1502168,2025-11-14,Rawalpindi Cricket Stadium,Sri Lanka,Pakistan,mens_odi,40,213,5,269,248,290,288,-19,19,6,8,-2,2,True,42,,,
+1502167,2025-11-11,Rawalpindi Cricket Stadium,Pakistan,Sri Lanka,mens_odi,10,28,1,212,181,243,299,-87,87,5,5,0,0,False,62,,,
+1502167,2025-11-11,Rawalpindi Cricket Stadium,Pakistan,Sri Lanka,mens_odi,20,77,3,185,158,212,299,-114,114,5,5,0,0,False,54,,,
+1502167,2025-11-11,Rawalpindi Cricket Stadium,Pakistan,Sri Lanka,mens_odi,30,119,4,200,176,224,299,-99,99,6,5,1,1,False,48,,,
+1502167,2025-11-11,Rawalpindi Cricket Stadium,Pakistan,Sri Lanka,mens_odi,40,195,4,273,252,294,299,-26,26,5,5,0,0,False,42,,,
+1501899,2025-11-06,"Iqbal Stadium, Faisalabad",Pakistan,South Africa,mens_odi,10,41,3,181,154,208,269,-88,88,6,9,-3,3,False,54,,,
+1501899,2025-11-06,"Iqbal Stadium, Faisalabad",Pakistan,South Africa,mens_odi,20,85,3,197,168,226,269,-72,72,6,9,-3,3,False,58,,,
+1501899,2025-11-06,"Iqbal Stadium, Faisalabad",Pakistan,South Africa,mens_odi,30,131,5,201,177,225,269,-68,68,6,9,-3,3,False,48,,,
+1501899,2025-11-06,"Iqbal Stadium, Faisalabad",Pakistan,South Africa,mens_odi,40,179,5,214,197,231,269,-55,55,6,9,-3,3,False,34,,,
+1507889,2025-11-05,"ICC Academy, Dubai",Nepal,United Arab Emirates,mens_odi,10,41,1,252,215,289,239,13,13,5,9,-4,4,True,74,,,
+1507889,2025-11-05,"ICC Academy, Dubai",Nepal,United Arab Emirates,mens_odi,20,80,2,200,170,230,239,-39,39,5,9,-4,4,False,60,,,
+1507889,2025-11-05,"ICC Academy, Dubai",Nepal,United Arab Emirates,mens_odi,30,124,4,194,171,217,239,-45,45,6,9,-3,3,False,46,,,
+1507889,2025-11-05,"ICC Academy, Dubai",Nepal,United Arab Emirates,mens_odi,40,170,5,205,189,221,239,-34,34,6,9,-3,3,False,32,,,
+1501898,2025-11-04,"Iqbal Stadium, Faisalabad",South Africa,Pakistan,mens_odi,10,62,0,418,356,480,263,155,155,3,10,-7,7,False,124,,,
+1501898,2025-11-04,"Iqbal Stadium, Faisalabad",South Africa,Pakistan,mens_odi,20,125,1,400,340,460,263,137,137,4,10,-6,6,False,120,,,
+1501898,2025-11-04,"Iqbal Stadium, Faisalabad",South Africa,Pakistan,mens_odi,30,167,3,274,242,306,263,11,11,5,10,-5,5,True,64,,,
+1501898,2025-11-04,"Iqbal Stadium, Faisalabad",South Africa,Pakistan,mens_odi,40,211,6,241,222,260,263,-22,22,7,10,-3,3,False,38,,,
+1507888,2025-11-03,Dubai International Cricket Stadium,United States of America,United Arab Emirates,mens_odi,10,47,3,191,163,219,292,-101,101,6,3,3,3,False,56,,,
+1507888,2025-11-03,Dubai International Cricket Stadium,United States of America,United Arab Emirates,mens_odi,20,90,3,220,187,253,292,-72,72,5,3,2,2,False,66,,,
+1507888,2025-11-03,Dubai International Cricket Stadium,United States of America,United Arab Emirates,mens_odi,30,145,3,255,225,285,292,-37,37,5,3,2,2,False,60,,,
+1507888,2025-11-03,Dubai International Cricket Stadium,United States of America,United Arab Emirates,mens_odi,40,198,3,270,249,291,292,-22,22,4,3,1,1,False,42,,,
+1507887,2025-11-01,"ICC Academy, Dubai",Nepal,United States of America,mens_odi,10,50,1,303,258,348,271,32,32,5,10,-5,5,True,90,,,
+1507887,2025-11-01,"ICC Academy, Dubai",Nepal,United States of America,mens_odi,20,90,2,248,211,285,271,-23,23,5,10,-5,5,True,74,,,
+1507887,2025-11-01,"ICC Academy, Dubai",Nepal,United States of America,mens_odi,30,144,4,250,220,280,271,-21,21,6,10,-4,4,True,60,,,
+1507887,2025-11-01,"ICC Academy, Dubai",Nepal,United States of America,mens_odi,40,201,5,242,223,261,271,-29,29,6,10,-4,4,False,38,,,
+1491722,2025-11-01,"Sky Stadium, Wellington",England,New Zealand,mens_odi,10,44,4,184,157,211,222,-38,38,7,10,-3,3,False,54,,,
+1491722,2025-11-01,"Sky Stadium, Wellington",England,New Zealand,mens_odi,20,92,5,189,161,217,222,-33,33,7,10,-3,3,False,56,,,
+1491722,2025-11-01,"Sky Stadium, Wellington",England,New Zealand,mens_odi,30,152,7,195,172,218,222,-27,27,9,10,-1,1,False,46,,,
+1491722,2025-11-01,"Sky Stadium, Wellington",England,New Zealand,mens_odi,40,222,9,234,216,252,222,12,12,10,10,0,0,True,36,,,
+1507886,2025-10-30,"ICC Academy, Dubai",Nepal,United Arab Emirates,mens_odi,10,33,2,203,173,233,233,-30,30,6,10,-4,4,True,60,,,
+1507886,2025-10-30,"ICC Academy, Dubai",Nepal,United Arab Emirates,mens_odi,20,82,3,221,188,254,233,-12,12,5,10,-5,5,True,66,,,
+1507886,2025-10-30,"ICC Academy, Dubai",Nepal,United Arab Emirates,mens_odi,30,117,3,205,181,229,233,-28,28,5,10,-5,5,False,48,,,
+1507886,2025-10-30,"ICC Academy, Dubai",Nepal,United Arab Emirates,mens_odi,40,178,4,237,219,255,233,4,4,5,10,-5,5,True,36,,,
+1507885,2025-10-28,Dubai International Cricket Stadium,United Arab Emirates,United States of America,mens_odi,10,29,2,204,174,234,211,-7,7,6,9,-3,3,True,60,,,
+1507885,2025-10-28,Dubai International Cricket Stadium,United Arab Emirates,United States of America,mens_odi,20,67,2,213,182,244,211,2,2,5,9,-4,4,True,62,,,
+1507885,2025-10-28,Dubai International Cricket Stadium,United Arab Emirates,United States of America,mens_odi,30,108,4,178,157,199,211,-33,33,6,9,-3,3,False,42,,,
+1507885,2025-10-28,Dubai International Cricket Stadium,United Arab Emirates,United States of America,mens_odi,40,153,6,179,165,193,211,-32,32,7,9,-2,2,False,28,,,

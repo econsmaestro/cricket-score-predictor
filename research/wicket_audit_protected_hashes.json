@@ -1,0 +1,21 @@
+{
+  "prediction.py": "687cc30a2b3f95328676fecf9759bf442363b5be7335d8017e4b884cb768fe08",
+  "backtest.py": "ac685467bce75047517c4409cebdac70160812b1be434b6a7c9c6ec4a2401c65",
+  "backtest_data.py": "d8a8834d4d3fc70d6c16ea3e5ff71dce838ace3f8ecbc9708503c75332296752",
+  "learning_engine.py": "59cc1478e50d104dbf151fc44aa781dd87a167544766102f475382a1947992ae",
+  "ipl_stats.py": "de27be85e41789b94d6984587f85bfaace379b1d2a5d300ca924a5a987fc31af",
+  "fielding_intelligence/__init__.py": "c657688a67d57312fdbf1970c34916c6c679c87713d266cf6920aa72c1741e7b",
+  "fielding_intelligence/__main__.py": "d5b88e734acf6fcc223f9cb6530999094a6569e4bd87449f569933bcba8b64d1",
+  "fielding_intelligence/adapter.py": "8e6d992968018f114e3a02e2344a7165ee510f8a13df09a627f16739781f67d7",
+  "fielding_intelligence/api.py": "ea76e8f3459c9dc75286df6e961166a94026abb88b0463be128652c740ee173c",
+  "fielding_intelligence/evaluation.py": "c65be5dba4799d37cd76a4200d7c3f824480ecb8662b1fa956a7f99bb7829da9",
+  "fielding_intelligence/ingestion.py": "13d0c640ad49ab087fdd5d23aac25749730baf30585587de33901f01624e3d36",
+  "fielding_intelligence/learning.py": "43d5123435b699d00e95fa94a74226dee8a4be25e1501de265df01389b6452ea",
+  "fielding_intelligence/models.py": "ef8e3957028d94837d9cdb4a0df89b251c684fa32e7fbbaab0554a1b8a4e0b1b",
+  "fielding_intelligence/pressure.py": "ecccd56e3f826d59ffa4d3de076fda8721bb3961134d21b684b74635c910f6ba",
+  "fielding_intelligence/ratings.py": "b8d255386403bbdde9588a6f34264204e5d8c96c88f4b4761f04da6af2b7628f",
+  "fielding_intelligence/registry.py": "ab50f512de924feea5740cde769b1fbfe2ac7d35d8353b4259c94cf57b6e42c6",
+  "fielding_intelligence/reporting.py": "ed4bfe77c0362311f1b6d17e3cc571fc57863c86199dc5006f5f92f5c8359ff3",
+  "fielding_intelligence/service.py": "1a2ca18ec2b90ed58e7f622bef57e904388dd37fe3d3bec1eb1a09ca4797f472",
+  "fielding_intelligence/sources.py": "8fd9417380ce60832c901dbc9c31b2d7e56c49dc672993c4c88c82d4581fca4e"
+}

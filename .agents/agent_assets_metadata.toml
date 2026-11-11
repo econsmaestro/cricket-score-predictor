@@ -238,3 +238,17 @@ mtime_ms = 1794319726627
 storage_uri = "gcs://replit-rams-assets-sisko/rams/assets/repl:b407f9d4-a912-4514-9106-fd10bd03162e/a6cde105-95fc-4804-8296-73b8bdaa0087/fb385621-612f-4997-a40f-af1ed9f5c377"
 storage_version_token = "1794319775125687"
 content_type = "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+
+[[outputs]]
+id = "FfCwYJfYJNbIjE304CjhP"
+uri = "file://generated-artifacts/fielding-strength/metrics.csv"
+type = "table"
+title = "Fielding strength replay metrics"
+description = "Run and wicket MAE and signed bias for every strength, including earlier-fit and later-test splits."
+logical_id = "dfa087b7-e906-4669-977c-ead955e7cf42"
+content_hash = "sha256:09537f00d8a0998a6ee500466cfa9f0e44483a39023092daf03ccc45581dc307"
+size = 3382
+mtime_ms = 1794401487766
+storage_uri = "gcs://replit-rams-assets-sisko/rams/assets/repl:b407f9d4-a912-4514-9106-fd10bd03162e/dfa087b7-e906-4669-977c-ead955e7cf42/e039c58c-cea0-4873-ae99-4dc76a3749bc"
+storage_version_token = "1794402338728236"
+content_type = "text/csv"

@@ -4,6 +4,13 @@ How the team fielding ratings were assigned, what they do to predictions, and wh
 committed backtest data supports them. Reproduce every table below with
 `python -m research.fielding_rating_audit` (offline; reads `data/backtests/*.json`).
 
+> **Status update.** The approximate ablation in section 3 was superseded by a real-model replay:
+> see `docs/fielding-strength-replay.md`. That replay also corrected a backtest-harness bug (women's
+> fixtures used the men's rating keys), so the committed women's reports changed (see
+> `docs/first-innings-report-refresh.md`). The approximation below reproduces the committed MAE at
+> k=1 by construction, but its k<1 figures for women's rows predate the key fix and should not be
+> quoted. Use the real-model numbers: pooled run MAE 28.2 at today's strength vs 27.3 with no fielding effect.
+
 ## 1. Provenance: what we can and cannot say
 
 * `TEAM_FIELDING_EFFICIENCY` in `prediction.py` is a hand-assigned table (for example India 0.92,
