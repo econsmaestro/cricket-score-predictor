@@ -92,6 +92,13 @@ class Referral(db.Model):
     )
 
 
+class ReferralRewardNotice(db.Model):
+    """Receipt that a reward notification was rendered for its owner."""
+    __tablename__ = 'referral_reward_notice'
+    reward_id = db.Column(db.Integer, db.ForeignKey('referral_reward.id'), primary_key=True)
+    shown_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+
+
 class ReferralReward(db.Model):
     __tablename__ = 'referral_reward'
     id = db.Column(db.Integer, primary_key=True)

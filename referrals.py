@@ -12,7 +12,7 @@ from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.orm import Session
 
 from app import db
-from models import User, Prediction, ReferralProfile, ReferralIdentity, Referral, ReferralReward, ReferralWelcomeGrant
+from models import User, Prediction, ReferralProfile, ReferralIdentity, Referral, ReferralReward, ReferralWelcomeGrant, ReferralRewardNotice
 
 SG = ZoneInfo("Asia/Singapore")
 ATTRIBUTION_DAYS = 30
@@ -187,6 +187,23 @@ def settle_pending_rewards():
 
 
 def init_referrals(app, require_login):
+    @app.context_processor
+    def referral_reward_notification():
+        """Show earned rewards on the owner's next rendered page, not API requests."""
+        if not current_user.is_authenticated:
+            return {"referral_reward_notification_count": 0}
+        with Session(db.engine) as tx, tx.begin():
+            # Serialize concurrent page renders for the same owner.
+            tx.scalar(select(User).where(User.id == current_user.id).with_for_update())
+            rewards = tx.scalars(select(ReferralReward.id).where(
+                ReferralReward.referrer_id == current_user.id,
+                ~select(ReferralRewardNotice.reward_id).where(
+                    ReferralRewardNotice.reward_id == ReferralReward.id).exists()
+            )).all()
+            for reward_id in rewards:
+                tx.add(ReferralRewardNotice(reward_id=reward_id))
+        return {"referral_reward_notification_count": len(rewards)}
+
     @app.before_request
     def remember_known_account():
         if "prediction_csrf" not in session:

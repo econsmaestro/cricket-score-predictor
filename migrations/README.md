@@ -1,5 +1,17 @@
 # Referral programme schema
 
+## Referral reward notifications
+
+Adds `referral_reward_notice`, with `reward_id` as its primary key and foreign
+key to `referral_reward.id`, plus a non-null `shown_at` timestamp. The existing
+development schema setup creates this new table. Include it in the Publish
+schema-diff review; no existing records need to be changed or deleted.
+
+The next rendered page for the referrer shows previously unannounced rewards,
+including rewards earned before this feature was added. The receipt prevents
+repeat notifications across visits and devices. This is an in-app notification,
+not an email or a real-time push notification.
+
 The SQLAlchemy models remain the schema source of truth. This change adds
 `referral_profile`, `referral_identity`, `referral`, `referral_reward`, plus nullable
 `prediction.user_id` (foreign key to `users.id`, indexed). Existing prediction rows

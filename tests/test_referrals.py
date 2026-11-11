@@ -76,6 +76,45 @@ def rows(engine, model):
         return tx.scalars(select(model)).all()
 
 
+def render_reward_notice(uid=None):
+    from flask import render_template
+    from flask_login import login_user, logout_user
+    with app.test_request_context("/"):
+        logout_user()
+        if uid:
+            login_user(db.session.get(User, uid))
+        return render_template("base.html")
+
+
+def test_reward_notification_is_owner_only_once_per_reward(referral_db):
+    from models import ReferralRewardNotice
+    engine = referral_db
+    code = create_user(engine)
+    register(engine, "friend1", code)
+    assert "You earned free Pro!" not in render_reward_notice("owner")
+    qualify(engine, "friend1")
+    assert "You earned free Pro!" not in render_reward_notice()
+    assert "You earned free Pro!" not in render_reward_notice("friend1")
+    assert rows(engine, ReferralRewardNotice) == []
+    page = render_reward_notice("owner")
+    assert "You earned free Pro!" in page
+    assert 'href="/referrals"' in page
+    assert len(rows(engine, ReferralRewardNotice)) == 1
+    assert "You earned free Pro!" not in render_reward_notice("owner")
+    register(engine, "friend2", code)
+    qualify(engine, "friend2")
+    assert "You earned free Pro!" in render_reward_notice("owner")
+    assert len(rows(engine, ReferralRewardNotice)) == 2
+
+
+def test_pending_and_rejected_referrals_do_not_notify(referral_db):
+    engine = referral_db
+    code = create_user(engine)
+    register(engine, "pending", code)
+    register(engine, "rejected", code, known=True)
+    assert "You earned free Pro!" not in render_reward_notice("owner")
+
+
 def test_unique_links_and_successful_reward(referral_db):
     engine = referral_db
     code = create_user(engine)

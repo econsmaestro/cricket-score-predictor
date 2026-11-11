@@ -151,6 +151,16 @@
     
     <main class="main-content">
         <div class="container">
+            {% if referral_reward_notification_count %}
+            <div class="alert alert-success alert-dismissible fade show" role="status">
+                <strong>You earned free Pro!</strong>
+                {{ referral_reward_notification_count }} referral reward{{ 's' if referral_reward_notification_count != 1 else '' }}
+                {{ 'have' if referral_reward_notification_count != 1 else 'has' }} been awarded.
+                Each reward adds one calendar month of Pro access.
+                <a href="{{ url_for('referral_dashboard') }}" class="alert-link">View your rewards and Pro expiry</a>.
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Dismiss referral reward notification"></button>
+            </div>
+            {% endif %}
             {% with messages = get_flashed_messages(with_categories=true) %}
                 {% if messages %}
                     {% for category, message in messages %}

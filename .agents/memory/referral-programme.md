@@ -27,3 +27,12 @@ provider; this limitation was disclosed before implementation.
 **How to apply:** Do not claim this is proof of distinct people or promise
 complete multi-account fraud prevention. Preserve provider-side verification and
 do not replace it with posted flags or IP-only rules.
+
+Notify the referrer when a reward is actually awarded, rather than merely when
+a friend registers or becomes qualified beyond the monthly cap.
+
+**Why:** The user requested a completion notification by email or popup; an
+in-app notice avoids introducing email delivery dependencies.
+
+**How to apply:** Keep notifications tied to committed rewards. A queued
+qualification must not be described as an awarded month.
