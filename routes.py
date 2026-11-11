@@ -1992,9 +1992,17 @@ def api_support_chat():
             }
         conv.append(entry)
 
-    ai_reply = generate_chat_reply(conv, user_name=username)
+    try:
+        ai_reply = generate_chat_reply(conv, user_name=username)
+    except Exception as exc:
+        app.logger.error("Chat generation failed (%s)", type(exc).__name__)
+        ai_reply = None
     if not ai_reply:
-        ai_reply = "Sorry, I'm having trouble responding right now. Please try again in a moment!"
+        return jsonify({
+            "error": "The AI reply could not be completed. Please try again in a moment.",
+            "message_saved": True,
+            **chat_allowance(current_user),
+        }), 503
 
     ai_entry = SupportChat(
         session_id=chat_session_id,
@@ -2015,6 +2023,17 @@ def api_support_chat():
         }
 
     return jsonify({"reply": ai_reply, **chat_allowance(current_user), "attachment": attachment_info})
+
+
+@app.route("/api/support-chat/allowance")
+def api_support_chat_allowance():
+    """Read current account usage even when a previous reply failed or timed out."""
+    from chat_access import chat_allowance
+    if not current_user.is_authenticated:
+        return jsonify({"error": "Please sign in to use the support chat."}), 401
+    response = jsonify(chat_allowance(current_user))
+    response.headers["Cache-Control"] = "no-store"
+    return response
 
 
 @app.route("/api/support-chat/clear", methods=["POST"])

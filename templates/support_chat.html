@@ -345,6 +345,17 @@
         }
     }
 
+    function refreshAllowance() {
+        return fetch('{{ url_for("api_support_chat_allowance") }}', {cache: 'no-store'})
+            .then(response => {
+                if (!response.ok) throw new Error('Allowance unavailable');
+                return response.json();
+            })
+            .then(data => updateQuota(data.remaining, data.renews_at, data.unlimited, data.weekly_limit))
+            .catch(() => {}); // Retain the last known allowance if the network is down.
+    }
+    refreshAllowance();
+
     function scrollToBottom() {
         chatMessages.scrollTop = chatMessages.scrollHeight;
     }
@@ -468,27 +479,33 @@
             method: 'POST',
             body: formData
         })
-        .then(r => r.json())
+        .then(response => {
+            if (!(response.headers.get('content-type') || '').includes('application/json')) {
+                throw new Error('Chat server did not return JSON');
+            }
+            return response.json();
+        })
         .then(data => {
             hideTyping();
+            if (data.remaining !== undefined || data.unlimited !== undefined) {
+                updateQuota(data.remaining, data.renews_at, data.unlimited, data.weekly_limit);
+            }
             if (data.quota_exceeded) {
                 appendMessage('assistant', data.error);
                 updateQuota(0, data.renews_at, data.unlimited, data.weekly_limit);
                 disableChat();
             } else if (data.reply) {
                 appendMessage('assistant', data.reply);
-                if (data.remaining !== undefined || data.unlimited !== undefined) {
-                    updateQuota(data.remaining, data.renews_at, data.unlimited, data.weekly_limit);
-                }
             } else if (data.error) {
                 appendMessage('assistant', data.error);
             }
         })
         .catch(() => {
             hideTyping();
-            appendMessage('assistant', 'Something went wrong. Please try again.');
+            appendMessage('assistant', 'The chat request failed or timed out. Please try again in a moment.');
         })
-        .finally(() => {
+        .finally(async () => {
+            await refreshAllowance();
             if (!quotaBlocked && (unlimited || (remaining !== null && remaining > 0))) {
                 chatInput.disabled = false;
                 attachBtn.disabled = false;

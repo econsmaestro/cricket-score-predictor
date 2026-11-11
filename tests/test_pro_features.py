@@ -5,6 +5,7 @@ import re
 import subprocess
 from concurrent.futures import ThreadPoolExecutor
 from threading import Barrier
+from types import SimpleNamespace
 
 import pytest
 from sqlalchemy import text
@@ -193,6 +194,72 @@ def test_old_messages_age_out_of_free_quota(feature_db, client):
     user = sign_in(client)
     seed_messages(user, 50, days_ago=8)
     assert chat_allowance(user)["remaining"] == 50
+
+
+@pytest.mark.parametrize("tier,remaining", [("free", 49), ("paid", None)])
+@pytest.mark.parametrize("failure", ["unavailable", "exception"])
+def test_ai_failure_returns_json_and_current_allowance(
+    feature_db, client, monkeypatch, tier, remaining, failure,
+):
+    sign_in(client, tier)
+
+    def fail_reply(*args, **kwargs):
+        if failure == "exception":
+            raise TimeoutError("Synthetic timeout")
+        return None
+
+    monkeypatch.setattr(email_responder, "generate_chat_reply", fail_reply)
+    response = client.post("/api/support-chat", json={
+        "message": "Explain DLS", "csrf_token": "synthetic-csrf",
+    })
+    assert response.status_code == 503
+    assert response.is_json
+    assert response.json["message_saved"] is True
+    assert response.json["remaining"] == remaining
+    assert response.json["unlimited"] is (tier == "paid")
+    assert SupportChat.query.filter_by(role="user").count() == 1
+    assert SupportChat.query.filter_by(role="assistant").count() == 0
+    refreshed = client.get("/api/support-chat/allowance")
+    assert refreshed.status_code == 200
+    assert refreshed.json["remaining"] == remaining
+    assert refreshed.headers["Cache-Control"] == "no-store"
+
+
+def test_allowance_requires_login(feature_db, client):
+    assert client.get("/api/support-chat/allowance").status_code == 401
+
+
+@pytest.mark.parametrize("vision", [False, True])
+def test_ai_requests_disable_retries_and_bound_reply_budget(monkeypatch, vision):
+    options_seen = []
+    request_seen = []
+
+    def create(**kwargs):
+        request_seen.append(kwargs)
+        return SimpleNamespace(choices=[
+            SimpleNamespace(message=SimpleNamespace(content="A cricket answer")),
+        ])
+
+    def with_options(**kwargs):
+        options_seen.append(kwargs)
+        return SimpleNamespace(chat=SimpleNamespace(completions=SimpleNamespace(create=create)))
+
+    monkeypatch.setattr(email_responder, "client", SimpleNamespace(with_options=with_options))
+    monkeypatch.setattr(email_responder, "_encode_image_base64", lambda path: "data:image/png;base64,eA==")
+    history = [{"role": "user", "message": "Explain DLS"}]
+    if vision:
+        history[0]["attachment"] = {"original_name": "test.png", "path": "synthetic.png"}
+    assert email_responder.generate_chat_reply(history) == "A cricket answer"
+    assert options_seen == [{"max_retries": 0, "timeout": 25}]
+    request = request_seen[0]
+    if vision:
+        assert request["model"] == "gpt-4o-mini"
+        assert request["max_tokens"] == 1200
+        assert "reasoning_effort" not in request
+    else:
+        assert request["model"] == "gpt-5-nano"
+        assert request["reasoning_effort"] == "minimal"
+        assert request["max_completion_tokens"] == 1200
 
 
 def test_expiry_is_enforced_even_on_previously_unlimited_page(feature_db, client, monkeypatch):

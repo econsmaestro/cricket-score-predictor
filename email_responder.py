@@ -343,14 +343,19 @@ Guidelines:
 
     try:
         model = "gpt-4o-mini" if use_vision else "gpt-5-nano"
-        response = client.chat.completions.create(
+        options = {"max_tokens": 1200} if use_vision else {
+            "reasoning_effort": "minimal", "max_completion_tokens": 1200,
+        }
+        # SDK retries can multiply a 30s timeout beyond Gunicorn's 60s budget.
+        # Keep interactive chat bounded independently of background email jobs.
+        response = client.with_options(max_retries=0, timeout=25).chat.completions.create(
             model=model,
             messages=messages,
-            timeout=30,
+            **options,
         )
         return response.choices[0].message.content.strip()
     except Exception as e:
-        logger.error(f"Chat reply generation failed: {e}")
+        logger.error("Chat reply generation failed (%s)", type(e).__name__)
         return None
 
 
