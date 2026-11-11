@@ -115,6 +115,9 @@ def get_venues_by_country() -> Dict[str, List[str]]:
 
 DEFAULT_VENUE_FACTORS = {"avg_score": 165, "boundary_rate": 0.15, "wicket_rate": 0.088}
 
+# Hand-assigned fielding prior, first added in commit 04f9846 (3 May 2026).
+# No measured derivation: these values are analyst estimates, not observed
+# catching/fielding percentages. See docs/fielding-rating-audit.md.
 TEAM_FIELDING_EFFICIENCY = {
     "India": 0.92,
     "Australia": 0.94,
