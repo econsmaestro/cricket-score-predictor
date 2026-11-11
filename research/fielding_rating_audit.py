@@ -60,6 +60,61 @@ def chronological_split(rows, fmt):
     return [r for r in rs if r["match_id"] in early], [r for r in rs if r["match_id"] not in early]
 
 
+HIST_COMMIT = "8121e80"  # last commit that holds data/fielding/team_ratings.json (older fielding_stats engine)
+
+
+def _spearman(a, b):
+    def rank(v):
+        order = sorted(range(len(v)), key=lambda i: v[i])
+        out, i = [0.0] * len(v), 0
+        while i < len(order):
+            j = i
+            while j + 1 < len(order) and v[order[j + 1]] == v[order[i]]:
+                j += 1
+            for k in range(i, j + 1):
+                out[order[k]] = (i + j) / 2 + 1
+            i = j + 1
+        return out
+    ra, rb = rank(a), rank(b)
+    n = len(a)
+    ma, mb = sum(ra) / n, sum(rb) / n
+    den = (sum((x - ma) ** 2 for x in ra) * sum((y - mb) ** 2 for y in rb)) ** 0.5
+    return sum((x - ma) * (y - mb) for x, y in zip(ra, rb)) / den if den else float("nan")
+
+
+def observed_outcomes_check(ratings, min_innings=20):
+    """Do the assigned ratings agree with observed Cricsheet team outcomes?
+
+    Uses team_ratings.json from the older fielding_stats engine (kept in git history), which holds
+    per-team catches, dismissals, run-out involvement and runs allowed per over computed from
+    Cricsheet ball-by-ball files. These are outcomes, not opportunity-adjusted fielding skill.
+    """
+    import subprocess
+    try:
+        raw = subprocess.run(["git", "show", f"{HIST_COMMIT}:data/fielding/team_ratings.json"],
+                             cwd=ROOT, capture_output=True, text=True, check=True).stdout
+        data = json.loads(raw)
+    except Exception as exc:  # shallow clone or file missing
+        print(f"\n(Observed-outcomes check skipped: {exc})")
+        return
+    print(f"\n## Agreement with observed Cricsheet team outcomes (Spearman rank correlation, teams with {min_innings}+ innings)")
+    print("| Cohort | Teams | Catches / innings | Dismissals / innings | Runs allowed / over | Run-out involvement / innings |\n|---|---|---|---|---|---|")
+    for fmt, suffix in (("mens_t20", ""), ("mens_odi", ""), ("womens_t20", " W"), ("womens_odi", " W")):
+        pts = []
+        for team, by_fmt in data.items():
+            x = by_fmt.get(fmt)
+            if x and x["innings"] >= min_innings and team + suffix in ratings:
+                pts.append((ratings[team + suffix], x["catches"] / x["innings"], x["dismissals_per_innings"],
+                            x["rpo_allowed"], x["run_out_involved"] / x["innings"]))
+        if len(pts) >= 6:
+            a = [p[0] for p in pts]
+            cells = " | ".join(f"{_spearman(a, [p[i] for p in pts]):+.2f}" for i in (1, 2, 3, 4))
+            print(f"| {fmt} | {len(pts)} | {cells} |")
+    print("\nReading: a positive value for catches and dismissals means higher-rated teams take more of both. "
+          "That mostly reflects overall team quality (bowling included), not fielding alone. For runs allowed, "
+          "a negative value would support the ratings; positive values do not.")
+
+
 def main():
     rows, ratings, modifier = _load()
     print("# Fielding rating audit (generated)\n")
@@ -112,6 +167,7 @@ def main():
         n += len(late)
     print(f"| Pooled | | {tot['now'] / n:.2f} | {tot['fit'] / n:.2f} | {tot['none'] / n:.2f} |")
 
+    observed_outcomes_check(ratings)
     women = [r for r in rows if r["fmt"].startswith("womens") and r["fielding_team"] in ratings]
     print(f"\nHarness note: {len(women)} women's rows matched a men's table key (e.g. 'India'), and "
           f"{sum(1 for r in rows if r['fielding_team'].endswith(' W'))} matched a women's 'X W' key. "

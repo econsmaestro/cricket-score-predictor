@@ -78,6 +78,30 @@ What this shows:
 3. **A much smaller effect fits better.** The best strength is roughly a quarter to a half of
    today's, and on the later half of matches a fitted or zero effect beats the current one.
 
+### 3b. Agreement with observed outcomes
+
+The older `fielding_stats` engine (commit `8121e80`, still in git history) computed per-team
+Cricsheet outcomes. Rank correlation between the assigned rating and those outcomes, for teams
+with 20+ innings:
+
+| Cohort | Teams | Catches / innings | Dismissals / innings | Runs allowed / over | Run-out involvement / innings |
+|---|---|---|---|---|---|
+| Men's T20 | 21 | +0.50 | +0.30 | +0.82 | -0.22 |
+| Men's ODI | 19 | +0.43 | +0.59 | +0.46 | +0.24 |
+| Women's T20 | 9 | +0.49 | +0.52 | -0.20 | -0.05 |
+| Women's ODI | 9 | +0.73 | +0.70 | -0.27 | -0.62 |
+
+Higher-rated teams do take more catches and more wickets per innings, but that mostly reflects
+overall team quality (bowling included), not fielding alone. Runs allowed per over does not
+agree: for the ratings to be supported it should be negative, and in men's cohorts it is positive.
+Nine to 21 teams per cohort is a small sample. These are outcomes, not opportunity-adjusted
+fielding skill, so they cannot validate the ratings; they only show the ordering is not
+unrelated to team standing.
+
+Structure of the table itself (men's, 24 teams): 0.90 to 0.94 for five leading sides, 0.80 to
+0.85 for five established sides, 0.71 to 0.79 for fourteen others. Women's table: nine teams,
+0.76 to 0.93.
+
 ## 4. Limits of this evidence
 
 * Approximate: assumes the run modifier scales projected remaining runs. Other adjustments in
