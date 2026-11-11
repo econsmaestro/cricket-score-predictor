@@ -192,6 +192,7 @@ def test_duplicate_email_alias_of_preprogramme_account_is_rejected(referral_db, 
     create_user(engine, "existing", email="oldname@gmail.com")
     register(engine, "new", code, email=email)
     assert rows(engine, Referral)[0].rejection_reason == "existing_identity"
+    assert rows(engine, ReferralWelcomeGrant) == []
     assert qualify(engine, "new") == 0
 
 
@@ -205,6 +206,7 @@ def test_unverified_or_additional_browser_account_rejected(referral_db, verified
     code = create_user(engine)
     register(engine, "new", code, verified=verified, known=known)
     assert rows(engine, Referral)[0].rejection_reason == reason
+    assert rows(engine, ReferralWelcomeGrant) == []
     assert qualify(engine, "new") == 0
 
 

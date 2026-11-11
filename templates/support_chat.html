@@ -111,7 +111,7 @@
                 {% endif %}
             </div>
 
-            <div id="quotaBar" class="d-flex align-items-center justify-content-between" style="background: #f0f4f8; border-top: 1px solid #e9ecef; padding: 6px 16px; font-size: 12px; color: #5a6a7a;">
+            <div id="quotaBar" class="d-flex flex-wrap gap-2 align-items-center justify-content-between" style="background: #f0f4f8; border-top: 1px solid #e9ecef; padding: 6px 16px; font-size: 12px; color: #5a6a7a;">
                 <span>
                     <i class="bi bi-chat-square-text me-1"></i>
                     <span id="quotaText">{% if unlimited %}Unlimited messages · Pro{% else %}{{ remaining }} of {{ weekly_limit }} messages left this week{% endif %}</span>
@@ -119,6 +119,7 @@
                 <span id="renewInfo" data-renews="{{ renews_at or '' }}" style="color: #8a9ab5;{% if unlimited or not renews_at %}display:none;{% endif %}">
                     <i class="bi bi-arrow-repeat me-1"></i>Renews <span id="renewTime"></span>
                 </span>
+                <a id="chatProUpgrade" href="{{ url_for('pricing') }}" class="fw-semibold" {% if unlimited %}hidden{% endif %}>Upgrade to Pro for unlimited messages</a>
             </div>
             {% if not unlimited and remaining is not none and remaining <= 0 %}
             <div id="quotaExceeded" class="text-center py-3" style="background: #fff3cd; border-top: 1px solid #e9ecef; padding: 10px 16px;">
@@ -313,6 +314,7 @@
         if (newWeeklyLimit !== undefined) weeklyLimit = newWeeklyLimit;
         remaining = newRemaining;
         quotaBlocked = !unlimited && remaining !== null && remaining <= 0;
+        document.getElementById('chatProUpgrade').hidden = unlimited;
         if (unlimited) {
             quotaText.textContent = 'Unlimited messages · Pro';
             if (renewInfo) renewInfo.style.display = 'none';

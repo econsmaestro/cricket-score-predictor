@@ -107,6 +107,7 @@ def test_all_pro_entitlements_get_unlimited_chat_and_full_report(
     assert b"let remaining = null;" in page.data
     assert b"let unlimited = true;" in page.data
     assert b'id="quotaExceeded"' not in page.data
+    assert re.search(r'id="chatProUpgrade"[^>]*\bhidden\b', page.text)
     script = next(
         script for script in re.findall(r"<script>(.*?)</script>", page.text, re.S)
         if "const CSRF" in script
@@ -150,6 +151,10 @@ def test_free_and_expired_users_keep_basic_summary_and_free_quota(
     page = client.get("/support-chat")
     assert b"0 of 50 messages" in page.data
     assert b'id="quotaExceeded"' in page.data
+    upgrade = re.search(r'<a id="chatProUpgrade"[^>]*>', page.text).group()
+    assert 'href="/pricing"' in upgrade
+    assert "hidden" not in upgrade
+    assert "Upgrade to Pro for unlimited messages" in page.text
     response = client.post("/api/support-chat", json={
         "message": "Question", "csrf_token": "synthetic-csrf", "unlimited": True,
     })
