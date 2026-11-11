@@ -107,3 +107,88 @@ def test_anonymous_sign_in_stores_only_safe_next(client, destination, expected):
     assert response.status_code == 200
     with client.session_transaction() as stored:
         assert stored["next_url"] == expected
+
+
+def _referral_auth_client(client, monkeypatch, provider):
+    """Exercise the real referrals URL and auth guard without referral DB writes."""
+    user = User(id="referral-navigation-user")
+    monkeypatch.setattr(replit_auth.login_manager, "_user_callback", lambda user_id: user)
+    monkeypatch.setitem(
+        app.view_functions, "referral_dashboard",
+        replit_auth.require_login(lambda: "Referral dashboard"),
+    )
+    with client.session_transaction() as stored:
+        stored["_user_id"] = user.id
+        stored["_fresh"] = True
+        if provider:
+            stored["auth_provider"] = provider
+
+
+def test_google_referrals_ignores_stale_replit_credentials(client, monkeypatch):
+    _referral_auth_client(client, monkeypatch, "google")
+
+    class UnusedReplitSession:
+        @property
+        def token(self):
+            raise AssertionError("Google login must not inspect Replit credentials")
+
+    monkeypatch.setattr(replit_auth, "replit", UnusedReplitSession())
+    response = client.get("/referrals", follow_redirects=True)
+    assert response.status_code == 200
+    assert response.data == b"Referral dashboard"
+    assert not response.history
+
+
+@pytest.mark.parametrize("provider", ["replit_auth", None])
+def test_expired_replit_referrals_ends_at_sign_in_without_loop(client, monkeypatch, provider):
+    _referral_auth_client(client, monkeypatch, provider)
+
+    class ExpiredReplitSession:
+        def __init__(self):
+            self.token = {"expires_in": -1, "refresh_token": "synthetic"}
+
+        def refresh_token(self, **kwargs):
+            raise replit_auth.InvalidGrantError()
+
+    monkeypatch.setattr(replit_auth, "replit", ExpiredReplitSession())
+    response = client.get("/referrals", follow_redirects=True)
+    assert response.status_code == 200
+    assert response.request.path == "/sign-in"
+    assert len(response.history) == 1
+    assert b"Please sign in again" in response.data
+    with client.session_transaction() as stored:
+        assert "_user_id" not in stored
+        assert "auth_provider" not in stored
+        assert stored["next_url"] == "/referrals"
+
+
+def test_valid_replit_referrals_still_loads(client, monkeypatch):
+    _referral_auth_client(client, monkeypatch, "replit_auth")
+    monkeypatch.setattr(
+        replit_auth, "replit", SimpleNamespace(token={"expires_in": 600})
+    )
+    response = client.get("/referrals")
+    assert response.status_code == 200
+    assert response.data == b"Referral dashboard"
+
+
+def test_refreshable_replit_referrals_still_loads(client, monkeypatch):
+    _referral_auth_client(client, monkeypatch, "replit_auth")
+    updated = []
+    refreshed = {"expires_in": 600, "access_token": "synthetic"}
+    monkeypatch.setattr(replit_auth, "replit", SimpleNamespace(
+        token={"expires_in": -1, "refresh_token": "synthetic"},
+        refresh_token=lambda **kwargs: refreshed,
+        token_updater=updated.append,
+    ))
+    response = client.get("/referrals")
+    assert response.status_code == 200
+    assert response.data == b"Referral dashboard"
+    assert updated == [refreshed]
+
+
+def test_anonymous_referrals_reaches_sign_in(client):
+    response = client.get("/referrals", follow_redirects=True)
+    assert response.status_code == 200
+    assert response.request.path == "/sign-in"
+    assert len(response.history) == 1

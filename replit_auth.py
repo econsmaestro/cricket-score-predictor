@@ -455,8 +455,13 @@ def require_login(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
         if not current_user.is_authenticated:
-            session["next_url"] = get_next_navigation_url(request)
+            session["next_url"] = safe_next_url(get_next_navigation_url(request))
             return redirect(url_for('auth_options'))
+
+        # Google login establishes a CricPredict session independently of Replit.
+        # An old Replit token must not invalidate that session.
+        if session.get("auth_provider") == "google":
+            return f(*args, **kwargs)
 
         token = replit.token
         expires_in = token.get('expires_in', 0) if token else 0
@@ -467,7 +472,13 @@ def require_login(f):
                 token = replit.refresh_token(token_url=refresh_token_url,
                                              client_id=os.environ['REPL_ID'])
             except InvalidGrantError:
-                session["next_url"] = get_next_navigation_url(request)
+                # Clear the failed login before /sign-in checks authentication,
+                # otherwise it redirects back here indefinitely.
+                del replit.token
+                logout_user()
+                session.pop("auth_provider", None)
+                session["next_url"] = safe_next_url(request.full_path.rstrip("?"))
+                flash("Your sign-in session has expired. Please sign in again.", "warning")
                 return redirect(url_for('auth_options'))
             replit.token_updater(token)
 
