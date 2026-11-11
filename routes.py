@@ -50,7 +50,7 @@ from prediction import (
     IPL_VENUES, ALL_VENUES, get_venues_by_country, Batsman, Bowler, MatchState, predict_score, validate_bowling_rules, FORMAT_CONFIG, get_venue_timezone, FIELDING_TEAMS, PredictionResult
 )
 from insights import build_match_insights
-from prematch import build_prematch_analysis
+from prematch import build_prematch_analysis, build_basic_prematch_summary
 from player_data import (
     get_batsman_stats, get_bowler_stats, get_player_form_rating,
     PLAYER_CAREER_STATS, BOWLER_CAREER_STATS
@@ -1600,6 +1600,13 @@ def prematch():
         flash("Please select a valid venue", "error")
         return redirect(url_for("prematch"))
 
+    if not (current_user.is_authenticated and current_user.has_pro):
+        basic = build_basic_prematch_summary(venue, match_format, team1, team2)
+        return render_template(
+            "prematch.html", venues=ALL_VENUES,
+            venues_by_country=venues_by_country, analysis=None, basic_summary=basic,
+        )
+
     analysis = build_prematch_analysis(
         venue=venue,
         match_format=match_format,
@@ -1863,7 +1870,7 @@ def link_google_account():
 def support_chat():
     """Render the AI-powered support chat page with session and CSRF management."""
     import uuid
-    from datetime import datetime, timedelta
+    from chat_access import chat_allowance
 
     if not current_user.is_authenticated:
         return render_template("support_chat.html", login_required=True,
@@ -1877,47 +1884,12 @@ def support_chat():
     if 'chat_csrf' not in session:
         session['chat_csrf'] = uuid.uuid4().hex
 
-    history = SupportChat.query.filter_by(session_id=chat_session_id).order_by(SupportChat.created_at.asc()).all()
-
-    WEEKLY_LIMIT = 50
-    now = datetime.utcnow()
-    week_start = now - timedelta(days=7)
-    if current_user.is_authenticated:
-        used = SupportChat.query.filter(
-            SupportChat.user_id == current_user.id,
-            SupportChat.role == 'user',
-            SupportChat.created_at >= week_start
-        ).count()
-    else:
-        used = SupportChat.query.filter(
-            SupportChat.session_id == chat_session_id,
-            SupportChat.role == 'user',
-            SupportChat.created_at >= week_start
-        ).count()
-
-    remaining = max(0, WEEKLY_LIMIT - used)
-
-    oldest_msg = None
-    if used > 0:
-        if current_user.is_authenticated:
-            oldest_msg = SupportChat.query.filter(
-                SupportChat.user_id == current_user.id,
-                SupportChat.role == 'user',
-                SupportChat.created_at >= week_start
-            ).order_by(SupportChat.created_at.asc()).first()
-        else:
-            oldest_msg = SupportChat.query.filter(
-                SupportChat.session_id == chat_session_id,
-                SupportChat.role == 'user',
-                SupportChat.created_at >= week_start
-            ).order_by(SupportChat.created_at.asc()).first()
-
-    renews_at = None
-    if oldest_msg:
-        renews_at = (oldest_msg.created_at + timedelta(days=7)).isoformat() + "Z"
+    history = SupportChat.query.filter_by(
+        session_id=chat_session_id, user_id=current_user.id,
+    ).order_by(SupportChat.created_at.asc()).all()
 
     return render_template("support_chat.html", history=history, csrf_token=session['chat_csrf'],
-                           remaining=remaining, weekly_limit=WEEKLY_LIMIT, renews_at=renews_at,
+                           **chat_allowance(current_user),
                            login_required=False)
 
 
@@ -1926,7 +1898,7 @@ def api_support_chat():
     """Process a user chat message and return an AI-generated support response."""
     import uuid
     import os
-    from datetime import datetime, timedelta
+    from chat_access import chat_allowance
     from email_responder import generate_chat_reply
     from werkzeug.utils import secure_filename
 
@@ -1951,6 +1923,19 @@ def api_support_chat():
         return jsonify({"error": "Please provide a message or attachment."}), 400
     if len(user_message) > 1000:
         return jsonify({"error": "Message too long (max 1000 characters)."}), 400
+
+    # Serialize allowance checks and message reservation for the same account.
+    # A new chat/browser tab cannot reset or race past the Free account limit.
+    db.session.execute(
+        db.select(User).where(User.id == current_user.id).with_for_update()
+    ).scalar_one()
+    allowance = chat_allowance(current_user)
+    if not allowance["unlimited"] and allowance["remaining"] <= 0:
+        db.session.rollback()
+        return jsonify({
+            **allowance, "quota_exceeded": True,
+            "error": "You've reached the weekly limit of 50 messages. Upgrade to Pro for unlimited messages, or wait for your quota to renew.",
+        }), 429
 
     MAX_FILE_SIZE = 10 * 1024 * 1024
     saved_filename = None
@@ -1977,49 +1962,6 @@ def api_support_chat():
         username = current_user.display_name
         user_id = current_user.id
 
-    WEEKLY_LIMIT = 50
-    now = datetime.utcnow()
-    week_start = now - timedelta(days=7)
-    if current_user.is_authenticated:
-        used = SupportChat.query.filter(
-            SupportChat.user_id == current_user.id,
-            SupportChat.role == 'user',
-            SupportChat.created_at >= week_start
-        ).count()
-    else:
-        used = SupportChat.query.filter(
-            SupportChat.session_id == chat_session_id,
-            SupportChat.role == 'user',
-            SupportChat.created_at >= week_start
-        ).count()
-
-    if used >= WEEKLY_LIMIT:
-        if saved_filename:
-            try:
-                os.remove(os.path.join("static", "chat_uploads", saved_filename))
-            except OSError:
-                pass
-        oldest_msg = None
-        if current_user.is_authenticated:
-            oldest_msg = SupportChat.query.filter(
-                SupportChat.user_id == current_user.id,
-                SupportChat.role == 'user',
-                SupportChat.created_at >= week_start
-            ).order_by(SupportChat.created_at.asc()).first()
-        else:
-            oldest_msg = SupportChat.query.filter(
-                SupportChat.session_id == chat_session_id,
-                SupportChat.role == 'user',
-                SupportChat.created_at >= week_start
-            ).order_by(SupportChat.created_at.asc()).first()
-
-        renews_at = None
-        if oldest_msg:
-            renews_at = (oldest_msg.created_at + timedelta(days=7)).isoformat() + "Z"
-
-        return jsonify({"error": "You've reached the weekly limit of 50 messages. Your quota renews soon — check back later!",
-                        "quota_exceeded": True, "remaining": 0, "renews_at": renews_at}), 429
-
     display_message = user_message if user_message else ""
     if saved_filename and not user_message:
         display_message = f"[Attached: {original_name}]"
@@ -2036,7 +1978,9 @@ def api_support_chat():
     db.session.add(user_entry)
     db.session.commit()
 
-    history = SupportChat.query.filter_by(session_id=chat_session_id).order_by(SupportChat.created_at.asc()).all()
+    history = SupportChat.query.filter_by(
+        session_id=chat_session_id, user_id=current_user.id,
+    ).order_by(SupportChat.created_at.asc()).all()
     conv = []
     for h in history:
         entry = {"role": h.role, "message": h.message}
@@ -2062,24 +2006,6 @@ def api_support_chat():
     db.session.add(ai_entry)
     db.session.commit()
 
-    new_remaining = max(0, WEEKLY_LIMIT - (used + 1))
-    renews_at = None
-    oldest_msg = None
-    if current_user.is_authenticated:
-        oldest_msg = SupportChat.query.filter(
-            SupportChat.user_id == current_user.id,
-            SupportChat.role == 'user',
-            SupportChat.created_at >= week_start
-        ).order_by(SupportChat.created_at.asc()).first()
-    else:
-        oldest_msg = SupportChat.query.filter(
-            SupportChat.session_id == chat_session_id,
-            SupportChat.role == 'user',
-            SupportChat.created_at >= week_start
-        ).order_by(SupportChat.created_at.asc()).first()
-    if oldest_msg:
-        renews_at = (oldest_msg.created_at + timedelta(days=7)).isoformat() + "Z"
-
     attachment_info = None
     if saved_filename:
         attachment_info = {
@@ -2088,7 +2014,7 @@ def api_support_chat():
             "is_image": ext in ('.jpg', '.jpeg', '.png', '.gif', '.webp', '.bmp', '.svg')
         }
 
-    return jsonify({"reply": ai_reply, "remaining": new_remaining, "renews_at": renews_at, "attachment": attachment_info})
+    return jsonify({"reply": ai_reply, **chat_allowance(current_user), "attachment": attachment_info})
 
 
 @app.route("/api/support-chat/clear", methods=["POST"])

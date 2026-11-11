@@ -541,6 +541,22 @@ def _par_score_tactical(par_score, weather, surface):
             "with at least 6 wickets in hand so you can accelerate freely in the death." + dew_line)
 
 
+def build_basic_prematch_summary(venue, match_format, team1=None, team2=None):
+    """Public conditions only; never include the premium tactical report payload."""
+    labels = {
+        "mens_t20": "Men's T20", "womens_t20": "Women's T20",
+        "mens_odi": "Men's ODI", "womens_odi": "Women's ODI",
+    }
+    return {
+        "venue": venue,
+        "format_label": labels[match_format],
+        "team1": team1,
+        "team2": team2,
+        "weather_description": get_venue_weather(venue)["description"],
+        "surface_description": get_surface_description(venue, match_format)["surface"],
+    }
+
+
 def build_prematch_analysis(venue, match_format, match_time=None, team1=None, team2=None):
     """Assemble the complete pre-match analysis dict for a venue and format.
 

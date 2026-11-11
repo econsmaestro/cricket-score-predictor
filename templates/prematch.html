@@ -18,7 +18,9 @@
         {% endif %}
     {% endwith %}
 
-    {% if not analysis %}
+    {% if basic_summary %}
+    {% include "prematch_basic.html" %}
+    {% elif not analysis %}
 
     <div class="card shadow-sm mb-4 border-0">
         <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">

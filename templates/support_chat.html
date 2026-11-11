@@ -114,15 +114,13 @@
             <div id="quotaBar" class="d-flex align-items-center justify-content-between" style="background: #f0f4f8; border-top: 1px solid #e9ecef; padding: 6px 16px; font-size: 12px; color: #5a6a7a;">
                 <span>
                     <i class="bi bi-chat-square-text me-1"></i>
-                    <span id="quotaText">{{ remaining }} of {{ weekly_limit }} messages left this week</span>
+                    <span id="quotaText">{% if unlimited %}Unlimited messages · Pro{% else %}{{ remaining }} of {{ weekly_limit }} messages left this week{% endif %}</span>
                 </span>
-                {% if renews_at %}
-                <span id="renewInfo" data-renews="{{ renews_at }}" style="color: #8a9ab5;">
+                <span id="renewInfo" data-renews="{{ renews_at or '' }}" style="color: #8a9ab5;{% if unlimited or not renews_at %}display:none;{% endif %}">
                     <i class="bi bi-arrow-repeat me-1"></i>Renews <span id="renewTime"></span>
                 </span>
-                {% endif %}
             </div>
-            {% if remaining <= 0 %}
+            {% if not unlimited and remaining is not none and remaining <= 0 %}
             <div id="quotaExceeded" class="text-center py-3" style="background: #fff3cd; border-top: 1px solid #e9ecef; padding: 10px 16px;">
                 <i class="bi bi-exclamation-triangle-fill text-warning me-1"></i>
                 <span style="font-size: 13px; color: #856404;">Weekly message limit reached. Your quota renews soon.</span>
@@ -143,11 +141,11 @@
             <div class="card-footer" style="background: white; border-top: 1px solid #e9ecef; padding: 12px 16px;">
                 <form id="chatForm" class="d-flex gap-2 align-items-end">
                     <input type="file" id="fileInput" style="display: none;">
-                    <button type="button" id="attachBtn" class="btn" style="background: transparent; border: 1px solid #dee2e6; border-radius: 12px; width: 42px; height: 42px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: #6c757d;" title="Attach file (max 10 MB)" {% if remaining <= 0 %}disabled{% endif %}>
+                    <button type="button" id="attachBtn" class="btn" style="background: transparent; border: 1px solid #dee2e6; border-radius: 12px; width: 42px; height: 42px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: #6c757d;" title="Attach file (max 10 MB)" {% if not unlimited and remaining is not none and remaining <= 0 %}disabled{% endif %}>
                         <i class="bi bi-paperclip" style="font-size: 18px;"></i>
                     </button>
                     <div class="flex-grow-1 position-relative">
-                        <textarea id="chatInput" class="form-control" rows="1" maxlength="1000" placeholder="{% if remaining <= 0 %}Message limit reached{% else %}Type your message...{% endif %}" {% if remaining <= 0 %}disabled{% endif %} style="border-radius: 12px; border: 1px solid #dee2e6; padding: 10px 14px; resize: none; font-size: 14px; min-height: 42px; max-height: 100px;"></textarea>
+                        <textarea id="chatInput" class="form-control" rows="1" maxlength="1000" placeholder="{% if not unlimited and remaining is not none and remaining <= 0 %}Message limit reached{% else %}Type your message...{% endif %}" {% if not unlimited and remaining is not none and remaining <= 0 %}disabled{% endif %} style="border-radius: 12px; border: 1px solid #dee2e6; padding: 10px 14px; resize: none; font-size: 14px; min-height: 42px; max-height: 100px;"></textarea>
                         <span id="charCount" style="position: absolute; right: 10px; bottom: 4px; font-size: 10px; color: #aaa;">0/1000</span>
                     </div>
                     <button type="submit" id="sendBtn" class="btn" style="background: linear-gradient(135deg, #1a365d, #2d5a87); color: white; border: none; border-radius: 12px; width: 42px; height: 42px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;" disabled>
@@ -184,8 +182,10 @@
     const attachmentName = document.getElementById('attachmentName');
     const attachmentSize = document.getElementById('attachmentSize');
     const removeAttachment = document.getElementById('removeAttachment');
-    let remaining = {{ remaining }};
-    const weeklyLimit = {{ weekly_limit }};
+    let remaining = {{ remaining|tojson }};
+    let unlimited = {{ unlimited|tojson }};
+    let weeklyLimit = {{ weekly_limit|tojson }};
+    let quotaBlocked = !unlimited && remaining !== null && remaining <= 0;
     let pendingFile = null;
 
     function formatFileSize(bytes) {
@@ -233,7 +233,7 @@
     });
 
     document.addEventListener('paste', function(e) {
-        if (remaining <= 0) return;
+        if (quotaBlocked) return;
         const items = e.clipboardData && e.clipboardData.items;
         if (!items) return;
         for (let i = 0; i < items.length; i++) {
@@ -260,7 +260,7 @@
     });
 
     function updateSendState() {
-        sendBtn.disabled = !(chatInput.value.trim() || pendingFile);
+        sendBtn.disabled = quotaBlocked || !(chatInput.value.trim() || pendingFile);
     }
 
     function formatRelativeTime(isoStr) {
@@ -282,15 +282,15 @@
     const renewEl = document.getElementById('renewTime');
     const renewInfo = document.getElementById('renewInfo');
     if (renewEl && renewInfo) {
-        const renewsAt = renewInfo.getAttribute('data-renews');
         function updateRenewTime() {
-            renewEl.textContent = formatRelativeTime(renewsAt);
+            renewEl.textContent = formatRelativeTime(renewInfo.getAttribute('data-renews'));
         }
         updateRenewTime();
         setInterval(updateRenewTime, 60000);
     }
 
     function disableChat() {
+        quotaBlocked = true;
         chatInput.disabled = true;
         chatInput.placeholder = 'Message limit reached';
         sendBtn.disabled = true;
@@ -307,15 +307,40 @@
         }
     }
 
-    function updateQuota(newRemaining, renewsAtStr) {
+    function updateQuota(newRemaining, renewsAtStr, isUnlimited, newWeeklyLimit) {
+        if (typeof isUnlimited === 'boolean') unlimited = isUnlimited;
+        if (newRemaining === null) unlimited = true;
+        if (newWeeklyLimit !== undefined) weeklyLimit = newWeeklyLimit;
         remaining = newRemaining;
+        quotaBlocked = !unlimited && remaining !== null && remaining <= 0;
+        if (unlimited) {
+            quotaText.textContent = 'Unlimited messages · Pro';
+            if (renewInfo) renewInfo.style.display = 'none';
+            const exceeded = document.getElementById('quotaExceeded');
+            if (exceeded) exceeded.remove();
+            if (!quotaBlocked) {
+                chatInput.disabled = false;
+                attachBtn.disabled = false;
+                chatInput.placeholder = 'Type your message...';
+            }
+            updateSendState();
+            return;
+        }
         quotaText.textContent = remaining + ' of ' + weeklyLimit + ' messages left this week';
         if (renewsAtStr && renewEl && renewInfo) {
             renewInfo.setAttribute('data-renews', renewsAtStr);
             renewEl.textContent = formatRelativeTime(renewsAtStr);
             renewInfo.style.display = '';
+        } else if (renewInfo) {
+            renewInfo.style.display = 'none';
         }
-        if (remaining <= 0) disableChat();
+        if (remaining !== null && remaining <= 0) disableChat();
+        else if (!quotaBlocked) {
+            chatInput.disabled = false;
+            attachBtn.disabled = false;
+            chatInput.placeholder = 'Type your message...';
+            updateSendState();
+        }
     }
 
     function scrollToBottom() {
@@ -402,6 +427,7 @@
 
     chatForm.addEventListener('submit', function(e) {
         e.preventDefault();
+        if (quotaBlocked) return;
         const msg = chatInput.value.trim();
         if (!msg && !pendingFile) return;
 
@@ -445,11 +471,12 @@
             hideTyping();
             if (data.quota_exceeded) {
                 appendMessage('assistant', data.error);
-                updateQuota(0, data.renews_at);
+                updateQuota(0, data.renews_at, data.unlimited, data.weekly_limit);
+                disableChat();
             } else if (data.reply) {
                 appendMessage('assistant', data.reply);
-                if (data.remaining !== undefined) {
-                    updateQuota(data.remaining, data.renews_at);
+                if (data.remaining !== undefined || data.unlimited !== undefined) {
+                    updateQuota(data.remaining, data.renews_at, data.unlimited, data.weekly_limit);
                 }
             } else if (data.error) {
                 appendMessage('assistant', data.error);
@@ -460,7 +487,7 @@
             appendMessage('assistant', 'Something went wrong. Please try again.');
         })
         .finally(() => {
-            if (remaining > 0) {
+            if (!quotaBlocked && (unlimited || (remaining !== null && remaining > 0))) {
                 chatInput.disabled = false;
                 attachBtn.disabled = false;
                 chatInput.focus();

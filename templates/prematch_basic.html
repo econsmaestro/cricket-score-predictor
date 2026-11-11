@@ -1,0 +1,62 @@
+<div class="mb-3">
+    <a href="/prematch" class="btn btn-outline-secondary"><i class="bi bi-arrow-left me-1"></i>New Analysis</a>
+    <a href="/" class="btn btn-outline-primary ms-2"><i class="bi bi-calculator me-1"></i>Score Predictor</a>
+</div>
+
+<section class="card shadow-sm mb-4 border-0" aria-labelledby="basicPrematchTitle">
+    <div class="card-header bg-success text-white">
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
+            <div>
+                <span class="small text-white-50 text-uppercase">Basic pre-match summary</span>
+                <h3 id="basicPrematchTitle" class="h4 mb-0 mt-1">
+                    {% if basic_summary.team1 and basic_summary.team2 %}
+                    {{ basic_summary.team1 }} vs {{ basic_summary.team2 }}
+                    {% else %}
+                    Venue snapshot
+                    {% endif %}
+                </h3>
+            </div>
+            <span class="badge bg-light text-success">{{ basic_summary.format_label }}</span>
+        </div>
+    </div>
+    <div class="card-body p-4">
+        <h4 class="h5 fw-bold mb-1"><i class="bi bi-geo-alt me-2 text-success"></i>{{ basic_summary.venue }}</h4>
+        {% if basic_summary.team1 or basic_summary.team2 %}
+        <p class="text-muted mb-4">
+            {% if basic_summary.team1 %}{{ basic_summary.team1 }}{% endif %}
+            {% if basic_summary.team1 and basic_summary.team2 %} vs {% endif %}
+            {% if basic_summary.team2 %}{{ basic_summary.team2 }}{% endif %}
+        </p>
+        {% else %}
+        <p class="text-muted mb-4">{{ basic_summary.format_label }} conditions at a glance</p>
+        {% endif %}
+
+        <div class="row g-3">
+            <div class="col-12 col-md-6">
+                <div class="h-100 rounded border p-3">
+                    <h5 class="h6 fw-bold"><i class="bi bi-cloud-sun me-2 text-primary"></i>Weather</h5>
+                    <p class="mb-0">{{ basic_summary.weather_description }}</p>
+                </div>
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="h-100 rounded border p-3">
+                    <h5 class="h6 fw-bold"><i class="bi bi-layers me-2 text-warning"></i>Surface &amp; pitch</h5>
+                    <p class="mb-0">{{ basic_summary.surface_description }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="card border-0 shadow-sm" aria-labelledby="proAnalysisTitle">
+    <div class="card-body p-4 p-md-5 text-center">
+        <span class="badge bg-warning text-dark mb-3">MATCHDAY PRO</span>
+        <h3 id="proAnalysisTitle" class="h4 fw-bold">Go deeper than the conditions</h3>
+        <p class="text-muted mx-auto mb-4" style="max-width: 620px;">
+            Get the full venue report: batting-first and chasing records, toss advice, pace and spin breakdown, par scores, and phase-by-phase expectations.
+        </p>
+        <a href="{{ url_for('pricing') }}" class="btn btn-warning fw-semibold px-4">
+            Explore Matchday Pro <i class="bi bi-arrow-right ms-1"></i>
+        </a>
+    </div>
+</section>
