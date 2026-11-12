@@ -1,0 +1,2 @@
+{ "name": "cricpredict-deck", "private": true, "description": "Source for the CricPredict / Cricketviz presentation (pptxgenjs).",
+  "dependencies": { "pptxgenjs": "^3", "sharp": "^0.33", "react": "^18", "react-dom": "^18", "react-icons": "^5" } }
