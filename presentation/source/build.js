@@ -359,7 +359,7 @@ function content(title, eyebrow, section) {
     { text: 'No validated fielding prediction exists yet. ', options: { bold: true, color: C.accent2 } },
     { text: 'Shadow output equals the baseline until validated signals exist.', options: { color: C.background1 } },
   ], { x: 7.0, y: 5.0, w: 5.5, h: 1.55, fontSize: 14, objectName: 'Missing text' });
-  footnote(s, 'Proposed research, not a completed production feature. No fielding signal is in the live prediction today.');
+  footnote(s, 'Proposed research, not a completed production feature. No event-based fielding signal is in the live prediction; today\'s input is the hand-assigned team rating (slide 8).');
   s.addNotes(NOTES[9]);
 
   // ======================================================= 10. WHAT I HOPE TO EXPLORE WITH CRICKETVIZ
