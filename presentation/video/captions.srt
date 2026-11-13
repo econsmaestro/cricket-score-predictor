@@ -1,0 +1,124 @@
+1
+00:00:00,000 --> 00:00:03,043
+A dropped catch. A diving stop on
+
+2
+00:00:03,043 --> 00:00:06,522
+and no scoreboard tells
+you by how much.
+
+3
+00:00:06,522 --> 00:00:10,000
+and no scoreboard tells
+you by how much.
+
+4
+00:00:10,000 --> 00:00:12,625
+It moves the score in two different
+
+5
+00:00:12,625 --> 00:00:15,250
+ways. Chances: catches
+and run-outs, taken or
+
+6
+00:00:15,250 --> 00:00:17,875
+missed, change the odds of a wicket.
+
+7
+00:00:17,875 --> 00:00:20,500
+Runs saved: ground fielding,
+dives and boundary
+
+8
+00:00:20,500 --> 00:00:23,125
+stops change how many runs get scored,
+
+9
+00:00:23,125 --> 00:00:25,000
+even when nobody is out.
+
+10
+00:00:25,000 --> 00:00:28,051
+Here is the honest part.
+In CricPredict
+
+11
+00:00:28,051 --> 00:00:31,103
+today, fielding is one hand-assigned
+rating per
+
+12
+00:00:31,103 --> 00:00:34,154
+team. I tested it. With the rating,
+
+13
+00:00:34,154 --> 00:00:38,077
+off, 27.3. So it is not
+earning its place.
+
+14
+00:00:38,077 --> 00:00:42,000
+off, 27.3. So it is not
+earning its place.
+
+15
+00:00:42,000 --> 00:00:45,182
+Why not measure it? Public
+ball-by-ball data
+
+16
+00:00:45,182 --> 00:00:48,364
+names fielders only on successful
+dismissals. No
+
+17
+00:00:48,364 --> 00:00:51,545
+drops, no misfields,
+no runs saved. And
+
+18
+00:00:51,545 --> 00:00:54,727
+catches and wickets alone
+mix up fielding
+
+19
+00:00:54,727 --> 00:00:57,000
+with bowling and team quality.
+
+20
+00:00:57,000 --> 00:00:59,844
+What exists is the research
+tooling, running
+
+21
+00:00:59,844 --> 00:01:02,688
+in shadow mode, not
+in production. What
+
+22
+00:01:02,688 --> 00:01:06,344
+we have it, there is no validated
+fielding prediction.
+
+23
+00:01:06,344 --> 00:01:10,000
+we have it, there is no validated
+fielding prediction.
+
+24
+00:01:10,000 --> 00:01:13,231
+If you hold structured
+fielding-event data, I
+
+25
+00:01:13,231 --> 00:01:16,462
+would like to compare notes. A small
+
+26
+00:01:16,462 --> 00:01:19,692
+sample and a data dictionary is enough
+
+27
+00:01:19,692 --> 00:01:22,000
+to start. Details at cricket-score-predictor.com.
