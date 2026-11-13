@@ -13,6 +13,18 @@ in the bottom-right corner (300 px, centred about x 1690, y 870 on a 1920x1080 f
 | 0:57-1:10 | `05_built_vs_missing.png` | "What exists is the research tooling, running in shadow mode, not in production. What is missing is labelled fielding-event data. Until we have it, there is no validated fielding prediction." |
 | 1:10-1:22 | `06_the_ask.png` | "If you hold structured fielding-event data, I would like to compare notes. A small sample and a data dictionary is enough to start. Details at cricket-score-predictor.com." |
 
+## Optional cutaways (frames 07 and 08)
+Both are screenshots of the current build. They do not change the timing above; cut to them inside beat 3 (0:25-0:42) and return to `03_the_numbers.png` for the 28.2 vs 27.3 line.
+
+| Time | Frame | Lay over | Note |
+|---|---|---|---|
+| 0:25-0:31 | `08_live_product_sample.png` | "In CricPredict today, fielding is one hand-assigned rating per team." | The on-screen "analyst estimate: 80%" label is the rating you are naming. The frame carries a "SAMPLE SCENARIO · SYNTHETIC INPUTS" banner (a made-up Men's ODI at 150/3 after 30 overs). Say out loud that it is a sample, not a real match. |
+| 0:36-0:42 | `07_backtest_is_public.png` | "I tested it." (before the 28.2 vs 27.3 numbers) | Shows the four public MAE tiles: Women's T20 16.6, Men's T20 21.1, Women's ODI 38.3, Men's ODI 41.5. These are the general model's errors, not the fielding test; do not describe them as fielding results. Footer says it is a historical replay, not out-of-time. |
+
+* Keep each cutaway under about 7 seconds, then return to frame 03 so the fielding numbers are the last thing on screen before beat 4.
+* Frame 07 only reads as proof if you do not imply the fielding rating improved those errors. The honest line is that the site publishes its error, and fielding did not help it.
+* Re-capture both frames after you Publish in Replit if you want them to match the live site exactly; today they come from the committed build.
+
 ## Where each claim comes from
 * 28.2 vs 27.3: real-model replay, `docs/fielding-strength-replay.md` (1,800 checkpoints; a replay of the current model, not an out-of-time test, and the frame says so).
 * Public data names fielders only on successful dismissals; paid event-level data; free sources only: `docs/fielding-intelligence.md`.
