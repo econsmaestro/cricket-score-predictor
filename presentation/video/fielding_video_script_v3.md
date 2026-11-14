@@ -8,7 +8,7 @@ Two runs off. But fielding is where I can't tell you the whole story.
 
 I'm building CricPredict: a cricket prediction app for fans, with free and Pro plans. Entertainment only, not betting.
 
-First ODI of India's 2026 tour of New Zealand. **[VERIFY: Kohli's one-handed diving catch at second slip to dismiss Nathan Smith]**. **[VERIFY: Rohit Sharma's sharp run-out assist]**. Moments like these swing a match.
+First ODI of India's 2026 tour of New Zealand. Virat Kohli took a one-handed diving catch at second slip to dismiss Nathan Smith. Rohit Sharma made a sharp run-out assist. Moments like these swing a match.
 
 At 84 for four after 17 overs, CricPredict predicted 199 for seven. New Zealand finished 185 all out: fourteen runs lower, but three wickets more than predicted.
 
@@ -25,7 +25,7 @@ If you hold fielding data, or work at a data provider, message me. Try CricPredi
 ---
 
 ## Must check before you record
-* **The two fielding moments are NOT confirmed.** They come from a Google "AI Overview" screenshot, which also said "depending on which tour you are referring to" and did not describe any dropped catch, so I did not write one. Confirm the catch, the dismissed batter's name, the run-out and the date (Nov 4, Eden Park) on the official scorecard or highlights, then delete the **[VERIFY]** tags. Say only what the scorecard shows.
+* **Fielding moments:** you confirmed them by watching the match (Kohli's catch to dismiss Nathan Smith, Rohit's run-out assist). Say them as you saw them, no extra detail.
 * **Match scores and predictions (84/4 after 17 overs to 199/7; 185 all out; 171/9 after 37.3 to 183)** are copied from your earlier "Two runs off" script. I could not check them: Cricsheet's public feed currently ends on 2026-11-03, before this ODI. Confirm against your saved predictions and the scorecard.
 * Do **not** claim the catch or run-out caused the 14-run or 3-wicket gap. The script only says fielding could not be separated out, which is the honest point.
 * 28.2 vs 27.3: `docs/fielding-strength-replay.md`; a replay of the current model, not an out-of-time test.
