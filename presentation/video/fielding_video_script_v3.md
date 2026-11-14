@@ -6,7 +6,7 @@
 
 Two runs off. But fielding is where I can't tell you the whole story.
 
-I'm building CricPredict: a cricket prediction app for fans, with free and Pro plans. Entertainment only, not betting.
+I'm building CricPredict: a cricket prediction app for fans. Entertainment only, not betting.
 
 First ODI of India's 2026 tour of New Zealand. Virat Kohli took a one-handed diving catch at second slip to dismiss Nathan Smith. Rohit Sharma made a sharp run-out assist. Moments like these swing a match.
 
