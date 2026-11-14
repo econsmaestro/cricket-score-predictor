@@ -18,7 +18,7 @@ Did fielding explain the gap? I can't prove it. But here is the limit: CricPredi
 
 Public ball-by-ball data only names a fielder when a wicket falls. No drops, no misfields, no dives, no runs saved. So a model built on public data sees only part of the picture.
 
-So here is the plan. Build a fielding model on public data first, starting in shadow mode, and test the effect on runs and wickets separately, on fresh, timestamped matches. Then, if I can get ball-by-ball fielding data, and I'd like to talk to providers like CricViz about it, use it to fill in what public data can't see. If it doesn't beat the current model, it doesn't ship.
+So here is the plan. Start with what public data does give me, the catches and run-outs that end in a wicket, and build a first fielding model from that in shadow mode, knowing its limits. Test the effect on runs and wickets separately, on fresh, timestamped matches. Then, if I can get ball-by-ball fielding data, and I'd like to talk to providers like CricViz about it, use it to fill in what public data can't see. If it doesn't beat the current model, it doesn't ship.
 
 If you hold fielding data, or work at a data provider, message me. Try CricPredict at cricket-score-predictor.com.
 
