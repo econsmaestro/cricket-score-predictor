@@ -24,6 +24,19 @@ If you hold fielding data, or work at a data provider, message me. Try CricPredi
 
 ---
 
+## Frame placement (v3)
+| Line | Frame |
+|---|---|
+| "First ODI of India's 2026 tour... Moments like these swing a match." | `09_moments.png` |
+| "At 84 for four after 17 overs, CricPredict predicted 199 for seven. New Zealand finished 185 all out..." | `11_screens_84_4.png` (shows the entered state and the prediction), or `10_india_nz_predictions.png` for the summary |
+| "Later, at 171 for nine after 37.3 overs, it predicted 183 all out. Two runs off." | `12_screens_171_9.png` |
+| "...in my backtest on men's ODIs, its average error is 41.5 runs." | `07_backtest_is_public.png` |
+| "Today it is just one hand-assigned rating per team." | `08_live_product_sample.png`, or the "India fielding 92%" callout on frame 11/12 |
+| The plan | `05_built_vs_missing.png` |
+| The ask | `06_the_ask.png` |
+
+Frames 11 and 12 are real screenshots of the live site (phone). The "India fielding 92%" badge on them is the hand-assigned team rating, and the frames say so. The live site does not yet carry the "analyst estimate" label; publish in Replit if you want it to.
+
 ## Must check before you record
 * **Fielding moments:** you confirmed them by watching the match (Kohli's catch to dismiss Nathan Smith, Rohit's run-out assist). Say them as you saw them, no extra detail.
 * **Match scores and predictions (84/4 after 17 overs to 199/7; 185 all out; 171/9 after 37.3 to 183):** you verified them and have the screenshots. Use those screenshots as the cutaways on those lines.
