@@ -26,7 +26,7 @@ If you hold fielding data, or work at a data provider, message me. Try CricPredi
 
 ## Must check before you record
 * **Fielding moments:** you confirmed them by watching the match (Kohli's catch to dismiss Nathan Smith, Rohit's run-out assist). Say them as you saw them, no extra detail.
-* **Match scores and predictions (84/4 after 17 overs to 199/7; 185 all out; 171/9 after 37.3 to 183)** are copied from your earlier "Two runs off" script. I could not check them: Cricsheet's public feed currently ends on 2026-11-03, before this ODI. Confirm against your saved predictions and the scorecard.
+* **Match scores and predictions (84/4 after 17 overs to 199/7; 185 all out; 171/9 after 37.3 to 183):** you verified them and have the screenshots. Use those screenshots as the cutaways on those lines.
 * Do **not** claim the catch or run-out caused the 14-run or 3-wicket gap. The script only says fielding could not be separated out, which is the honest point.
 * 28.2 vs 27.3: `docs/fielding-strength-replay.md`; a replay of the current model, not an out-of-time test.
 * **CricViz:** the script only says you'd like to talk to providers like CricViz. No conversation, access or agreement exists, so do not say "we're getting", "partnering with" or "using" CricViz data. Consider tagging them only if you are comfortable with the public ask.
