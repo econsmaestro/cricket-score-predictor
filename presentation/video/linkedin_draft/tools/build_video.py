@@ -49,6 +49,7 @@ from concurrent.futures import ThreadPoolExecutor
 with ThreadPoolExecutor(4) as ex: list(ex.map(run, jobs))
 # cross-fade chain
 cmd = base[:]; [cmd.extend(["-i", str(p)]) for p, _ in segs]
+if a.facecam and a.audio: cmd += ["-i", a.facecam]
 chain = ""; last = "[0:v]"; cum = 0.0; xs = 0.0
 for i in range(1, len(segs)):
     x = segs[i][1].get("xfade", XF); cum += segs[i-1][1]["dur"]; xs += x
@@ -58,7 +59,7 @@ chain = chain.rstrip(";")
 total = sum(s["dur"] for _, s in segs) - sum(s.get("xfade", XF) for _, s in segs[1:])
 cmd += ["-filter_complex", chain, "-map", last]
 if a.facecam and a.audio:
-    cmd += ["-ss", "0", "-i", a.facecam, "-map", f"{len(segs)}:a", "-af", "highpass=f=80,afftdn=nr=12,loudnorm=I=-16:TP=-1.5:LRA=9", "-c:a", "aac", "-b:a", "128k", "-t", f"{total:.3f}"]
+    cmd += ["-map", f"{len(segs)}:a", "-af", "highpass=f=80,afftdn=nr=12,loudnorm=I=-16:TP=-1.5:LRA=9", "-c:a", "aac", "-b:a", "128k", "-t", f"{total:.3f}"]
 else:
     cmd += ["-an"]
 cmd += ["-c:v", "libx264", "-crf", "20", "-preset", "medium", "-pix_fmt", "yuv420p", "-movflags", "+faststart", a.out]
