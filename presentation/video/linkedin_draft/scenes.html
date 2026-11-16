@@ -1,0 +1,164 @@
+<!doctype html><html><head><meta charset="utf-8"><title>CricPredict LinkedIn scenes (1080x1350, 4:5)</title>
+<style>
+:root{--bg:#0B0F0D;--panel:#141A17;--line:#22332B;--green:#34C26B;--amber:#E0A93B;--mint:#8FD9AE;--muted:#A7B2AC;--text:#F3F6F4}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:transparent}
+body{font-family:Carlito,Calibri,sans-serif;color:var(--text);width:1080px}
+.scene{position:relative;width:1080px;height:1350px;background:var(--bg);overflow:hidden;margin-bottom:40px}
+.scene.overlay{background:transparent}
+.abs{position:absolute}
+.kicker{left:60px;top:54px;width:960px;font-size:30px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--green)}
+h1{position:absolute;left:60px;top:100px;width:960px;font-family:Caladea,Georgia,serif;font-size:70px;line-height:1.04;font-weight:700}
+.take{left:60px;top:1062px;width:700px;font-size:44px;line-height:1.18;font-weight:700}
+.take small{display:block;font-size:36px;font-weight:400;color:var(--muted);margin-top:8px}
+.foot{left:60px;bottom:34px;width:700px;font-size:30px;line-height:1.22;color:var(--muted)}
+.mint{color:var(--mint)} .amber{color:var(--amber)} .green{color:var(--green)}
+.shot{position:absolute;border-radius:22px;border:2px solid var(--line);display:block}
+.panel{position:absolute;left:60px;width:960px;background:var(--panel);border:2px solid var(--line);border-radius:24px;padding:26px 34px}
+.panel .lab{font-size:30px;font-weight:700;letter-spacing:.13em}
+.panel .big{font-family:Caladea,Georgia,serif;font-size:50px;font-weight:700;margin-top:6px}
+.panel ul{list-style:none;margin-top:10px}
+.panel li{font-size:38px;line-height:1.28}
+.row{display:flex;flex-wrap:wrap;gap:12px 14px;margin-top:12px}
+.chip{display:inline-block;font-size:36px;font-weight:700;padding:6px 20px;border-radius:999px;border:2px solid}
+.chip.ok{color:var(--green);border-color:var(--green);background:rgba(52,194,107,.12)}
+.chip.no{color:var(--amber);border-color:var(--amber);background:rgba(224,169,59,.12)}
+.tile{position:absolute;width:468px;height:300px;background:var(--panel);border:2px solid var(--line);border-radius:24px;padding:28px 30px}
+.tile.hl{border-color:var(--amber);box-shadow:0 0 0 2px rgba(224,169,59,.25)}
+.tile .t{font-size:36px;color:var(--muted)}
+.tile .n{font-family:Caladea,Georgia,serif;font-size:128px;font-weight:700;line-height:1.0;margin-top:20px}
+.tile .u{font-size:32px;color:var(--muted);margin-top:6px}
+.brand{left:60px;bottom:40px;font-size:30px;letter-spacing:.06em;color:var(--text);opacity:.9}
+.scrim-top{left:0;top:0;width:1080px;height:560px;background:linear-gradient(180deg,rgba(11,15,13,.92),rgba(11,15,13,.65) 55%,rgba(11,15,13,0))}
+.scrim-bot{left:0;bottom:0;width:1080px;height:560px;background:linear-gradient(0deg,rgba(11,15,13,.94),rgba(11,15,13,.7) 60%,rgba(11,15,13,0))}
+/* placeholders (build tool swaps these for the real face-cam footage) */
+.ph-full{background:#101714;border:0}
+.ph-full .dash{left:190px;top:420px;width:700px;height:760px;border:6px dashed var(--amber);border-radius:50%}
+.ph-full .msg{left:190px;top:900px;width:700px;text-align:center;font-size:30px;font-weight:700;color:var(--amber);letter-spacing:.06em}
+.ph-pip{width:250px;height:250px;border-radius:50%;background:#101714;display:flex;align-items:center;justify-content:center;text-align:center;font-size:30px;font-weight:700;color:var(--amber);line-height:1.15}
+.ring{width:250px;height:250px;border-radius:50%;border:7px solid var(--green)}
+</style></head><body>
+
+<!-- 01 OPEN: full-screen face camera + text overlay (transparent) -->
+<section class="scene overlay" id="s01_open">
+  <div class="abs scrim-top"></div>
+  <div class="abs kicker">Fielding</div>
+  <h1>How many runs is a dropped catch worth?</h1>
+  <div class="abs" style="left:60px;top:370px;width:960px;font-size:46px;color:var(--mint);font-weight:700">No scoreboard tells you.</div>
+  <div class="abs scrim-bot" style="height:260px"></div>
+  <div class="abs brand">CricPredict · fielding research</div>
+</section>
+
+<!-- 02 INTRO -->
+<section class="scene" id="s02_intro">
+  <div class="abs kicker">CricPredict · an independent project</div>
+  <h1>Live score predictions for cricket fans</h1>
+  <img class="shot" src="assets/crops/live_home.png" style="left:60px;top:312px;width:960px">
+  <div class="abs take">Pick a live match.<small>Get a projected score.</small></div>
+  <div class="abs foot">Entertainment only. Not betting.</div>
+</section>
+
+<!-- 03a NZ v IND, prediction at 84/4 -->
+<section class="scene" id="s03a_nz_pred">
+  <div class="abs kicker">India v New Zealand · 1st ODI, 2026</div>
+  <h1>At 84 for four after 17 overs</h1>
+  <img class="shot" src="assets/crops/banner_84.png" style="left:130px;top:300px;width:820px">
+  <img class="shot" src="assets/crops/score_199.png" style="left:130px;top:798px;width:820px">
+  <div class="abs take">CricPredict said <span class="green">199/7</span><small>Range 170–228</small></div>
+  <div class="abs foot">“India fielding 92%” is a hand-assigned team rating.</div>
+</section>
+<!-- 03b result -->
+<section class="scene" id="s03b_nz_result">
+  <div class="abs kicker">India v New Zealand · 1st ODI, 2026</div>
+  <h1>At 84 for four after 17 overs</h1>
+  <img class="shot" src="assets/crops/banner_84.png" style="left:130px;top:300px;width:820px">
+  <img class="shot" src="assets/crops/score_199.png" style="left:130px;top:798px;width:820px">
+  <div class="abs take">Finished <span class="mint">185 all out</span><small>14 runs lower, 3 wickets more than predicted</small></div>
+  <div class="abs foot">“India fielding 92%” is a hand-assigned team rating.</div>
+</section>
+
+<!-- 04a 171/9 prediction -->
+<section class="scene" id="s04a_171_pred">
+  <div class="abs kicker">India v New Zealand · 1st ODI, 2026</div>
+  <h1>At 171 for nine after 37.3 overs</h1>
+  <img class="shot" src="assets/crops/banner_171.png" style="left:130px;top:300px;width:820px">
+  <img class="shot" src="assets/crops/score_183.png" style="left:130px;top:798px;width:820px">
+  <div class="abs take">CricPredict said <span class="green">183 all out</span><small>Range 162–204</small></div>
+  <div class="abs foot">A much shorter forecasting horizon.</div>
+</section>
+<!-- 04b result -->
+<section class="scene" id="s04b_171_result">
+  <div class="abs kicker">India v New Zealand · 1st ODI, 2026</div>
+  <h1>At 171 for nine after 37.3 overs</h1>
+  <img class="shot" src="assets/crops/banner_171.png" style="left:130px;top:300px;width:820px">
+  <img class="shot" src="assets/crops/score_183.png" style="left:130px;top:798px;width:820px">
+  <div class="abs take">Finished <span class="mint">185 all out</span><small>Two runs off</small></div>
+  <div class="abs foot">A much shorter forecasting horizon.</div>
+</section>
+
+<!-- 05a backtest tiles -->
+<section class="scene" id="s05a_backtest">
+  <div class="abs kicker">Model evaluation</div>
+  <h1>Our backtest is public</h1>
+  <div class="tile" style="left:60px;top:310px"><div class="t">Women's T20</div><div class="n">16.6</div><div class="u">MAE · runs</div></div>
+  <div class="tile" style="left:552px;top:310px"><div class="t">Men's T20</div><div class="n">21.1</div><div class="u">MAE · runs</div></div>
+  <div class="tile" style="left:60px;top:634px"><div class="t">Women's ODI</div><div class="n">38.3</div><div class="u">MAE · runs</div></div>
+  <div class="tile hl" style="left:552px;top:634px"><div class="t">Men's ODI</div><div class="n">41.5</div><div class="u">MAE · runs</div></div>
+  <div class="abs take" style="top:1000px;width:960px;font-size:40px">Average error in runs, 100 matches per format.</div>
+  <div class="abs foot" style="top:1090px;bottom:auto;width:700px">Cricsheet data. A historical replay of the current model, not an out-of-time test.</div>
+</section>
+<!-- 05b Men's ODI detail -->
+<section class="scene" id="s05b_backtest_odi">
+  <div class="abs kicker">Men's ODI · the hardest format</div>
+  <h1>41.5 runs average error</h1>
+  <div class="tile" style="left:60px;top:310px"><div class="t">MAE</div><div class="n">41.5</div><div class="u">runs</div></div>
+  <div class="tile" style="left:552px;top:310px"><div class="t">Range hit rate</div><div class="n">46.8%</div><div class="u">actual score inside range</div></div>
+  <div class="tile" style="left:60px;top:634px"><div class="t">Final-wicket MAE</div><div class="n">3.11</div><div class="u">wickets</div></div>
+  <div class="tile hl" style="left:552px;top:634px"><div class="t">Final-wicket bias</div><div class="n">−2.98</div><div class="u">predicted − actual</div></div>
+  <div class="abs take" style="top:1000px;width:960px;font-size:40px">It tends to under-predict wickets.</div>
+  <div class="abs foot" style="top:1090px;bottom:auto;width:700px">100 matches, 400 checkpoint predictions. Backtesting page, report dated Nov 11, 2026.</div>
+</section>
+
+<!-- 06 public data -->
+<section class="scene" id="s06_public_data">
+  <div class="abs kicker">Why not just measure it?</div>
+  <h1>Public data can't see most of fielding.</h1>
+  <div class="panel" style="top:318px;height:150px"><div class="lab green">RECORDED</div><div class="row" style="margin-top:8px"><span class="chip ok">✔ Catch taken</span><span class="chip ok">✔ Run-out</span></div></div>
+  <div class="panel" style="top:486px;height:268px"><div class="lab amber">NOT RECORDED</div><div class="row"><span class="chip no">✖ Dropped catch</span><span class="chip no">✖ Misfield</span><span class="chip no">✖ Direct hit</span><span class="chip no">✖ Runs saved</span></div></div>
+  <div class="panel" style="top:772px;height:262px;padding-top:22px"><div style="font-size:35px;line-height:1.25">Catches and wickets alone mix up fielding with bowling and team quality.</div><div style="font-size:35px;line-height:1.25;margin-top:12px;color:var(--muted)">Event-level fielding data exists, but under paid licences. CricPredict uses free sources only.</div></div>
+  <div class="abs take" style="font-size:40px">Fielders are named only on successful dismissals.</div>
+</section>
+
+<!-- 07 tooling vs data -->
+<section class="scene" id="s07_tooling">
+  <div class="abs kicker">Where the research stands</div>
+  <h1>The tooling exists. The data doesn't.</h1>
+  <div class="panel" style="top:318px;height:408px"><div class="lab green">✔ BUILT</div><div class="big">Research tooling</div>
+    <ul><li>Player registry and ingestion</li><li>Opportunity-adjusted estimates</li><li>Shadow-mode comparison</li></ul>
+    <div class="row" style="margin-top:14px"><span class="chip no">Not in production</span></div></div>
+  <div class="panel" style="top:744px;height:290px"><div class="lab amber">✖ MISSING</div><div class="big">Labelled fielding events</div>
+    <ul><li>Dropped chances</li><li>Misfields · direct hits · runs saved</li></ul></div>
+  <div class="abs take" style="font-size:40px">No validated fielding prediction exists yet.</div>
+  <div class="abs foot" style="font-size:27px">Proposed research, not a production feature. Live predictions use only the hand-assigned team rating.</div>
+</section>
+
+<!-- 08 CLOSE: full-screen face camera + text overlay (transparent) -->
+<section class="scene overlay" id="s08_cta">
+  <div class="abs scrim-top" style="height:520px"></div>
+  <div class="abs kicker" style="top:60px;text-transform:none;letter-spacing:.02em;font-size:40px;color:var(--mint)">If you hold fielding-event data</div>
+  <h1 style="top:124px;font-size:92px">Let's compare notes.</h1>
+  <div class="abs scrim-bot"></div>
+  <div class="abs" style="left:60px;bottom:170px;width:960px;font-size:40px;line-height:1.22">A small <b class="green">sample dataset</b> and its <b class="green">data dictionary</b> is enough to start.</div>
+  <div class="abs" style="left:60px;bottom:96px;font-size:50px;font-weight:700;color:var(--green)">cricket-score-predictor.com</div>
+  <div class="abs brand" style="bottom:40px;color:var(--muted)">CricPredict · a collaboration, not a request</div>
+</section>
+
+<!-- placeholders -->
+<section class="scene ph-full" id="ph_full">
+  <div class="abs dash"></div>
+  <div class="abs" style="left:60px;top:560px;width:960px;text-align:center;font-size:56px;font-weight:700;color:var(--amber);line-height:1.15">YOUR FACE CAMERA<br>GOES HERE</div>
+  <div class="abs msg">PLACEHOLDER · FULL SCREEN<br>KEEP YOUR HEAD INSIDE THE OVAL</div>
+</section>
+<section class="scene overlay" id="ph_pip" style="width:250px;height:250px;margin:0"><div class="ph-pip">FACE<br>CAM</div></section>
+<section class="scene overlay" id="ring" style="width:250px;height:250px;margin:0"><div class="ring"></div></section>
+</body></html>

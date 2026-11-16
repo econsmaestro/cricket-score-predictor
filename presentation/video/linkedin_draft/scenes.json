@@ -1,0 +1,18 @@
+{
+  "_comment": "Edit durations (seconds) and face-camera settings here, then run: python3 tools/build_video.py",
+  "size": [1080, 1350], "fps": 30, "crossfade": 0.35,
+  "pip": {"x": 790, "y": 1060, "size": 250},
+  "scenes": [
+    {"id": "s01_open",         "type": "face", "dur": 7},
+    {"id": "s02_intro",        "type": "demo", "dur": 9},
+    {"id": "s03a_nz_pred",     "type": "demo", "dur": 7},
+    {"id": "s03b_nz_result",   "type": "demo", "dur": 6, "xfade": 0.25},
+    {"id": "s04a_171_pred",    "type": "demo", "dur": 6},
+    {"id": "s04b_171_result",  "type": "demo", "dur": 6, "xfade": 0.25},
+    {"id": "s05a_backtest",    "type": "demo", "dur": 8},
+    {"id": "s05b_backtest_odi","type": "demo", "dur": 7},
+    {"id": "s06_public_data",  "type": "demo", "dur": 12},
+    {"id": "s07_tooling",      "type": "demo", "dur": 14},
+    {"id": "s08_cta",          "type": "face", "dur": 10}
+  ]
+}
