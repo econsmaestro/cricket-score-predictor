@@ -1,0 +1,42 @@
+1
+00:00:00,100 --> 00:00:03,200
+Think you know how an innings will end?
+
+2
+00:00:03,400 --> 00:00:07,000
+CricPredict gives you live predictions:
+
+3
+00:00:07,000 --> 00:00:10,600
+projected score, wickets to fall,
+even win probability.
+
+4
+00:00:10,900 --> 00:00:14,500
+New Zealand v India. 84 for 4 after
+17 overs, it said 199.
+
+5
+00:00:14,500 --> 00:00:17,000
+They finished 185 all out.
+
+6
+00:00:17,000 --> 00:00:19,100
+Then it updated as the innings went on.
+
+7
+00:00:19,300 --> 00:00:22,000
+It's more than following the score.
+
+8
+00:00:22,000 --> 00:00:25,700
+Ask Third Umpire AI. Check the next over.
+Build your own match.
+
+9
+00:00:25,900 --> 00:00:28,500
+Ready to predict?
+
+10
+00:00:28,500 --> 00:00:30,900
+Try CricPredict: cricket-score-predictor.com
