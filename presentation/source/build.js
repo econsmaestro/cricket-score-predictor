@@ -448,7 +448,7 @@ function content(title, eyebrow, section) {
   txt(s, 'CRICPREDICT', { x: 7.45, y: 1.0, w: 5.2, h: 0.3, fontSize: 13, bold: true, color: C.accent1, charSpacing: 4, objectName: 'Closing brand' });
   txt(s, 'Understand the game beyond the scoreboard', { x: 7.45, y: 1.45, w: 5.3, h: 2.1, fontSize: 38, bold: true, color: C.background1, fontFace: 'Cambria', objectName: 'Closing title' });
   txt(s, '\u201CI\u2019m interested in exploring how better cricket data can help us build better predictions and give fans a deeper understanding of the game.\u201D', { x: 7.45, y: 3.85, w: 5.2, h: 1.5, fontSize: 16, italic: true, color: C.background2, objectName: 'Closing statement' });
-  txt(s, 'Thank you, Cricketviz team.', { x: 7.45, y: 5.55, w: 5.2, h: 0.45, fontSize: 22, bold: true, color: C.background1, objectName: 'Closing thanks' });
+  txt(s, 'Thank you, CricViz.', { x: 7.45, y: 5.55, w: 5.2, h: 0.45, fontSize: 22, bold: true, color: C.background1, objectName: 'Closing thanks' });
   txt(s, 'cricket-score-predictor.com', { x: 7.45, y: 6.2, w: 5.2, h: 0.35, fontSize: 18, bold: true, color: C.accent1, objectName: 'Closing URL' });
   s.addNotes(NOTES[13]);
 
