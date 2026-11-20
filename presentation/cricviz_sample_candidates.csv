@@ -1,0 +1,21 @@
+format,match_id,date,venue,batting,fielding,final,wkts,band
+mens_t20,1545683,2026-08-21,Kerava National Cricket Ground,Portugal,Spain,160,6,mid
+mens_t20,1545681,2026-08-21,Tikkurila Cricket Ground,Bulgaria,Czech Republic,158,10,mid
+mens_t20,1552916,2026-09-13,Gahanga B Ground,Sierra Leone,Kenya,112,9,low
+mens_t20,1552924,2026-09-18,Gahanga International Cricket Stadium,Uganda,Kenya,197,7,high
+mens_t20,1552767,2026-09-24,Korogi Sports Park,Hong Kong,Malaysia,81,9,low
+mens_t20,1554535,2026-10-05,"Bayuemas Oval, Kuala Lumpur",Kuwait,Qatar,199,7,high
+mens_t20,1554569,2026-10-08,"YSD-UKM Cricket Oval, Bangi",Saudi Arabia,Singapore,174,7,mid
+mens_t20,1550708,2026-10-09,Rawalpindi Cricket Stadium,Sri Lanka,Pakistan,182,8,high
+mens_t20,1554550,2026-10-12,"Selangor Turf Club, Kuala Lumpur",Bhutan,Kuwait,74,9,low
+mens_t20,1529233,2026-10-14,"Rajiv Gandhi International Stadium, Uppal",West Indies,India,247,3,high
+mens_t20,1557524,2026-10-21,"Nigeria Cricket Federation Oval 2, Abuja",Lesotho,Uganda,87,10,low
+mens_t20,1557523,2026-10-21,"Nigeria Cricket Federation Oval 1, Abuja",Mozambique,Gambia,148,6,mid
+mens_odi,1501899,2025-11-06,"Iqbal Stadium, Faisalabad",Pakistan,South Africa,269,9,mid
+mens_odi,1490232,2026-01-14,"Niranjan Shah Stadium, Rajkot",India,New Zealand,284,7,mid
+mens_odi,1525654,2026-03-15,"Shere Bangla National Stadium, Mirpur",Bangladesh,Pakistan,290,5,high
+mens_odi,1538426,2026-06-08,"Maple Leaf North-West Ground, King City",Netherlands,United States of America,196,8,low
+mens_odi,1538628,2026-07-21,Kensington Oval,New Zealand,West Indies,268,9,mid
+mens_odi,1544129,2026-07-31,"Sportpark Maarschalkerweerd, Utrecht",Netherlands,Namibia,183,10,low
+mens_odi,1549965,2026-09-08,"YSD-UKM Cricket Oval, Bangi",United Arab Emirates,Oman,192,10,low
+mens_odi,1554411,2026-10-07,"Grand Prairie Stadium, Dallas",Namibia,United States of America,298,9,high
