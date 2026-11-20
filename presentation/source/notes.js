@@ -62,8 +62,8 @@ const SCRIPT = [
     'The distinction to land: the research tooling already exists (player registry and ingestion, opportunity-adjusted estimates with uncertainty, shadow-mode comparison with the live model, and an activation gate). The missing ingredient is the labelled fielding-event data itself.',
     'Be explicit that no validated fielding prediction exists yet. Shadow output equals the baseline until validated signals exist. This is proposed research, not a shipped feature.',
   ] },
-  { n: 10, title: 'What I hope to explore with Cricketviz', time: '1:30', points: [
-    'Position it as a possible collaboration. Do not assume what Cricketviz holds or has agreed to share: ask.',
+  { n: 10, title: 'What I hope to explore with CricViz', time: '1:30', points: [
+    'Position it as a possible collaboration. Do not assume what CricViz holds or has agreed to share: ask.',
     'Walk the five items: structured historical fielding-event data; dropped catches and missed opportunities; run-out attempts and outcomes; runs saved or conceded; fielder attribution and historical coverage.',
     'Ask what would make this worthwhile on their side. Listen before proposing terms.',
   ] },
@@ -75,11 +75,11 @@ const SCRIPT = [
   { n: 12, title: 'Next steps', time: '1:00', points: [
     'Three discussion points, not demands: understand what data exists; explore a small-scale arrangement; test whether it improves predictive performance on held-out matches.',
     'The proposed first step is deliberately small: a sample dataset and its data dictionary.',
-    'Questions to leave them with: What fielding data exists? Who is the right person to talk to? What would be useful to Cricketviz?',
+    'Questions to leave them with: What fielding data exists? Who is the right person to talk to? What would be useful to CricViz?',
   ] },
   { n: 13, title: 'Closing', time: '0:30', points: [
     'Read the closing line: you are interested in how better cricket data can help build better predictions and give fans a deeper understanding of the game.',
-    'Thank the Cricketviz team. Invite them to try the site, then open the floor for questions.',
+    'Thank the CricViz team. Invite them to try the site, then open the floor for questions.',
   ] },
 ];
 
@@ -92,7 +92,7 @@ const QA = [
   ['Is fielding already in the model?', 'Only as one hand-assigned rating per team. The event-level research tooling is built but runs in shadow mode and changes nothing in production.'],
   ['Is the win probability calibrated?', 'In chases it is a heuristic estimate based on required run rate, wickets in hand and phase of the innings. It has not been independently calibrated, and the slides say so.'],
   ['What would you do with our data, and who owns the results?', 'Open question, and I would like to hear your constraints first. I would start with a small sample under whatever terms suit you, and agree usage, ownership and attribution before anything larger.'],
-  ['Do you already use any Cricketviz data?', 'No. Match data comes from public sources, with Cricsheet for the backtests.'],
+  ['Do you already use any CricViz data?', 'No. Match data comes from public sources, with Cricsheet for the backtests.'],
   ['Why is ODI error so much higher than T20?', 'ODI totals are larger and the early overs give less information about how the innings will unfold. Relative to the average final score the gap is small (about 14 to 16% for ODI against 13 to 14% for T20), and error falls steadily as the innings progresses.'],
 ];
 

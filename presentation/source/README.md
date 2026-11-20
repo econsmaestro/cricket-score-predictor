@@ -1,10 +1,10 @@
 # Deck source
 
-Editable source for `presentation/CricPredict_Cricketviz.pptx`.
+Editable source for `presentation/CricPredict_CricViz.pptx`.
 
     cd presentation/source && npm install
-    NODE_PATH=$PWD/node_modules node build.js ../CricPredict_Cricketviz.pptx
-    soffice --headless --convert-to pdf --outdir .. ../CricPredict_Cricketviz.pptx   # PDF is rendered from the PPTX
+    NODE_PATH=$PWD/node_modules node build.js ../CricPredict_CricViz.pptx
+    soffice --headless --convert-to pdf --outdir .. ../CricPredict_CricViz.pptx   # PDF is rendered from the PPTX
 
 * `build.js` slides, theme and layouts (pptxgenjs). `notes.js` speaker notes, script and Q&A.
 * `data.js` reads `data/backtests/*.json`, so chart numbers always match the committed reports.

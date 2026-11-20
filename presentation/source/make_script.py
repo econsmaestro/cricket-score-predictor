@@ -9,7 +9,7 @@ st = doc.styles['Normal']; st.font.name = 'Calibri'; st.font.size = Pt(11)
 for lvl, sz in (('Heading 1', 20), ('Heading 2', 13)):
     h = doc.styles[lvl]; h.font.name = 'Cambria'; h.font.size = Pt(sz); h.font.bold = True; h.font.color.rgb = RGBColor(0x14, 0x5A, 0x32)
 doc.add_heading('CricPredict: presenter script', 1)
-p = doc.add_paragraph('Live demonstration for the Cricketviz team  ·  about 20 minutes plus questions  ·  November 2026'); p.runs[0].font.color.rgb = RGBColor(0x55, 0x55, 0x55)
+p = doc.add_paragraph('Live demonstration for the CricViz team  ·  about 20 minutes plus questions  ·  November 2026'); p.runs[0].font.color.rgb = RGBColor(0x55, 0x55, 0x55)
 doc.add_heading('Run of show', 2)
 t = doc.add_table(rows=1, cols=3); t.style = 'Light Grid Accent 1'
 for i, h in enumerate(('Slide', 'Topic', 'Time')): t.rows[0].cells[i].text = h

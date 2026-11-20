@@ -9,7 +9,7 @@ const NOTES = require('./notes.js');
 const D = require('./data.js');
 
 const A = (f) => path.join(__dirname, 'assets', f);
-const OUT = process.argv[2] || path.join(__dirname, 'CricPredict_Cricketviz.pptx');
+const OUT = process.argv[2] || path.join(__dirname, 'CricPredict_CricViz.pptx');
 
 const THEME = {
   name: 'CricPredict Dark',
@@ -29,7 +29,7 @@ pres.layout = 'LAYOUT_WIDE'; // 13.333 x 7.5
 pres.theme = { headFontFace: THEME.headFontFace, bodyFontFace: THEME.bodyFontFace };
 pres.title = 'CricPredict: understand the game beyond the scoreboard';
 pres.author = 'Anjaneya Sharma';
-pres.subject = 'CricPredict live cricket intelligence: demonstration for Cricketviz';
+pres.subject = 'CricPredict live cricket intelligence: demonstration for CricViz';
 const C = pres.SchemeColor;
 const SH = pres.shapes;
 
@@ -86,7 +86,7 @@ function content(title, eyebrow, section) {
   txt(s, 'Understand the game beyond the scoreboard.', { x: 0.7, y: 3.45, w: 5.4, h: 1.0, fontSize: 26, color: C.background1, objectName: 'Cover subtitle' });
   txt(s, 'An AI-powered live cricket intelligence and prediction platform.', { x: 0.7, y: 4.65, w: 5.2, h: 0.7, fontSize: 16, color: C.background2, objectName: 'Cover description' });
   txt(s, 'cricket-score-predictor.com', { x: 0.7, y: 5.55, w: 5, h: 0.35, fontSize: 18, bold: true, color: C.accent1, objectName: 'Cover URL' });
-  txt(s, 'Prepared for the Cricketviz team  ·  November 2026', { x: 0.7, y: 6.75, w: 5.6, h: 0.3, fontSize: 12, color: C.background2, objectName: 'Cover byline' });
+  txt(s, 'Prepared for the CricViz team  ·  November 2026', { x: 0.7, y: 6.75, w: 5.6, h: 0.3, fontSize: 12, color: C.background2, objectName: 'Cover byline' });
   s.addNotes(NOTES[1]);
 
   // ======================================================= 2. PROBLEM
@@ -362,11 +362,11 @@ function content(title, eyebrow, section) {
   footnote(s, 'Proposed research, not a completed production feature. No event-based fielding signal is in the live prediction; today\'s input is the hand-assigned team rating (slide 8).');
   s.addNotes(NOTES[9]);
 
-  // ======================================================= 10. WHAT I HOPE TO EXPLORE WITH CRICKETVIZ
+  // ======================================================= 10. WHAT I HOPE TO EXPLORE WITH CRICVIZ
   pres.addSection({ title: 'Collaboration' });
-  s = content('An opportunity to take cricket analytics further', 'WHY CRICKETVIZ', 'Collaboration');
+  s = content('An opportunity to take cricket analytics further', 'WHY CRICVIZ', 'Collaboration');
   card(s, 0.6, 1.95, 4.95, 4.65, 'Bring card');
-  txt(s, 'WHAT CRICKETVIZ MAY BRING', { x: 0.88, y: 2.15, w: 4.4, h: 0.26, fontSize: 12, bold: true, color: C.accent1, charSpacing: 2, objectName: 'Bring label' });
+  txt(s, 'WHAT CRICVIZ MAY BRING', { x: 0.88, y: 2.15, w: 4.4, h: 0.26, fontSize: 12, bold: true, color: C.accent1, charSpacing: 2, objectName: 'Bring label' });
   txt(s, 'Domain knowledge, structured cricket information and data capabilities that could help investigate this problem.', { x: 0.88, y: 2.6, w: 4.4, h: 2.3, fontSize: 22, color: C.background1, objectName: 'Bring text' });
   txt(s, 'I am not assuming what data you hold or can share, or that any of it is available. That is the first conversation.', { x: 0.88, y: 4.95, w: 4.4, h: 1.4, fontSize: 15, color: C.background2, objectName: 'Bring caveat' });
   card(s, 5.8, 1.95, 6.93, 4.65, 'Explore card');
