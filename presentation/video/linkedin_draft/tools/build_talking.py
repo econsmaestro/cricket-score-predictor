@@ -15,7 +15,7 @@ def run(c): subprocess.run(c, check=True, stdout=subprocess.DEVNULL)
 out = subprocess.run(["ffmpeg", "-hide_banner", "-nostats", "-i", SRC, "-af", "silencedetect=n=-42dB:d=0.6", "-f", "null", "-"], capture_output=True, text=True).stderr
 st = [float(x) for x in re.findall(r"silence_start: ([\d.e+-]+)", out)]; en = [float(x) for x in re.findall(r"silence_end: ([\d.e+-]+)", out)]
 sil = [(s, e) for s, e in zip(st, en) if e - s >= cfg["trim_pauses_over"]]
-pad = cfg["pad"]; fx = cfg["face_center_x"]; cx = int(1280 * fx)
+P = cfg.get('pip', {'size': 250, 'x': 790, 'y': 1060}); pad = cfg["pad"]; fx = cfg["face_center_x"]; cx = int(1280 * fx)
 segs = []; total = 0.0
 for i, b in enumerate(cfg["beats"]):
     a0, b0 = b["src"]; parts = []; t = a0
@@ -38,8 +38,8 @@ for i, b in enumerate(cfg["beats"]):
     else:
         x0 = max(0, min(1280 - 720, cx - 360))
         zoom = f"scale=1620:2025,scale=w='trunc(1620*(1+0.04*t/{dur:.3f})/2)*2':h=-2:eval=frame,crop=1620:2025:(iw-1620)/2:(ih-2025)*0.40,scale={W}:{H}"
-        fc = (f"[1:v]{zoom},fps={FPS}[z];[0:v]crop=720:720:{x0}:0,scale=250:250,format=rgba,geq=r='r(X,Y)':g='g(X,Y)':b='b(X,Y)':a='if(lte(hypot(X-125,Y-125),125),255,0)'[fc];"
-              f"[2:v]scale=250:250[r];[z][fc]overlay=790:1060[a1];[a1][r]overlay=790:1060,format=yuv420p[v]")
+        fc = (f"[1:v]{zoom},fps={FPS}[z];[0:v]crop=720:720:{x0}:0,scale={P['size']}:{P['size']},format=rgba,geq=r='r(X,Y)':g='g(X,Y)':b='b(X,Y)':a='if(lte(hypot(X-{P['size']/2},Y-{P['size']/2}),{P['size']/2}),255,0)'[fc];"
+              f"[2:v]scale={P['size']}:{P['size']}[r];[z][fc]overlay={P['x']}:{P['y']}[a1];[a1][r]overlay={P['x']}:{P['y']},format=yuv420p[v]")
         run(base + ["-i", str(clip), "-loop", "1", "-framerate", str(FPS), "-t", f"{dur:.3f}", "-i", str(art), "-loop", "1", "-framerate", str(FPS), "-t", f"{dur:.3f}", "-i", str(R / "assets" / "placeholders" / "ring.png"),
                     "-filter_complex", fc, "-map", "[v]", "-map", "0:a", "-c:v", "libx264", "-crf", "16", "-preset", "veryfast", "-r", str(FPS), "-c:a", "aac", "-b:a", "192k", "-t", f"{dur:.3f}", str(seg)])
     segs.append(seg); total += dur; print(f"{b['id']:<12} {dur:5.1f}s  ({n} cut{'s' if n > 1 else ''})")
