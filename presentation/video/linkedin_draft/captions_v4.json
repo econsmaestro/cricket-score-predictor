@@ -2,7 +2,7 @@
  "_comment": "Caption text per beat, taken from fielding_video_script_v4.md. Timing inside each beat is spread evenly by text length, so re-time in your editor if you ad-libbed. Used by tools/make_srt.py.",
  "01_open": "Two runs off. But fielding is where I can't tell you the whole story. I'm building CricPredict: a cricket prediction app for fans. Entertainment only, not betting.",
  "02_moments": "First ODI of India's 2026 tour of New Zealand. Virat Kohli took a one-handed diving catch at second slip to dismiss Nathan Smith. Rohit Sharma made a sharp run-out assist. Moments like these swing a match.",
- "03_84_4": "At 84/4 after 17 overs, CricPredict predicted 199/7.",
+ "03_84_4": "At 84/4, after 17 overs, CricPredict predicted 199/7.",
  "04_finished": "New Zealand finished 185 all out: fourteen runs lower, but three wickets more than predicted.",
  "05_171_9": "Later, at 171/9 after 37.3 overs, it predicted 183 all out.",
  "06_183": "Two runs off. Encouraging, but a much shorter forecasting horizon.",

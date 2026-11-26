@@ -10,7 +10,7 @@ I'm building CricPredict: a cricket prediction app for fans. Entertainment only,
 
 First ODI of India's 2026 tour of New Zealand. Virat Kohli took a one-handed diving catch at second slip to dismiss Nathan Smith. Rohit Sharma made a sharp run-out assist. Moments like these swing a match.
 
-At 84/4 after 17 overs, CricPredict predicted 199/7. New Zealand finished 185 all out: fourteen runs lower, but three wickets more than predicted.
+At 84/4, after 17 overs, CricPredict predicted 199/7. New Zealand finished 185 all out: fourteen runs lower, but three wickets more than predicted.
 
 Later, at 171/9 after 37.3 overs, it predicted 183 all out. Two runs off. Encouraging, but a much shorter horizon.
 

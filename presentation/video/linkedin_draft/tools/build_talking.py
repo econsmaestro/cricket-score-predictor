@@ -36,9 +36,9 @@ for i, b in enumerate(cfg["beats"]):
         fc = f"[0:v]crop=576:720:{x0}:0,scale={W}:{H}:flags=lanczos,format=yuv420p[bg];[1:v]scale={W}:{H}[ov];[bg][ov]overlay,format=yuv420p[v]"
         run(base + ["-i", str(clip), "-loop", "1", "-framerate", str(FPS), "-t", f"{dur:.3f}", "-i", str(art), "-filter_complex", fc, "-map", "[v]", "-map", "0:a", "-c:v", "libx264", "-crf", "16", "-preset", "veryfast", "-r", str(FPS), "-c:a", "aac", "-b:a", "192k", "-t", f"{dur:.3f}", str(seg)])
     else:
-        x0 = max(0, min(1280 - 720, cx - 360))
+        PC = cfg.get('pip_crop', {'size': 720, 'y': 0}); x0 = max(0, min(1280 - PC['size'], cx - PC['size'] // 2))
         zoom = f"scale=1620:2025,scale=w='trunc(1620*(1+{ZOOM}*t/{dur:.3f})/2)*2':h=-2:eval=frame,crop=1620:2025:(iw-1620)/2:(ih-2025)*0.40,scale={W}:{H}"
-        fc = (f"[1:v]{zoom},fps={FPS}[z];[0:v]crop=720:720:{x0}:0,scale={P['size']}:{P['size']},format=rgba,geq=r='r(X,Y)':g='g(X,Y)':b='b(X,Y)':a='if(lte(hypot(X-{P['size']/2},Y-{P['size']/2}),{P['size']/2}),255,0)'[fc];"
+        fc = (f"[1:v]{zoom},fps={FPS}[z];[0:v]crop={PC['size']}:{PC['size']}:{x0}:{PC['y']},scale={P['size']}:{P['size']},format=rgba,geq=r='r(X,Y)':g='g(X,Y)':b='b(X,Y)':a='if(lte(hypot(X-{P['size']/2},Y-{P['size']/2}),{P['size']/2}),255,0)'[fc];"
               f"[2:v]scale={P['size']}:{P['size']}[r];[z][fc]overlay={P['x']}:{P['y']}[a1];[a1][r]overlay={P['x']}:{P['y']},format=yuv420p[v]")
         run(base + ["-i", str(clip), "-loop", "1", "-framerate", str(FPS), "-t", f"{dur:.3f}", "-i", str(art), "-loop", "1", "-framerate", str(FPS), "-t", f"{dur:.3f}", "-i", str(R / "assets" / "placeholders" / "ring.png"),
                     "-filter_complex", fc, "-map", "[v]", "-map", "0:a", "-c:v", "libx264", "-crf", "16", "-preset", "veryfast", "-r", str(FPS), "-c:a", "aac", "-b:a", "192k", "-t", f"{dur:.3f}", str(seg)])
