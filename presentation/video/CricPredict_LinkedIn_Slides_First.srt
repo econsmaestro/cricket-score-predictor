@@ -1,0 +1,140 @@
+1
+00:00:00,150 --> 00:00:04,771
+Two runs off. But fielding is
+where I can't tell you the whole
+story.
+
+2
+00:00:04,821 --> 00:00:08,834
+I'm building CricPredict: a
+cricket prediction app for fans.
+
+3
+00:00:08,884 --> 00:00:11,000
+Entertainment only, not betting.
+
+4
+00:00:11,350 --> 00:00:14,875
+First ODI of India's 2026 tour of
+New Zealand.
+
+5
+00:00:14,925 --> 00:00:21,249
+Virat Kohli took a one-handed
+diving catch at second slip to
+dismiss Nathan Smith.
+
+6
+00:00:21,299 --> 00:00:24,435
+Rohit Sharma made a sharp run-out
+assist.
+
+7
+00:00:24,485 --> 00:00:27,000
+Moments like these swing a match.
+
+8
+00:00:27,350 --> 00:00:35,200
+At 84 for four after 17 overs,
+CricPredict predicted 199 for
+seven.
+
+9
+00:00:35,550 --> 00:00:37,042
+New Zealand finished 185 all out:
+
+10
+00:00:37,092 --> 00:00:39,800
+fourteen runs lower, but three
+wickets more than predicted.
+
+11
+00:00:40,150 --> 00:00:45,400
+Later, at 171 for nine after 37.3
+overs, it predicted 183 all out.
+
+12
+00:00:45,750 --> 00:00:53,300
+Two runs off. Encouraging, but a
+much shorter forecasting horizon.
+
+13
+00:00:53,650 --> 00:00:57,473
+Did fielding explain the gap? I
+can't prove it.
+
+14
+00:00:57,523 --> 00:01:00,274
+But the model has room to improve:
+
+15
+00:01:00,324 --> 00:01:05,300
+in my backtest on men's ODIs, its
+average error is 41.5 runs.
+
+16
+00:01:05,650 --> 00:01:08,677
+Fielding is one thing it can't see
+properly.
+
+17
+00:01:08,727 --> 00:01:15,600
+Today it is just one hand-assigned
+rating per team, a reputation, not
+who is actually on the field.
+
+18
+00:01:15,950 --> 00:01:28,200
+I think that is part of what's
+holding accuracy back, on runs and
+on wickets.
+
+19
+00:01:28,550 --> 00:01:37,821
+Public ball-by-ball data only
+names a fielder when a wicket
+falls.
+
+20
+00:01:37,871 --> 00:01:44,600
+No drops, no misfields, no dives,
+no runs saved.
+
+21
+00:01:44,950 --> 00:01:46,258
+So here is the plan.
+
+22
+00:01:46,308 --> 00:01:57,601
+Start with what public data does
+give me, the catches and run-outs
+that end in a wicket, and build a
+first fielding model from that in
+shadow mode, knowing its limits.
+
+23
+00:01:57,651 --> 00:02:03,918
+Then, if I can get ball-by-ball
+fielding data, use it to rate the
+actual fielders in each XI.
+
+24
+00:02:03,968 --> 00:02:08,332
+Test the effect on runs and
+wickets separately, on fresh
+matches.
+
+25
+00:02:08,382 --> 00:02:12,000
+If it doesn't beat the current
+model, it doesn't ship.
+
+26
+00:02:12,350 --> 00:02:16,622
+If you hold fielding data, or work
+at a data provider, message me.
+
+27
+00:02:16,672 --> 00:02:19,700
+Try CricPredict at
+cricket-score-predictor.com.
