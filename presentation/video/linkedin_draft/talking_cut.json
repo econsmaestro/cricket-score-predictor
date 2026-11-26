@@ -1,0 +1,19 @@
+{
+  "_comment": "Timeline for the v4 talking-head cut. 'src' = [start, end] seconds in facecam_blurred.mp4, snapped to pauses found by silence detection (the beats were located from a rough speech transcript, so check them by eye). 'art' is a scene PNG in assets/scenes. type 'face' = full-screen face with the art as an overlay; 'demo' = product scene with a circular face window.",
+  "source": "../facecam_blurred.mp4",
+  "face_center_x": 0.55,
+  "trim_pauses_over": 0.6, "pad": 0.16,
+  "beats": [
+    {"id": "01_open",      "type": "face", "art": "v4_open",          "src": [1.15, 12.7]},
+    {"id": "02_moments",   "type": "demo", "art": "v4_moments",       "src": [14.0, 30.6]},
+    {"id": "03_84_4",      "type": "demo", "art": "s03a_nz_pred",     "src": [31.8, 40.0]},
+    {"id": "04_finished",  "type": "demo", "art": "s03b_nz_result",   "src": [40.0, 44.6]},
+    {"id": "05_171_9",     "type": "demo", "art": "s04a_171_pred",    "src": [48.4, 54.0]},
+    {"id": "06_183",       "type": "demo", "art": "s04b_171_result",  "src": [54.0, 62.4]},
+    {"id": "07_mae",       "type": "demo", "art": "s05b_backtest_odi","src": [63.8, 76.1]},
+    {"id": "08_hand",      "type": "demo", "art": "v4_hand",          "src": [76.1, 99.0]},
+    {"id": "09_public",    "type": "demo", "art": "s06_public_data",  "src": [100.0, 116.8]},
+    {"id": "10_plan",      "type": "demo", "art": "v4_plan",          "src": [117.4, 146.1]},
+    {"id": "11_ask",       "type": "face", "art": "v4_cta",           "src": [147.3, 155.84]}
+  ]
+}
