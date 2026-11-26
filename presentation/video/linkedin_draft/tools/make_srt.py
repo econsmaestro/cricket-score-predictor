@@ -6,14 +6,14 @@ Optional hard-burned copy:  ffmpeg -i cut.mp4 -vf "subtitles=OUT.srt:force_style
 import json, re, sys, pathlib
 R = pathlib.Path(__file__).resolve().parent.parent
 tl = json.load(open(sys.argv[1])); cap = json.load(open(R / "captions_v4.json")); out = sys.argv[2]
-def split(text, limit=70):
+def split(text, limit=84):
     sents = re.split(r"(?<=[.!?:])\s+", text.strip()); cues = []; cur = ""
     for s in sents:
         if cur and len(cur) + len(s) + 1 > limit: cues.append(cur); cur = s
         else: cur = (cur + " " + s).strip()
     if cur: cues.append(cur)
     return cues
-def wrap(t, w=34):
+def wrap(t, w=44):
     words = t.split(); lines = []; cur = ""
     for x in words:
         if cur and len(cur) + len(x) + 1 > w: lines.append(cur); cur = x
