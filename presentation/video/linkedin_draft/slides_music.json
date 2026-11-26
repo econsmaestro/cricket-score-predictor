@@ -1,0 +1,16 @@
+{
+  "_comment": "90-second slides-and-music cut: no voice, no face. Durations in seconds; total = sum - crossfades. Edit and run: python3 tools/build_slides_music.py",
+  "size": [1080, 1350], "fps": 30, "crossfade": 0.4, "music": "assets/music_90s.wav",
+  "scenes": [
+    {"art": "v4_open_s",         "dur": 10.0},
+    {"art": "v4_moments",        "dur": 9.0},
+    {"art": "s03a_nz_pred",      "dur": 8.5},
+    {"art": "s03b_nz_result",    "dur": 7.5},
+    {"art": "s05b_backtest_odi", "dur": 9.5},
+    {"art": "v4_hand",           "dur": 9.5},
+    {"art": "v4_hold",           "dur": 8.5},
+    {"art": "s06_public_data",   "dur": 10.5},
+    {"art": "v4_plan",           "dur": 12.0},
+    {"art": "v4_cta_s",          "dur": 8.6}
+  ]
+}

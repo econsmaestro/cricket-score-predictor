@@ -2,8 +2,11 @@
 """Original synthesised background track for the ad (128 BPM, ~31 s). No samples, no AI model, no third-party music.
 Writes assets/music_original.wav. Replace it with licensed Instagram audio if you prefer."""
 import numpy as np, wave, pathlib, sys
-SR = 44100; BPM = 128; B = 60 / BPM; BEATS = 66; N = int((BEATS * B + 1.0) * SR)
-out = pathlib.Path(__file__).resolve().parent.parent / "assets" / "music_original.wav"
+import argparse
+ap = argparse.ArgumentParser(); ap.add_argument('--beats', type=int, default=66); ap.add_argument('--out'); a = ap.parse_args()
+SR = 44100; BPM = 128; B = 60 / BPM; BEATS = a.beats; N = int((BEATS * B + 1.0) * SR)
+LONG = BEATS > 100
+out = pathlib.Path(a.out) if a.out else pathlib.Path(__file__).resolve().parent.parent / "assets" / "music_original.wav"
 rng = np.random.default_rng(7); mix = np.zeros(N)
 def add(sig, t0, g=1.0):
     i = int(t0 * SR); j = min(N, i + len(sig))
@@ -23,12 +26,13 @@ chords = [(55.0, [220.0, 261.63, 329.63]), (43.65, [174.61, 220.0, 261.63]), (65
 for b in range(BEATS):
     t0 = b * B; bar, beat_in_bar = divmod(b, 4); root, tones = chords[bar % 4]
     hook = b < 7                                     # first 7 beats: stripped back so the visual hook lands
-    if b >= 2 or b == 0: add(kick(), t0, .95 if b >= 2 else .5)
+    brk = LONG and BEATS - 40 <= b < BEATS - 32     # breakdown (no kick/bass) before the final section
+    if (b >= 2 or b == 0) and not brk: add(kick(), t0, .95 if b >= 2 else .5)
     if b >= 4 and beat_in_bar in (1, 3): add(clap(), t0, 1.0)
     if b >= 2:
         add(hat(), t0 + B / 2, 1.0)
         if b >= 7: add(hat(), t0 + B / 4, .6); add(hat(), t0 + 3 * B / 4, .6)
-    if b >= 7:                                       # bass on 8ths, ducked by the kick
+    if b >= 7 and not brk:                           # bass on 8ths, ducked by the kick
         for k in range(2):
             n = int(B / 2 * SR); s = np.sin(2 * np.pi * root * 2 * np.arange(n) / SR) * env(n, .004, .18) * .55
             add(s, t0 + k * B / 2, 1.0)
@@ -36,13 +40,13 @@ for b in range(BEATS):
         for k in range(4):
             f = tones[(beat_in_bar * 4 + k) % 3] * (2 if k % 2 else 1); n = int(B / 4 * SR)
             add(tone(f, n) * env(n, .003, .09) * .13, t0 + k * B / 4, 1.0)
-    if beat_in_bar == 0 and b >= 41:                 # pad swell for the "more than" and CTA sections
+    if beat_in_bar == 0 and b >= (16 if LONG else 41):                 # pad swell for the "more than" and CTA sections
         n = int(4 * B * SR); t = np.arange(n) / SR; p = sum(np.sin(2 * np.pi * f * t) for f in tones) * .06
         add(p * np.minimum(t / .5, 1) * np.minimum((n / SR - t) / .6, 1), t0, 1.0)
 # riser into the call to action and an impact on its first beat
 rn = int(2 * B * SR); r = rng.standard_normal(rn); t = np.arange(rn) / SR
-r = (r - np.convolve(r, np.ones(40) / 40, 'same')) * (t / t[-1]) ** 2 * .35; add(r, 53 * B, 1.0)
-imp = int(.9 * SR); ti = np.arange(imp) / SR; add(np.sin(2 * np.pi * 52 * ti) * np.exp(-ti * 4) * .9, 55 * B, 1.0)
+r = (r - np.convolve(r, np.ones(40) / 40, 'same')) * (t / t[-1]) ** 2 * .35; add(r, (BEATS - 13) * B, 1.0)
+imp = int(.9 * SR); ti = np.arange(imp) / SR; add(np.sin(2 * np.pi * 52 * ti) * np.exp(-ti * 4) * .9, (BEATS - 11) * B, 1.0)
 # gentle limiter, fade out
 mix = np.tanh(mix * 1.1); fade = int(1.4 * SR); mix[-fade:] *= np.linspace(1, 0, fade)
 mix = mix / np.max(np.abs(mix)) * .89
